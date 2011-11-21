@@ -1,0 +1,3 @@
+{% for link in navigation %}
+    <a href="{{ path(link.route, link.route_params) }}">{{ "navigation.link" | trans({'%type%' : link.section_name}) }}</a>
+{% endfor %}

@@ -1,0 +1,4 @@
+{% extends "SnowcapAdminBundle:Content:form.html.twig" %}
+
+{% set form_title = "content.create" | trans({'%content_name%': admin.param('label') | lower }) %}
+{% set form_action = path('content_create', {'section': section}) %}

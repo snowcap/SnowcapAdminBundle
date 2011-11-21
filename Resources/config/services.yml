@@ -1,0 +1,43 @@
+parameters:
+  sections: ~
+
+services:
+  snowcap_admin:
+    class: Snowcap\AdminBundle\Environment
+    arguments: [%sections%, @form.factory, @snowcap_admin.grid_factory, @doctrine]
+
+  snowcap_admin.grid_factory:
+    class: Snowcap\AdminBundle\Grid\Factory
+    arguments: [@form.factory]
+    
+
+  snowcap_admin.twig:
+    public: false
+    class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
+    tags:
+      -  { name: twig.extension }
+
+  snowcap_admin.slug:
+    class: Snowcap\AdminBundle\Form\Extension\Core\Type\SlugType
+    tags:
+      -  { name: form.type, alias: slug }
+
+  snowcap_admin.markdown:
+    class: Snowcap\AdminBundle\Form\Extension\Core\Type\MarkdownType
+    tags:
+      -  { name: form.type, alias: markdown }
+  
+  snowcap_admin.fieldset:
+    class: Snowcap\AdminBundle\Form\Extension\Core\Type\FieldsetType
+    tags:
+      -  { name: form.type, alias: fieldset }
+  
+  snowcap_admin.form.content:
+    class: Snowcap\AdminBundle\Form\ContentType
+    tags:
+      -  { name: form.type, alias: content }
+  
+  snowcap_admin.form.masscontent:
+    class: Snowcap\AdminBundle\Form\MassContentType
+    tags:
+      -  { name: form.type, alias: masscontent }

@@ -1,0 +1,74 @@
+{% block grid_widget_orderablecontent %}
+    <div class="grid grid-orderablecontent">
+        <form method="post" action="{{ path(grid.orderFormAction.route, {'section': grid.orderFormAction.section }) }}">
+            <div class="grid-update">
+                {{ form_widget(grid.orderFormView) }}
+            </div>
+            <div class="grid-submit message message-action ui-widget ui-state-highlight">
+                <p>The order of the grid items has changed.</p>
+                <button type="submit" class="ui-icon ui-icon-circle-check">Update</button>
+            </div>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th class="grid-drag"></th>
+                    {% for column_name, column_params in grid.columns %}
+                        {{ grid_header(column_name, column_params) }}
+                    {% endfor %}
+                    <th>{{ "content.actions" | trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data_row in grid.data %}
+                    <tr>
+                        <td class="grid-drag"><a href="{{ grid.getDragLink(data_row) }}"></a></td>
+                        {% for column_name, column_params in grid.columns %}
+                            {{ grid_cell(data_row, column_name, column_params) }}
+                        {% endfor %}
+                        <td class="listing-actions">
+                            {% for action_route, action_config in grid.actions %}
+                                <a href="{{ path(action_route, action_config.parameters | merge({'id': data_row.id })) }}" class="ui-button ui-button-icon-only ui-icon ui-icon-{{ action_config.icon }}">{{ action_config.label | trans }}</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block grid_widget_content %}
+    <table class="{{ grid_class }}">
+		<thead>
+			<tr>
+				{% for column_name, column_params in grid.columns %}
+				    {{ grid_header(column_name, column_params) }}
+				{% endfor %}
+				<th>{{ "content.actions" | trans }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for data_row in grid.data %}
+                <tr>
+                    {% for column_name, column_params in grid.columns %}
+                        {{ grid_cell(data_row, column_name, column_params) }}
+                    {% endfor %}
+                    <td class="listing-actions">
+                        {% for action_route, action_config in grid.actions %}
+                            <a href="{{ path(action_route, action_config.parameters | merge({'id': data_row.id })) }}" class="ui-button ui-button-icon-only ui-icon ui-icon-{{ action_config.icon }}">{{ action_config.label | trans }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block cell %}
+    <td>{{ output }}</td>
+{% endblock %}
+
+{% block header %}
+    <th>{{ output }}</th>
+{% endblock %}
