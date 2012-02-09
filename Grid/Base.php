@@ -15,19 +15,32 @@ abstract class Base {
     protected $data;
 
     protected $actions;
+
+    protected $code;
     /**
      * @var \Symfony\Component\Form\FormFactory
      */
     protected $formFactory;
 
-    public function addColumn($columnName, $columnParams = array())
+    public function __construct($code) {
+        $this->code = $code;
+    }
+
+    public function getCode() {
+        return $this->code;
+    }
+
+    public function add($columnName, $type = 'default', $columnParams = array())
     {
         $this->columns[$columnName] = $columnParams;
         return $this;
     }
 
-    public function addAction($routeName, $routeParameterss, $routeLabel, $icon) {
-        $this->actions[$routeName] = array('parameters' => $routeParameterss, 'label' => $routeLabel, 'icon' => $icon);
+    public function addAction($routeName, array $parameters = array(), array $options = array()) {
+        if(!array_key_exists('label', $options)){
+            $options['label'] = $routeName;
+        }
+        $this->actions[$routeName] = array('parameters' => $parameters, 'options' => $options);
     }
 
     public function getActions()
@@ -45,6 +58,10 @@ abstract class Base {
     public function getOption($optionName)
     {
         return $this->options[$optionName];
+    }
+
+    public function hasOption($optionName) {
+        return array_key_exists($optionName, $this->options);
     }
 
     public function getColumns()

@@ -26,19 +26,28 @@ abstract class Base {
     protected $params;
 
     protected $doctrine;
+
+    protected $code;
     /**
      * @param \Snowcap\AdminBundle\Environment $environment
      * @param \Symfony\Component\Form\FormFactory $formFactory
      * @param \Snowcap\AdminBundle\Grid\Factory $gridFactory
      * @param array $params
      */
-    public function __construct(array $params, FormFactory $formFactory, GridFactory $gridFactory, Registry $doctrine, $environment)
+    public function __construct($code, array $params, Environment $environment)
     {
-        $this->formFactory = $formFactory;
-        $this->gridFactory = $gridFactory;
-        $this->params = $params;
-        $this->doctrine = $doctrine;
+        $this->code = $code;
+        $this->validateParams($params); //TODO: check if necessary
+        $this->params = array_merge($this->getDefaultParams(), $params);
         $this->environment = $environment;
+    }
+
+    protected function getDefaultParams() {
+        return array();
+    }
+
+    public function getCode() {
+        return $this->code;
     }
 
     public function getParam($paramName)
@@ -49,13 +58,24 @@ abstract class Base {
      * @param grid $type
      * @return \Snowcap\AdminBundle\Grid\Base
      */
-    public function createGrid($type)
+    public function createGrid($type, $code)
     {
-        return $this->gridFactory->create($type);
+        return $this->environment->createGrid($type, $code);
     }
-
+    /**
+     * @param $type
+     * @param null $data
+     * @param array $options
+     * @return \Symfony\Component\Form\Form
+     */
     public function createForm($type, $data = null, $options = array())
     {
-        return $this->formFactory->create($type, $data, $options);
+        return $this->environment->createForm($type, $data, $options);
+    }
+
+    abstract public function getDefaultPath();
+
+    protected function validateParams(array $params) {
+        
     }
 }

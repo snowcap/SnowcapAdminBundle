@@ -18,35 +18,34 @@ class ContentController extends Controller
     /**
      * Content homepage (listing)
      *
-     * @Route("/content/{section}", name="content")
+     * @Route("/content/{code}", name="content")
      * @Template()
      *
      * @param string $type
      * @return mixed
      */
-    public function indexAction($section)
+    public function indexAction($code)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($section);
+        $admin = $this->get('snowcap_admin')->getSection($code);
         $grid = $admin->getContentGrid();
         return array(
             'admin' => $admin,
             'grid' => $grid,
-            'section' => $section,
         );
     }
 
     /**
      * Create a new content entity
      *
-     * @Route("/content/{section}/create", name="content_create")
+     * @Route("/content/{code}/create", name="content_create")
      * @Template("SnowcapAdminBundle:Content:create.html.twig")
      *
-     * @param string $type
+     * @param string $code
      * @return mixed
      */
-    public function createAction($section)
+    public function createAction($code)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($section);
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
         $em = $this->get('doctrine')->getEntityManager();
         $entityName = $admin->getParam('entity_class');
         $entity = new $entityName();
@@ -57,30 +56,29 @@ class ContentController extends Controller
             if ($form->isValid()) {
                 $em->persist($entity);
                 $em->flush();
-                return $this->redirect($this->generateUrl('content', array('section' => $section)));
+                return $this->redirect($this->generateUrl('content', array('code' => $code)));
             }
         }
         return array(
             'admin' => $admin,
-            'section' => $section,
             'entity' => $entity,
-            'form' => $form->createView(),
+            'form_view' => $form->createView(),
         );
     }
 
     /**
      * Update an existing content entity
      *
-     * @Route("/content/{section}/update/{id}", name="content_update")
+     * @Route("/content/{code}/update/{id}", name="content_update")
      * @Template("SnowcapAdminBundle:Content:update.html.twig")
      *
-     * @param string $type
+     * @param string $code
      * @param int $id
      * @return mixed
      */
-    public function updateAction($section, $id)
+    public function updateAction($code, $id)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($section);
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $this->findEntity($id, $admin);
         $request = $this->get('request');
@@ -90,28 +88,27 @@ class ContentController extends Controller
             if ($form->isValid()) {
                 $em->persist($entity);
                 $em->flush();
-                return $this->redirect($this->generateUrl('content', array('section' => $section)));
+                return $this->redirect($this->generateUrl('content', array('code' => $code)));
             }
         }
         return array(
             'admin' => $admin,
-            'section' => $section,
             'entity' => $entity,
-            'form' => $form->createView(),
+            'form_view' => $form->createView(),
         );
     }
 
     /**
      * Mass update an existing content entity
      *
-     * @Route("/content/{section}/mass_update", name="content_mass_update")
+     * @Route("/content/{code}/mass_update", name="content_mass_update")
      *
      * @param string $type
      * @return mixed
      */
-    public function massUpdateAction($section)
+    public function massUpdateAction($code)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($section);
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
         $em = $this->getDoctrine()->getEntityManager();
         $grid = $admin->getContentGrid();
         $form = $grid->getOrderForm();

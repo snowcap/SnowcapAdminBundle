@@ -8,5 +8,5 @@ content:
   save: Save
   edit: Edit
   delete: Delete
-  actions: Actions
+  actions: actions
   back_to_list: Back to list

@@ -48,8 +48,11 @@ class ContentType extends AbstractType
         return $this;
     }
 
-    public function addField($fieldName, $fieldOptions = array()) {
-        $this->fields[$fieldName] = $fieldOptions;
+    public function addField($fieldName, $fieldType, $fieldOptions = array()) {
+        $this->fields[$fieldName] = array(
+            'type' => $fieldType,
+            'options' => $fieldOptions
+        );
         return $this;
     }
 }

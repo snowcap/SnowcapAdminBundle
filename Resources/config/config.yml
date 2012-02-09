@@ -1,5 +1,4 @@
 twig:
-    form:
-        resources:
-            - 'SnowcapAdminBundle::forms.html.twig'
-
+  form:
+    resources:
+        - 'SnowcapAdminBundle::forms.html.twig'

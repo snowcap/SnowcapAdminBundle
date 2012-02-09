@@ -1,0 +1,194 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f5f5f5;
+	color: #0a0a0a;
+	font-size: 14px;
+}
+
+a {
+	text-decoration: none;
+}
+
+header {
+	height: 40px;
+	background-color: #0a0a0a;
+	color: #fff;
+	position: relative;
+	overflow: hidden;
+}
+header h1 {
+	text-indent: -5000px;
+	float: left;
+	margin: 0 20px;
+	padding: 0 0 0 40px;
+	background: url(img/snowcap-white.png) left center no-repeat;
+	line-height: 40px;
+}
+header nav {
+	overflow: hidden;
+	float: left;
+	font-size: 12px;
+}
+header nav a {
+	color: #fff;
+	float: left;
+	line-height: 40px;
+	margin-right: 10px;
+}
+header nav a:hover {
+	color: #8cc622;
+}
+.section-700 {
+	width: 660px;
+}
+.section-700 input, .section-700 textarea {
+	width: 650px;
+}
+.section-700 input.widget-slug {
+    width: 620px;
+}
+input.off {
+    background: #ccc !important;
+}
+#main {
+	margin: 20px;
+}
+#main section {
+	background: #fff;
+	padding: 20px;
+	border: 1px solid #c0c0c0;
+}
+#main section h2 {
+	color: #8ac722;
+	margin: 0 0 10px 0;
+}
+#main section form {
+	margin: 0 0 20px 0;
+}
+#main section .form-row {
+    position: relative;
+	margin: 20px 0;
+}
+#main section .form-row label {
+	display: block;
+	margin-bottom: 5px;
+	font-size: 16px;
+}
+#main section .form-row .form {
+    background-color: #eee;
+    border: 1px solid #c0c0c0;
+    padding:  0 10px;
+}
+#main section #project_images .form-row > label {
+    display: none;
+}
+#main .section-700 .form-row .form input,
+#main .section-700 .form-row .form textarea {
+	width: 630px;
+}
+#main section input,
+#main section textarea {
+	display: block;
+	padding: 4px;
+	border: 1px solid #c0c0c0;
+    background-color: #fff;
+}
+#main section input {
+	height: 20px;
+}
+#main section input[type="text"] {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+}
+#main section input.datepicker {
+	width: 80px;
+	text-align: center;
+}
+#main section textarea {
+	height: 200px;
+}
+.grid table {
+	width: 100%;
+	margin: 0 0 20px 0;
+	border-collapse: collapse;
+}
+.grid td, .grid th {
+	text-align: left;
+	line-height: 36px;
+	padding: 0 30px 0 10px;
+}
+.grid td:last-child, .grid th:last-child {
+	padding-right: 10px;
+}
+.grid thead th {
+	background: #F5F5F5;
+	font-size: 16px;
+	border-bottom: 1px solid #C0C0C0;
+	font-weight: normal;
+}
+.grid tbody td {
+	font-size: 14px;
+}
+.grid tbody tr:not(:last-child) td {
+	border-bottom: 1px solid #C0C0C0;
+}
+.grid .grid-drag {
+    padding: 0;
+    margin: 0;
+}
+.grid td.grid-drag a {
+    display: block;
+    width: 10px;
+    height: 36px;
+    background: #ddd;
+}
+
+.grid-orderablecontent form .grid-update{
+    display: none;
+}
+
+.message {
+    padding: 10px;
+}
+.message p {
+    margin:  0;
+}
+.message-action p {
+    float: left;
+    line-height: 22px;
+}
+.message-action button {
+    margin-left: 10px;
+}
+
+
+.detail {
+	margin: 0 0 20px 0;
+}
+.detail dt {
+	display: block;
+	margin: 0 0 5px 0;
+	padding: 0;
+	font-weight: bold;
+	font-size: 16px;
+}
+.detail dd {
+	display: block;
+	margin: 0 0 10px 0;
+	padding: 0;
+}
+.widget-markdown {
+}
+.markdown_previewer {
+	position: absolute;
+	left: 743px;
+	width: 700px;
+	height: 188px;
+	overflow:  scroll;
+    border: solid 1px #aaa;
+	padding: 10px;
+	background-color: #eee;
+}

@@ -1,92 +1,82 @@
 <?php
 namespace Snowcap\AdminBundle;
 
-use Symfony\Bundle\DoctrineBundle\Registry,
-    Symfony\Component\Form\AbstractType,
-    Symfony\Component\Form\FormFactory;
-
-use Snowcap\AdminBundle\Form\ContentType,
-    Snowcap\AdminBundle\Grid\Factory as GridFactory;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * Environment admin service
  *
  */
-class Environment {
+class Environment extends ContainerAware
+{
+
     /**
-     * Admin sections configuration
-     *
      * @var array
      */
-    private $sections = array();
-    /**
-     * @var \Symfony\Component\Form\FormFactory
-     */
-    private $formFactory;
-    /**
-     * @var \Snowcap\AdminBundle\Grid\Factory
-     */
-    private $gridFactory;
+    private $sections;
 
-    private $doctrine;
     /**
-     * @param $sections
-     * @param \Symfony\Component\Form\FormFactory $formFactory
-     * @param Grid\Factory $gridFactory
+     * @param array $sections
      */
-    public function __construct($sections, FormFactory $formFactory, GridFactory $gridFactory, Registry $doctrine)
+    public function __construct($sections)
     {
-        $this->sections = $sections;
-        $this->formFactory = $formFactory;
-        $this->gridFactory = $gridFactory;
-        $this->doctrine = $doctrine;
+        foreach ($sections as $sectionCode => $sectionParams) {
+            $this->validateSection($sectionCode, $sectionParams);
+            $adminClassName = $sectionParams['admin_class'];
+            $adminInstance = new $adminClassName($sectionCode, $sectionParams, $this);
+            $this->sections[$sectionCode] = $adminInstance;
+        }
     }
+
     /**
-     * Get the content admin instance for the provided type
+     * Get the section admin instance for the provided code
      *
-     * @throws \Exception
-     * @param string $type
-     * @return \Snowcap\AdminBundle\Admin\Content
+     * @param string $code
+     * @return \Snowcap\AdminBundle\Admin\Base
      */
-    public function getAdmin($section)
+    public function getSection($code)
     {
-        if(!array_key_exists($section, $this->sections)){
-            throw new \Exception('Invalid section ' . $section);
+        if (!array_key_exists($code, $this->sections)) {
+            throw new Exception(sprintf('The admin section %s  has not been registered with the admin bundle', $code), Exception::SECTION_UNKNOWN);
         }
-        $adminParams = $this->sections[$section];
-        $adminParams['section'] = $section;
-        $adminClassName = $adminParams['admin_class'];
-        $adminInstance = new $adminClassName($adminParams, $this->formFactory, $this->gridFactory, $this->doctrine, $this);
-        return $adminInstance;
+        return $this->sections[$code];
     }
+
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
     /**
-     * Build a param array for navigation purposes
-     *
-     * @return array
+     * @param strong $sectionName
+     * @param array $sectionParams
      */
-    public function getNavigation() {
-        $navigation = array();
-        foreach ($this->sections as $section_name => $config) {
-            $route = '';
-            $routeParams = array();
-            switch($config['type']){
-                case 'custom':
-                    $route = $config['default_route'];
-                    break;
-                case 'content':
-                    $route = 'content';
-                    $routeParams['section'] = $section_name;
-                    break;
-                default:
-                    throw new \ErrorException('not implemented');
-                    break;
-            }
-            $navigation[] = array(
-                'route' => $route,
-                'route_params' => $routeParams,
-                'section_name'=> $config['label']
-            );
+    protected function validateSection($sectionName, $sectionParams)
+    {
+        if (!is_array($sectionParams)) {
+            throw new Exception(sprintf('The parameters of the admin section "%s" have to be defined as an array, %s given', $sectionName, gettype($sectionParams)), Exception::SECTION_INVALID);
         }
-        return $navigation;
+        if (!array_key_exists('admin_class', $sectionParams)) {
+            throw new Exception(sprintf('The admin section "%s" lacks a "admin_class" parameter.', $sectionName), Exception::SECTION_INVALID);
+        }
+        if (!class_exists($sectionParams['admin_class'])) {
+            throw new Exception(sprintf('The admin section "%s" has an invalid "admin_class" parameter (%s).', $sectionName, $sectionParams['admin_class']), Exception::SECTION_INVALID);
+        }
+        $expectedParent = 'Snowcap\\AdminBundle\\Admin\\Base';
+        if (!in_array($expectedParent, class_parents($sectionParams['admin_class']))) { //TODO: replace with instanceof ?
+            throw new Exception(sprintf('The admin section class %s for the admin section "%s" must extend the class %s.', $sectionParams['admin_class'], $sectionName, $expectedParent), Exception::SECTION_INVALID);
+        }
+    }
+
+    /**
+     * Gets a service by id.
+     *
+     * @param  string $id The service id
+     *
+     * @return object The service
+     */
+    public function get($id)
+    {
+        return $this->container->get($id);
     }
 }

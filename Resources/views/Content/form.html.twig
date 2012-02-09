@@ -3,18 +3,18 @@
 {% block body %}
 <section class="section-700">
 	<h2>{{ form_title }}</h2>
-	<form action="{{ form_action }}" method="post" {{ form_enctype(form) }}>
-		{{ form_errors(form) }}
-		{% for field in form %}
+	<form action="{{ form_action }}" method="post" {{ form_enctype(form_view) }}>
+		{{ form_errors(form_view) }}
+		{% for field in form_view %}
 		    {{ form_row(field) }}
 		{% endfor %}
-	    {{ form_rest(form) }}
+	    {{ form_rest(form_view) }}
 		<p>
 			<button type="submit" class="ui-icon ui-icon-circle-check">{{ "content.save" | trans }}</button>
 		</p>
 	</form>
 	<nav>
-		<a href="{{ path('content', {'section': section }) }}" class="ui-button ui-icon ui-icon-circle-triangle-w">{{ "content.back_to_list" | trans }}</a>
+		<a href="{{ admin.defaultRoute }}" class="ui-button ui-icon ui-icon-circle-triangle-w">{{ "content.back_to_list" | trans }}</a>
 	</nav>
 </section>
 {% endblock %}

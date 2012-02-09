@@ -1,6 +1,6 @@
 {% block grid_widget_orderablecontent %}
     <div class="grid grid-orderablecontent">
-        <form method="post" action="{{ path(grid.orderFormAction.route, {'section': grid.orderFormAction.section }) }}">
+        <form method="post" action="{{ grid.orderFormAction }}">
             <div class="grid-update">
                 {{ form_widget(grid.orderFormView) }}
             </div>
@@ -16,7 +16,9 @@
                     {% for column_name, column_params in grid.columns %}
                         {{ grid_header(column_name, column_params) }}
                     {% endfor %}
-                    <th>{{ "content.actions" | trans }}</th>
+                    {% if grid.actions | length > 0 %}
+                        <th>{{ "content.actions" | trans }}</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -26,11 +28,9 @@
                         {% for column_name, column_params in grid.columns %}
                             {{ grid_cell(data_row, column_name, column_params) }}
                         {% endfor %}
-                        <td class="listing-actions">
-                            {% for action_route, action_config in grid.actions %}
-                                <a href="{{ path(action_route, action_config.parameters | merge({'id': data_row.id })) }}" class="ui-button ui-button-icon-only ui-icon ui-icon-{{ action_config.icon }}">{{ action_config.label | trans }}</a>
-                            {% endfor %}
-                        </td>
+                        {% if grid.actions | length > 0 %}
+                            {{ block('row_actions') }}
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -39,30 +39,41 @@
 {% endblock %}
 
 {% block grid_widget_content %}
-    <table class="{{ grid_class }}">
-		<thead>
-			<tr>
-				{% for column_name, column_params in grid.columns %}
-				    {{ grid_header(column_name, column_params) }}
-				{% endfor %}
-				<th>{{ "content.actions" | trans }}</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for data_row in grid.data %}
+    <div class="grid grid-orderablecontent">
+        <table>
+            <thead>
                 <tr>
                     {% for column_name, column_params in grid.columns %}
-                        {{ grid_cell(data_row, column_name, column_params) }}
+                        {{ grid_header(column_name, column_params) }}
                     {% endfor %}
-                    <td class="listing-actions">
-                        {% for action_route, action_config in grid.actions %}
-                            <a href="{{ path(action_route, action_config.parameters | merge({'id': data_row.id })) }}" class="ui-button ui-button-icon-only ui-icon ui-icon-{{ action_config.icon }}">{{ action_config.label | trans }}</a>
-                        {% endfor %}
-                    </td>
+                    {% if grid.actions | length > 0 %}
+                        <th>{{ "content.actions" | trans }}</th>
+                    {% endif %}
                 </tr>
-			{% endfor %}
-		</tbody>
-	</table>
+            </thead>
+            <tbody>
+                {% for data_row in grid.data %}
+                    <tr>
+                        {% for column_name, column_params in grid.columns %}
+                            {{ grid_cell(data_row, column_name, column_params) }}
+                        {% endfor %}
+                        {% if grid.actions | length > 0 %}
+                            {{ block('row_actions') }}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block row_actions %}
+    <td class="listing-actions">
+        {% for action_route, action_config in grid.actions %}
+            {% set action_path = path(action_route, action_config.parameters | merge({'id': data_row.id })) %}
+            <a href="{{ action_path }}">{{ action_config.options.label | trans }}</a>
+        {% endfor %}
+    </td>
 {% endblock %}
 
 {% block cell %}

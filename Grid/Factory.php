@@ -1,28 +1,72 @@
 <?php
 namespace Snowcap\AdminBundle\Grid;
 
-class Factory {
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Routing\Router;
+use Symfony\Bundle\DoctrineBundle\Registry;
+use Snowcap\AdminBundle\Admin\Base;
 
+class Factory {
+    /**
+     * @var array
+     */
     protected $types = array(
         'content' => '\\Snowcap\\AdminBundle\\Grid\\Content',
         'orderablecontent' => '\\Snowcap\\AdminBundle\\Grid\\OrderableContent',
     );
+    /**
+     * @var \Symfony\Component\Form\FormFactory
+     */
     protected $formFactory;
-
-    public function __construct($formFactory){
+    /**
+     * @var \Symfony\Component\Routing\Router
+     */
+    protected $router;
+    /**
+     * @var \Symfony\Bundle\DoctrineBundle\Registry
+     */
+    protected $doctrine;
+    /**
+     * @param \Symfony\Component\Form\FormFactory $formFactory
+     */
+    public function setFormFactory(FormFactory $formFactory) {
         $this->formFactory = $formFactory;
     }
-
-    public function create($type)
-    {
-        $gridClass = $this->types[$type];
-        return $this->createFromClass($gridClass);
+    /**
+     * @param \Symfony\Component\Routing\Router $router
+     */
+    public function setRouter(Router $router) {
+        $this->router = $router;
+    }
+    /**
+     * @param \Symfony\Bundle\DoctrineBundle\Registry $doctrine
+     */
+    public function setDoctrine(Registry $doctrine) {
+        $this->doctrine = $doctrine;
     }
 
-    public function createFromClass($gridClass) {
-        $grid = new $gridClass();
+
+
+    public function create($type, $name)
+    {
+        $gridClass = $this->types[$type];
+        $grid = new $gridClass($name);
         if(is_callable(array($grid, 'setFormFactory'))) {
             call_user_func(array($grid, 'setFormFactory'), $this->formFactory);
+        }
+        if(is_callable(array($grid, 'setRouter'))) {
+            call_user_func(array($grid, 'setRouter'), $this->router);
+        }
+        if(is_callable(array($grid, 'setQueryBuilder'))) {
+            call_user_func(array($grid, 'setQueryBuilder'), $this->doctrine->getEntityManager()->createQueryBuilder());
+        }
+        return $grid;
+    }
+
+    public function createFromClass($gridClass) {//TODO: deprecated ?
+        $grid = new $gridClass();
+        if(is_callable(array($grid, 'setFormFactory'))) {
+            call_user_func(array($grid, 'setFormFactory'), $this->admin->getFormFactory());
         }
         return $grid;
     }

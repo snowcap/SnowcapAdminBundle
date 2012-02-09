@@ -4,11 +4,16 @@ parameters:
 services:
   snowcap_admin:
     class: Snowcap\AdminBundle\Environment
-    arguments: [%sections%, @form.factory, @snowcap_admin.grid_factory, @doctrine]
+    arguments: [%sections%]
+    calls:
+        - [setContainer, [ @service_container ]]
 
   snowcap_admin.grid_factory:
     class: Snowcap\AdminBundle\Grid\Factory
-    arguments: [@form.factory]
+    calls:
+      - [ setFormFactory, [ @form.factory ]]
+      - [ setRouter, [ @router ]]
+      - [ setDoctrine, [ @doctrine ]]
     
 
   snowcap_admin.twig:

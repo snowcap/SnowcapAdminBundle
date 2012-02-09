@@ -1,7 +1,8 @@
 <?php
 namespace Snowcap\AdminBundle\Grid;
 
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\QueryBuilder,
+    Snowcap\AdminBundle\Exception;
 
 class OrderableContent extends Content {
     public function getType() {
@@ -40,10 +41,13 @@ class OrderableContent extends Content {
     }
 
     public function getOrderFormAction() {
-        return array('route' => 'content_mass_update', 'section' => $this->getOption('section'));
+        return $this->router->generate('content_mass_update', array('code' => $this->code));
     }
 
     public function processQueryBuilder() {
+        if(!$this->getOption('order_field')) {
+            throw new Exception(sprintf('The "%s" grid needs a "order_field" parameter', $this->getName()), Exception::GRID_INVALID);
+        }
         $this->queryBuilder->orderBy('e.' . $this->getOption('order_field'), 'ASC');
     }
 }

@@ -6,7 +6,8 @@ Symfony\Component\Form\AbstractType,
 Symfony\Component\Form\FormFactory;
 
 use Snowcap\AdminBundle\Form\ContentType,
-Snowcap\AdminBundle\Grid\Content as ContentGrid;
+    Snowcap\AdminBundle\Grid\Content as ContentGrid,
+    Snowcap\AdminBundle\Exception;
 
 /**
  * Content admin class
@@ -15,33 +16,41 @@ Snowcap\AdminBundle\Grid\Content as ContentGrid;
  */
 abstract class Content extends Base
 {
-
-    public function getContentType() {
-        $type = new ContentType();
-        $this->configureContentType($type);
-        return $type;
+    public function getDefaultPath() {
+        return $this->environment->get('router')->generate('content', array('code' => $this->getCode()));
     }
 
-    abstract public function configureContentType($type);
+    protected function getDefaultParams() {
+        return array(
+            'grid_type' => 'content'
+        );
+    }
 
-    public function createContentGrid($type, $options = array()) {
-        $grid = $this->createGrid($type, $options);
-        $queryBuilder = $this->doctrine->getEntityManager()->createQueryBuilder()
+    public function createGrid($type, $code) {
+        $grid = parent::createGrid($type, $code);
+        $grid->addAction('content_update', array('code' => $this->getCode()), 'Edit', 'pencil');
+        $queryBuilder = $this->environment->createQueryBuilder();
+        $queryBuilder
             ->select('e')
             ->from($this->getParam('entity_class'), 'e');
         $grid->setQueryBuilder($queryBuilder);
-        $grid->setOption('section', $this->getParam('section'));
-        $grid->addAction('content_update', array('section' => $this->getParam('section')), 'update', 'pencil');
-        $grid->addAction('content_delete', array('section' => $this->getParam('section')), 'delete', 'trash');
         return $grid;
     }
 
-    abstract function getContentGrid();
-
-    public function getContentForm($data = null){
-        $type = $this->getContentType();
-        return $this->createForm($type, $data);
+    public function getCreateRoute() {
+        return $this->environment->buildRoute('content_create', array('code' => $this->code));
     }
 
-    abstract public function getContentTitle($content);
+    public function getUpdateRoute($entity) {
+        return $this->environment->buildRoute('content_update', array('code' => $this->code, 'id' => $entity->getId()));
+    }
+
+    public function validateParams(array $params) {
+        if(!array_key_exists('entity_class', $params)) {
+            throw new Exception(sprintf('The admin section %s must be configured with a "entity_class" parameter', $this->getCode()), Exception::SECTION_INVALID);
+        }
+        elseif(!class_exists($params['entity_class'])) {
+            throw new Exception(sprintf('The admin section %s has an invalid "entity_class" parameter', $this->getCode()), Exception::SECTION_INVALID);
+        }
+    }
 }
