@@ -23,7 +23,7 @@ header h1 {
 	float: left;
 	margin: 0 20px;
 	padding: 0 0 0 40px;
-	background: url(img/snowcap-white.png) left center no-repeat;
+	background: url(../img/snowcap-white.png) left center no-repeat;
 	line-height: 40px;
 }
 header nav {

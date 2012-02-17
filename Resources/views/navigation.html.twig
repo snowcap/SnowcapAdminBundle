@@ -1,0 +1,17 @@
+{% macro menu_item(route_name, label, title) %}
+    <li{% if is_active_route(route_name) %} class="active"{% endif %}>
+        <a href="{{ path(route_name) }}" title="{{ title | trans }}">{{ label | trans }}</a>
+    </li>
+{% endmacro %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="{{ path('admin_index') }}">
+                {{ "project.name" | trans }}
+            </a>
+            {% for section in sections %}
+                {{ _self.menu_item(section.defaultRoute, "navigation.link" | trans({'%type%' : section.param('label')})) }}
+            {% endfor %}
+        </div>
+    </div>
+</div>

@@ -17,7 +17,7 @@ class DefaultController extends Controller
     /**
      * Admin default action
      *
-     * @Route("")
+     * @Route("", name="admin_index")
      * @Template()
      *
      * @return mixed
@@ -30,7 +30,7 @@ class DefaultController extends Controller
     /**
      * Get the navigation for content management
      * 
-     * @Template("SnowcapAdminBundle:Default:navigation.html.twig")
+     * @Template("SnowcapAdminBundle::navigation.html.twig")
      *
      * @return mixed
      */
