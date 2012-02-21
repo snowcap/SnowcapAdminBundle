@@ -18,7 +18,7 @@ class ContentController extends Controller
     /**
      * Content homepage (listing)
      *
-     * @Route("/content/{code}", name="content")
+     * @Route("/content/{code}", name="snowcap_admin_content_index")
      * @Template()
      *
      * @param string $type
@@ -26,8 +26,8 @@ class ContentController extends Controller
      */
     public function indexAction($code)
     {
-        $admin = $this->get('snowcap_admin')->getSection($code);
-        $grid = $admin->getContentGrid();
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $grid = $admin->getListGrid();
         return array(
             'admin' => $admin,
             'grid' => $grid,

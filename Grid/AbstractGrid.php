@@ -4,7 +4,7 @@ namespace Snowcap\AdminBundle\Grid;
 use Symfony\Component\Form\FormFactory;
 use \Doctrine\ORM\QueryBuilder;
 
-abstract class Base {
+abstract class AbstractGrid {
     /**
      * @var array
      */

@@ -2,11 +2,11 @@
 namespace Snowcap\AdminBundle\Grid;
 
 use Snowcap\AdminBundle\Exception;
-use Doctrine\ORM\QueryBuilder,
-    Symfony\Component\Form\FormFactory,
-    Symfony\Component\Routing\Router;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Routing\Router;
 
-class Content extends Base {
+class ContentGrid extends AbstractGrid {
     /**
      * @var \Doctrine\ORM\QueryBuilder
      */

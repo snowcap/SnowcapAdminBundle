@@ -1,6 +1,7 @@
 <?php
-
 namespace Snowcap\AdminBundle\Twig\Extension;
+
+use Snowcap\AdminBundle\Grid\AbstractGrid;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -36,7 +37,7 @@ class AdminExtension extends \Twig_Extension {
     }
 
     
-    public function renderGrid(\Snowcap\AdminBundle\Grid\Base $grid)
+    public function renderGrid(AbstractGrid $grid)
     {
         $loader = $this->environment->getLoader(); /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
         $loader->addPath(__DIR__ . '/../../Resources/views/');

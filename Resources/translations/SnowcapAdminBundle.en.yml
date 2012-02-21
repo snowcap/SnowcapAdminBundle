@@ -10,3 +10,6 @@ content:
   delete: Delete
   actions: actions
   back_to_list: Back to list
+
+project:
+    name: Admin

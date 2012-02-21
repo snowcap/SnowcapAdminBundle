@@ -11,7 +11,7 @@ class Factory {
      * @var array
      */
     protected $types = array(
-        'content' => '\\Snowcap\\AdminBundle\\Grid\\Content',
+        'content' => '\\Snowcap\\AdminBundle\\Grid\\ContentGrid',
         'orderablecontent' => '\\Snowcap\\AdminBundle\\Grid\\OrderableContent',
     );
     /**
@@ -59,14 +59,6 @@ class Factory {
         }
         if(is_callable(array($grid, 'setQueryBuilder'))) {
             call_user_func(array($grid, 'setQueryBuilder'), $this->doctrine->getEntityManager()->createQueryBuilder());
-        }
-        return $grid;
-    }
-
-    public function createFromClass($gridClass) {//TODO: deprecated ?
-        $grid = new $gridClass();
-        if(is_callable(array($grid, 'setFormFactory'))) {
-            call_user_func(array($grid, 'setFormFactory'), $this->admin->getFormFactory());
         }
         return $grid;
     }

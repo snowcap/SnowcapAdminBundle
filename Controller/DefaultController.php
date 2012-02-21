@@ -30,7 +30,7 @@ class DefaultController extends Controller
     /**
      * Get the navigation for content management
      * 
-     * @Template("SnowcapAdminBundle::navigation.html.twig")
+     * @Template()
      *
      * @return mixed
      */

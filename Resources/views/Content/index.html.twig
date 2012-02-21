@@ -1,11 +1,6 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 
 {% block body %}
-<section class="section-700">
 	<h2>{{ "content.list" | trans({'%content_name%': admin.param('label') }) }}</h2>
 	{{ grid_widget(grid) }}
-	<nav>
-		<a href="{{ admin.createRoute }}" class="ui-button ui-icon ui-icon-circle-plus">{{ "content.create" | trans({'%content_name%': admin.param('label') | lower }) }}</a>
-	</nav>
-</section>
 {% endblock %}

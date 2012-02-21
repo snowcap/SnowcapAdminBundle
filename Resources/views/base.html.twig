@@ -11,13 +11,7 @@
 		<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 	</head>
 	<body>
-
-		<header>
-			<h1>Snowcap admin</h1>
-			<nav>
-				{% render('SnowcapAdminBundle:Default:Navigation') %}
-			</nav>
-		</header>
+        {% render('SnowcapAdminBundle:Default:Navigation') %}
         <div class="container">
             {% block body %}{% endblock %}
         </div>

@@ -1,13 +1,15 @@
 <?php
 namespace Snowcap\AdminBundle\Admin;
 
-use Symfony\Bundle\DoctrineBundle\Registry,
-    Symfony\Component\Form\FormFactory;
+use Symfony\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\Form\FormFactory;
 
-use Snowcap\AdminBundle\Environment,
-    Snowcap\AdminBundle\Grid\Factory as GridFactory;
+use Snowcap\AdminBundle\Environment;
+use Snowcap\AdminBundle\Grid\Factory as GridFactory;
+use Snowcap\AdminBundle\Exception;
 
-abstract class Base {
+abstract class Base
+{
     /**
      * @var \Snowcap\AdminBundle\Environment
      */
@@ -28,6 +30,7 @@ abstract class Base {
     protected $doctrine;
 
     protected $code;
+
     /**
      * @param \Snowcap\AdminBundle\Environment $environment
      * @param \Symfony\Component\Form\FormFactory $formFactory
@@ -42,18 +45,24 @@ abstract class Base {
         $this->environment = $environment;
     }
 
-    protected function getDefaultParams() {
+    protected function getDefaultParams()
+    {
         return array();
     }
 
-    public function getCode() {
+    public function getCode()
+    {
         return $this->code;
     }
 
     public function getParam($paramName)
     {
+        if (!array_key_exists($paramName, $this->params)) {
+            throw new Exception(sprintf('The admin section %s must have a %s parameter', $this->getCode(), $paramName), Exception::SECTION_INVALID);
+        }
         return $this->params[$paramName];
     }
+
     /**
      * @param grid $type
      * @return \Snowcap\AdminBundle\Grid\Base
@@ -62,6 +71,7 @@ abstract class Base {
     {
         return $this->environment->createGrid($type, $code);
     }
+
     /**
      * @param $type
      * @param null $data
@@ -75,7 +85,10 @@ abstract class Base {
 
     abstract public function getDefaultPath();
 
-    protected function validateParams(array $params) {
-        
+    protected function validateParams(array $params)
+    {
+        if (!array_key_exists('label', $params)) {
+            throw new Exception(sprintf('The admin section %s must be configured with a "label" parameter', $this->getCode()), Exception::SECTION_INVALID);
+        }
     }
 }

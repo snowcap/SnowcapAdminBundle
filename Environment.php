@@ -34,7 +34,7 @@ class Environment extends ContainerAware
      * @param string $code
      * @return \Snowcap\AdminBundle\Admin\Base
      */
-    public function getSection($code)
+    public function getAdmin($code)
     {
         if (!array_key_exists($code, $this->sections)) {
             throw new Exception(sprintf('The admin section %s  has not been registered with the admin bundle', $code), Exception::SECTION_UNKNOWN);

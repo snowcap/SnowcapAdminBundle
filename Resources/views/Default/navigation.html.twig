@@ -1,3 +1,19 @@
-{% for section in sections %}
-    <a href="{{ section.defaultPath }}">{{ "navigation.link" | trans({'%type%' : section.param('label')}) }}</a>
-{% endfor %}
+{% macro menu_item(url, label, title) %}
+    <li>
+        <a href="{{ url }}" title="{{ title | trans }}">{{ label | trans }}</a>
+    </li>
+{% endmacro %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="{{ path('admin_index') }}">
+                {{ "project.name"|trans({}, 'SnowcapAdminBundle') }}
+            </a>
+            <ul class="nav">
+                {% for section in sections %}
+                    {{ _self.menu_item(section.defaultUrl, section.param('label')) }}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
