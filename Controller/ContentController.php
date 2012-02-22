@@ -26,8 +26,9 @@ class ContentController extends Controller
      */
     public function indexAction($code)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $grid = $admin->getListGrid();
+        $admin = $this->get('snowcap_admin')->getAdmin($code); /* @var \Snowcap\AdminBundle\Admin\ContentAdmin $admin */
+        $grid = $admin->getContentGrid();
+
         return array(
             'admin' => $admin,
             'grid' => $grid,

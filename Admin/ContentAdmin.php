@@ -14,42 +14,46 @@ use Snowcap\AdminBundle\Exception;
  *
  * Instances of this class are used as configuration for specific models
  */
-abstract class Content extends Base
+abstract class ContentAdmin extends AbstractAdmin
 {
     public function getDefaultPath()
     {
         return $this->environment->get('router')->generate('content', array('code' => $this->getCode()));
     }
 
-    protected function getDefaultParams() {
-            return array('grid_type' => 'content');
-        }
+    protected function getDefaultParams()
+    {
+        return array('grid_type' => 'content');
+    }
 
-    public function getListGrid()
-        {
-            $grid = $this->environment->get('snowcap_admin.grid_factory')->create($this->getParam('grid_type'), $this->getCode());
-            $grid->addAction('content_update', array('code' => $this->getCode()));
-            $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
-            $queryBuilder
-                ->select('e')
-                ->from($this->getParam('entity_class'), 'e');
-            $grid->setQueryBuilder($queryBuilder);
-            $this->configureListGrid($grid);
-            return $grid;
-        }
+    /**
+     * Return the main content grid used to display the entity listing
+     *
+     * @return \Snowcap\AdminBundle\Grid\ContentGrid
+     */
+    public function getContentGrid()
+    {
+        $grid = $this->environment->get('snowcap_admin.grid_factory')->create($this->getParam('grid_type'), $this->getCode());
+        $grid->addAction('content_update', array('code' => $this->getCode()));
+        $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder(); /* @var QueryBuilder $queryBuilder */
+        $this->configureListQueryBuilder($queryBuilder);
+        $grid->setQueryBuilder($queryBuilder);
+        $this->configureListGrid($grid);
+        return $grid;
+    }
+
     /**
      * @abstract
-     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
-     *
-     * @return \Doctrine\ORM\QueryBuilder $queryBuilder
+     * @param \Snowcap\AdminBundle\Grid\ContentGrid $grid
      */
-    abstract public function configureListGrid(ContentGrid $grid);
+    abstract protected function configureListGrid(ContentGrid $grid);
 
-
-
-
-
-
+    protected function configureListQueryBuilder(QueryBuilder $queryBuilder)
+    {
+        $queryBuilder
+            ->select('e')
+            ->from($this->getParam('entity_class'), 'e');
+    }
 
 
     public function validateParams(array $params)
@@ -62,8 +66,6 @@ abstract class Content extends Base
             throw new Exception(sprintf('The admin section %s has an invalid "entity_class" parameter', $this->getCode()), Exception::SECTION_INVALID);
         }
     }
-
-
 
 
     /**

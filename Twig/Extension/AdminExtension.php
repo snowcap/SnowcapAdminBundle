@@ -1,6 +1,8 @@
 <?php
 namespace Snowcap\AdminBundle\Twig\Extension;
 
+use Symfony\Component\Form\Util\PropertyPath;
+
 use Snowcap\AdminBundle\Grid\AbstractGrid;
 
 /**
@@ -54,26 +56,22 @@ class AdminExtension extends \Twig_Extension {
         return $html;
     }
     
-    public function renderCell($entity, $property, $params)
+    public function renderCell($entity, $path, $params)
     {
         $loader = $this->environment->getLoader(); /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
         $loader->addPath(__DIR__ . '/../../Resources/views/');
         $template = $this->environment->loadTemplate('grid.html.twig');
-        $output = 'EMPTY';
-        if(isset($params['callback'])){
-            $output = call_user_func($params['callback'], $entity);
-        }
-        elseif(isset($entity->$property)){
-            $output = $entity->$property;
-        }
-        elseif(method_exists($entity, 'get' . ucfirst($property))){
-            $output = call_user_func(array($entity, 'get' . ucfirst($property)));
-        }
+
+        $propertyPath = new PropertyPath($path);
+        $output = $propertyPath->getValue($entity);
+
         ob_start();
         $template->displayBlock('cell', array('output' => $output));
         $html = ob_get_clean();
+
         return $html;
     }
+
     public function renderHeader($property, $params)
     {
         $loader = $this->environment->getLoader(); /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */

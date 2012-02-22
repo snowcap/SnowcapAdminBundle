@@ -62,7 +62,7 @@ class Environment extends ContainerAware
         if (!class_exists($sectionParams['admin_class'])) {
             throw new Exception(sprintf('The admin section "%s" has an invalid "admin_class" parameter (%s).', $sectionName, $sectionParams['admin_class']), Exception::SECTION_INVALID);
         }
-        $expectedParent = 'Snowcap\\AdminBundle\\Admin\\Base';
+        $expectedParent = 'Snowcap\\AdminBundle\\Admin\\AbstractAdmin';
         if (!in_array($expectedParent, class_parents($sectionParams['admin_class']))) { //TODO: replace with instanceof ?
             throw new Exception(sprintf('The admin section class %s for the admin section "%s" must extend the class %s.', $sectionParams['admin_class'], $sectionName, $expectedParent), Exception::SECTION_INVALID);
         }

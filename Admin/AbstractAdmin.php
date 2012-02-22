@@ -8,7 +8,7 @@ use Snowcap\AdminBundle\Environment;
 use Snowcap\AdminBundle\Grid\Factory as GridFactory;
 use Snowcap\AdminBundle\Exception;
 
-abstract class Base
+abstract class AbstractAdmin
 {
     /**
      * @var \Snowcap\AdminBundle\Environment

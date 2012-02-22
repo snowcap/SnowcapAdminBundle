@@ -43,26 +43,11 @@ class ContentGrid extends AbstractGrid {
             }
             catch(\Doctrine\ORM\Query\QueryException $e) {
                 throw new Exception(
-                    sprintf('The "%s" grid queryBuilder leads to an invalid query (probably due to lacking select or from clauses)', $this->code),
+                    sprintf('The "%s" grid queryBuilder leads to an invalid query (probably due to lacking select or from clauses). The returned error was: %s', $this->code, $e->getMessage()),
                     Exception::GRID_INVALIDQUERYBUILDER
                 );
             }
         }
         return $this->data;
-    }
-
-    public function setFormFactory(FormFactory $formFactory)
-    {
-        $this->formFactory = $formFactory;
-    }
-
-    public function setRouter(Router $router)
-    {
-        $this->router = $router;
-    }
-
-    public function add($columnName, $type = 'field', $columnParams = array())
-    {
-        parent::add($columnName, $type, $columnParams);
     }
 }

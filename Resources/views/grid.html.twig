@@ -39,32 +39,30 @@
 {% endblock %}
 
 {% block grid_widget_content %}
-    <div class="grid grid-orderablecontent">
-        <table>
-            <thead>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                {% for column_name, column_params in grid.columns %}
+                    {{ grid_header(column_name, column_params) }}
+                {% endfor %}
+                {% if grid.actions | length > 0 %}
+                    <th>{{ "content.actions" | trans }}</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for data_row in grid.data %}
                 <tr>
-                    {% for column_name, column_params in grid.columns %}
-                        {{ grid_header(column_name, column_params) }}
+                    {% for path, params in grid.columns %}
+                    {{ grid_cell(data_row, path, params) }}
                     {% endfor %}
                     {% if grid.actions | length > 0 %}
-                        <th>{{ "content.actions" | trans }}</th>
+                        {{ block('row_actions') }}
                     {% endif %}
                 </tr>
-            </thead>
-            <tbody>
-                {% for data_row in grid.data %}
-                    <tr>
-                        {% for column_name, column_params in grid.columns %}
-                            {{ grid_cell(data_row, column_name, column_params) }}
-                        {% endfor %}
-                        {% if grid.actions | length > 0 %}
-                            {{ block('row_actions') }}
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block row_actions %}
