@@ -1,4 +1,4 @@
 {% extends "SnowcapAdminBundle:Content:form.html.twig" %}
 
-{% set form_title = "content.update" | trans({'%content_name%': admin.param('label') | lower }) %}
-{% set form_action = admin.updateRoute(entity) %}
+{% set form_title = "content.update"|trans({'%content_name%': admin.param('label')|lower }, 'SnowcapAdminBundle') %}
+{% set form_action = path('snowcap_admin_content_update', {'code': admin.code, 'id': entity.id}) %}

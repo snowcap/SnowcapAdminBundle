@@ -2,8 +2,8 @@
 namespace Snowcap\AdminBundle\Admin;
 
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormBuilder;
 
 use Snowcap\AdminBundle\Form\ContentType;
 use Snowcap\AdminBundle\Grid\ContentGrid;
@@ -40,26 +40,57 @@ abstract class ContentAdmin extends AbstractAdmin
             array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
         );
         $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
-        $this->configureListQueryBuilder($queryBuilder);
+        $this->configureContentQueryBuilder($queryBuilder);
         $grid->setQueryBuilder($queryBuilder);
-        $this->configureListGrid($grid);
+        $this->configureContentGrid($grid);
         return $grid;
     }
 
+    public function getContentType()
+    {
+        $contentType = $this->createContentType();
+        $this->configureContentType($contentType);
+        return $contentType;
+    }
+
+    protected function createContentType()
+    {
+        $formFactory = $this->environment->get('form.factory'); /* @var FormFactory $formFactory */
+        return $formFactory->getType('snowcap_admin_content');
+    }
+
     /**
+     * Configure the main listing grid
+     *
      * @abstract
      * @param \Snowcap\AdminBundle\Grid\ContentGrid $grid
      */
-    abstract protected function configureListGrid(ContentGrid $grid);
+    abstract protected function configureContentGrid(ContentGrid $grid);
 
-    protected function configureListQueryBuilder(QueryBuilder $queryBuilder)
+    /**
+     * @abstract
+     * @param \Symfony\Component\Form\FormBuilder $builder
+     */
+    abstract protected function configureContentType(ContentType $type);
+
+    /**
+     * Configure the main listing query builder
+     *
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
+     */
+    protected function configureContentQueryBuilder(QueryBuilder $queryBuilder)
     {
         $queryBuilder
             ->select('e')
             ->from($this->getParam('entity_class'), 'e');
     }
 
-
+    /**
+     * Validate the admin section params
+     *
+     * @param array $params
+     * @throws \Snowcap\AdminBundle\Exception
+     */
     public function validateParams(array $params)
     {
         parent::validateParams($params);
@@ -69,27 +100,6 @@ abstract class ContentAdmin extends AbstractAdmin
         elseif (!class_exists($params['entity_class'])) {
             throw new Exception(sprintf('The admin section %s has an invalid "entity_class" parameter', $this->getCode()), Exception::SECTION_INVALID);
         }
-    }
-
-
-    /**
-     * Generate the default url for the admin instance
-     *
-     * @return string
-     */
-    public function getDefaulturl()
-    {
-        return $this->environment->get('router')->generate('snowcap_admin_content_index', array('code' => $this->getCode()));
-    }
-
-    public function getCreateRoute()
-    {
-        return $this->environment->buildRoute('content_create', array('code' => $this->code));
-    }
-
-    public function getUpdateRoute($entity)
-    {
-        return $this->environment->buildRoute('content_update', array('code' => $this->code, 'id' => $entity->getId()));
     }
 
 

@@ -10,10 +10,6 @@ services:
 
   snowcap_admin.grid_factory:
     class: Snowcap\AdminBundle\Grid\Factory
-    calls:
-      - [ setFormFactory, [ @form.factory ]]
-      - [ setRouter, [ @router ]]
-      - [ setDoctrine, [ @doctrine ]]
     
 
   snowcap_admin.twig:
@@ -40,7 +36,7 @@ services:
   snowcap_admin.form.content:
     class: Snowcap\AdminBundle\Form\ContentType
     tags:
-      -  { name: form.type, alias: content }
+      -  { name: form.type, alias: snowcap_admin_content }
   
   snowcap_admin.form.masscontent:
     class: Snowcap\AdminBundle\Form\MassContentType

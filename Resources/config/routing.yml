@@ -6,6 +6,10 @@ snowcap_admin_content_index:
     pattern: /content/{code}
     defaults: { _controller: SnowcapAdminBundle:Content:index }
 
+snowcap_admin_content_create:
+    pattern: /content/{code}/create
+    defaults: { _controller: SnowcapAdminBundle:Content:create }
+
 snowcap_admin_content_update:
     pattern: /content/{code}/update/{id}
-    defaults: { _controller: SnowcapAdminBundle:Content:index }
+    defaults: { _controller: SnowcapAdminBundle:Content:update }

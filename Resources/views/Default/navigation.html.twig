@@ -1,6 +1,6 @@
-{% macro menu_item(url, label, title) %}
+{% macro menu_item(route, routeParams, label, title) %}
     <li>
-        <a href="{{ url }}" title="{{ title | trans }}">{{ label | trans }}</a>
+        <a href="{{ path(route, routeParams) }}" title="{{ title | trans }}">{{ label | trans }}</a>
     </li>
 {% endmacro %}
 <div class="navbar navbar-fixed-top">
@@ -10,8 +10,8 @@
                 {{ "project.name"|trans({}, 'SnowcapAdminBundle') }}
             </a>
             <ul class="nav">
-                {% for section in sections %}
-                    {{ _self.menu_item(section.defaultUrl, section.param('label')) }}
+                {% for admin in sections %}
+                    {{ _self.menu_item('snowcap_admin_content_index', {'code': admin.code}, admin.param('label')) }}
                 {% endfor %}
             </ul>
         </div>

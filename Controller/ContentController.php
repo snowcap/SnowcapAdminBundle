@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Snowcap\AdminBundle\Admin\Content as ContentAdmin;
+use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Form\ContentType;
 
 /**
@@ -37,7 +37,6 @@ class ContentController extends Controller
     /**
      * Create a new content entity
      *
-     * @Route("/content/{code}/create", name="content_create")
      * @Template("SnowcapAdminBundle:Content:create.html.twig")
      *
      * @param string $code
@@ -50,19 +49,20 @@ class ContentController extends Controller
         $entityName = $admin->getParam('entity_class');
         $entity = new $entityName();
         $request = $this->get('request');
-        $form = $admin->getContentForm($entity);
+        $formType = $admin->getContentType();
+        $form = $this->createForm($formType, $entity);
         if ('POST' === $request->getMethod()) {
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $em->persist($entity);
                 $em->flush();
-                return $this->redirect($this->generateUrl('content', array('code' => $code)));
+                return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
         return array(
             'admin' => $admin,
             'entity' => $entity,
-            'form_view' => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -81,19 +81,20 @@ class ContentController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $this->findEntity($id, $admin);
         $request = $this->get('request');
-        $form = $admin->getContentForm($entity);
+        $formType = $admin->getContentType();
+        $form = $this->createForm($formType, $entity);
         if ('POST' === $request->getMethod()) {
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $em->persist($entity);
                 $em->flush();
-                return $this->redirect($this->generateUrl('content', array('code' => $code)));
+                return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
         return array(
             'admin' => $admin,
             'entity' => $entity,
-            'form_view' => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -105,7 +106,7 @@ class ContentController extends Controller
      * @param string $type
      * @return mixed
      */
-    public function massUpdateAction($code)
+    public function massUpdateAction($code)//TODO: check if still ok
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $em = $this->getDoctrine()->getEntityManager();

@@ -5,5 +5,5 @@ namespace Snowcap\AdminBundle\Admin;
  *
  * Instances of this class are used as configuration for specific models
  */
-abstract class Custom extends Base{
+abstract class CustomAdmin extends Base{
 }
