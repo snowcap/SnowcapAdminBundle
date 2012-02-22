@@ -8,7 +8,9 @@ content:
   save: Save
   edit: Edit
   delete: Delete
-  actions: actions
+  actions_header: Actions
+  actions:
+    edit: Edit
   back_to_list: Back to list
 
 project:

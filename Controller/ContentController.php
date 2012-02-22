@@ -18,7 +18,6 @@ class ContentController extends Controller
     /**
      * Content homepage (listing)
      *
-     * @Route("/content/{code}", name="snowcap_admin_content_index")
      * @Template()
      *
      * @param string $type
@@ -70,7 +69,6 @@ class ContentController extends Controller
     /**
      * Update an existing content entity
      *
-     * @Route("/content/{code}/update/{id}", name="content_update")
      * @Template("SnowcapAdminBundle:Content:update.html.twig")
      *
      * @param string $code

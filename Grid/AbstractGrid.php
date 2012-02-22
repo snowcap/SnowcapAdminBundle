@@ -30,9 +30,9 @@ abstract class AbstractGrid {
         return $this->code;
     }
 
-    public function addColumn($path, $columnParams = array())
+    public function addColumn($path, $options = array())
     {
-        $this->columns[$path] = $columnParams;
+        $this->columns[$path] = $options;
         return $this;
     }
 

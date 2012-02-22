@@ -34,8 +34,12 @@ abstract class ContentAdmin extends AbstractAdmin
     public function getContentGrid()
     {
         $grid = $this->environment->get('snowcap_admin.grid_factory')->create($this->getParam('grid_type'), $this->getCode());
-        $grid->addAction('content_update', array('code' => $this->getCode()));
-        $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder(); /* @var QueryBuilder $queryBuilder */
+        $grid->addAction(
+            'snowcap_admin_content_update',
+            array('code' => $this->getCode()),
+            array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
+        );
+        $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
         $this->configureListQueryBuilder($queryBuilder);
         $grid->setQueryBuilder($queryBuilder);
         $this->configureListGrid($grid);

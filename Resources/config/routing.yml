@@ -1,0 +1,11 @@
+snowcap_admin_default_index:
+    pattern: ""
+    defaults: { _controller: SnowcapAdminBundle:Default:index }
+
+snowcap_admin_content_index:
+    pattern: /content/{code}
+    defaults: { _controller: SnowcapAdminBundle:Content:index }
+
+snowcap_admin_content_update:
+    pattern: /content/{code}/update/{id}
+    defaults: { _controller: SnowcapAdminBundle:Content:index }

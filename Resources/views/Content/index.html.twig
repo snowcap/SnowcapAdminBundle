@@ -1,6 +1,6 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 
 {% block body %}
-	<h2>{{ "content.list" | trans({'%content_name%': admin.param('label') }) }}</h2>
+	<h2>{{ "content.list"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
 	{{ grid_widget(grid) }}
 {% endblock %}
