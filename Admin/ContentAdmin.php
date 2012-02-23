@@ -46,7 +46,19 @@ abstract class ContentAdmin extends AbstractAdmin
         return $grid;
     }
 
-    abstract public function getContentType();
+    /**
+     * @return mixed
+     * @throws \Snowcap\AdminBundle\Exception
+     */
+    public function getContentType(){
+        if (!array_key_exists('content_type_class', $this->params)) {
+            throw new Exception(sprintf('The admin section %s must be configured with a "content_type_class" parameter or override the getContentType() method', $this->getCode()), Exception::SECTION_INVALID);
+        }
+        elseif (!class_exists($this->params['content_type_class'])) {
+            throw new Exception(sprintf('The admin section %s has an invalid "content_type_class" parameter', $this->getCode()), Exception::SECTION_INVALID);
+        }
+        return new $this->params['content_type_class'];
+    }
 
     /**
      * Configure the main listing grid
@@ -77,6 +89,7 @@ abstract class ContentAdmin extends AbstractAdmin
     public function validateParams(array $params)
     {
         parent::validateParams($params);
+        // Checks that there is a valid entity class in the config
         if (!array_key_exists('entity_class', $params)) {
             throw new Exception(sprintf('The admin section %s must be configured with a "entity_class" parameter', $this->getCode()), Exception::SECTION_INVALID);
         }
