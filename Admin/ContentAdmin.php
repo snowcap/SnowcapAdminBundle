@@ -46,18 +46,7 @@ abstract class ContentAdmin extends AbstractAdmin
         return $grid;
     }
 
-    public function getContentType()
-    {
-        $contentType = $this->createContentType();
-        $this->configureContentType($contentType);
-        return $contentType;
-    }
-
-    protected function createContentType()
-    {
-        $formFactory = $this->environment->get('form.factory'); /* @var FormFactory $formFactory */
-        return $formFactory->getType('snowcap_admin_content');
-    }
+    abstract public function getContentType();
 
     /**
      * Configure the main listing grid
@@ -66,12 +55,6 @@ abstract class ContentAdmin extends AbstractAdmin
      * @param \Snowcap\AdminBundle\Grid\ContentGrid $grid
      */
     abstract protected function configureContentGrid(ContentGrid $grid);
-
-    /**
-     * @abstract
-     * @param \Symfony\Component\Form\FormBuilder $builder
-     */
-    abstract protected function configureContentType(ContentType $type);
 
     /**
      * Configure the main listing query builder
