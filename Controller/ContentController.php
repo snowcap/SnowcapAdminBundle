@@ -49,8 +49,9 @@ class ContentController extends Controller
         $entityName = $admin->getParam('entity_class');
         $entity = new $entityName();
         $request = $this->get('request');
-        $formType = $admin->getContentType();
-        $form = $this->createForm($formType, $entity);
+        //$formType = $admin->getContentType();
+        //$form = $this->createForm($formType, $entity);
+        $form = $admin->getForm($entity);
         if ('POST' === $request->getMethod()) {
             $form->bindRequest($request);
             if ($form->isValid()) {

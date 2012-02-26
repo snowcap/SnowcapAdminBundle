@@ -47,18 +47,16 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
-     * @return mixed
-     * @throws \Snowcap\AdminBundle\Exception
+     * @param $data
+     * @return \Symfony\Component\Form\Form
      */
-    public function getContentType(){
-        if (!array_key_exists('content_type_class', $this->params)) {
-            throw new Exception(sprintf('The admin section %s must be configured with a "content_type_class" parameter or override the getContentType() method', $this->getCode()), Exception::SECTION_INVALID);
-        }
-        elseif (!class_exists($this->params['content_type_class'])) {
-            throw new Exception(sprintf('The admin section %s has an invalid "content_type_class" parameter', $this->getCode()), Exception::SECTION_INVALID);
-        }
-        return new $this->params['content_type_class'];
+    public function getForm($data){
+        $builder = $this->environment->get('form.factory')->createBuilder('form', $data, array('data_class' => $this->getParam('entity_class')));
+        $this->buildForm($builder);
+        return $builder->getForm();
     }
+
+    abstract protected function buildForm(FormBuilder $builder);
 
     /**
      * Configure the main listing grid

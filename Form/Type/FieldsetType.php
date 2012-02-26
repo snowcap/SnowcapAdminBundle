@@ -1,5 +1,5 @@
 <?php
-namespace Snowcap\AdminBundle\Form\Extension\Core\Type;
+namespace Snowcap\AdminBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
@@ -21,19 +21,15 @@ class FieldsetType extends AbstractType
     {
         return array(
             'virtual' => true,
-            'fields' => array(),
             'legend' => null,
         );
     }
 
+
+
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder->setAttribute('legend', $options['legend']);
-        foreach($options['fields'] as $childName => $childParams) {
-            $type = isset($childParams['type']) ? $childParams['type'] : null;
-            $options = isset($childParams['options']) ? $childParams['options'] : array();
-            $builder->add($childName, $type, $options);
-        }
     }
 
     /**
@@ -44,4 +40,6 @@ class FieldsetType extends AbstractType
         $view
             ->set('legend', $form->getAttribute('legend'));
     }
+
+
 }

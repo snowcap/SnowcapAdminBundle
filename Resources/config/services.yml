@@ -29,7 +29,7 @@ services:
       -  { name: form.type, alias: markdown }
   
   snowcap_admin.fieldset:
-    class: Snowcap\AdminBundle\Form\Extension\Core\Type\FieldsetType
+    class: Snowcap\AdminBundle\Form\Type\FieldsetType
     tags:
       -  { name: form.type, alias: fieldset }
   

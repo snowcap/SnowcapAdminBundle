@@ -63,26 +63,6 @@ abstract class AbstractAdmin
         return $this->params[$paramName];
     }
 
-    /**
-     * @param grid $type
-     * @return \Snowcap\AdminBundle\Grid\Base
-     */
-    public function createGrid($type, $code)
-    {
-        return $this->environment->createGrid($type, $code);
-    }
-
-    /**
-     * @param $type
-     * @param null $data
-     * @param array $options
-     * @return \Symfony\Component\Form\Form
-     */
-    public function createForm($type, $data = null, $options = array())
-    {
-        return $this->environment->createForm($type, $data, $options);
-    }
-
     abstract public function getDefaultPath();
 
     protected function validateParams(array $params)
