@@ -11,6 +11,7 @@ content:
   actions_header: Actions
   actions:
     edit: Edit
+    delete: Delete
   back_to_list: Back to list
 
 project:

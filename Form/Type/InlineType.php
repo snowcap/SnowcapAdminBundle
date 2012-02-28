@@ -9,7 +9,7 @@ use Symfony\Component\Form\Exception\FormException;
 
 /**
  * Slug field type class
- * 
+ *
  */
 class InlineType extends AbstractType
 {
@@ -24,15 +24,20 @@ class InlineType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(array $options) {
-        return array('create_url' => null);
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'create_url' => null,
+            'empty_value' => '---'
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilder $builder, array $options) {
-        if($options['create_url'] === null) {
+    public function buildForm(FormBuilder $builder, array $options)
+    {
+        if ($options['create_url'] === null) {
             throw new FormException('Inline types must be given a valid create_url option');
         }
         $builder->setAttribute('create_url', $options['create_url']);
@@ -51,6 +56,6 @@ class InlineType extends AbstractType
      */
     public function getParent(array $options)
     {
-        return 'choice';
+        return 'entity';
     }
 }

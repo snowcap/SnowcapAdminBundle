@@ -1,0 +1,4 @@
+{% extends  "SnowcapAdminBundle:Inline:form.html.twig" %}
+
+{% set form_title = "content.create"|trans({'%content_name%': admin.param('label')|lower}, 'SnowcapAdminBundle') %}
+{% set form_action = path('snowcap_admin_inline_create', {'code': admin.code}) %}

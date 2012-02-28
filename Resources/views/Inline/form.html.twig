@@ -3,7 +3,7 @@
 {% block modal_title %}<h3>{{ form_title }}</h3>{% endblock %}
 
 {% block modal_body %}
-<form action="{{ form_action }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate">
     {{ form_widget(form) }}
 </form>
 {% endblock %}

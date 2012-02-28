@@ -39,22 +39,47 @@ jQuery(document).ready(function ($) {
     };
 
     var InlineWidget = function (trigger) {
-        var modal = $('#modal').modal({show:false});
+        //$(trigger).siblings('select').hide();
+        var modal = $('#modal');
         $(trigger).click(function (event) {
             event.preventDefault();
+
             $.get($(trigger).attr('href'), function (data) {
-                modal.html(data);
-                modal.find('$[type=submit]').click(function (event) {
+                modal.html(data.html);
+                modal.find('$[type=submit]').live('click', function (event) {
                     event.preventDefault();
                     var form = modal.find('form');
-                    $.post(form.attr('action'), form.serialize(), function (data) {
-                        console.log(data);
-                    });
+                    var data = new FormData(form[0]);
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', form.attr('action'), true);
+                    xhr.onload = function(e) {
+                        if(this.status === 200){
+                            var responseJSON = JSON.parse(this.response);
+                            modal.html(responseJSON.html);
+                        }
+                        else if(this.status === 201){
+                            var responseJSON = JSON.parse(this.response);
+                            var inlineId = responseJSON.inline_id;
+                            console.log(responseJSON);
+                            modal.modal('hide');
+                        }
+                    };
+                    xhr.send(data);
+                    /*var form = modal.find('form');
+                    $.post(form.attr('action'), form.formData(), function (data) {
+                        modal.html(data.html);
+                    });*/
                 });
                 modal.modal('show');
             });
         });
     };
+
+    //TODO: create modals on demand
+    $('#modal').modal({show:false});
+    $('#modal').on('hidden', function(event){
+       $(this).empty();
+    });
 
     $('a[rel=inline]').each(function (offset, trigger) {
         new InlineWidget(trigger);

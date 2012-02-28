@@ -25,7 +25,8 @@ class ContentController extends Controller
      */
     public function indexAction($code)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($code); /* @var \Snowcap\AdminBundle\Admin\ContentAdmin $admin */
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        /* @var \Snowcap\AdminBundle\Admin\ContentAdmin $admin */
         $grid = $admin->getContentGrid();
 
         return array(
@@ -45,16 +46,13 @@ class ContentController extends Controller
     public function createAction($code)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $em = $this->get('doctrine')->getEntityManager();
-        $entityName = $admin->getParam('entity_class');
-        $entity = new $entityName();
+        $entity = $admin->getBlankEntity();
         $request = $this->get('request');
         $form = $admin->getForm($entity);
         if ('POST' === $request->getMethod()) {
             $form->bindRequest($request);
             if ($form->isValid()) {
-                $em->persist($entity);
-                $em->flush();
+                $admin->saveEntity($entity);
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
@@ -77,17 +75,13 @@ class ContentController extends Controller
     public function updateAction($code, $id)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $em = $this->getDoctrine()->getEntityManager();
-        $entity = $this->findEntity($id, $admin);
+        $entity = $admin->findEntity($id);
         $request = $this->get('request');
-        //$formType = $admin->getContentType();
-        //$form = $this->createForm($formType, $entity);
         $form = $admin->getForm($entity);
         if ('POST' === $request->getMethod()) {
             $form->bindRequest($request);
             if ($form->isValid()) {
-                $em->persist($entity);
-                $em->flush();
+                $admin->saveEntity($entity);
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
@@ -99,68 +93,16 @@ class ContentController extends Controller
     }
 
     /**
-     * Mass update an existing content entity
-     *
-     * @Route("/content/{code}/mass_update", name="content_mass_update")
-     *
-     * @param string $type
-     * @return mixed
-     */
-    public function massUpdateAction($code)//TODO: check if still ok
-    {
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $em = $this->getDoctrine()->getEntityManager();
-        $grid = $admin->getContentGrid();
-        $form = $grid->getOrderForm();
-        $request = $this->get('request');
-        if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
-            if ($form->isValid()) {
-                foreach($grid->getData() as $entity) {
-                    foreach($form->get($grid->generateEntityKey($entity))->get($entity->getId())->getData() as $dataKey => $dataValue) {
-                        call_user_func(array($entity, 'set' . ucfirst($dataKey)), $dataValue);
-                    }
-                    $em->persist($entity);
-                }
-                $em->flush();
-                return $this->redirect($this->generateUrl('content', array('section' => $section)));
-            }
-        }
-    }
-
-    /**
      * Deletes a content entity.
      *
-     * @Route("/content/{section}/delete/{id}", name="content_delete")
-     *
      * @param string $type
      * @param int $id
      * @return mixed
      */
-    public function deleteAction($section, $id)
+    public function deleteAction($code, $id)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($section);
-        $entity = $this->findEntity($id, $admin);
-        $em = $this->get('doctrine')->getEntityManager();
-        $em->remove($entity);
-        $em->flush();
-        return $this->redirect($this->generateUrl('content', array('section' => $section)));
-    }
-
-    /**
-     * Find an entity managed by the provided admin class
-     *
-     * @throws \Symfony\Bundle\FrameworkBundle\Controller\NotFoundHttpException
-     * @param int $id
-     * @param \Snowcap\AdminBundle\Admin\Content $admin
-     * @return \Object
-     */
-    private function findEntity($id, ContentAdmin $admin)
-    {
-        $entity = $this->get('doctrine')->getEntityManager()->getRepository($admin->getParam('entity_class'))->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find content entity.');
-        }
-        return $entity;
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $admin->deleteEntity($id);
+        return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
     }
 }
