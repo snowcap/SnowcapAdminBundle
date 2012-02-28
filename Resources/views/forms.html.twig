@@ -9,6 +9,10 @@
 {% endif %}
 {% endblock %}
 
+{% block inline_widget %}
+<a class="btn btn-small btn-primary" rel="inline" href="{{ create_url }}"><i class="icon-plus icon-white"></i> Add</a>
+{% endblock %}
+
 {% block fieldset_widget %}
 {% spaceless %}
     <fieldset>

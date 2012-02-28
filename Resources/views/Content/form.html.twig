@@ -1,16 +1,14 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 
-
 {% block body %}
-<section class="section-700">
-	<h2>{{ form_title }}</h2>
-	<form action="{{ form_action }}" method="post" {{ form_enctype(form) }}>
-		{{ form_widget(form) }}
-		<div class="form-actions">
-			<button type="submit" class="btn btn-large btn-primary">{{ "content.save"|trans({}, 'SnowcapAdminBundle') }}</button>
-		</div>
-	</form>
-</section>
+<h2>{{ form_title }}</h2>
+<form action="{{ form_action }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <div class="form-actions">
+        <button type="submit"
+                class="btn btn-large btn-primary">{{ "content.save"|trans({}, 'SnowcapAdminBundle') }}</button>
+    </div>
+</form>
 {% endblock %}
 
 
