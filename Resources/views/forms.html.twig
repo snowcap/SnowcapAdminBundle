@@ -14,7 +14,7 @@
 
     {% endif %}
     {{ block('choice_widget') }}
-    <a class="btn btn-small btn-primary" rel="inline" href="{{ create_url }}"><i class="icon-plus icon-white"></i> Add</a>
+    <a class="btn btn-small btn-primary" rel="inline" href="{{ path(route, params) }}"><i class="icon-plus icon-white"></i> Add</a>
 
 {% endblock %}
 

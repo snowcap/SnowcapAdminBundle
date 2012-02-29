@@ -59,8 +59,12 @@ jQuery(document).ready(function ($) {
                         }
                         else if(this.status === 201){
                             var responseJSON = JSON.parse(this.response);
-                            var inlineId = responseJSON.inline_id;
-                            console.log(responseJSON);
+                            var select = $(trigger).siblings('select');
+                            var option = $('<option>');
+                            option.attr('value', responseJSON.entity_id);
+                            option.attr('selected', 'selected');
+                            option.html(responseJSON.entity_property);
+                            select.append(option);
                             modal.modal('hide');
                         }
                     };

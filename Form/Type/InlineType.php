@@ -27,7 +27,8 @@ class InlineType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'create_url' => null,
+            'route' => null,
+            'params' => null,
             'empty_value' => '---'
         );
     }
@@ -37,10 +38,14 @@ class InlineType extends AbstractType
      */
     public function buildForm(FormBuilder $builder, array $options)
     {
-        if ($options['create_url'] === null) {
-            throw new FormException('Inline types must be given a valid create_url option');
+        if ($options['route'] === null) {
+            throw new FormException('Inline types must be given a valid route option');
         }
-        $builder->setAttribute('create_url', $options['create_url']);
+        if ($options['params'] === null) {
+            throw new FormException('Inline types must be given a valid params option');
+        }
+        $builder->setAttribute('route', $options['route']);
+        $builder->setAttribute('params', $options['params']);
     }
 
     /**
@@ -48,7 +53,8 @@ class InlineType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form)
     {
-        $view->set('create_url', $form->getAttribute('create_url'));
+        $view->set('route', $form->getAttribute('route'));
+        $view->set('params', $form->getAttribute('params'));
     }
 
     /**

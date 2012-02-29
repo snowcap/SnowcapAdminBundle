@@ -6,6 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Util\PropertyPath;
+
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 
@@ -19,9 +21,10 @@ class InlineController extends Controller
      * Create a new content entity
      *
      * @param string $code
+     * @param string $property
      * @return mixed
      */
-    public function createAction($code)
+    public function createAction($code, $property)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $entity = $admin->getBlankEntity();
@@ -31,8 +34,13 @@ class InlineController extends Controller
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
+
+                $propertyPath = new PropertyPath($property);
+                $value = $propertyPath->getValue($entity);
+
                 $return = array(
-                    'inline_id' => $entity->getId(),
+                    'entity_id' => $entity->getId(),
+                    'entity_property' => $value,
                 );
                 return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
             }
@@ -43,6 +51,7 @@ class InlineController extends Controller
                 'admin' => $admin,
                 'entity' => $entity,
                 'form' => $form->createView(),
+                'property' => $property,
             ))
         );
         return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
