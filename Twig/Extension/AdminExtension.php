@@ -35,6 +35,7 @@ class AdminExtension extends \Twig_Extension {
             'grid_widget' => new \Twig_Function_Method($this, 'renderGrid', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'grid_cell' => new \Twig_Function_Method($this, 'renderCell', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'grid_header' => new \Twig_Function_Method($this, 'renderHeader', array('pre_escape' => 'html', 'is_safe' => array('html'))),
+            'form_row_type_classes' => new \Twig_Function_Method($this, 'getFormRowTypeClasses'),
         );
     }
 
@@ -88,6 +89,13 @@ class AdminExtension extends \Twig_Extension {
         $html = ob_get_clean();
         return $html;
     }
+
+    public function getFormRowTypeClasses(array $types) {
+        return implode(' ', array_map(function($type){
+            return 'type_' . $type;
+        }, $types));
+    }
+
 
     public function getName()
     {

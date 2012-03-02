@@ -26,7 +26,7 @@ services:
   snowcap_admin.inline:
     class: Snowcap\AdminBundle\Form\Type\InlineType
     tags:
-      -  { name: form.type, alias: inline }
+      -  { name: form.type, alias: snowcap_admin_inline }
 
   snowcap_admin.markdown:
     class: Snowcap\AdminBundle\Form\Extension\Core\Type\MarkdownType

@@ -56,4 +56,32 @@ class InlineController extends Controller
         );
         return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
     }
+
+    public function selectAction($code)
+    {
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $grid = $admin->getContentGrid();
+
+        $return = array(
+            'html' => $this->renderView('SnowcapAdminBundle:Inline:select.html.twig', array(
+                'admin' => $admin,
+                'grid' => $grid,
+            ))
+        );
+        return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
+    }
+
+    public function previewAction($code, $id)
+    {
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $preview = $admin->getPreview($id);
+
+        $return = array(
+            'html' => $this->renderView('SnowcapAdminBundle:Inline:preview.html.twig', array(
+                'admin' => $admin,
+                'preview' => $preview,
+            ))
+        );
+        return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
+    }
 }

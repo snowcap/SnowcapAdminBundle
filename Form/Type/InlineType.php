@@ -18,7 +18,7 @@ class InlineType extends AbstractType
      */
     public function getName()
     {
-        return 'inline';
+        return 'snowcap_admin_inline';
     }
 
     /**
@@ -27,9 +27,9 @@ class InlineType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'route' => null,
-            'params' => null,
-            'empty_value' => '---'
+            'inline_admin' => null,
+            'empty_value' => '---',
+            'preview' => null,
         );
     }
 
@@ -38,14 +38,12 @@ class InlineType extends AbstractType
      */
     public function buildForm(FormBuilder $builder, array $options)
     {
-        if ($options['route'] === null) {
-            throw new FormException('Inline types must be given a valid route option');
+        if ($options['inline_admin'] === null) {
+            throw new FormException('Inline types must be given a valid "inline_admin" option');
         }
-        if ($options['params'] === null) {
-            throw new FormException('Inline types must be given a valid params option');
-        }
-        $builder->setAttribute('route', $options['route']);
-        $builder->setAttribute('params', $options['params']);
+        $builder->setAttribute('inline_admin', $options['inline_admin']);
+        $builder->setAttribute('property', $options['property']);
+        $builder->setAttribute('preview', $options['preview']);
     }
 
     /**
@@ -53,8 +51,9 @@ class InlineType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form)
     {
-        $view->set('route', $form->getAttribute('route'));
-        $view->set('params', $form->getAttribute('params'));
+        $view->set('inline_admin', $form->getAttribute('inline_admin'));
+        $view->set('property', $form->getAttribute('property'));
+        $view->set('preview', $form->getAttribute('preview'));
     }
 
     /**

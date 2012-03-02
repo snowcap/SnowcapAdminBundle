@@ -1,11 +1,9 @@
 {% extends "SnowcapAdminBundle::modal_base.html.twig" %}
 
-{% block modal_title %}<h3>{{ form_title }}</h3>{% endblock %}
+{% block modal_title %}<h3>{{ "content.list"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h3>{% endblock %}
 
 {% block modal_body %}
-<form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate">
-    {{ form_widget(form) }}
-</form>
+    {{ grid_widget(grid) }}
 {% endblock %}
 
 {% block modal_footer%}

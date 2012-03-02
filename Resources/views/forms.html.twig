@@ -1,21 +1,16 @@
 {% extends 'SnowcapBootstrapBundle::forms.html.twig' %}
 
-{% block field_row %}
-{% if attr is not defined %}{% set attr = {} %}{% endif %}
-{% if 'fieldset' in types %}
-{{ form_widget(form, {'attr': attr}) }}
-{% else %}
-{{ parent() }}
-{% endif %}
-{% endblock %}
-
-{% block inline_widget %}
-    {% if value is empty %}
-
-    {% endif %}
+{% block snowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
-    <a class="btn btn-small btn-primary" rel="inline" href="{{ path(route, params) }}"><i class="icon-plus icon-white"></i> Add</a>
-
+    <p>
+        {% if value is not empty %}
+        <a rel="preview" href="{{ path('snowcap_admin_inline_preview', {'code': inline_admin.code, 'id': value }) }}">Preview</a>
+        {% endif %}
+        {% if choices is not empty %}
+            <a class="btn btn-small" rel="select" href="{{ path('snowcap_admin_inline_select', {'code': inline_admin.code }) }}"><i class="icon-search"></i> Search</a>
+        {% endif %}
+        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inline_create', {'code': inline_admin.code, 'property': property }) }}"><i class="icon-plus icon-white"></i> Add</a>
+    </p>
 {% endblock %}
 
 {% block fieldset_widget %}

@@ -5,11 +5,10 @@ jQuery(document).ready(function ($) {
         var _element = $(element);
 
         // Get the data-prototype we explained earlier
-        //var prototype = collectionHolder.attr('data-prototype');
+        var prototype = collectionHolder.attr('data-prototype');
         // Replace '$$name$$' in the prototype's HTML to
         // instead be a number based on the current collection's length.
-        //form = prototype.replace(/\$\$name\$\$/g, collectionHolder.children().length);
-        $.ajax('get_embeded_form/form_name/3')
+        form = prototype.replace(/\$\$name\$\$/g, collectionHolder.children().length);
         // Display the form in the page
         collectionHolder.append(form);
     };
@@ -38,55 +37,70 @@ jQuery(document).ready(function ($) {
         });
     };
 
-    var InlineWidget = function (trigger) {
-        //$(trigger).siblings('select').hide();
-        var modal = $('#modal');
-        $(trigger).click(function (event) {
-            event.preventDefault();
+    var InlineWidget = function (row) {
 
-            $.get($(trigger).attr('href'), function (data) {
+        var self = this;
+        var addTrigger = $(row).find('a[rel=create]');
+        var selectTrigger = $(row).find('a[rel=select]');
+        var modal = $('#modal');
+
+        /**
+         * Observe what's cooking in the add form
+         */
+        self.observeAddForm = function () {
+            modal.find('$[type=submit]').on('click', function (event) {
+                event.preventDefault();
+                var form = modal.find('form');
+                var data = new FormData(form[0]);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', form.attr('action'), true);
+                xhr.onload = function (e) {
+                    if (this.status === 200) {
+                        var responseJSON = JSON.parse(this.response);
+                        modal.html(responseJSON.html);
+                        self.observeAddForm();
+                    }
+                    else if (this.status === 201) {
+                        var responseJSON = JSON.parse(this.response);
+                        var select = $(addTrigger).siblings('select');
+                        var option = $('<option>');
+                        option.attr('value', responseJSON.entity_id);
+                        option.attr('selected', 'selected');
+                        option.html(responseJSON.entity_property);
+                        select.append(option);
+                        modal.modal('hide');
+                    }
+                };
+                xhr.send(data);
+            });
+        };
+
+        /**
+         * Open the add popup
+         */
+        $(addTrigger).click(function (event) {
+            event.preventDefault();
+            $.get($(this).attr('href'), function (data) {
                 modal.html(data.html);
-                modal.find('$[type=submit]').live('click', function (event) {
-                    event.preventDefault();
-                    var form = modal.find('form');
-                    var data = new FormData(form[0]);
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', form.attr('action'), true);
-                    xhr.onload = function(e) {
-                        if(this.status === 200){
-                            var responseJSON = JSON.parse(this.response);
-                            modal.html(responseJSON.html);
-                        }
-                        else if(this.status === 201){
-                            var responseJSON = JSON.parse(this.response);
-                            var select = $(trigger).siblings('select');
-                            var option = $('<option>');
-                            option.attr('value', responseJSON.entity_id);
-                            option.attr('selected', 'selected');
-                            option.html(responseJSON.entity_property);
-                            select.append(option);
-                            modal.modal('hide');
-                        }
-                    };
-                    xhr.send(data);
-                    /*var form = modal.find('form');
-                    $.post(form.attr('action'), form.formData(), function (data) {
-                        modal.html(data.html);
-                    });*/
-                });
+                self.observeAddForm();
                 modal.modal('show');
             });
+        });
+
+        $(selectTrigger).click(function(event) {
+           event.preventDefault();
+            $.get;
         });
     };
 
     //TODO: create modals on demand
     $('#modal').modal({show:false});
-    $('#modal').on('hidden', function(event){
-       $(this).empty();
+    $('#modal').on('hidden', function (event) {
+        $(this).empty();
     });
 
-    $('a[rel=inline]').each(function (offset, trigger) {
-        new InlineWidget(trigger);
+    $('.type_snowcap_admin_inline').each(function (offset, row) {
+        new InlineWidget(row);
     });
 
     $('*[data-prototype]').manageDataPrototype();
