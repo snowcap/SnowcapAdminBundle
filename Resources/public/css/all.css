@@ -2,6 +2,10 @@ body {
     padding-top: 60px;
 }
 
+.widget-markdown {
+    width: 98%;
+}
+
 .markdown-previewer {
     min-height: 190px;
     padding: 4px;
