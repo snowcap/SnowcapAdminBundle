@@ -9,7 +9,6 @@ jQuery(document).ready(function ($) {
         var previewTrigger = _element.parents('.controls').find('.preview-trigger');
         $(previewTrigger).click(function(event) {
             previewContent = _element.val();
-            console.log(previewContent);
 
             if (previewContent != latestPreviewContent) {
                 $.post(_element.attr('data-url'), { content: previewContent }, function(data) {
