@@ -19,7 +19,7 @@ services:
       -  { name: twig.extension }
 
   snowcap_admin.slug:
-    class: Snowcap\AdminBundle\Form\Extension\Core\Type\SlugType
+    class: Snowcap\AdminBundle\Form\Type\SlugType
     tags:
       -  { name: form.type, alias: slug }
 
@@ -29,7 +29,7 @@ services:
       -  { name: form.type, alias: snowcap_admin_inline }
 
   snowcap_admin.markdown:
-    class: Snowcap\AdminBundle\Form\Extension\Core\Type\MarkdownType
+    class: Snowcap\AdminBundle\Form\Type\MarkdownType
     tags:
       -  { name: form.type, alias: markdown }
   

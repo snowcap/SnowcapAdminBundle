@@ -1,23 +1,23 @@
 <?php
-namespace Snowcap\AdminBundle\Form\Extension\Core\Type;
+namespace Snowcap\AdminBundle\Form\Type;
 
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
 /**
- * Markdown field type class
+ * Slug field type class
  * 
  */
-class MarkdownType extends TextAreaType
+class SlugType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'markdown';
+        return 'slug';
     }
 
     /**
@@ -50,6 +50,6 @@ class MarkdownType extends TextAreaType
      */
     public function getParent(array $options)
     {
-        return 'textarea';
+        return 'text';
     }
 }

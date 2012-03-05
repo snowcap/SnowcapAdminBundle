@@ -21,3 +21,21 @@
     </fieldset>
 {% endspaceless %}
 {% endblock %}
+
+{% block markdown_widget %}
+{% set attr = attr|merge({'class': attr.class|default('widget-markdown span10')}) %}
+{% spaceless %}
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#textarea-{{ id }}" data-toggle="tab" class="text-trigger">Text</a></li>
+        <li><a href="#preview-{{ id }}" data-toggle="tab" class="preview-trigger">Preview</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="textarea-{{ id }}">
+            <textarea {{ block('widget_attributes') }} data-url="{{ path('snowcap_admin_markdown') }}" rows="10">{{ value }}</textarea>
+        </div>
+        <div class="tab-pane" id="preview-{{ id }}">
+            <div class="markdown-previewer">&nbsp;</div>
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock %}

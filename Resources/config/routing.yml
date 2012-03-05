@@ -29,3 +29,8 @@ snowcap_admin_inline_create:
 snowcap_admin_inline_preview:
     pattern: /inline/{code}/preview/{id}
     defaults: { _controller: SnowcapAdminBundle:Inline:preview }
+
+# Default routes
+snowcap_admin_markdown:
+    pattern: /markdown
+    defaults: { _controller: SnowcapAdminBundle:Default:markdown }

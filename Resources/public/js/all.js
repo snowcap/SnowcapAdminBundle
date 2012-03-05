@@ -1,5 +1,33 @@
 jQuery(document).ready(function ($) {
 
+    var MarkdownPreviewer = function(element) {
+        var _element = $(element);
+        var latestPreviewContent = "";
+        var previewContent = "";
+
+        var previewElement = _element.parents('.tab-content').find('.markdown-previewer');
+        var previewTrigger = _element.parents('.controls').find('.preview-trigger');
+        $(previewTrigger).click(function(event) {
+            previewContent = _element.val();
+            console.log(previewContent);
+
+            if (previewContent != latestPreviewContent) {
+                $.post(_element.attr('data-url'), { content: previewContent }, function(data) {
+                    previewElement.html(data);
+                    latestPreviewContent = previewContent;
+                });
+            }
+        });
+
+    };
+
+    $.fn.markdownPreviewer = function() {
+        return this.each(function() {
+            new MarkdownPreviewer(this);
+        });
+    };
+
+
     var AddElementForm = function (element, collectionHolder) {
         var _this = this;
         var _element = $(element);
@@ -92,6 +120,8 @@ jQuery(document).ready(function ($) {
             $.get;
         });
     };
+
+    $('.widget-markdown').markdownPreviewer();
 
     //TODO: create modals on demand
     $('#modal').modal({show:false});
