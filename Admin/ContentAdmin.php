@@ -62,8 +62,6 @@ abstract class ContentAdmin extends AbstractAdmin
         return $builder->getForm();
     }
 
-    abstract protected function buildForm(FormBuilder $builder);
-
     /**
      * Configure the main listing grid
      *

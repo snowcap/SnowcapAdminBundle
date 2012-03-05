@@ -20,6 +20,7 @@ class CollectionTypeExtension extends AbstractTypeExtension
             'initial_data' => null,
             'tabbable' => false,
             'property' => 'id',
+            'html_id' => 'tabbable',
         );
     }
 
@@ -36,6 +37,9 @@ class CollectionTypeExtension extends AbstractTypeExtension
         if (isset($options['property'])) {
             $builder->setAttribute('property', $options['property']);
         }
+        if (isset($options['html_id'])) {
+            $builder->setAttribute('html_id', $options['html_id']);
+        }
 
     }
 
@@ -46,6 +50,7 @@ class CollectionTypeExtension extends AbstractTypeExtension
     {
         $view->set('tabbable', $form->getAttribute('tabbable'));
         $view->set('property', $form->getAttribute('property'));
+        $view->set('html_id', $form->getAttribute('html_id'));
     }
 
 }

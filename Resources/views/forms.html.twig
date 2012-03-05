@@ -52,14 +52,14 @@
     <ul class="nav nav-tabs">
     {% for key, row in form %}
         {% set label = row[property].get('value') %}
-        <li{% if key == 0 %} class="active"{% endif %}><a href="#{{label}}" data-toggle="tab">{{ form_label(row, label) }}</a></li>
+        <li{% if key == 0 %} class="active"{% endif %}><a href="#{{ html_id }}-{{label}}" data-toggle="tab">{{ form_label(row, label) }}</a></li>
     {% endfor %}
     </ul>
     <div class="tab-content">
     {% for key, row in form %}
         {% set label = row[property].get('value') %}
         {% spaceless %}
-                <div class="tab-pane{% if key == 0 %} active{% endif %}" id="{{label}}">
+                <div class="tab-pane{% if key == 0 %} active{% endif %}" id="{{ html_id }}-{{label}}">
                     {{ form_errors(row) }}
                     {{ form_widget(row, {'attr': widget_attr|default({})}) }}
                 </div>

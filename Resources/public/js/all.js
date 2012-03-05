@@ -1,17 +1,17 @@
 jQuery(document).ready(function ($) {
 
-    var MarkdownPreviewer = function(element) {
+    var MarkdownPreviewer = function (element) {
         var _element = $(element);
         var latestPreviewContent = "";
         var previewContent = "";
 
         var previewElement = _element.parents('.controls').find('.markdown-previewer');
         var previewTrigger = _element.parents('.controls').find('.preview-trigger');
-        $(previewTrigger).click(function(event) {
+        $(previewTrigger).click(function (event) {
             previewContent = _element.val();
 
             if (previewContent != latestPreviewContent) {
-                $.post(_element.attr('data-url'), { content: previewContent }, function(data) {
+                $.post(_element.attr('data-url'), { content:previewContent }, function (data) {
                     previewElement.html(data);
                     latestPreviewContent = previewContent;
                 });
@@ -20,8 +20,8 @@ jQuery(document).ready(function ($) {
 
     };
 
-    $.fn.markdownPreviewer = function() {
-        return this.each(function() {
+    $.fn.markdownPreviewer = function () {
+        return this.each(function () {
             new MarkdownPreviewer(this);
         });
     };
@@ -115,8 +115,8 @@ jQuery(document).ready(function ($) {
             });
         });
 
-        $(selectTrigger).click(function(event) {
-           event.preventDefault();
+        $(selectTrigger).click(function (event) {
+            event.preventDefault();
             $.get;
         });
     };
