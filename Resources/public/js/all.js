@@ -5,7 +5,7 @@ jQuery(document).ready(function ($) {
         var latestPreviewContent = "";
         var previewContent = "";
 
-        var previewElement = _element.parents('.tab-content').find('.markdown-previewer');
+        var previewElement = _element.parents('.controls').find('.markdown-previewer');
         var previewTrigger = _element.parents('.controls').find('.preview-trigger');
         $(previewTrigger).click(function(event) {
             previewContent = _element.val();
@@ -53,6 +53,7 @@ jQuery(document).ready(function ($) {
         _element.parent().append(_button);
         // When the link is clicked we add the field to input another element
         _button.click(function (event) {
+            event.preventDefault();
             $(this).addElementForm(_element);
         });
 

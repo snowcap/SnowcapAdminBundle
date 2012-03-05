@@ -139,5 +139,9 @@ abstract class ContentAdmin extends AbstractAdmin
         $em->flush();
     }
 
+    public function getFieldsets()
+    {
+        return array();
+    }
 
 }

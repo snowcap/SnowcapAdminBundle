@@ -3,7 +3,17 @@
 {% block body %}
 <h2>{{ form_title }}</h2>
 <form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate" class="form-horizontal">
-    {{ form_widget(form) }}
+
+    {% for fieldset in admin.fieldsets %}
+        <fieldset class="well">
+            <legend>{{ fieldset.legend }}</legend>
+            {% for row in fieldset.rows %}
+                {{ form_row(form[row]) }}
+            {% endfor %}
+        </fieldset>
+    {% else %}
+        {{ form_widget(form) }}
+    {% endfor %}
     <div class="form-actions">
         <button type="submit"
                 class="btn btn-large btn-primary">{{ "content.save"|trans({}, 'SnowcapAdminBundle') }}</button>
