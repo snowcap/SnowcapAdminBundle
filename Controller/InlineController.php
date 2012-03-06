@@ -26,6 +26,10 @@ class InlineController extends Controller
      */
     public function createAction($code, $property)
     {
+        $extensions = $this->get('snowcap_admin.twig');
+        $twig = $this->get('twig');
+        $extensions->initRuntime($twig);
+
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $entity = $admin->getBlankEntity();
         $request = $this->get('request');
@@ -41,6 +45,7 @@ class InlineController extends Controller
                 $return = array(
                     'entity_id' => $entity->getId(),
                     'entity_property' => $value,
+                    'preview' => $extensions->renderPreview($entity,$admin,$property),
                 );
                 return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
             }
@@ -66,20 +71,6 @@ class InlineController extends Controller
             'html' => $this->renderView('SnowcapAdminBundle:Inline:select.html.twig', array(
                 'admin' => $admin,
                 'grid' => $grid,
-            ))
-        );
-        return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
-    }
-
-    public function previewAction($code, $id)
-    {
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $preview = $admin->getPreview($id);
-
-        $return = array(
-            'html' => $this->renderView('SnowcapAdminBundle:Inline:preview.html.twig', array(
-                'admin' => $admin,
-                'preview' => $preview,
             ))
         );
         return new Response(json_encode($return), 200, array('content-type' => 'text/json'));

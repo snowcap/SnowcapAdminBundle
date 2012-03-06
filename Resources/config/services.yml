@@ -13,7 +13,6 @@ services:
     
 
   snowcap_admin.twig:
-    public: false
     class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
     tags:
       -  { name: twig.extension }

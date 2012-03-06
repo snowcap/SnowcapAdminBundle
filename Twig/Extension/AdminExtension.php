@@ -35,6 +35,7 @@ class AdminExtension extends \Twig_Extension {
             'grid_widget' => new \Twig_Function_Method($this, 'renderGrid', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'grid_cell' => new \Twig_Function_Method($this, 'renderCell', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'grid_header' => new \Twig_Function_Method($this, 'renderHeader', array('pre_escape' => 'html', 'is_safe' => array('html'))),
+            'preview_widget' => new \Twig_Function_Method($this, 'renderPreview', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'form_row_type_classes' => new \Twig_Function_Method($this, 'getFormRowTypeClasses'),
         );
     }
@@ -96,6 +97,51 @@ class AdminExtension extends \Twig_Extension {
         }, $types));
     }
 
+    public function renderPreview($entity,$admin,$property)
+    {
+       $loader = $this->environment->getLoader(); /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
+
+        // looking if there's some specific template in the users bundle
+        $finderBundles = new \Symfony\Component\Finder\Finder();
+        $finderBundles->directories()->in(__DIR__ . '/../../../../../../src')->depth('< 3')->name('*Bundle');
+        foreach($finderBundles as $bundle) {
+            $finderTemplates = new \Symfony\Component\Finder\Finder();
+            $finderTemplates->files()->in($bundle . '/Resources/views/')->name("preview_widgets.html.twig")->depth('< 2');
+            if(count(iterator_count($finderTemplates)) > 0) {
+                $loader = $this->environment->getLoader(); /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
+                $loader->addPath($bundle . '/Resources/views/');
+                $template = $this->environment->loadTemplate('preview_widgets.html.twig');
+                break;
+            }
+        }
+
+        ob_start();
+        if(!$this->renderPreviewBlock($template,$admin->getPreviewBlockName(), array('entity' => $entity))) {
+            $loader->setPaths(__DIR__ . '/../../Resources/views/');
+            $template = $this->environment->loadTemplate('preview_widgets.html.twig');
+            $this->renderPreviewBlock($template,$admin->getPreviewBlockName(), array('entity' => $entity, 'property' => $property));
+        }
+        $html = ob_get_clean();
+        return $html;
+    }
+
+    private function renderPreviewBlock($template,$block,$options)
+    {
+        if($template === null) {
+            return false;
+        }
+
+        if($template->hasBlock($block)) {
+            $template->displayBlock($block, $options);
+            return true;
+        }
+
+        if($template->hasBlock('default_preview')) {
+            $template->displayBlock('default_preview', $options);
+            return true;
+        }
+        return false;
+    }
 
     public function getName()
     {

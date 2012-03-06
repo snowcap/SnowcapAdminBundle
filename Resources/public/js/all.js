@@ -176,6 +176,9 @@ jQuery(document).ready(function ($) {
         var addTrigger = $(row).find('a[rel=create]');
         var selectTrigger = $(row).find('a[rel=select]');
         var modal = $('#modal');
+        var select = $(addTrigger).siblings('select');
+
+        select.hide();
 
         /**
          * Observe what's cooking in the add form
@@ -195,12 +198,16 @@ jQuery(document).ready(function ($) {
                     }
                     else if (this.status === 201) {
                         var responseJSON = JSON.parse(this.response);
-                        var select = $(addTrigger).siblings('select');
+
+                        var preview = $(addTrigger).parent().parent().find(".inline-preview");
+                        preview.html(responseJSON.preview);
+
                         var option = $('<option>');
                         option.attr('value', responseJSON.entity_id);
                         option.attr('selected', 'selected');
                         option.html(responseJSON.entity_property);
                         select.append(option);
+
                         modal.modal('hide');
                     }
                 };

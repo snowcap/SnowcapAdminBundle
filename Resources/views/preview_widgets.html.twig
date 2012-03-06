@@ -1,0 +1,10 @@
+{% block default_preview %}
+    {{ attribute(entity,property) }}
+{% endblock %}
+
+{% block image_preview %}
+    <div class="thumbnail span1">
+        <img src="/{{ entity.webPath }}" />
+        <div class="caption">{{ entity.title }}</div>
+    </div>
+{% endblock %}

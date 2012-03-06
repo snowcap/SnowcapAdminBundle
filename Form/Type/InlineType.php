@@ -30,6 +30,7 @@ class InlineType extends AbstractType
             'inline_admin' => null,
             'empty_value' => '---',
             'preview' => null,
+            'property' => 'id',
         );
     }
 
@@ -54,6 +55,8 @@ class InlineType extends AbstractType
         $view->set('inline_admin', $form->getAttribute('inline_admin'));
         $view->set('property', $form->getAttribute('property'));
         $view->set('preview', $form->getAttribute('preview'));
+        $formData = $form->getData();
+        $view->set('data', $formData);
     }
 
     /**

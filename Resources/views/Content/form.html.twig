@@ -14,6 +14,9 @@
     {% else %}
         {{ form_widget(form) }}
     {% endfor %}
+
+    {{ form_rest(form) }}
+
     <div class="form-actions">
         <button type="submit"
                 class="btn btn-large btn-primary">{{ "content.save"|trans({}, 'SnowcapAdminBundle') }}</button>
