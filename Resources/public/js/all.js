@@ -222,10 +222,7 @@ jQuery(document).ready(function ($) {
 
             $(previewBlock).remove();
             $(select).find("option[value='" + entityId + "']").each( function(offset,row) {
-                console.log($(row).attr('selected'));
                 $(row).removeAttr('selected');
-                console.log($(row));
-                console.log($(row).attr('selected'));
             });
 
         });
