@@ -9,20 +9,21 @@ jQuery(document).ready(function ($) {
          * Append a "lock" button to control slug behaviour (auto or manual)
          */
         this.appendLockButton = function() {
+            _modal = _element.parent().parent().find('.modal');
+            _modal.find('a[data-accept=modal]').click(function(event){
+                _this.unlock();
+                _modal.modal('hide');
+            });
             _this.lockButton = _element.parent().find('a');
-            _this.lockButton.tooltip();
             _this.lockButton.click(function(event) {
                 event.preventDefault();
                 if (_this.lockButton.attr('href') === '#locked') {
-                    if (confirm("Are you sure you want to change this slug ?")) {
-                        _this.unlock();
-                    }
+                    _modal.modal('show');
                 }
                 else {
                     _this.lock();
                 }
             });
-            //_element.after(_this.lockButton);
         };
         /**
          * Unlock the widget input (manual mode)
