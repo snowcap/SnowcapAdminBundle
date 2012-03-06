@@ -142,4 +142,9 @@ abstract class ContentAdmin extends AbstractAdmin
         return array();
     }
 
+    public function getPreviewBlockName()
+    {
+        return 'default_preview';
+    }
+
 }

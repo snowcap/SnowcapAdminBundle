@@ -3,13 +3,15 @@
 {% block snowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
     <p>
-        {% if value is not empty %}
-        <a rel="preview" href="{{ path('snowcap_admin_inline_preview', {'code': inline_admin.code, 'id': value }) }}">Preview</a>
-        {% endif %}
-        {% if choices is not empty %}
-            <a class="btn btn-small" rel="select" href="{{ path('snowcap_admin_inline_select', {'code': inline_admin.code }) }}"><i class="icon-search"></i> Search</a>
-        {% endif %}
-        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inline_create', {'code': inline_admin.code, 'property': property }) }}"><i class="icon-plus icon-white"></i> Add</a>
+        <ul class="inline-preview thumbnails">
+            {% if value is not empty %}
+                {% set entity = data %}
+                {{ preview_widget(entity,inline_admin,property) }}
+            {% else %}
+                {{ 'None selected yet' | trans }}
+            {% endif %}
+        </ul>
+        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inline_create', {'code': inline_admin.code, 'property': property }) }}"><i class="icon-plus icon-white"></i> Select</a>
     </p>
 {% endblock %}
 
