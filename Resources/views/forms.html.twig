@@ -24,7 +24,10 @@
 
 {% block slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug widget-slug-' ~ target }) %}
-    {{ block('field_widget') }}
+    <div class="input-append">
+        {{ block('field_widget') }}
+        <span class="add-on"><a href="#locked" rel="tooltip" title="ATTENTION<br/> If you change the current slug,<br/>you can break links from other pages."><i class="icon-pencil icon"></i></a></span>
+    </div>
 {% endblock slug_widget %}
 
 {% block markdown_widget %}

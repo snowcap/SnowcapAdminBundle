@@ -9,46 +9,45 @@ jQuery(document).ready(function ($) {
          * Append a "lock" button to control slug behaviour (auto or manual)
          */
         this.appendLockButton = function() {
-            _this.lockButton = $('<a>').attr('href', 'locked').html('<i class="icon-pencil icon-white"></i> Unlock');
-            _this.lockButton.addClass('btn btn-danger btn-small');
-
+            _this.lockButton = _element.parent().find('a');
+            _this.lockButton.tooltip();
             _this.lockButton.click(function(event) {
                 event.preventDefault();
-                if (_this.lockButton.attr('href') === 'locked') {
-                    _this.unlock();
+                if (_this.lockButton.attr('href') === '#locked') {
+                    if (confirm("Are you sure you want to change this slug ?")) {
+                        _this.unlock();
+                    }
                 }
                 else {
                     _this.lock();
                 }
             });
-            _element.after(_this.lockButton);
+            //_element.after(_this.lockButton);
         };
         /**
          * Unlock the widget input (manual mode)
          *
          */
         this.unlock = function() {
-            _element.removeClass('off');
-            _this.lockButton.attr('href', 'unlocked');
-            _this.lockButton.html('<i class="icon-ban-circle icon-white"></i> Lock')
+            _this.lockButton.attr('href', '#unlocked');
+            _this.lockButton.find('i').toggleClass('icon-pencil icon-magnet');
             _element.removeAttr('readonly');
+
         };
-        /**
-         * Lock the widget input (auto mode)
-         */
         this.lock = function() {
-            if (confirm("Warning ! Locking this slug will override your changes")) {
-                _element.addClass('off');
-                _this.lockButton.attr('href', 'locked');
-                _this.lockButton.html('<i class="icon-pencil icon-white"></i> Unlock')
-                if (_currentSlug !== '') {
-                    _element.val(_currentSlug);
-                }
-                else {
-                    _element.val(_this.makeSlug(_target.val()));
-                }
-                _element.attr('readonly', 'readonly');
+            /**
+             * Lock the widget input (auto mode)
+             */
+            _this.lockButton.attr('href', '#locked');
+            _this.lockButton.find('i').toggleClass('icon-pencil icon-magnet');
+
+            if (_currentSlug !== '') {
+                _element.val(_currentSlug);
             }
+            else {
+                _element.val(_this.makeSlug(_target.val()));
+            }
+            _element.attr('readonly', 'readonly');
         };
         /**
          * Transform a string into a slug
