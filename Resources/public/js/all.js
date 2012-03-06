@@ -200,7 +200,8 @@ jQuery(document).ready(function ($) {
                         var responseJSON = JSON.parse(this.response);
 
                         var preview = $(addTrigger).parent().parent().find(".inline-preview");
-                        preview.html(responseJSON.preview);
+                        preview.find('li.empty').hide();
+                        preview.append(responseJSON.preview);
 
                         var option = $('<option>');
                         option.attr('value', responseJSON.entity_id);
@@ -218,16 +219,16 @@ jQuery(document).ready(function ($) {
         // Inline unlinking
         $(row).find('a[rel=delete-inline]').live( 'click', function(event) {
 
-            previewBlock = $(this).parents("li")[0];
-            entityId = $(previewBlock).attr('data-entity-id');
+            var previewBlock = $(this).parents("li");
+            var entityId = previewBlock.attr('data-entity-id');
 
-            $(previewBlock).remove();
-            $(select).find("option[value='" + entityId + "']").each( function(offset,row) {
-                console.log($(row).attr('selected'));
-                $(row).removeAttr('selected');
-                console.log($(row));
-                console.log($(row).attr('selected'));
-            });
+            previewBlock.remove();
+            select.find("option[value='" + entityId + "']").removeAttr('selected');
+
+            // TODO see if no li's left => showing the empty one again
+            if($(row).find('ul.inline-preview li').length == 1) {
+                $(row).find('li.empty').show();
+            }
 
         });
 
