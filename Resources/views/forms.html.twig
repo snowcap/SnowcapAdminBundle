@@ -22,6 +22,11 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block slug_widget %}
+    {% set attr = attr|merge({'class': 'widget-slug widget-slug-' ~ target }) %}
+    {{ block('field_widget') }}
+{% endblock slug_widget %}
+
 {% block markdown_widget %}
 {% set attr = attr|merge({'class': attr.class|default('widget-markdown')}) %}
 {% spaceless %}

@@ -1,5 +1,110 @@
 jQuery(document).ready(function ($) {
 
+    var Slugger = function(element) {
+        var _this = this;
+        var _element = $(element);
+        var _target;
+        var _currentSlug = '';
+        /**
+         * Append a "lock" button to control slug behaviour (auto or manual)
+         */
+        this.appendLockButton = function() {
+            _this.lockButton = $('<a>').attr('href', 'locked').html('<i class="icon-pencil icon-white"></i> Unlock');
+            _this.lockButton.addClass('btn btn-danger btn-small');
+
+            _this.lockButton.click(function(event) {
+                event.preventDefault();
+                if (_this.lockButton.attr('href') === 'locked') {
+                    _this.unlock();
+                }
+                else {
+                    _this.lock();
+                }
+            });
+            _element.after(_this.lockButton);
+        };
+        /**
+         * Unlock the widget input (manual mode)
+         *
+         */
+        this.unlock = function() {
+            _element.removeClass('off');
+            _this.lockButton.attr('href', 'unlocked');
+            _this.lockButton.html('<i class="icon-ban-circle icon-white"></i> Lock')
+            _element.removeAttr('readonly');
+        };
+        /**
+         * Lock the widget input (auto mode)
+         */
+        this.lock = function() {
+            if (confirm("Warning ! Locking this slug will override your changes")) {
+                _element.addClass('off');
+                _this.lockButton.attr('href', 'locked');
+                _this.lockButton.html('<i class="icon-pencil icon-white"></i> Unlock')
+                if (_currentSlug !== '') {
+                    _element.val(_currentSlug);
+                }
+                else {
+                    _element.val(_this.makeSlug(_target.val()));
+                }
+                _element.attr('readonly', 'readonly');
+            }
+        };
+        /**
+         * Transform a string into a slug
+         *
+         * @param string string
+         * @return string
+         */
+        this.makeSlug = function(string) {
+            var lowercased = string.toLowerCase();
+            var hyphenized = lowercased.replace(/\s/g, '-');
+            var slug = hyphenized.replace(/[^a-zA-Z0-9\-]/g, '').replace('--', '-').replace(/\-+$/, '');
+            return slug;
+        };
+        /**
+         * Observe the target field and slug it
+         *
+         */
+        this.startSlug = function() {
+            _target.keyup(function(event) {
+                if (_element.attr('readonly') === 'readonly') {
+                    _element.val(_this.makeSlug($(this).val()));
+                }
+            });
+        };
+        /**
+         * Instance init
+         */
+        this.init = function() {
+            var targetId = $.grep(_element.attr('class').split(' '),
+                function(element, offset) {
+                    return element.indexOf('widget-slug-') !== -1;
+                }).pop().split('-').pop();
+            _target = $('#' + targetId);
+            _element.attr('readonly', 'readonly');
+            _element.addClass('off');
+            initialState = 'locked';
+            if (_element.val() === '') {
+                _element.val(_this.makeSlug(_target.val()));
+                _this.startSlug();
+            }
+            else {
+                _currentSlug = _element.val();
+            }
+            _this.appendLockButton();
+        };
+        this.init();
+    };
+    /**
+     * Namespace in jQuery
+     */
+    $.fn.slugger = function() {
+        return this.each(function() {
+            new Slugger(this);
+        });
+    };
+
     var MarkdownPreviewer = function (element) {
         var _element = $(element);
         var latestPreviewContent = "";
@@ -121,6 +226,9 @@ jQuery(document).ready(function ($) {
         });
     };
 
+    // Slug
+    $('.widget-slug').slugger();
+    // Markdown
     $('.widget-markdown').markdownPreviewer();
 
     //TODO: create modals on demand
