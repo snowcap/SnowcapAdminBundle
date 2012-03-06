@@ -215,6 +215,23 @@ jQuery(document).ready(function ($) {
             });
         };
 
+        // Inline unlinking
+        $(row).find('a[rel=delete-inline]').live( 'click', function(event) {
+
+            previewBlock = $(this).parents("li")[0];
+            entityId = $(previewBlock).attr('data-entity-id');
+
+            $(previewBlock).remove();
+            $(select).find("option[value='" + entityId + "']").each( function(offset,row) {
+                console.log($(row).attr('selected'));
+                $(row).removeAttr('selected');
+                console.log($(row));
+                console.log($(row).attr('selected'));
+            });
+
+        });
+
+
         /**
          * Open the add popup
          */
@@ -229,7 +246,6 @@ jQuery(document).ready(function ($) {
 
         $(selectTrigger).click(function (event) {
             event.preventDefault();
-            $.get;
         });
     };
 
