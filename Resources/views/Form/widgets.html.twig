@@ -1,4 +1,4 @@
-{% extends 'SnowcapBootstrapBundle::forms.html.twig' %}
+{% extends 'SnowcapBootstrapBundle:Form:widgets.html.twig' %}
 
 {% block snowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
@@ -15,14 +15,24 @@
     </p>
 {% endblock %}
 
-{% block fieldset_widget %}
+{% block field_row %}
+{% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
-    <fieldset>
-        <legend>{{ legend }}</legend>
-        {{ block('field_rows') }}
-    </fieldset>
+{% if 'snowcap_admin_inline' in types %}
+    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_type_classes(types) }}">
+        {{ form_widget(form, {'attr': attr}) }}
+        {% if help_block is defined %}
+            <p class="help-block">{{ help_block }}</p>
+        {% elseif help_inline is defined %}
+            <span class="help-inline">{{ help_inline }}</span>
+        {% endif %}
+        {{ form_errors(form) }}
+    </div>
+{% else %}
+    {{ parent() }}
+{% endif %}
 {% endspaceless %}
-{% endblock %}
+{% endblock field_row %}
 
 {% block slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug widget-slug-' ~ target }) %}

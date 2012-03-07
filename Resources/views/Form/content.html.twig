@@ -1,0 +1,14 @@
+{% extends 'SnowcapAdminBundle:Form:widgets.html.twig' %}
+
+{% block slug_widget %}
+{% spaceless %}
+    {% set attr = attr|merge({'class': 'span3 widget-slug widget-slug-' ~ target }) %}
+    <div class="input-append">
+        {{ block('field_widget') }}
+        <span class="add-on"><a href="#locked"><i class="icon-pencil icon"></i></a></span>
+    </div>
+    {% from 'SnowcapBootstrapBundle::macros.html.twig' import modal %}
+    {{ modal('modal-slug', 'ATTENTION', 'If you change the slug, you can break links on other pages') }}
+{% endspaceless %}
+{% endblock slug_widget %}
+

@@ -1,14 +1,20 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
+{% form_theme form 'SnowcapAdminBundle:Form:content.html.twig' %}
 
 {% block body %}
 <h2>{{ form_title }}</h2>
-<form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate" class="form-horizontal">
-
+<form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate" class="row form-horizontal">
+    <div class="span10">
     {% for fieldset in admin.fieldsets %}
-        <fieldset class="well">
+        <fieldset>
             <legend>{{ fieldset.legend }}</legend>
             {% for row in fieldset.rows %}
-                {{ form_row(form[row]) }}
+                {% if 'collection' in form[row].get('types') %}
+                    {{ form_errors(form[row]) }}
+                    {{ form_widget(form[row]) }}
+                {% else %}
+                    {{ form_row(form[row]) }}
+                {% endif %}
             {% endfor %}
         </fieldset>
     {% else %}
@@ -20,6 +26,7 @@
     <div class="form-actions">
         <button type="submit"
                 class="btn btn-large btn-primary">{{ "content.save"|trans({}, 'SnowcapAdminBundle') }}</button>
+    </div>
     </div>
 </form>
 {% endblock %}

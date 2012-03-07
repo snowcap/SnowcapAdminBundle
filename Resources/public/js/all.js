@@ -83,7 +83,6 @@ jQuery(document).ready(function ($) {
                 }).pop().split('-').pop();
             _target = $('#' + targetId);
             _element.attr('readonly', 'readonly');
-            _element.addClass('off');
             initialState = 'locked';
             if (_element.val() === '') {
                 _element.val(_this.makeSlug(_target.val()));
@@ -266,4 +265,5 @@ jQuery(document).ready(function ($) {
     });
 
     $('*[data-prototype]').manageDataPrototype();
+
 });
