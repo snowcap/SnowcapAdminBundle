@@ -19,7 +19,7 @@
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
 {% if 'snowcap_admin_inline' in types %}
-    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_type_classes(types) }}">
+    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
         {{ form_widget(form, {'attr': attr}) }}
         {% if help_block is defined %}
             <p class="help-block">{{ help_block }}</p>

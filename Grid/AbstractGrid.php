@@ -17,22 +17,25 @@ abstract class AbstractGrid {
     protected $actions;
 
     protected $code;
+
+    protected $mode = 'standard';
     /**
      * @var \Symfony\Component\Form\FormFactory
      */
     protected $formFactory;
 
-    public function __construct($code) {
-        $this->code = $code;
-    }
+
 
     public function getCode() {
         return $this->code;
     }
 
-    public function addColumn($path, $options = array())
+    public function addColumn($path, $type = 'text', $options = array())
     {
-        $this->columns[$path] = $options;
+        $this->columns[$path] = array(
+            'type' => $type,
+            'options' => $options
+        );
         return $this;
     }
 
@@ -77,5 +80,15 @@ abstract class AbstractGrid {
     public function setData($data)
     {
         $this->data = $data;
+    }
+
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+        return $this;
+    }
+
+    public function getMode(){
+        return $this->mode;
     }
 }

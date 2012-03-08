@@ -1,13 +1,24 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 
 {% block body %}
-	<h2>{{ "content.list"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
-	{{ grid_widget(grid) }}
-    <hr/>
-    <p>
-        <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.code}) }}">
-            <i class="icon-plus icon-white"></i>
-            {{ "content.create"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}
-        </a>
-    </p>
+<h2>{{ "content.list"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
+<hr/>
+{% if searchForm is defined %}
+<form action="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" method="GET" class="form-search">
+    <label>{{ "content.filter.label"|trans({}, 'SnowcapAdminBundle') }}</label>
+    {% for field in searchForm %}
+    {{ form_widget(field) }}
+    {% endfor %}
+    <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
+    <a href="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
+</form>
+{% endif %}
+{{ list_widget(list) }}
+<hr/>
+<p>
+    <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.code}) }}">
+        <i class="icon-plus icon-white"></i>
+        {{ "content.create"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}
+    </a>
+</p>
 {% endblock %}

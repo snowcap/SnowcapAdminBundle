@@ -30,6 +30,7 @@ abstract class ContentAdmin extends AbstractAdmin
      * Return the main content grid used to display the entity listing
      *
      * @return \Snowcap\AdminBundle\Grid\ContentGrid
+     * @deprecated
      */
     public function getContentGrid()
     {
@@ -51,6 +52,10 @@ abstract class ContentAdmin extends AbstractAdmin
         return $grid;
     }
 
+    public function getSearchForm() {
+        return null;
+    }
+
     /**
      * @param $data
      * @return \Symfony\Component\Form\Form
@@ -61,14 +66,6 @@ abstract class ContentAdmin extends AbstractAdmin
         $this->buildForm($builder);
         return $builder->getForm();
     }
-
-    /**
-     * Configure the main listing grid
-     *
-     * @abstract
-     * @param \Snowcap\AdminBundle\Grid\ContentGrid $grid
-     */
-    abstract protected function configureContentGrid(ContentGrid $grid);
 
     /**
      * Configure the main listing query builder

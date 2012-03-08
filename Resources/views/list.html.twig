@@ -1,0 +1,84 @@
+# grid view
+{% block list_grid %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            {% for column in list.view.columns %}
+                {{ block('grid_header') }}
+            {% endfor %}
+            {% if list.actions|length > 0 %}
+                <th>{{ "content.actions_header"|trans({}, 'SnowcapAdminBundle') }}</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for data_row in list.data %}
+        <tr>
+            {% for column in list.view.columns %}
+                {{ block('grid_cell_' ~ column.type) }}
+            {% endfor %}
+            {% if list.actions | length > 0 %}
+                <td class="listing-actions">{{ block('row_actions') }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block grid_header %}
+    <th>{{ column.options.label }}</th>
+{% endblock %}
+
+{% block grid_cell_text %}
+    <td>{{ list_value(data_row, column.path, column.options) }}</td>
+{% endblock %}
+
+{% block grid_cell_image %}
+    <td><img src="/{{ list_value(data_row, column.path, column.options) }}"/></td>
+{% endblock %}
+
+# thumbnail view
+
+{% block list_thumbnail %}
+<ul class="thumbnails">
+    {% for data_row in list.data %}
+    <li class="span3">
+        <div class="thumbnail">
+            {{ block('list_thumbnail_visual') }}
+            <div class="caption">
+                {% if list.view.label is not null %}
+                    <h5>{{ list_value(data_row, list.view.label.path, list.view.label.options) }}</h5>
+                {% endif %}
+                {% if list.view.description is not null %}
+                <p>{{ list_value(data_row, list.view.description.path, list.view.description.options) }}</p>
+                {% endif %}
+                <p>
+                    {{ block('row_actions') }}
+                </p>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block list_thumbnail_visual %}
+    {% if(list.view.image is defined) %}
+        <img src="/{{ list_value(data_row, list.view.image.path, list.view.image.options) }}">
+    {% else %}
+        <img src="http://placehold.it/260x180"/>
+    {% endif %}
+{% endblock %}
+
+# common list widgets
+
+{% block row_actions %}
+    {% for action_route, action_config in list.actions %}
+    {% set action_path = path(action_route, action_config.parameters | merge({'id': data_row.id })) %}
+    <a class="btn btn-small" href="{{ action_path }}">
+        {% if action_config.options.icon is defined %}<i class="{{ action_config.options.icon }}"></i>{% endif %}
+        {{ action_config.options.label|trans({}, 'SnowcapAdminBundle') }}
+    </a>
+    {% endfor %}
+{% endblock %}

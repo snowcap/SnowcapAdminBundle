@@ -26,13 +26,19 @@ class ContentController extends Controller
     public function indexAction($code)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        /* @var \Snowcap\AdminBundle\Admin\ContentAdmin $admin */
-        $grid = $admin->getContentGrid();
-
-        return array(
+        $list = $admin->getList();
+        $searchForm = $admin->getSearchForm();
+        $vars = array(
             'admin' => $admin,
-            'grid' => $grid,
+            'list' => $list,
         );
+        if($searchForm !== null) {
+            $searchForm->bindRequest($this->get('request'));
+            $searchData = $searchForm->getData();
+            $list->filterData(array_filter($searchData));
+            $vars['searchForm'] =  $searchForm->createView();
+        }
+        return $vars;
     }
 
     /**
