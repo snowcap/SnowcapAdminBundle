@@ -2,35 +2,33 @@
 
 {% block snowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
-    <p>
-        <ul class="inline-preview thumbnails">
-            {% if value is not empty %}
-                {% set entity = data %}
-                {{ preview_widget(entity,inline_admin,property) }}
-            {% else %}
-                <li class="empty">{{ 'None selected yet' | trans }}</li>
-            {% endif %}
-        </ul>
-        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inline_create', {'code': inline_admin.code, 'property': property }) }}"><i class="icon-plus icon-white"></i> Select</a>
-    </p>
+    <ul class="inline-preview thumbnails">
+        {% if value is not empty %}
+            {% set entity = data %}
+            {{ preview_widget(entity,inline_admin,property) }}
+        {% else %}
+            <li class="empty">{{ 'None selected yet' | trans }}</li>
+        {% endif %}
+    </ul>
+    <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inline_create', {'code': inline_admin.code, 'property': property }) }}"><i class="icon-plus icon-white"></i> Select</a>
 {% endblock %}
 
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
-{% if 'snowcap_admin_inline' in types %}
-    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
-        {{ form_widget(form, {'attr': attr}) }}
-        {% if help_block is defined %}
-            <p class="help-block">{{ help_block }}</p>
-        {% elseif help_inline is defined %}
-            <span class="help-inline">{{ help_inline }}</span>
-        {% endif %}
-        {{ form_errors(form) }}
-    </div>
-{% else %}
-    {{ parent() }}
-{% endif %}
+    {% if 'snowcap_admin_inline' in types %}
+        <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
+            {{ form_widget(form, {'attr': attr}) }}
+            {% if help_block is defined %}
+                <p class="help-block">{{ help_block }}</p>
+            {% elseif help_inline is defined %}
+                <span class="help-inline">{{ help_inline }}</span>
+            {% endif %}
+            {{ form_errors(form) }}
+        </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
 {% endspaceless %}
 {% endblock field_row %}
 
@@ -47,15 +45,20 @@
 {% block markdown_widget %}
 {% set attr = attr|merge({'class': attr.class|default('widget-markdown')}) %}
 {% spaceless %}
-<div class="tabbable tabs-below">
+    <div class="tabbable tabs-below">
 
-    <div class="tab-content">
-        <div class="tab-pane active" id="textarea-{{ id }}">
-            <textarea {{ block('widget_attributes') }} data-url="{{ path('snowcap_admin_markdown') }}" rows="10">{{ value }}</textarea>
+        <div class="tab-content">
+            <div class="tab-pane active" id="textarea-{{ id }}">
+                <textarea {{ block('widget_attributes') }} data-url="{{ path('snowcap_admin_markdown') }}" rows="10">{{ value }}</textarea>
+            </div>
+            <div class="tab-pane" id="preview-{{ id }}">
+                <div class="markdown-previewer">&nbsp;</div>
+            </div>
         </div>
-        <div class="tab-pane" id="preview-{{ id }}">
-            <div class="markdown-previewer">&nbsp;</div>
-        </div>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#textarea-{{ id }}" data-toggle="tab" class="text-trigger">Text</a></li>
+            <li><a href="#preview-{{ id }}" data-toggle="tab" class="preview-trigger">Preview</a></li>
+        </ul>
     </div>
     <ul class="nav nav-tabs">
         <li class="active"><a href="#textarea-{{ id }}" data-toggle="tab" class="text-trigger">Text</a></li>
@@ -67,29 +70,31 @@
 
 {% block collection_widget %}
 {% spaceless %}
-{% if prototype is defined %}
-    {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
-{% endif %}
-{% if tabbable %}
-    <ul class="nav nav-tabs">
-    {% for key, row in form %}
-        {% set label = row[property].get('value') %}
-        <li{% if key == 0 %} class="active"{% endif %}><a href="#{{ html_id }}-{{label}}" data-toggle="tab">{{ form_label(row, label) }}</a></li>
-    {% endfor %}
-    </ul>
-    <div class="tab-content">
-    {% for key, row in form %}
-        {% set label = row[property].get('value') %}
-        {% spaceless %}
-                <div class="tab-pane{% if key == 0 %} active{% endif %}" id="{{ html_id }}-{{label}}">
-                    {{ form_errors(row) }}
-                    {{ form_widget(row, {'attr': widget_attr|default({})}) }}
-                </div>
-        {% endspaceless %}
-    {% endfor %}
-    </div>
-{% else %}
-    {{ block('form_widget') }}
-{% endif %}
+    {% if prototype is defined %}
+        {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
+    {% endif %}
+    {% if tabbable %}
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                {% for key, row in form %}
+                    {% set label = row[property].get('value') %}
+                    <li{% if key == 0 %} class="active"{% endif %}><a href="#{{ html_id }}-{{label}}" data-toggle="tab">{{ form_label(row, label) }}</a></li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+            {% for key, row in form %}
+                {% set label = row[property].get('value') %}
+                {% spaceless %}
+                        <div class="tab-pane{% if key == 0 %} active{% endif %}" id="{{ html_id }}-{{label}}">
+                            {{ form_errors(row) }}
+                            {{ form_widget(row, {'attr': widget_attr|default({})}) }}
+                        </div>
+                {% endspaceless %}
+            {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        {{ block('form_widget') }}
+    {% endif %}
 {% endspaceless %}
 {% endblock collection_widget %}

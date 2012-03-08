@@ -1,18 +1,27 @@
 navigation:
-  link: Manage %type%
+    link: Manage %type%
 
 content:
-  list: %content_name% list
-  create: Create %content_name%
-  update: Update %content_name%
-  save: Save
-  edit: Edit
-  delete: Delete
-  actions_header: Actions
-  actions:
-    edit: Edit
-    delete: Delete
-  back_to_list: Back to list
+    list:
+        title: %content_name% list
+    create:
+        title: Create %content_name%
+        flash:
+            success: Your content has been created.
+    update:
+        title: Update %content_name%
+        flash:
+            success: Your content has been updated.
+    delete:
+        flash:
+            success: Your content has been deleted
+    actions:
+        header: Actions
+        create: Create %content_name%
+        save: Save
+        edit: Edit
+        delete: Delete
+        back: Back to list
 
 project:
     name: Admin
