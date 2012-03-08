@@ -13,7 +13,7 @@ use Snowcap\AdminBundle\Form\ContentType;
  * This controller provides basic CRUD capabilities for content models
  *
  */
-class ContentController extends Controller
+class ContentController extends BaseController
 {
     /**
      * Content homepage (listing)
@@ -53,7 +53,7 @@ class ContentController extends Controller
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
-                $this->get('session')->setFlash('success', 'flash.content_create_success');
+                $this->setFlash('success', 'content.create.flash.success');
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
@@ -83,7 +83,7 @@ class ContentController extends Controller
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
-                $this->get('session')->setFlash('success', 'flash.content_update_success');
+                $this->setFlash('success', 'content.update.flash.success');
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
@@ -105,7 +105,7 @@ class ContentController extends Controller
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $admin->deleteEntity($id);
-        $this->get('session')->setFlash('success', 'flash.content_delete_success');
+        $this->setFlash('success', 'content.delete.flash.success');
         return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
     }
 }

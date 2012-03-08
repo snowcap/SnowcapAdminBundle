@@ -17,7 +17,7 @@
                         {{ grid_header(column_name, column_params) }}
                     {% endfor %}
                     {% if grid.actions | length > 0 %}
-                        <th>{{ "content.actions" | trans }}</th>
+                        <th>{{ "content.actions.header" | trans }}</th>
                     {% endif %}
                 </tr>
             </thead>
@@ -46,7 +46,7 @@
                     {{ grid_header(column_name, column_params) }}
                 {% endfor %}
                 {% if grid.actions | length > 0 %}
-                    <th>{{ "content.actions_header"|trans({}, 'SnowcapAdminBundle') }}</th>
+                    <th>{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
                 {% endif %}
             </tr>
         </thead>

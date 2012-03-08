@@ -1,13 +1,13 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 
 {% block body %}
-	<h2>{{ "content.list"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
+	<h2>{{ "content.list.title"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
 	{{ grid_widget(grid) }}
     <hr/>
     <p>
         <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.code}) }}">
             <i class="icon-plus icon-white"></i>
-            {{ "content.create"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}
+            {{ "content.actions.create"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}
         </a>
     </p>
 {% endblock %}
