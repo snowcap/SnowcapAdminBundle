@@ -13,6 +13,10 @@
 	<body>
         {% render('SnowcapAdminBundle:Default:Navigation') %}
         <div class="container">
+            {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
+            {% for type, flash in app.session.getFlashes() %}
+                {{ alert(flash, type, null, true) }}
+            {% endfor %}
             {% block body %}{% endblock %}
         </div>
         <div class="modal fade" id="modal" style="display: none"></div>

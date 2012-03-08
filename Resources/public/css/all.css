@@ -22,3 +22,7 @@ body {
     border-radius: 3px;
     cursor: not-allowed;
 }
+
+fieldset {
+    padding-top: 10px;
+}
