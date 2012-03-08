@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Snowcap\AdminBundle\Exception;
+use Snowcap\AdminBundle\Datalist\View\DatalistViewInterface;
 
 class AbstractDatalist
 {
@@ -11,7 +12,7 @@ class AbstractDatalist
      */
     protected $name;
     /**
-     * @var \Snowcap\AdminBundle\Datalist\View\ListViewInterface
+     * @var \Snowcap\AdminBundle\Datalist\View\DatalistViewInterface
      */
     protected $view;
 
@@ -26,24 +27,13 @@ class AbstractDatalist
     protected $actions;
 
     /**
-     * @var array
-     */
-    protected $availableViews = array(
-        'grid' => 'Snowcap\AdminBundle\Datalist\View\GridView',
-        'thumbnail' => 'Snowcap\AdminBundle\Datalist\View\ThumbnailView'
-    );
-
-    /**
      * @param string $code
      * @param string $view
      */
-    public function __construct($name, $view)
+    public function __construct($name, DatalistViewInterface $view)
     {
         $this->name = $name;
-        if (!array_key_exists($view, $this->availableViews)) {
-            throw new Exception(sprintf('The datalist view "%s" does not exist', $view));
-        }
-        $this->view = new $this->availableViews[$view];
+        $this->view = $view;
     }
 
     /**
@@ -82,7 +72,7 @@ class AbstractDatalist
     }
 
     /**
-     * @return \Snowcap\AdminBundle\Datalist\View\ListViewInterface
+     * @return \Snowcap\AdminBundle\Datalist\View\DatalistViewInterface
      */
     public function getView()
     {

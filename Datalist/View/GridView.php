@@ -2,7 +2,7 @@
 
 namespace Snowcap\AdminBundle\Datalist\View;
 
-class GridView implements ListViewInterface {
+class GridView implements DatalistViewInterface {
     protected $columns;
     public function add($path, $type = null, $options = array())
     {

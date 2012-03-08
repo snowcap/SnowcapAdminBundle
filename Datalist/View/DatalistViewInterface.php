@@ -2,7 +2,7 @@
 
 namespace Snowcap\AdminBundle\Datalist\View;
 
-interface ListViewInterface {
+interface DatalistViewInterface {
     public function add($path, $type = null, $options = array());
     public function getName();
 }

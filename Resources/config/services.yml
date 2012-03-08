@@ -8,8 +8,7 @@ services:
     calls:
         - [setContainer, [ @service_container ]]
 
-  snowcap_admin.grid_factory:
-    class: Snowcap\AdminBundle\Grid\Factory
+
     
 
   snowcap_admin.twig:
@@ -52,3 +51,17 @@ services:
     tags:
       -  { name: form.type_extension, alias: collection }
 
+  #Datalists
+  snowcap_admin.datalist_factory:
+    class: Snowcap\AdminBundle\Datalist\DatalistFactory
+    arguments: [[]]
+
+  snowcap_admin.datalist_view.grid:
+    class: Snowcap\AdminBundle\Datalist\View\GridView
+    tags:
+      - { name: snowcap_admin.datalist_view, alias: grid }
+
+  snowcap_admin.datalist_view.thumbnail:
+    class: Snowcap\AdminBundle\Datalist\View\ThumbnailView
+    tags:
+      - { name: snowcap_admin.datalist_view, alias: thumbnail }

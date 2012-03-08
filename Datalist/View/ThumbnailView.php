@@ -4,7 +4,7 @@ namespace Snowcap\AdminBundle\Datalist\View;
 
 use Snowcap\AdminBundle\Exception;
 
-class ThumbnailView implements ListViewInterface
+class ThumbnailView implements DatalistViewInterface
 {
 
     /**

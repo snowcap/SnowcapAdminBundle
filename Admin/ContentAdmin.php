@@ -26,33 +26,36 @@ abstract class ContentAdmin extends AbstractAdmin
         return array('grid_type' => 'content');
     }
 
-    /**
-     * Return the main content grid used to display the entity listing
-     *
-     * @return \Snowcap\AdminBundle\Grid\ContentGrid
-     * @deprecated
-     */
-    public function getContentGrid()
+    protected function createDatalist($name, $type)
     {
-        $grid = $this->environment->get('snowcap_admin.grid_factory')->create($this->getParam('grid_type'), $this->getCode());
-        $grid->addAction(
+        $datalist = $this->environment->get('snowcap_admin.datalist_factory')->createDatalist($name, $type);
+        $datalist->setQueryBuilder($this->getQueryBuilder());
+        $datalist->addAction(
             'snowcap_admin_content_update',
             array('code' => $this->getCode()),
             array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
         );
-        $grid->addAction(
+        $datalist->addAction(
             'snowcap_admin_content_delete',
             array('code' => $this->getCode()),
             array('label' => 'content.actions.delete', 'icon' => 'icon-remove')
         );
-        $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
-        $this->configureContentQueryBuilder($queryBuilder);
-        $grid->setQueryBuilder($queryBuilder);
-        $this->configureContentGrid($grid);
-        return $grid;
+
+        return $datalist;
     }
 
-    public function getSearchForm() {
+    protected function getQueryBuilder()
+    {
+        $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
+        $queryBuilder
+            ->select('e')
+            ->from($this->getParam('entity_class'), 'e');
+        return $queryBuilder;
+    }
+
+
+    public function getSearchForm()
+    {
         return null;
     }
 
@@ -65,18 +68,6 @@ abstract class ContentAdmin extends AbstractAdmin
         $builder = $this->environment->get('form.factory')->createBuilder('form', $data, array('data_class' => $this->getParam('entity_class')));
         $this->buildForm($builder);
         return $builder->getForm();
-    }
-
-    /**
-     * Configure the main listing query builder
-     *
-     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
-     */
-    protected function configureContentQueryBuilder(QueryBuilder $queryBuilder)
-    {
-        $queryBuilder
-            ->select('e')
-            ->from($this->getParam('entity_class'), 'e');
     }
 
     /**
@@ -108,7 +99,12 @@ abstract class ContentAdmin extends AbstractAdmin
         return new $entityName;
     }
 
-    public function findEntity($entityId){
+    /**
+     * @param mixed $entityId
+     * @return mixed
+     */
+    public function findEntity($entityId)
+    {
         $em = $this->environment->get('doctrine')->getEntityManager();
         $entity = $em->getRepository($this->getParam('entity_class'))->find($entityId);
         return $entity;
@@ -126,6 +122,9 @@ abstract class ContentAdmin extends AbstractAdmin
         $em->flush();
     }
 
+    /**
+     * @param mixed $entityId
+     */
     public function deleteEntity($entityId)
     {
         $entity = $this->findEntity($entityId);
@@ -134,11 +133,17 @@ abstract class ContentAdmin extends AbstractAdmin
         $em->flush();
     }
 
+    /**
+     * @return array
+     */
     public function getFieldsets()
     {
         return array();
     }
 
+    /**
+     * @return string
+     */
     public function getPreviewBlockName()
     {
         return 'default_preview';
