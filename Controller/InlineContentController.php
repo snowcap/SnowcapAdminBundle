@@ -15,8 +15,19 @@ use Snowcap\AdminBundle\Admin\ContentAdmin;
  * This controller provides basic CRUD capabilities for content models
  *
  */
-class InlineController extends Controller
+class InlineContentController extends Controller
 {
+    public function selectOrCreateAction($code)
+    {
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $return = array(
+            'html' => $this->renderView('SnowcapAdminBundle:InlineContent:select_or_create.html.twig', array(
+                'admin' => $admin,
+            ))
+        );
+        return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
+    }
+
     /**
      * Create a new content entity
      *
@@ -24,7 +35,7 @@ class InlineController extends Controller
      * @param string $property
      * @return mixed
      */
-    public function createAction($code, $property)
+    public function createAction($code)
     {
         $extensions = $this->get('snowcap_admin.twig');
         $twig = $this->get('twig');
@@ -39,40 +50,31 @@ class InlineController extends Controller
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
 
-                $propertyPath = new PropertyPath($property);
-                $value = $propertyPath->getValue($entity);
-
                 $return = array(
                     'entity_id' => $entity->getId(),
-                    'entity_property' => $value,
-                    'preview' => $extensions->renderPreview($entity,$admin,$property),
+                    'preview' => $extensions->renderPreview($entity, $admin),
                 );
                 return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
             }
         }
 
-        $return = array(
-            'html' => $this->renderView('SnowcapAdminBundle:Inline:create.html.twig', array(
-                'admin' => $admin,
-                'entity' => $entity,
-                'form' => $form->createView(),
-                'property' => $property,
-            ))
-        );
-        return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
+        return $this->render('SnowcapAdminBundle:InlineContent:create.html.twig', array(
+            'admin' => $admin,
+            'entity' => $entity,
+            'form' => $form->createView(),
+        ));
     }
 
     public function selectAction($code)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $grid = $admin->getContentGrid();
+        $list = $admin->getList();
 
-        $return = array(
-            'html' => $this->renderView('SnowcapAdminBundle:Inline:select.html.twig', array(
-                'admin' => $admin,
-                'grid' => $grid,
-            ))
-        );
-        return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
+        return $this->render('SnowcapAdminBundle:InlineContent:select.html.twig', array(
+            'admin' => $admin,
+            'list' => $list,
+        ));
+
     }
+
 }

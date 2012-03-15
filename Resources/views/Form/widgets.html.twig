@@ -10,7 +10,7 @@
             <li class="empty">{{ 'None selected yet' | trans }}</li>
         {% endif %}
     </ul>
-    <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inline_create', {'code': inline_admin.code, 'property': property }) }}"><i class="icon-plus icon-white"></i> Select</a>
+    <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inlinecontent_select_or_create', {'code': inline_admin.code, 'property': property }) }}"><i class="icon-plus icon-white"></i> Select</a>
 {% endblock %}
 
 {% block field_row %}

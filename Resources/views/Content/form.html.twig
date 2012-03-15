@@ -5,28 +5,27 @@
 <h2>{{ form_title }}</h2>
 <form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate" class="row form-horizontal">
     <div class="span10">
-    {% for fieldset in admin.fieldsets %}
-        <fieldset>
-            <legend>{{ fieldset.legend }}</legend>
-            {% for row in fieldset.rows %}
-                {% if 'collection' in form[row].get('types') %}
-                    {{ form_errors(form[row]) }}
-                    {{ form_widget(form[row]) }}
-                {% else %}
-                    {{ form_row(form[row]) }}
-                {% endif %}
-            {% endfor %}
-        </fieldset>
-    {% else %}
-        {{ form_widget(form) }}
-    {% endfor %}
+        {% for fieldset in admin.fieldsets %}
+            <fieldset>
+                <legend>{{ fieldset.legend }}</legend>
+                {% for row in fieldset.rows %}
+                    {% if 'collection' in form[row].get('types') %}
+                        {{ form_errors(form[row]) }}
+                        {{ form_widget(form[row]) }}
+                    {% else %}
+                        {{ form_row(form[row]) }}
+                    {% endif %}
+                {% endfor %}
+            </fieldset>
+        {% else %}
+            {{ form_widget(form) }}
+        {% endfor %}
 
-    {{ form_rest(form) }}
+        {{ form_rest(form) }}
 
-    <div class="form-actions">
-        <button type="submit"
-                class="btn btn-large btn-primary">{{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}</button>
-    </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-large btn-primary">{{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}</button>
+        </div>
     </div>
 </form>
 {% endblock %}

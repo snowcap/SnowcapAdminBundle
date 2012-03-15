@@ -130,52 +130,12 @@ jQuery(document).ready(function ($) {
         });
     };
 
-
-    var AddElementForm = function (element, collectionHolder) {
-        var _this = this;
-        var _element = $(element);
-
-        // Get the data-prototype we explained earlier
-        var prototype = collectionHolder.attr('data-prototype');
-        // Replace '$$name$$' in the prototype's HTML to
-        // instead be a number based on the current collection's length.
-        form = prototype.replace(/\$\$name\$\$/g, collectionHolder.children().length);
-        // Display the form in the page
-        collectionHolder.append(form);
-    };
-
-    $.fn.addElementForm = function (collectionHolder) {
-        return this.each(function () {
-            new AddElementForm(this, collectionHolder);
-        });
-    };
-
-    var ManageDataPrototype = function (element) {
-        var _this = this;
-        var _element = $(element);
-        var _button = $('<a href="#" class="btn btn-primary">+</a>');
-        _element.parent().append(_button);
-        // When the link is clicked we add the field to input another element
-        _button.click(function (event) {
-            event.preventDefault();
-            $(this).addElementForm(_element);
-        });
-
-
-    };
-    $.fn.manageDataPrototype = function () {
-        return this.each(function () {
-            new ManageDataPrototype(this);
-        });
-    };
-
     var InlineWidget = function (row) {
 
         var self = this;
-        var addTrigger = $(row).find('a[rel=create]');
-        var selectTrigger = $(row).find('a[rel=select]');
+        var trigger = $(row).find('a[rel=select_or_create]');
         var modal = $('#modal');
-        var select = $(addTrigger).siblings('select');
+        var select = $(trigger).siblings('select');
 
         select.hide();
 
@@ -198,7 +158,7 @@ jQuery(document).ready(function ($) {
                     else if (this.status === 201) {
                         var responseJSON = JSON.parse(this.response);
 
-                        var preview = $(addTrigger).parent().parent().find(".inline-preview");
+                        var preview = $(trigger).parent().parent().find(".inline-preview");
                         preview.find('li.empty').hide();
                         preview.append(responseJSON.preview);
 
@@ -233,9 +193,9 @@ jQuery(document).ready(function ($) {
 
 
         /**
-         * Open the add popup
+         * Open the select or create popup
          */
-        $(addTrigger).click(function (event) {
+        $(trigger).click(function (event) {
             event.preventDefault();
             $.get($(this).attr('href'), function (data) {
                 modal.html(data.html);
@@ -263,7 +223,5 @@ jQuery(document).ready(function ($) {
     $('.type_snowcap_admin_inline').each(function (offset, row) {
         new InlineWidget(row);
     });
-
-    $('*[data-prototype]').manageDataPrototype();
 
 });

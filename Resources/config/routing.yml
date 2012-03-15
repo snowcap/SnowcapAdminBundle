@@ -20,15 +20,18 @@ snowcap_admin_content_delete:
     defaults: { _controller: SnowcapAdminBundle:Content:delete }
 
 # Inline routes
-snowcap_admin_inline_select:
+snowcap_admin_inlinecontent_select_or_create:
+    pattern: /inline/{code}/select_or_create
+    defaults: { _controller: SnowcapAdminBundle:InlineContent:selectOrCreate }
+snowcap_admin_inlinecontent_select:
     pattern: /inline/{code}/select}
-    defaults: { _controller: SnowcapAdminBundle:Inline:select }
-snowcap_admin_inline_create:
-    pattern: /inline/{code}/create/{property}
-    defaults: { _controller: SnowcapAdminBundle:Inline:create }
-snowcap_admin_inline_preview:
+    defaults: { _controller: SnowcapAdminBundle:InlineContent:select }
+snowcap_admin_inlinecontent_create:
+    pattern: /inline/{code}/create
+    defaults: { _controller: SnowcapAdminBundle:InlineContent:create }
+snowcap_admin_inlinecontent_preview:
     pattern: /inline/{code}/preview/{id}
-    defaults: { _controller: SnowcapAdminBundle:Inline:preview }
+    defaults: { _controller: SnowcapAdminBundle:InlineContent:preview }
 
 # Default routes
 snowcap_admin_markdown:
