@@ -27,6 +27,7 @@ inline_content:
     select_or_create: Select or create %content_name%
     select: Select existing %content_name%
     create: Create new %content_name%
+    save: Save
 
 project:
     name: Admin
