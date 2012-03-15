@@ -203,10 +203,6 @@ jQuery(document).ready(function ($) {
                 modal.modal('show');
             });
         });
-
-        $(selectTrigger).click(function (event) {
-            event.preventDefault();
-        });
     };
 
     // Slug
