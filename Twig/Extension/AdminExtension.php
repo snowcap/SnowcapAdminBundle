@@ -91,7 +91,7 @@ class AdminExtension extends \Twig_Extension
         return $html;
     }
 
-    public function renderPreview($entity, $admin, $property)
+    public function renderPreview($entity, $admin)
     {
         $loader = $this->environment->getLoader();
         /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
@@ -115,7 +115,7 @@ class AdminExtension extends \Twig_Extension
         if (!$this->renderPreviewBlock($template, $admin->getPreviewBlockName(), array('entity' => $entity))) {
             $loader->setPaths(__DIR__ . '/../../Resources/views/');
             $template = $this->environment->loadTemplate('preview_widgets.html.twig');
-            $this->renderPreviewBlock($template, $admin->getPreviewBlockName(), array('entity' => $entity, 'property' => $property));
+            $this->renderPreviewBlock($template, $admin->getPreviewBlockName(), array('entity' => $entity));
         }
         $html = ob_get_clean();
         return $html;

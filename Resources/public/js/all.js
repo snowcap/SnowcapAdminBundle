@@ -143,7 +143,7 @@ jQuery(document).ready(function ($) {
          * Observe what's cooking in the add form
          */
         self.observeAddForm = function () {
-            modal.find('$[type=submit]').on('click', function (event) {
+            modal.find('*[type=submit]').on('click', function (event) {
                 event.preventDefault();
                 var form = modal.find('form');
                 var data = new FormData(form[0]);
