@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
 
-    var Slugger = function(element) {
+    var Slugger = function (element) {
         var _this = this;
         var _element = $(element);
         var _target;
@@ -8,14 +8,14 @@ jQuery(document).ready(function ($) {
         /**
          * Append a "lock" button to control slug behaviour (auto or manual)
          */
-        this.appendLockButton = function() {
+        this.appendLockButton = function () {
             _modal = _element.parent().parent().find('.modal');
-            _modal.find('a[data-accept=modal]').click(function(event){
+            _modal.find('a[data-accept=modal]').click(function (event) {
                 _this.unlock();
                 _modal.modal('hide');
             });
             _this.lockButton = _element.parent().find('a');
-            _this.lockButton.click(function(event) {
+            _this.lockButton.click(function (event) {
                 event.preventDefault();
                 if (_this.lockButton.attr('href') === '#locked') {
                     _modal.modal('show');
@@ -29,13 +29,13 @@ jQuery(document).ready(function ($) {
          * Unlock the widget input (manual mode)
          *
          */
-        this.unlock = function() {
+        this.unlock = function () {
             _this.lockButton.attr('href', '#unlocked');
             _this.lockButton.find('i').toggleClass('icon-pencil icon-magnet');
             _element.removeAttr('readonly');
 
         };
-        this.lock = function() {
+        this.lock = function () {
             /**
              * Lock the widget input (auto mode)
              */
@@ -56,7 +56,7 @@ jQuery(document).ready(function ($) {
          * @param string string
          * @return string
          */
-        this.makeSlug = function(string) {
+        this.makeSlug = function (string) {
             var lowercased = string.toLowerCase();
             var hyphenized = lowercased.replace(/\s/g, '-');
             var slug = hyphenized.replace(/[^a-zA-Z0-9\-]/g, '').replace('--', '-').replace(/\-+$/, '');
@@ -66,8 +66,8 @@ jQuery(document).ready(function ($) {
          * Observe the target field and slug it
          *
          */
-        this.startSlug = function() {
-            _target.keyup(function(event) {
+        this.startSlug = function () {
+            _target.keyup(function (event) {
                 if (_element.attr('readonly') === 'readonly') {
                     _element.val(_this.makeSlug($(this).val()));
                 }
@@ -76,9 +76,9 @@ jQuery(document).ready(function ($) {
         /**
          * Instance init
          */
-        this.init = function() {
+        this.init = function () {
             var targetId = $.grep(_element.attr('class').split(' '),
-                function(element, offset) {
+                function (element, offset) {
                     return element.indexOf('widget-slug-') !== -1;
                 }).pop().split('-').pop();
             _target = $('#' + targetId);
@@ -98,8 +98,8 @@ jQuery(document).ready(function ($) {
     /**
      * Namespace in jQuery
      */
-    $.fn.slugger = function() {
-        return this.each(function() {
+    $.fn.slugger = function () {
+        return this.each(function () {
             new Slugger(this);
         });
     };
@@ -135,7 +135,7 @@ jQuery(document).ready(function ($) {
         var self = this;
         var trigger = $(row).find('a[rel=select_or_create]');
         var modal = $('#modal');
-        var select = $(trigger).siblings('select');
+        var select = $(trigger).parent().siblings('select');
 
         select.hide();
 
@@ -165,7 +165,7 @@ jQuery(document).ready(function ($) {
                         var option = $('<option>');
                         option.attr('value', responseJSON.entity_id);
                         option.attr('selected', 'selected');
-                        option.html(responseJSON.entity_property);
+                        option.html(responseJSON.entity_id);
                         select.append(option);
 
                         modal.modal('hide');
@@ -176,7 +176,7 @@ jQuery(document).ready(function ($) {
         };
 
         // Inline unlinking
-        $(row).find('a[rel=delete-inline]').live( 'click', function(event) {
+        $(row).find('a[rel=delete-inline]').live('click', function (event) {
 
             var previewBlock = $(this).parents("li");
             var entityId = previewBlock.attr('data-entity-id');
@@ -185,10 +185,38 @@ jQuery(document).ready(function ($) {
             select.find("option[value='" + entityId + "']").removeAttr('selected');
 
             // TODO see if no li's left => showing the empty one again
-            if($(row).find('ul.inline-preview li').length == 1) {
+            if ($(row).find('ul.inline-preview li').length == 1) {
                 $(row).find('li.empty').show();
             }
 
+        });
+
+        $(row).find('.autocomplete').keyup(function (event) {
+            var autocomplete = $(this);
+            if ($(this).val().length >= 3) {
+                $.get($(this).attr('data-url').replace('placeholder', $(this).val()), function (data) {
+                    var results = autocomplete.siblings('.autocomplete-results');
+                    results.css('min-width', autocomplete.css('width'));
+                    results.html(data.html);
+                    results.find('li').click(function (event) {
+                        select.find('option[value=' + $(this).attr('data-identity') + ']').attr('selected', 'selected');
+                        results.hide();
+                        autocomplete.val('');
+                        var preview = $(trigger).parent().parent().find(".inline-preview");
+                        preview.find('li.empty').hide();
+                        if(select.attr('multiple') === 'multiple'){
+                            preview.append($(this));
+                        }
+                        else {
+                            preview.html($(this));
+                        }
+                    });
+                    results.show();
+                });
+            }
+        });
+        $(row).find('.autocomplete').blur(function (event) {
+            //$(this).siblings('.autocomplete-results').hide();
         });
 
 

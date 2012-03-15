@@ -26,3 +26,41 @@ body {
 fieldset {
     padding-top: 10px;
 }
+
+.autocomplete-wrapper {
+    position: relative;
+}
+.autocomplete-results {
+    padding: 10px 0;
+    position: absolute;
+    top: 100%;
+    margin-top: 2px;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    display: none;
+    box-shadow: 2px 3px 5px #ccc;
+    border-radius: 10px;
+}
+.autocomplete-results ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.autocomplete-results li {
+    padding: 10px;
+}
+.autocomplete-results li:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+}
+.autocomplete-results li:hover {
+    background: whiteSmoke;
+    cursor: pointer;
+}
+.autocomplete-results li img {
+    float: left;
+    margin-right: 10px;
+}
+.autocomplete-wrapper .btn {
+    margin-left: 10px;
+}

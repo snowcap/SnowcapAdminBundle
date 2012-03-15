@@ -26,6 +26,9 @@ snowcap_admin_inlinecontent_select_or_create:
 snowcap_admin_inlinecontent_select:
     pattern: /inline/{code}/select}
     defaults: { _controller: SnowcapAdminBundle:InlineContent:select }
+snowcap_admin_inlinecontent_autocomplete:
+    pattern: /inline/{code}/autocomplete/{input}
+    defaults: { _controller: SnowcapAdminBundle:InlineContent:autocomplete }
 snowcap_admin_inlinecontent_create:
     pattern: /inline/{code}/create
     defaults: { _controller: SnowcapAdminBundle:InlineContent:create }
