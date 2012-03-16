@@ -17,17 +17,6 @@ use Snowcap\AdminBundle\Admin\ContentAdmin;
  */
 class InlineContentController extends Controller
 {
-    public function selectOrCreateAction($code)
-    {
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $return = array(
-            'html' => $this->renderView('SnowcapAdminBundle:InlineContent:select_or_create.html.twig', array(
-                'admin' => $admin,
-            ))
-        );
-        return new Response(json_encode($return), 200, array('content-type' => 'text/json'));
-    }
-
     /**
      * Create a new content entity
      *
@@ -51,30 +40,24 @@ class InlineContentController extends Controller
                 $admin->saveEntity($entity);
 
                 $return = array(
-                    'entity_id' => $entity->getId(),
-                    'preview' => $extensions->renderPreview($entity, $admin),
+                    'html' => $this->renderView('SnowcapAdminBundle:InlineContent:preview.html.twig', array(
+                        'admin' => $admin,
+                        'entity' => $entity
+                    ))
                 );
                 return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
             }
         }
 
-        return $this->render('SnowcapAdminBundle:InlineContent:create.html.twig', array(
-            'admin' => $admin,
-            'entity' => $entity,
-            'form' => $form->createView(),
-        ));
-    }
+        $return = array(
+            'html' => $this->renderView('SnowcapAdminBundle:InlineContent:create.html.twig', array(
+                'admin' => $admin,
+                'entity' => $entity,
+                'form' => $form->createView(),
+            ))
+         );
 
-    public function selectAction($code)
-    {
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $list = $admin->getList();
-
-        return $this->render('SnowcapAdminBundle:InlineContent:select.html.twig', array(
-            'admin' => $admin,
-            'list' => $list,
-        ));
-
+        return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
     }
 
     public function autocompleteAction($code, $input)

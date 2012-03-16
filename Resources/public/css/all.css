@@ -27,35 +27,46 @@ fieldset {
     padding-top: 10px;
 }
 
+
+/**
+ * Inline widget
+ */
+.type_snowcap_admin_inline .selected {
+    list-style-type: none;
+    margin: 10px 0;
+}
+.type_snowcap_admin_inline .selected li:first-child {
+    margin-left: 0;
+}
+.type_snowcap_admin_inline .selected li > a {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+    color: #333;
+}
+.type_snowcap_admin_inline .selected li > a:hover {
+    background-color: #0088cc;
+}
+.type_snowcap_admin_inline .selected li > a:hover p,
+.type_snowcap_admin_inline .selected li > a:hover h4 {
+    color: #fff;
+}
+/**
+ * Autocomplete
+ */
 .autocomplete-wrapper {
     position: relative;
-}
-.autocomplete-results {
-    padding: 10px 0;
-    position: absolute;
-    top: 100%;
-    margin-top: 2px;
-    left: 0;
-    background: #fff;
-    border: 1px solid #ccc;
-    display: none;
-    box-shadow: 2px 3px 5px #ccc;
-    border-radius: 10px;
 }
 .autocomplete-results ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
-.autocomplete-results li {
-    padding: 10px;
+.autocomplete-results li > a {
+    padding: 5px;
 }
-.autocomplete-results li:not(:last-child) {
-    border-bottom: 1px solid #ddd;
-}
-.autocomplete-results li:hover {
-    background: whiteSmoke;
-    cursor: pointer;
+.autocomplete-results li > a:hover h4 {
+    color: #fff;
 }
 .autocomplete-results li img {
     float: left;

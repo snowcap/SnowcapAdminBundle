@@ -2,18 +2,19 @@
 
 {% block snowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
-    <ul class="inline-preview thumbnails">
+    <p class="empty">{{ "inline_content.empty"|trans({}, 'SnowcapAdminBundle') }}</p>
+    <ul class="selected row">
         {% if value is not empty %}
-            {% set entity = data %}
-            {{ preview_widget(entity,inline_admin,property) }}
-        {% else %}
-            <li class="empty">{{ 'None selected yet' | trans }}</li>
+            {% set results = multiple ? data : [data] %}
+            {% for result in results %}
+                {% include 'SnowcapAdminBundle:InlineContent:preview.html.twig' with {'entity': result, 'admin': inline_admin }%}
+            {% endfor %}
         {% endif %}
     </ul>
     <div class="autocomplete-wrapper">
         <input class="autocomplete" placeholder="{{ "inline_content.search"|trans({}, 'SnowcapAdminBundle') }}" type="text" data-url="{{ path('snowcap_admin_inlinecontent_autocomplete', {'code': inline_admin.code, 'input': 'placeholder'}) }}"/>
-        <a class="btn btn-small btn-primary" rel="select_or_create" href="{{ path('snowcap_admin_inlinecontent_select_or_create', {'code': inline_admin.code, 'property': property }) }}">
-            <i class="icon-plus icon-white"></i> {{ "inline_content.add"|trans({}, 'SnowcapAdminBundle') }}
+        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inlinecontent_create', {'code': inline_admin.code }) }}">
+            <i class="icon-plus icon-white"></i> {{ "inline_content.create"|trans({}, 'SnowcapAdminBundle') }}
         </a>
         <div class="autocomplete-results"></div>
     </div>

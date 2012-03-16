@@ -1,0 +1,12 @@
+{% set preview = admin.preview(entity) %}
+<li class="span2">
+    <a class="identity" href="{{ preview.identity }}">
+        {% if preview.image %}
+            <img src="{{ asset(preview.image) }}" alt="{{ preview.title }}" width="50"/>
+        {% endif  %}
+        <h4>{{ preview.title }}</h4>
+        {% if preview.description %}
+            <p>{{ preview.description }}</p>
+        {% endif %}
+    </a>
+</li>
