@@ -14,6 +14,9 @@
 </form>
 {% endif %}
 {{ list_widget(list) }}
+{% if list.paginator != null %}
+    {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
+{% endif %}
 <hr/>
 <p>
     <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.code}) }}">
