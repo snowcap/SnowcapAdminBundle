@@ -77,4 +77,16 @@ class InlineContentController extends Controller
 
     }
 
+    public function autocompleteAction($code, $input)
+    {
+        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $return = array(
+            'html' => $this->renderView('SnowcapAdminBundle:InlineContent:autocomplete.html.twig', array(
+                'results' => $admin->filterAutocomplete($input),
+                'admin' => $admin,
+            ))
+        );
+        return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
+    }
+
 }

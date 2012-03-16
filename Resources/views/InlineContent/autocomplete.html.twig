@@ -1,0 +1,18 @@
+{% if results is empty %}
+    <p>No result</p>
+{% else %}
+    <ul>
+        {% for result in results %}
+            {% set preview = admin.preview(result) %}
+            <li data-identity="{{ preview.identity }}">
+                {% if preview.image %}
+                    <img src="{{ asset(preview.image) }}" alt="{{ preview.title }}" width="50"/>
+                {% endif  %}
+                <h4>{{ preview.title }}</h4>
+                {% if preview.description %}
+                    <p>{{ preview.description }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif  %}

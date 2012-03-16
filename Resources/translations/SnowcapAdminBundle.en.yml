@@ -28,6 +28,8 @@ inline_content:
     select: Select existing %content_name%
     create: Create new %content_name%
     save: Save
+    add: New
+    search: Search
 
 project:
     name: Admin

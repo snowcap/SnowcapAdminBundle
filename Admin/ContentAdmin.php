@@ -43,7 +43,9 @@ abstract class ContentAdmin extends AbstractAdmin
 
         return $datalist;
     }
-
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     protected function getQueryBuilder()
     {
         $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
