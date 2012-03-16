@@ -4,6 +4,7 @@ namespace Snowcap\AdminBundle\Datalist;
 
 use Doctrine\ORM\QueryBuilder;
 use Snowcap\AdminBundle\Exception;
+use Snowcap\CoreBundle\Manager\PaginatorManager;
 
 class ContentDatalist extends AbstractDatalist
 {
@@ -11,6 +12,12 @@ class ContentDatalist extends AbstractDatalist
      * @var QueryBuilder
      */
     protected $queryBuilder;
+
+    /**
+     * @var PaginatorManager
+     */
+    protected $paginator;
+
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
@@ -27,7 +34,12 @@ class ContentDatalist extends AbstractDatalist
         }
         if (!isset($this->data)) {
             try {
-                $this->data = $this->queryBuilder->getQuery()->getResult();
+                if ($this->paginator !== null) {
+                    $this->paginator->setQuery($this->queryBuilder->getQuery());
+                    $this->data = $this->paginator->getResult();
+                } else {
+                    $this->data = $this->queryBuilder->getQuery()->getResult();
+                }
             }
             catch (\Doctrine\ORM\Query\QueryException $e) {
                 throw new Exception(sprintf('The "%s" list queryBuilder leads to an invalid query (probably due to lacking select or from clauses). The returned error was: %s', $this->name, $e->getMessage()));
@@ -45,4 +57,24 @@ class ContentDatalist extends AbstractDatalist
             $this->queryBuilder->add('where', $this->queryBuilder->expr()->like($field, $this->queryBuilder->expr()->literal('%' . $value . '%')));
         }
     }
+
+    public function paginate($limitPerPage = 10)
+    {
+        $this->paginator = new PaginatorManager();
+        $this->paginator->setLimitPerPage($limitPerPage);
+    }
+
+    public function setPage($page) {
+        $this->paginator->setPage($page);
+    }
+
+    /**
+     * @return \Snowcap\CoreBundle\Manager\PaginatorManager
+     */
+    public function getPaginator()
+    {
+        return $this->paginator;
+    }
+
+
 }

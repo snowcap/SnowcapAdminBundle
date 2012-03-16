@@ -27,6 +27,10 @@ class ContentController extends BaseController
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $list = $admin->getList();
+        $request = $this->getRequest();
+        if (($page = $request->get('page')) !== null) {
+            $list->setPage($page);
+        }
         $searchForm = $admin->getSearchForm();
         $vars = array(
             'admin' => $admin,
