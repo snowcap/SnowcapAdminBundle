@@ -5,8 +5,6 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormBuilder;
 
-use Snowcap\AdminBundle\Form\ContentType;
-use Snowcap\AdminBundle\Grid\ContentGrid;
 use Snowcap\AdminBundle\Exception;
 
 /**
@@ -16,34 +14,62 @@ use Snowcap\AdminBundle\Exception;
  */
 abstract class ContentAdmin extends AbstractAdmin
 {
-    public function getDefaultPath()
+    public function getDefaultRoute()
     {
-        return $this->environment->get('router')->generate('content', array('code' => $this->getCode()));
+        return 'snowcap_admin_content_index';
     }
 
-    protected function getDefaultParams()
-    {
-        return array('grid_type' => 'content');
-    }
-
-    protected function createDatalist($name, $type)
-    {
-        $datalist = $this->environment->get('snowcap_admin.datalist_factory')->createDatalist($name, $type);
-        $datalist->setQueryBuilder($this->getQueryBuilder());
-        $datalist->addAction(
-            'snowcap_admin_content_update',
-            array('code' => $this->getCode()),
-            array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
-        );
-        $datalist->addAction(
-            'snowcap_admin_content_delete',
-            array('code' => $this->getCode()),
-            array('label' => 'content.actions.delete', 'icon' => 'icon-remove')
-        );
-
-        return $datalist;
-    }
     /**
+     * Return the main admin form for this content
+     *
+     * @param object $data
+     * @return \Symfony\Component\Form\Form
+     */
+    abstract public function getForm($data = null);
+
+    /**
+     * Return an array of fieldsets to be used in the create / update screens
+     *
+     * The returned array should look like this :
+     *
+     * array(
+     *     array(
+     *        'legend' => 'some legend',
+     *        'rows' => array('a_field', 'another_field'),
+     *     ),
+     *     array(
+     *         'legend' => 'some other legend',
+     *         'rows' => array('yet_another_field', 'a_last_field'),
+     *     ),
+     * )
+     *
+     * @return array
+     */
+    public function getFieldsets()
+    {
+        return array();
+    }
+
+    /**
+     * Return the main admin list for this content
+     *
+     * @return \Snowcap\AdminBundle\Datalist\AbstractDatalist
+     */
+    abstract public function getDatalist();
+
+    /**
+     * Return the admin search form for this content (used in the list view)
+     *
+     * @return \Symfony\Component\Form\Form
+     */
+    public function getSearchForm()
+    {
+        return null;
+    }
+
+    /**
+     * Return the main admin querybuilder for this content
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     protected function getQueryBuilder()
@@ -53,23 +79,6 @@ abstract class ContentAdmin extends AbstractAdmin
             ->select('e')
             ->from($this->getParam('entity_class'), 'e');
         return $queryBuilder;
-    }
-
-
-    public function getSearchForm()
-    {
-        return null;
-    }
-
-    /**
-     * @param $data
-     * @return \Symfony\Component\Form\Form
-     */
-    public function getForm($data)
-    {
-        $builder = $this->environment->get('form.factory')->createBuilder('form', $data, array('data_class' => $this->getParam('entity_class')));
-        $this->buildForm($builder);
-        return $builder->getForm();
     }
 
     /**
@@ -95,13 +104,15 @@ abstract class ContentAdmin extends AbstractAdmin
      *
      * @return mixed
      */
-    public function getBlankEntity()
+    public function buildEntity()
     {
         $entityName = $this->getParam('entity_class');
         return new $entityName;
     }
 
     /**
+     * Find the entty with the given identifier
+     *
      * @param mixed $entityId
      * @return mixed
      */
@@ -125,6 +136,8 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
+     * Deletes the entity with the given identifier
+     *
      * @param mixed $entityId
      */
     public function deleteEntity($entityId)
@@ -134,21 +147,4 @@ abstract class ContentAdmin extends AbstractAdmin
         $em->remove($entity);
         $em->flush();
     }
-
-    /**
-     * @return array
-     */
-    public function getFieldsets()
-    {
-        return array();
-    }
-
-    /**
-     * @return string
-     */
-    public function getPreviewBlockName()
-    {
-        return 'default_preview';
-    }
-
 }

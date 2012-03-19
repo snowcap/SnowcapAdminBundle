@@ -36,7 +36,7 @@ class DefaultController extends Controller
      */
     public function navigationAction() {
 
-        return array('sections' => $this->get('snowcap_admin')->getSections());
+        return array('sections' => $this->get('snowcap_admin')->getAdmins());
     }
 
     /**

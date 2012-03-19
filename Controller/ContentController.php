@@ -26,7 +26,7 @@ class ContentController extends BaseController
     public function indexAction($code)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $list = $admin->getList();
+        $list = $admin->getDatalist();
         $request = $this->getRequest();
         if (($page = $request->get('page')) !== null) {
             $list->setPage($page);
@@ -56,7 +56,7 @@ class ContentController extends BaseController
     public function createAction($code)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $entity = $admin->getBlankEntity();
+        $entity = $admin->buildEntity();
         $request = $this->get('request');
         $form = $admin->getForm($entity);
         if ('POST' === $request->getMethod()) {

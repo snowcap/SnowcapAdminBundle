@@ -31,7 +31,7 @@ class InlineContentController extends Controller
         $extensions->initRuntime($twig);
 
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $entity = $admin->getBlankEntity();
+        $entity = $admin->buildEntity();
         $request = $this->get('request');
         $form = $admin->getForm($entity);
         if ('POST' === $request->getMethod()) {

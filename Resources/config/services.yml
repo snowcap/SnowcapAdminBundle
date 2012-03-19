@@ -23,6 +23,7 @@ services:
 
   snowcap_admin.inline:
     class: Snowcap\AdminBundle\Form\Type\InlineType
+    arguments: [@snowcap_admin]
     tags:
       -  { name: form.type, alias: snowcap_admin_inline }
 
@@ -30,21 +31,6 @@ services:
     class: Snowcap\AdminBundle\Form\Type\MarkdownType
     tags:
       -  { name: form.type, alias: markdown }
-  
-  snowcap_admin.fieldset:
-    class: Snowcap\AdminBundle\Form\Type\FieldsetType
-    tags:
-      -  { name: form.type, alias: fieldset }
-  
-  snowcap_admin.form.content:
-    class: Snowcap\AdminBundle\Form\ContentType
-    tags:
-      -  { name: form.type, alias: snowcap_admin_content }
-  
-  snowcap_admin.form.masscontent:
-    class: Snowcap\AdminBundle\Form\MassContentType
-    tags:
-      -  { name: form.type, alias: masscontent }
 
   snowcap_admin.form.collection:
     class: Snowcap\AdminBundle\Form\Extension\CollectionTypeExtension

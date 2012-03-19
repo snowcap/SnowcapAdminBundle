@@ -1,4 +1,5 @@
 <?php
+
 namespace Snowcap\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -7,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * This controller provides basic CRUD capabilities for content models
+ * This controller provides generic capabilities for admin controllers
  *
  */
 class BaseController extends Controller

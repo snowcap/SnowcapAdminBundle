@@ -7,12 +7,27 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\Exception\FormException;
 
+use Snowcap\AdminBundle\Environment;
+
 /**
  * Slug field type class
  *
  */
 class InlineType extends AbstractType
 {
+    /**
+     * @var \Snowcap\AdminBundle\Environment
+     */
+    private $environment;
+
+    /**
+     * @param \Snowcap\AdminBundle\Environment $environment
+     */
+    public function __construct(Environment $environment)
+    {
+        $this->environment = $environment;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -43,8 +58,6 @@ class InlineType extends AbstractType
             throw new FormException('Inline types must be given a valid "inline_admin" option');
         }
         $builder->setAttribute('inline_admin', $options['inline_admin']);
-        $builder->setAttribute('property', $options['property']);
-        $builder->setAttribute('preview', $options['preview']);
     }
 
     /**
@@ -53,10 +66,9 @@ class InlineType extends AbstractType
     public function buildView(FormView $view, FormInterface $form)
     {
         $view->set('inline_admin', $form->getAttribute('inline_admin'));
-        $view->set('property', $form->getAttribute('property'));
-        $view->set('preview', $form->getAttribute('preview'));
         $formData = $form->getData();
         $view->set('data', $formData);
+        $view->set('environment', $this->environment);
     }
 
     /**

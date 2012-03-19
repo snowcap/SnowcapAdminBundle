@@ -12,8 +12,8 @@
         {% endif %}
     </ul>
     <div class="autocomplete-wrapper">
-        <input class="autocomplete" placeholder="{{ "inline_content.search"|trans({}, 'SnowcapAdminBundle') }}" type="text" data-url="{{ path('snowcap_admin_inlinecontent_autocomplete', {'code': inline_admin.code, 'input': 'placeholder'}) }}"/>
-        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inlinecontent_create', {'code': inline_admin.code }) }}">
+        <input class="autocomplete" placeholder="{{ "inline_content.search"|trans({}, 'SnowcapAdminBundle') }}" type="text" data-url="{{ path('snowcap_admin_inlinecontent_autocomplete', {'code': environment.admin(inline_admin).code, 'input': 'placeholder'}) }}"/>
+        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inlinecontent_create', {'code': environment.admin(inline_admin).code }) }}">
             <i class="icon-plus icon-white"></i> {{ "inline_content.create"|trans({}, 'SnowcapAdminBundle') }}
         </a>
         <div class="autocomplete-results"></div>

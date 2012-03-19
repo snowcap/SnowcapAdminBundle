@@ -12,7 +12,7 @@ class DatalistFactory {
         $this->views = $views;
     }
 
-    public function createDatalist($name, $view) {
+    public function create($view, $name) {
         if(!isset($this->views[$view])){
             throw new Exception(sprintf('The view "%s" has not been registered for the datalist factory service', $view));
         }

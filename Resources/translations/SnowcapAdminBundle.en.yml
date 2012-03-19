@@ -4,6 +4,13 @@ navigation:
 content:
     list:
         title: %content_name% list
+        empty: There is no %content_name% yet
+    filter:
+        label: Filter content
+        submit: Filter
+        reset: Reset
+    actions:
+        header: Header
     create:
         title: Create %content_name%
         flash:

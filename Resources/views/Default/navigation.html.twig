@@ -11,7 +11,7 @@
             </a>
             <ul class="nav">
                 {% for admin in sections %}
-                    {{ _self.menu_item('snowcap_admin_content_index', {'code': admin.code}, admin.param('label')) }}
+                    {{ _self.menu_item(admin.defaultRoute, {'code': admin.code}, admin.param('label')) }}
                 {% endfor %}
             </ul>
         </div>
