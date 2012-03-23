@@ -3,7 +3,7 @@
 
 {% block body %}
 <h2>{{ form_title }}</h2>
-<form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate" class="row form-horizontal">
+<form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate" class="row form-vertical">
     <div class="span10">
         {% for fieldset in admin.fieldsets %}
             <fieldset>

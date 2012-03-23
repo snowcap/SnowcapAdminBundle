@@ -32,6 +32,11 @@ services:
     tags:
       -  { name: form.type, alias: markdown }
 
+  snowcap_admin.wyswyg:
+    class: Snowcap\AdminBundle\Form\Type\WysiwygType
+    tags:
+      -  { name: form.type, alias: wysiwyg }
+
   snowcap_admin.form.collection:
     class: Snowcap\AdminBundle\Form\Extension\CollectionTypeExtension
     tags:
