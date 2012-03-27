@@ -71,6 +71,7 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
+            'form_template' => $this->getTemplate('form', $code)
         );
     }
 
@@ -117,5 +118,13 @@ class ContentController extends BaseController
         $admin->deleteEntity($id);
         $this->setFlash('success', 'content.delete.flash.success');
         return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
+    }
+
+    protected function getTemplate($templateName, $code) {
+        $bundle = $this->get('snowcap_admin')->getBundle();
+        // TODO check if available in bundle, otherwise use the default one
+        // $template = $bundle . ':Content:' . ucfirst($code) . '/'. $templateName . '.html.twig';
+        $template = "SnowcapAdminBundle:Content:form.html.twig";
+        return $template;
     }
 }

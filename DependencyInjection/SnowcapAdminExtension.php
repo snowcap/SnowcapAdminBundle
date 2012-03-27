@@ -32,7 +32,7 @@ class SnowcapAdminExtension extends Extension
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
 
-        foreach (array('sections') as $attribute) {
+        foreach (array('sections','bundle') as $attribute) {
             $container->setParameter($attribute , $config[$attribute]);
         }
     }

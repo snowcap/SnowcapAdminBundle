@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('bundle')->end()
                 ->arrayNode('sections')
                     ->useAttributeAsKey('key')
                     ->prototype('variable')->end()

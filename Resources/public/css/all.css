@@ -98,3 +98,30 @@ fieldset {
     margin-bottom: 10px;
     margin-left: 10px;
 }
+
+/**
+ * Tabs
+ */
+.nav-tabs {
+    margin-bottom: 0;
+}
+.nav-tabs li.active a {
+    background-color: #fcfcfc;
+}
+.tab-content {
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    padding: 20px;
+    border-radius: 0 0 3px 3px;
+    background-color: #fcfcfc;
+    border-color: #ddd;
+    margin-bottom: 20px;
+}
+.tab-content h4 {
+    margin-bottom: 21px;
+    font-size: 16px;
+    line-height: 32px;
+    color: #333;
+    border: 0;
+    border-bottom: 1px solid #EEE;
+}

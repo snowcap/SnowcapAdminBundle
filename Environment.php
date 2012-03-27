@@ -15,6 +15,8 @@ class Environment extends ContainerAware
      */
     private $admins;
 
+    private $bundle;
+
     /**
      * @param array $admins
      */
@@ -79,4 +81,15 @@ class Environment extends ContainerAware
     {
         return $this->container->get($id);
     }
+
+    public function setBundle($bundle)
+    {
+        $this->bundle = $bundle;
+    }
+
+    public function getBundle()
+    {
+        return $this->bundle;
+    }
+
 }
