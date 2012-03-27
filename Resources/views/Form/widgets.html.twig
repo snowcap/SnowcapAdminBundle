@@ -7,7 +7,7 @@
         {% if value is not empty %}
             {% set results = multiple ? data : [data] %}
             {% for result in results %}
-                {% include 'SnowcapAdminBundle:InlineContent:preview.html.twig' with {'entity': result, 'admin': inline_admin }%}
+                {% include 'SnowcapAdminBundle:InlineContent:preview.html.twig' with {'entity': result, 'admin': environment.admin(inline_admin) }%}
             {% endfor %}
         {% endif %}
     </ul>
