@@ -27,51 +27,74 @@ fieldset {
     padding-top: 10px;
 }
 
+.form-vertical .add-on {
+    margin-bottom: 9px;
+}
 
 /**
- * Inline widget
- */
+* Inline widget
+*/
 .type_snowcap_admin_inline .selected {
     list-style-type: none;
     margin: 10px 0;
 }
-.type_snowcap_admin_inline .selected li:first-child {
-    margin-left: 0;
-}
-.type_snowcap_admin_inline .selected li > a {
+
+.type_snowcap_admin_inline .selected li {
+    position: relative;
     display: block;
     padding: 5px;
     text-decoration: none;
+}
+.type_snowcap_admin_inline .selected li a {
+    text-decoration: none;
     color: #333;
 }
-.type_snowcap_admin_inline .selected li > a:hover {
+.type_snowcap_admin_inline .selected li:first-child {
+    margin-left: 0;
+}
+
+.type_snowcap_admin_inline .selected li:hover {
     background-color: #0088cc;
 }
-.type_snowcap_admin_inline .selected li > a:hover p,
-.type_snowcap_admin_inline .selected li > a:hover h4 {
+
+.type_snowcap_admin_inline .selected li:hover p,
+.type_snowcap_admin_inline .selected li:hover h4 {
     color: #fff;
 }
+
+.type_snowcap_admin_inline .selected li .close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+}
+
 /**
  * Autocomplete
  */
 .autocomplete-wrapper {
     position: relative;
 }
+
 .autocomplete-results ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
+
 .autocomplete-results li > a {
     padding: 5px;
 }
+
 .autocomplete-results li > a:hover h4 {
     color: #fff;
 }
+
 .autocomplete-results li img {
     float: left;
     margin-right: 10px;
 }
+
 .autocomplete-wrapper .btn {
+    margin-bottom: 10px;
     margin-left: 10px;
 }

@@ -6,20 +6,24 @@ jQuery(document).ready(function ($) {
             dialogDefinition.removeContents('advanced');
             var targetTab = dialogDefinition.getContents('target');
             var targetField = targetTab.get('linkTargetType');
-
             var infoTab = dialogDefinition.getContents('info');
             infoTab.add(targetField);
             dialogDefinition.removeContents('target');
         }
         if (dialogName === 'image') {
             dialogDefinition.removeContents('advanced');
+            var infoTab = dialogDefinition.getContents('info');
         }
         if(dialogName === 'table') {
+            // No need for the advanced tab
             dialogDefinition.removeContents('advanced');
-            dialogDefinition.getContents('info').get('txtBorder')['default'] = 1;
-            dialogDefinition.getContents('info').get('txtBorder')['onLoad'] = function(a, b, c) {
-                console.log(this.getInputElement());
-            };
+            var infoTab = dialogDefinition.getContents('info');
+            // Set border to 1 and hide field
+            infoTab.get('txtBorder')['default'] = 1;
+            infoTab.get('txtBorder').hidden = true;
+            infoTab.remove('cmbAlign');
+            infoTab.remove('txtCellSpace');
+            infoTab.remove('txtCellPad');
         }
     });
 
@@ -36,9 +40,12 @@ jQuery(document).ready(function ($) {
     };
     /* Loop over each wysiwyg textarea */
     $('.widget-wysiwyg').each(function (offset, wysiwyg) {
-        wysiwygConfig.stylesSet = 'my_styles:' + $(wysiwyg).attr('data-stylefileurl');
-        $('.widget-wysiwyg').ckeditor(function () {
+        var thisConfig = $.extend({
+            "stylesSet": 'my_styles:' + $(wysiwyg).attr('data-stylefileurl'),
+            "contentsCss": $(wysiwyg).attr('data-cssfileurl')
         }, wysiwygConfig);
+        $('.widget-wysiwyg').ckeditor(function () {
+        }, thisConfig);
     });
 
 

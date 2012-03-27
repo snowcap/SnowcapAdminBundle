@@ -71,7 +71,7 @@
 {% endblock %}
 
 {% block wysiwyg_widget %}
-{% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-stylefileurl': asset(style_file)}) %}
+{% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-stylefileurl': asset(style_file), 'data-cssfileurl': asset(css_file)}) %}
 {{ block('textarea_widget') }}
 {% endblock %}
 

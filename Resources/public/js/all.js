@@ -185,7 +185,12 @@ jQuery(document).ready(function ($) {
                 select.find('option[selected=selected]').removeAttr('selected');
             }
             selectedItem.addClass('span2');
-            selectedItem.find('a').click(self.removeSelection);
+            selectedItem.find('a.identity').click(function(event){
+                event.preventDefault();
+            });
+            var close = $('<a>').addClass('close').html('x');
+            close.click(self.removeSelection);
+            selectedItem.append(close);
             selected.append(selectedItem);
             select.find('option[value=' + $(selectedItem).find('a').attr('href') + ']').attr('selected', 'selected');
         };

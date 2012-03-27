@@ -25,7 +25,8 @@ class WysiwygType extends AbstractType
      */
     public function getDefaultOptions(array $options) {
         return array(
-            'style_file' => 'bundles/snowcapadmin/vendor/ckeditor/plugin/styles/styles/ckeditor_styles.js'
+            'style_file' => 'bundles/snowcapadmin/vendor/ckeditor/plugin/styles/styles/ckeditor_styles.js',
+            'css_file' => 'bundles/snowcapadmin/vendor/ckeditor/contents.css',
         );
     }
 
@@ -34,6 +35,7 @@ class WysiwygType extends AbstractType
      */
     public function buildForm(FormBuilder $builder, array $options) {
         $builder->setAttribute('style_file', $options['style_file']);
+        $builder->setAttribute('css_file', $options['css_file']);
         parent::buildForm($builder, $options);
     }
 
@@ -43,6 +45,7 @@ class WysiwygType extends AbstractType
     public function buildView(FormView $view, FormInterface $form)
     {
         $view->set('style_file', $form->getAttribute('style_file'));
+        $view->set('css_file', $form->getAttribute('css_file'));
         parent::buildView($view, $form);
     }
 
