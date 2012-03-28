@@ -43,7 +43,7 @@ class AdminExtension extends \Twig_Extension
     }
 
 
-    public function renderList(AbstractDatalist $list)
+    public function renderList(AbstractDatalist $list, $locale = null)
     {
         $loader = $this->environment->getLoader();
         /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
@@ -56,6 +56,7 @@ class AdminExtension extends \Twig_Extension
         ob_start();
         $template->displayBlock($blockName, array(
             'list' => $list,
+            'locale' => $locale,
         ));
         $html = ob_get_clean();
         return $html;

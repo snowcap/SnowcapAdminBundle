@@ -14,7 +14,7 @@
 </form>
 {% endif %}
 {% if list.data is not empty %}
-    {{ list_widget(list) }}
+    {{ list_widget(list, app.request.locale) }}
     {% if list.paginator != null %}
         {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
     {% endif %}
