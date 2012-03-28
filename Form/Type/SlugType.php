@@ -41,8 +41,7 @@ class SlugType extends AbstractType
     public function buildView(FormView $view, FormInterface $form)
     {
         parent::buildView($view, $form);
-        $target = $form->getParent()->getName() . '_' . $form->getAttribute('target');
-        $view->set('target', $target);
+        $view->set('target', $form->getAttribute('target'));
     }
 
     /**

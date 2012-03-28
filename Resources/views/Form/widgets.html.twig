@@ -40,13 +40,13 @@
 {% endblock field_row %}
 
 {% block slug_widget %}
-    {% set attr = attr|merge({'class': 'widget-slug widget-slug-' ~ target }) %}
+    {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}
     <div class="input-append">
         {{ block('field_widget') }}
         <span class="add-on"><a href="#locked"><i class="icon-pencil icon"></i></a></span>
     </div>
     {% from 'SnowcapBootstrapBundle::macros.html.twig' import modal %}
-    {{ modal('modal-slug', 'ATTENTION', 'If you change the slug, you can break links on other pages') }}
+    {{ modal('modal-' ~ id, 'ATTENTION', 'If you change the slug, you can break links on other pages') }}
 {% endblock slug_widget %}
 
 {% block markdown_widget %}
@@ -85,7 +85,7 @@
             <ul class="nav nav-tabs">
                 {% for key, row in form %}
                     {% set label = row[property].get('value') %}
-                    <li{% if loop.first %} class="active"{% endif %}><a href="#{{ html_id }}-{{label}}" data-toggle="tab">{{ form_label(row, label) }}</a></li>
+                    <li{% if loop.first %} class="active"{% endif %}><a href="#{{ html_id }}-{{label}}" data-toggle="tab">{{ label }}</a></li>
                 {% endfor %}
             </ul>
             <div class="tab-content">

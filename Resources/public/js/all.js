@@ -5,11 +5,11 @@ jQuery(document).ready(function ($) {
         var _element = $(element);
         var _target;
         var _currentSlug = '';
+        var _modal = _element.parent().parent().find('.modal');
         /**
          * Append a "lock" button to control slug behaviour (auto or manual)
          */
         this.appendLockButton = function () {
-            _modal = _element.parent().parent().find('.modal');
             _modal.find('a[data-accept=modal]').click(function (event) {
                 _this.unlock();
                 _modal.modal('hide');
@@ -18,6 +18,7 @@ jQuery(document).ready(function ($) {
             _this.lockButton.click(function (event) {
                 event.preventDefault();
                 if (_this.lockButton.attr('href') === '#locked') {
+                    console.log(_modal);
                     _modal.modal('show');
                 }
                 else {
@@ -77,11 +78,11 @@ jQuery(document).ready(function ($) {
          * Instance init
          */
         this.init = function () {
-            var targetId = $.grep(_element.attr('class').split(' '),
-                function (element, offset) {
-                    return element.indexOf('widget-slug-') !== -1;
-                }).pop().split('-').pop();
-            _target = $('#' + targetId);
+            //console.log(_modal);
+            _modal.modal({show: false});
+            var elementIdSplitted = _element.attr('id').split('_');
+            elementIdSplitted.pop();
+            _target = $('#' + elementIdSplitted.join('_') + '_' +  _element.attr('data-target'));
             _element.attr('readonly', 'readonly');
             initialState = 'locked';
             if (_element.val() === '') {
