@@ -1,0 +1,41 @@
+navigation:
+    link: Gestion %type%
+
+content:
+    list:
+        title: liste %content_name%
+        empty: Aucun %content_name% n'a été trouvé
+    filter:
+        label: Filtrer
+        submit: Filtrer
+        reset: Annuler
+    actions:
+        header: Entête
+    create:
+        title: Créer %content_name%
+        flash:
+            success: Le contenu à bien été crée.
+    update:
+        title: Mettre à jour %content_name%
+        flash:
+            success: Le contenu à bien été mis à jour.
+    delete:
+        flash:
+            success: Le contenu à bien été effacé
+    actions:
+        header: Actions
+        create: Créer %content_name%
+        save: Sauvegarder
+        edit: Modifier
+        delete: Effacer
+        back: Retour à la liste
+
+inline_content:
+    create: Créer un nouvel élément %content_name%
+    save: Sauvegarder
+    create: Nouveau
+    search: Introduisez le nom du contenu recherché
+    empty: Aucun élément sélectionné
+
+project:
+    name: Admin
