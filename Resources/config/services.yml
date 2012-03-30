@@ -32,8 +32,9 @@ services:
     tags:
       -  { name: form.type, alias: markdown }
 
-  snowcap_admin.wyswyg:
+  snowcap_admin.wysiwyg:
     class: Snowcap\AdminBundle\Form\Type\WysiwygType
+    arguments: [@router]
     tags:
       -  { name: form.type, alias: wysiwyg }
 

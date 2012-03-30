@@ -5,13 +5,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-
+use Symfony\Component\Routing\Router;
 /**
  * Markdown field type class
  * 
  */
 class WysiwygType extends AbstractType
 {
+
+    /** @var Router */
+    private $router;
+
+    public function __construct(Router $router) {
+        $this->router = $router;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -27,6 +35,8 @@ class WysiwygType extends AbstractType
         return array(
             'style_file' => 'bundles/snowcapadmin/vendor/ckeditor/plugin/styles/styles/ckeditor_styles.js',
             'css_file' => 'bundles/snowcapadmin/vendor/ckeditor/contents.css',
+            'browser_url' => $this->router->generate('snowcap_admin_wysiwyg_browser'),
+            'upload_url' => $this->router->generate('snowcap_admin_wysiwyg_upload'),
         );
     }
 
@@ -36,6 +46,8 @@ class WysiwygType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options) {
         $builder->setAttribute('style_file', $options['style_file']);
         $builder->setAttribute('css_file', $options['css_file']);
+        $builder->setAttribute('browser_url', $options['browser_url']);
+        $builder->setAttribute('upload_url', $options['upload_url']);
         parent::buildForm($builder, $options);
     }
 
@@ -46,6 +58,8 @@ class WysiwygType extends AbstractType
     {
         $view->set('style_file', $form->getAttribute('style_file'));
         $view->set('css_file', $form->getAttribute('css_file'));
+        $view->set('browser_url', $form->getAttribute('browser_url'));
+        $view->set('upload_url', $form->getAttribute('upload_url'));
         parent::buildView($view, $form);
     }
 
