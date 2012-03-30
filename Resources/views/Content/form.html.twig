@@ -1,30 +1,48 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
-{% form_theme form 'SnowcapAdminBundle:Form:content.html.twig' %}
+{% form_theme forms 'SnowcapAdminBundle:Form:content.html.twig' %}
 
 {% block body %}
-<h2>{{ form_title }}</h2>
-<form action="{{ form_action }}" method="post" {{ form_enctype(form) }} novalidate="novalidate" class="row form-vertical">
+<div class="page-header">
+    <h1>{{ form_title }}</h1>
+</div>
+
+<form action="{{ path(app.request.get('_route'), form_action_params) }}" method="post" {{ form_enctype(forms) }} novalidate="novalidate"
+      class="row form-vertical">
+    {% if admin.translatable %}
+    <div class="span2">
+        <div class="well" style="padding: 8px 0">
+            <ul class="nav nav-list">
+                {% for locale_key, locale_text in get_active_locales(app.request.locale) %}
+                   <li{% if locale_key == content_locale %} class="active"{% endif %}>
+                       <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">{{ locale_text }}</a>
+                   </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    {% endif %}
     <div class="span10">
         {% block form_fields %}
-            {% for fieldset in admin.fieldsets %}
-                <fieldset>
-                    <legend>{{ fieldset.legend }}</legend>
-                    {% for row in fieldset.rows %}
-                        {% if 'collection' in form[row].get('types') %}
-                            {{ form_errors(form[row]) }}
-                            {{ form_widget(form[row]) }}
-                        {% else %}
-                            {{ form_row(form[row]) }}
-                        {% endif %}
-                    {% endfor %}
-                </fieldset>
+        {% for fieldset in admin.fieldsets %}
+        {% debug fieldset %}
+        <fieldset>
+            <legend>{{ fieldset.legend }}</legend>
+            {% for row in fieldset.rows %}
+            {% if 'collection' in forms[row].get('types') %}
+            {{ form_errors(forms[row]) }}
+            {{ form_widget(forms[row]) }}
             {% else %}
-                {{ form_widget(form) }}
+            {{ form_row(forms[row]) }}
+            {% endif %}
             {% endfor %}
+        </fieldset>
+        {% else %}
+        {{ form_widget(forms) }}
+        {% endfor %}
 
-            {{ form_rest(form) }}
+        {{ form_rest(forms) }}
         {% endblock %}
-
         <div class="form-actions">
             <button type="submit" class="btn btn-large btn-primary">{{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}</button>
         </div>

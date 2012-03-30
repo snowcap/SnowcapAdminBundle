@@ -147,4 +147,9 @@ abstract class ContentAdmin extends AbstractAdmin
         $em->remove($entity);
         $em->flush();
     }
+
+    public function isTranslatable()
+    {
+        return false;
+    }
 }

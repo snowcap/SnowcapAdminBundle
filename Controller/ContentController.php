@@ -6,8 +6,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Snowcap\AdminBundle\Environment;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
-use Snowcap\AdminBundle\Form\ContentType;
+use Snowcap\AdminBundle\Admin\TranslatableContentAdminInterface;
 
 /**
  * This controller provides basic CRUD capabilities for content models
@@ -36,11 +37,11 @@ class ContentController extends BaseController
             'admin' => $admin,
             'list' => $list,
         );
-        if($searchForm !== null) {
+        if ($searchForm !== null) {
             $searchForm->bindRequest($this->get('request'));
             $searchData = $searchForm->getData();
             $list->filterData(array_filter($searchData));
-            $vars['searchForm'] =  $searchForm->createView();
+            $vars['searchForm'] = $searchForm->createView();
         }
         return $vars;
     }
@@ -53,26 +54,43 @@ class ContentController extends BaseController
      * @param string $code
      * @return mixed
      */
-    public function createAction($code)
+    public function createAction($code, $locale = null)
     {
+        if ($locale === null) {
+            $locale = $this->getRequest()->getLocale();
+        }
+        $request = $this->get('request');
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $entity = $admin->buildEntity();
-        $request = $this->get('request');
+        $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
+        $forms->add($form);
+        if ($admin->isTranslatable()) {
+            $translationEntity = $admin->buildTranslationEntity($entity, $locale);
+            $translationForm = $admin->getTranslationForm($translationEntity);
+            $forms->add($translationForm);
+        }
         if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
+            $forms->bindRequest($request);
+            if ($admin->isTranslatable()) {
+                $admin->attachTranslation($entity, $translationEntity);
+            }
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
                 $this->setFlash('success', 'content.create.flash.success');
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
-        return array(
+        $templateParams = array(
             'admin' => $admin,
             'entity' => $entity,
-            'form' => $form->createView(),
-            'form_template' => $this->getTemplate('form', $code)
+            'forms' => $forms->createView(),
+            'form_template' => $this->getTemplate('form', $code),
         );
+        if ($admin->isTranslatable()) {
+            $templateParams['content_locale'] = $locale;
+        }
+        return $templateParams;
     }
 
     /**
@@ -84,25 +102,44 @@ class ContentController extends BaseController
      * @param int $id
      * @return mixed
      */
-    public function updateAction($code, $id)
+    public function updateAction($code, $id, $locale = null)
     {
+        if ($locale === null) {
+            $locale = $this->getRequest()->getLocale();
+        }
+        $request = $this->get('request');
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $entity = $admin->findEntity($id);
-        $request = $this->get('request');
+        $forms = $this->createForm('form');
+        $form = $admin->getForm($entity);
+        $forms->add($form);
+        if ($admin->isTranslatable()) {
+            $translationEntity = $admin->findTranslationEntity($entity, $locale);
+            $translationForm = $admin->getTranslationForm($translationEntity);
+            $forms->add($translationForm);
+        }
         $form = $admin->getForm($entity);
         if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
+            $forms->bindRequest($request);
+            if ($admin->isTranslatable()) {
+                $admin->attachTranslation($entity, $translationEntity);
+            }
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
                 $this->setFlash('success', 'content.update.flash.success');
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
             }
         }
-        return array(
+        $templateParams = array(
             'admin' => $admin,
             'entity' => $entity,
-            'form' => $form->createView(),
+            'forms' => $forms->createView(),
+            'form_template' => $this->getTemplate('form', $code),
         );
+        if ($admin->isTranslatable()) {
+            $templateParams['content_locale'] = $locale;
+        }
+        return $templateParams;
     }
 
     /**
@@ -120,7 +157,8 @@ class ContentController extends BaseController
         return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
     }
 
-    protected function getTemplate($templateName, $code) {
+    protected function getTemplate($templateName, $code)
+    {
         $bundle = $this->get('snowcap_admin')->getBundle();
         // TODO check if available in bundle, otherwise use the default one
         // $template = $bundle . ':Content:' . ucfirst($code) . '/'. $templateName . '.html.twig';

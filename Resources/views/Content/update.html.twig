@@ -1,4 +1,10 @@
 {% extends "SnowcapAdminBundle:Content:form.html.twig" %}
 
 {% set form_title = "content.update.title"|trans({'%content_name%': admin.param('label')|lower }, 'SnowcapAdminBundle') %}
-{% set form_action = path('snowcap_admin_content_update', {'code': admin.code, 'id': entity.id}) %}
+
+{% if admin.translatable %}
+    {% set switch_route_params = {'code': admin.code, 'id': entity.id} %}
+    {% set form_action_params = {'code': admin.code, 'id': entity.id, 'locale': content_locale} %}
+{% else %}
+    {% set form_action_params = {'code': admin.code, 'id': entity.id} %}
+{% endif %}
