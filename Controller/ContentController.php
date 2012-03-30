@@ -75,7 +75,7 @@ class ContentController extends BaseController
             if ($admin->isTranslatable()) {
                 $admin->attachTranslation($entity, $translationEntity);
             }
-            if ($form->isValid()) {
+            if ($forms->isValid()) {
                 $admin->saveEntity($entity);
                 $this->setFlash('success', 'content.create.flash.success');
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
@@ -124,7 +124,7 @@ class ContentController extends BaseController
             if ($admin->isTranslatable()) {
                 $admin->attachTranslation($entity, $translationEntity);
             }
-            if ($form->isValid()) {
+            if ($forms->isValid()) {
                 $admin->saveEntity($entity);
                 $this->setFlash('success', 'content.update.flash.success');
                 return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
