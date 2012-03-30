@@ -13,6 +13,13 @@ jQuery(document).ready(function ($) {
         if (dialogName === 'image') {
             dialogDefinition.removeContents('advanced');
             var infoTab = dialogDefinition.getContents('info');
+            // TODO try to add a tag field
+            /*var uploadTab = dialogDefinition.getContents('Upload');
+            uploadTab.add( {
+            					type : 'text',
+            					label : 'Tags',
+            					id : 'tags'
+            				});*/
         }
         if(dialogName === 'table') {
             // No need for the advanced tab
@@ -37,16 +44,50 @@ jQuery(document).ready(function ($) {
         ],
         'forcePasteAsPlainText':true,
         'startupOutlineBlocks':true
+
     };
+
     /* Loop over each wysiwyg textarea */
     $('.widget-wysiwyg').each(function (offset, wysiwyg) {
         var thisConfig = $.extend({
-            "stylesSet": 'my_styles:' + $(wysiwyg).attr('data-stylefileurl'),
-            "contentsCss": $(wysiwyg).attr('data-cssfileurl')
+            'stylesSet': 'my_styles:' + $(wysiwyg).attr('data-stylefileurl'),
+            'contentsCss': $(wysiwyg).attr('data-cssfileurl'),
+            'filebrowserBrowseUrl': $(wysiwyg).attr('data-browserurl'),
+            'filebrowserImageWindowWidth': '960',
+            'filebrowserImageWindowHeight': '720',
+            'filebrowserUploadUrl': $(wysiwyg).attr('data-uploadurl')
         }, wysiwygConfig);
         $('.widget-wysiwyg').ckeditor(function () {
         }, thisConfig);
     });
+
+    // Helper function to get parameters from the query string.
+    var getUrlParam = function (paramName) {
+        var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i');
+        var match = window.location.search.match(reParam);
+
+        return (match && match.length > 1) ? match[1] : '';
+    };
+    var sendUrlToWysiwyg = function (element) {
+        var _element = $(element);
+        var funcNum = getUrlParam('CKEditorFuncNum');
+        var img = _element.find('img');
+        var fileUrl = '';
+        if (img.attr('data-src').length > 0) {
+            fileUrl = img.attr('data-src');
+        } else {
+            fileUrl = img.attr('src');
+        }
+        window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+        window.close();
+    };
+
+    $('.wysiwyg-browser .thumbnail').click(function (event) {
+        event.preventDefault();
+        sendUrlToWysiwyg(this);
+    });
+
+
 
 
 });

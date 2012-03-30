@@ -43,7 +43,7 @@
 {% block list_thumbnail %}
 <ul class="thumbnails">
     {% for data_row in list.data %}
-    <li class="span3">
+    <li>
         <div class="thumbnail">
             {{ block('list_thumbnail_visual') }}
             <div class="caption">
@@ -65,7 +65,7 @@
 
 {% block list_thumbnail_visual %}
     {% if(list.view.image is defined) %}
-        <img src="/{{ list_value(data_row, list.view.image.path, list.view.image.options) }}" title="{{ data_row.translations[locale].title|default(data_row.title|default('Missing title')) }}" alt="{{ data_row.translations[locale].alt|default(data_row.alt|default('Missing alt'))}}">
+        <img src="{{ list_value(data_row, list.view.image.path, list.view.image.options)|imresize('admin_thumb') }}" title="{{ data_row.translations[locale].title|default(data_row.title|default('Missing title')) }}" alt="{{ data_row.translations[locale].alt|default(data_row.alt|default('Missing alt'))}}">
     {% else %}
         <img src="http://placehold.it/260x180" title="Placeholder" alt="Placeholder"/>
     {% endif %}

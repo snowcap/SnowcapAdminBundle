@@ -2,3 +2,7 @@ twig:
   form:
     resources:
         - 'SnowcapAdminBundle:Form:widgets.html.twig'
+snowcap_im:
+    formats:
+        admin_thumb:
+            thumbnail: 180x120

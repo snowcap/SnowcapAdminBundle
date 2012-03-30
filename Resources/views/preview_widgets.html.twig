@@ -12,7 +12,7 @@
 {% block image_preview %}
 <li data-entity-id="{{ entity.id }}">
     <div class="thumbnail">
-        <img src="/{{ entity.webPath }}" />
+        <img src="{{ entity.webPath|imresize('admin_thumb') }}" alt="{{ entity.alt|default('Alternate text')}}" />
         <div class="caption">
             <h5>{{ entity.title }}</h5>
             <p>
