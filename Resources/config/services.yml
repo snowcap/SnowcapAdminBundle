@@ -10,8 +10,7 @@ services:
         - [setContainer, [ @service_container ]]
         - [setBundle, [ %bundle% ]]
 
-    
-
+  # Twig extensions
   snowcap_admin.twig:
     class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
     tags:
@@ -38,11 +37,6 @@ services:
     arguments: [@router]
     tags:
       -  { name: form.type, alias: wysiwyg }
-
-  snowcap_admin.form.collection:
-    class: Snowcap\AdminBundle\Form\Extension\CollectionTypeExtension
-    tags:
-      -  { name: form.type_extension, alias: collection }
 
   #Datalists
   snowcap_admin.datalist_factory:

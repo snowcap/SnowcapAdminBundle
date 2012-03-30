@@ -5,6 +5,7 @@ use Symfony\Component\Form\Util\PropertyPath;
 
 use Snowcap\AdminBundle\DataList\AbstractDatalist;
 use Snowcap\AdminBundle\Exception;
+use Snowcap\AdminBundle\Environment;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -24,8 +25,6 @@ class AdminExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-
-
     public function initRuntime(\Twig_Environment $environment)
     {
         $this->environment = $environment;
@@ -43,7 +42,7 @@ class AdminExtension extends \Twig_Extension
     }
 
 
-    public function renderList(AbstractDatalist $list, $locale = null)
+    public function renderList(AbstractDatalist $list)
     {
         $loader = $this->environment->getLoader();
         /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
@@ -56,7 +55,6 @@ class AdminExtension extends \Twig_Extension
         ob_start();
         $template->displayBlock($blockName, array(
             'list' => $list,
-            'locale' => $locale,
         ));
         $html = ob_get_clean();
         return $html;
@@ -144,4 +142,6 @@ class AdminExtension extends \Twig_Extension
     {
         return 'snowcap_admin';
     }
+
+
 }

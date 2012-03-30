@@ -8,12 +8,12 @@ snowcap_admin_content_index:
     defaults: { _controller: SnowcapAdminBundle:Content:index }
 
 snowcap_admin_content_create:
-    pattern: /content/{code}/create
-    defaults: { _controller: SnowcapAdminBundle:Content:create }
+    pattern: /content/{code}/create/{locale}
+    defaults: { _controller: SnowcapAdminBundle:Content:create, locale: null }
 
 snowcap_admin_content_update:
-    pattern: /content/{code}/update/{id}
-    defaults: { _controller: SnowcapAdminBundle:Content:update }
+    pattern: /content/{code}/update/{id}/{locale}
+    defaults: { _controller: SnowcapAdminBundle:Content:update, locale: null }
 
 snowcap_admin_content_delete:
     pattern: /content/{code}/delete/{id}
