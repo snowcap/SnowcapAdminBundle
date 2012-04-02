@@ -24,24 +24,7 @@
     {% endif %}
     <div class="span10">
         {% block form_fields %}
-        {% for fieldset in admin.fieldsets %}
-        {% debug fieldset %}
-        <fieldset>
-            <legend>{{ fieldset.legend }}</legend>
-            {% for row in fieldset.rows %}
-            {% if 'collection' in forms[row].get('types') %}
-            {{ form_errors(forms[row]) }}
-            {{ form_widget(forms[row]) }}
-            {% else %}
-            {{ form_row(forms[row]) }}
-            {% endif %}
-            {% endfor %}
-        </fieldset>
-        {% else %}
-        {{ form_widget(forms) }}
-        {% endfor %}
-
-        {{ form_rest(forms) }}
+            {{ form_rest(forms) }}
         {% endblock %}
         <div class="form-actions">
             <button type="submit" class="btn btn-large btn-primary">{{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}</button>

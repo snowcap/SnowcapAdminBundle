@@ -33,9 +33,20 @@ class WysiwygController extends Controller
         return array('images' => $finder, 'arguments' => $arguments);
         */
 
-        $images = $this->getDoctrine()->getRepository('SnowcapAdminBundle:File')->findAll();
+        /** @var $datalist \Snowcap\AdminBundle\Datalist\ContentDatalist */
+        $datalist = $this->get('snowcap_admin.datalist_factory')->create('thumbnail', 'browser');
+        $datalist
+            ->add('path', 'image')
+            ->add('tags', 'label')
+        ;
+        /** @var $em \Doctrine\ORM\EntityManager */
+        $em = $this->getDoctrine()->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder();
+        $queryBuilder->select('f')->from('SnowcapAdminBundle:File', 'f');
 
-        return array('images' => $images, 'arguments' => $arguments);
+        $datalist->setQueryBuilder($queryBuilder);
+
+        return array('list' => $datalist, 'arguments' => $arguments);
     }
 
     /**
