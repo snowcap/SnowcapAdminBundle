@@ -5,4 +5,7 @@ twig:
 snowcap_im:
     formats:
         admin_thumb:
-            thumbnail: 180x120
+            thumbnail: 180x120>
+            background: white
+            gravity: center
+            extent: 180x120
