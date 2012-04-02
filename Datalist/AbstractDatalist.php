@@ -82,7 +82,7 @@ class AbstractDatalist
     public function addAction($routeName, array $parameters = array(), array $options = array())
     {
         if (!array_key_exists('label', $options)) {
-            $options['label'] = $routeName;
+            $options['label'] = ucfirst($routeName);
         }
         $this->actions[$routeName] = array('parameters' => $parameters, 'options' => $options);
     }

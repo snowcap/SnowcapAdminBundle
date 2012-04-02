@@ -10,7 +10,7 @@ class GridView implements DatalistViewInterface {
             $type = 'text';
         }
         if(!isset($options['label'])) {
-            $options['label'] = $path;
+            $options['label'] = ucfirst($path);
         }
         $this->columns[]= array(
             'path' => $path,
