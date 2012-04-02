@@ -36,12 +36,6 @@ snowcap_admin_markdown:
 snowcap_admin_wysiwyg_browser:
     pattern: /wysiwyg/browser
     defaults: { _controller: SnowcapAdminBundle:Wysiwyg:browser }
-snowcap_admin_wysiwyg_browser_entities:
-    pattern: /wysiwyg/browser/entities
-    defaults: { _controller: SnowcapAdminBundle:Wysiwyg:entities }
-snowcap_admin_wysiwyg_browser_files:
-    pattern: /wysiwyg/browser/files
-    defaults: { _controller: SnowcapAdminBundle:Wysiwyg:files }
 snowcap_admin_wysiwyg_upload:
     pattern: /wysiwyg/upload
     defaults: { _controller: SnowcapAdminBundle:Wysiwyg:upload }
