@@ -30,6 +30,11 @@ content:
         delete: Delete
         back: Back to list
 
+wysiwyg:
+    browse:
+        title: Browse images
+        empty: No image yet
+
 inline_content:
     create: Create new %content_name%
     save: Save
