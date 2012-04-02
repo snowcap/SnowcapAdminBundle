@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Snowcap\AdminBundle\Environment;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
-use Snowcap\AdminBundle\Admin\TranslatableContentAdminInterface;
 
 /**
  * This controller provides basic CRUD capabilities for content models
