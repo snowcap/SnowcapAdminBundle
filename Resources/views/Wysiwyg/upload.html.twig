@@ -1,15 +1,11 @@
 {% if form is defined %}
     <h2>Upload</h2>
     <hr/>
-    <form action="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" {{ form_enctype(form) }} method="post" class="form-vertical" novalidate="novalidate">
-        <fieldset>
-            <div class="row">
-                <div class="span3">{{ form_row(form.file) }}</div>
-                <div class="span3">{{ form_row(form.tags) }}</div>
-                <div class="span3"><button type="submit" class="btn btn-primary btn-small">Submit</button></div>
-                {{ form_rest(form) }}
-            </div>
-        </fieldset>
+    <form action="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" {{ form_enctype(form) }} method="post" class="well form-inline" novalidate="novalidate">
+        {{ form_widget(form.file) }}
+        {{ form_widget(form.tags, { 'attr': { 'placeholder': 'Enter tags for further search'}}) }}
+        <button type="submit" class="btn">Submit</button></div>
+        {{ form_rest(form) }}
     </form>
 {% endif %}
 {% if url is defined %}
