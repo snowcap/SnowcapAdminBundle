@@ -18,22 +18,15 @@
             <div class="wysiwyg-browser">
                 {% block body %}
                     {% render 'SnowcapAdminBundle:Wysiwyg:upload' %}
-                    {% if images|length > 0 %}
-                        <h2>Browse</h2>
-                        <hr/>
-                        <ul class="thumbnails">
-                            {% for image in images %}
-                            <li>
-                                <a href="javascript:void(0);" class="thumbnail">
-                                    {% imresize %}
-                                        <img height="100" src="{{ 'uploads/' ~ image.getRelativePathname() }}" data-src="{{ asset('uploads/' ~ image.getRelativePathname()) }}" alt="{{ image.alt|default('Alternate text for image') }}"/>
-                                    {% endimresize %}
-                                </a>
-                            </li>
-                            {% endfor %}
-                        </ul>
+                    <h2>Browse</h2>
+                    <hr/>
+                    {% if list.data is not empty %}
+                        {{ list_widget(list) }}
+                        {% if list.paginator != null %}
+                            {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
+                        {% endif %}
                     {% else %}
-                        <p>No image available</p>
+                        {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle')) }}
                     {% endif %}
                 {% endblock %}
             </div>
