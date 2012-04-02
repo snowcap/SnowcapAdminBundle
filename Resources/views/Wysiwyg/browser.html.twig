@@ -26,7 +26,7 @@
                             <li>
                                 <a href="javascript:void(0);" class="thumbnail">
                                     {% imresize %}
-                                        <img height="100" src="{{ 'uploads/' ~ image.getRelativePathname() }}" data-src="{{ asset('uploads/' ~ image.getRelativePathname()) }}" alt="{{ image.alt|default('Alternate text for image') }}"/>
+                                        <img height="100" src="{{ image.getPath() }}" data-src="{{ asset(image.getPath()) }}" alt="{{ image.tags }}"/>
                                     {% endimresize %}
                                 </a>
                             </li>

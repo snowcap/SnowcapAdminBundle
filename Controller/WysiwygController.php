@@ -25,10 +25,17 @@ class WysiwygController extends Controller
     public function browserAction()
     {
         parse_str($this->getRequest()->getQueryString(), $arguments);
+
+        /*
         $finder = new Finder();
         $finder->files()->in($this->get('kernel')->getRootDir() . '/../web/uploads');
 
         return array('images' => $finder, 'arguments' => $arguments);
+        */
+
+        $images = $this->getDoctrine()->getRepository('SnowcapAdminBundle:File')->findAll();
+
+        return array('images' => $images, 'arguments' => $arguments);
     }
 
     /**
