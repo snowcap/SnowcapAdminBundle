@@ -41,9 +41,9 @@ class AbstractDatalist
      * @param string $type
      * @return AbstractDatalist
      */
-    public function add($name, $type, array $options = array())
+    public function add($path, $type, array $options = array())
     {
-        $this->view->add($name, $type, $options);
+        $this->view->add($path, $type, $options);
         return $this;
     }
 
