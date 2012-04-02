@@ -113,12 +113,12 @@ class Environment extends ContainerAware
      */
     public function getLocales()
     {
-        return $this->locales;
+        return $this->container->getParameter('locales');
     }
 
     public function getLocale()
     {
-        return 'en';
+        return $this->get('request')->getLocale();
     }
 
 

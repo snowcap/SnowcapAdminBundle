@@ -2,6 +2,7 @@
 namespace Snowcap\AdminBundle\Twig\Extension;
 
 use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 use Snowcap\AdminBundle\DataList\AbstractDatalist;
 use Snowcap\AdminBundle\Exception;
@@ -23,11 +24,21 @@ class AdminExtension extends \Twig_Extension
     protected $environment;
 
     /**
+     * @var Snowcap\AdminBundle\Environment
+     */
+    protected $adminEnvironment;
+
+    /**
      * {@inheritdoc}
      */
     public function initRuntime(\Twig_Environment $environment)
     {
         $this->environment = $environment;
+    }
+
+    public function setAdminEnvironment(Environment $environment)
+    {
+        $this->adminEnvironment = $environment;
     }
 
 
@@ -62,13 +73,27 @@ class AdminExtension extends \Twig_Extension
 
     public function listValue($row, $path, $params)
     {
-        $loader = $this->environment->getLoader();
-        /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
-        $loader->addPath(__DIR__ . '/../../Resources/views/');
-
-        $propertyPath = new PropertyPath($path);
-        $output = $propertyPath->getValue($row);
-
+        $output = "empty value";
+        if(strpos($path, '%locale%') !== false) {
+            $currentLocale = $this->adminEnvironment->getLocale();
+            $activeLocales = $this->adminEnvironment->getLocales();
+            $mergedLocales = array_merge(array($currentLocale), array_diff($activeLocales, array($currentLocale)));
+            while(!empty($mergedLocales)) {
+                $testLocale = array_shift($mergedLocales);
+                $propertyPath = new PropertyPath(str_replace('%locale%', $testLocale, $path));
+                try {
+                    $output = $propertyPath->getValue($row);
+                    break;
+                }
+                catch(UnexpectedTypeException $e) {
+                    // do nothing
+                }
+            }
+        }
+        else {
+            $propertyPath = new PropertyPath($path);
+            $output = $propertyPath->getValue($row);
+        }
         return $output;
     }
 

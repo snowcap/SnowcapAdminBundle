@@ -15,7 +15,10 @@ services:
     class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
     tags:
       -  { name: twig.extension }
+    calls:
+            - [setAdminEnvironment, [ @snowcap_admin ]]
 
+  # Forms
   snowcap_admin.slug:
     class: Snowcap\AdminBundle\Form\Type\SlugType
     tags:
