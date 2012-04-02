@@ -21,11 +21,6 @@ class Environment extends ContainerAware
     private $bundle;
 
     /**
-     * @var array
-     */
-    private $locales;
-
-    /**
      * @param array $admins
      */
     public function __construct($admins)
@@ -98,14 +93,6 @@ class Environment extends ContainerAware
     public function getBundle()
     {
         return $this->bundle;
-    }
-
-    /**
-     * @param array $locales
-     */
-    public function setLocales($locales)
-    {
-        $this->locales = $locales;
     }
 
     /**

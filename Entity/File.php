@@ -33,6 +33,13 @@ class File {
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    protected $name;
+
+    /**
+     * @var string
      * @ORM\Column(name="tags", type="string", length=255, nullable=true)
      */
     protected $tags;
@@ -41,7 +48,7 @@ class File {
      * @var UploadedFile
      *
      * @Assert\File(maxSize="6000000")
-     * @SnowcapCore\File(path="uploads/images", mappedBy="path")
+     * @SnowcapCore\File(path="uploads/images", mappedBy="path", filename="name")
      */
     public $file;
 
@@ -83,5 +90,21 @@ class File {
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

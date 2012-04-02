@@ -74,7 +74,7 @@ jQuery(document).ready(function ($) {
         window.close();
     };
 
-    $('.wysiwyg-browser .thumbnail').click(function (event) {
+    $('body.wysiwyg .thumbnail').click(function (event) {
         event.preventDefault();
         sendUrlToWysiwyg(this);
     });

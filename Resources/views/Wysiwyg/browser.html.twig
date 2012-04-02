@@ -20,6 +20,16 @@
                     {% render 'SnowcapAdminBundle:Wysiwyg:upload' %}
                     <h2>{{ "wysiwyg.browse.title"|trans({}, 'SnowcapAdminBundle') }}</h2>
                     <hr/>
+                    {% if searchForm is defined and list.data is not empty %}
+                    <form action="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" method="post" class="form-search">
+                        {% for field in searchForm %}
+                        {{ form_widget(field, { 'attr': {'placeholder': "content.filter.label"|trans({}, 'SnowcapAdminBundle')}}) }}
+                        {% endfor %}
+                        <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
+                        <a href="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
+                    </form>
+                    {% endif %}
+
                     {% if list.data is not empty %}
                         {{ list_widget(list) }}
                         {% if list.paginator != null %}
