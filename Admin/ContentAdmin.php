@@ -28,29 +28,6 @@ abstract class ContentAdmin extends AbstractAdmin
     abstract public function getForm($data = null);
 
     /**
-     * Return an array of fieldsets to be used in the create / update screens
-     *
-     * The returned array should look like this :
-     *
-     * array(
-     *     array(
-     *        'legend' => 'some legend',
-     *        'rows' => array('a_field', 'another_field'),
-     *     ),
-     *     array(
-     *         'legend' => 'some other legend',
-     *         'rows' => array('yet_another_field', 'a_last_field'),
-     *     ),
-     * )
-     *
-     * @return array
-     */
-    public function getFieldsets()
-    {
-        return array();
-    }
-
-    /**
      * Return the main admin list for this content
      *
      * @return \Snowcap\AdminBundle\Datalist\AbstractDatalist
