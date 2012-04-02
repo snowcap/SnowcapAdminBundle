@@ -31,6 +31,9 @@ snowcap_admin_inlinecontent_create:
 snowcap_admin_markdown:
     pattern: /markdown
     defaults: { _controller: SnowcapAdminBundle:Default:markdown }
+snowcap_admin_switch_locale:
+    pattern: /switch-locale/{locale}
+    defaults: { _controller: SnowcapAdminBundle:Default:switchLocale }
 
 # Wysiwyg routes
 snowcap_admin_wysiwyg_browser:
