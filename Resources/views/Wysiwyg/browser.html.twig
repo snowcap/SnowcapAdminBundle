@@ -1,1 +1,49 @@
-Extend the WysiwygController in your own AdminBundle
+{% import 'SnowcapBootstrapBundle::macros.html.twig' as bootstrap %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>{% block title %}Snowcap File Browser{% endblock %}</title>
+		{% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('bundles/snowcapbootstrap/vendor/bootstrap/css/bootstrap.min.css') }}"/>
+            <link rel="stylesheet" type="text/css" href="{{ asset('bundles/snowcapadmin/css/all.css') }}"/>
+		{% endblock %}
+	</head>
+	<body class="wysiwyg">
+        <div class="container">
+            {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
+            {% for type, flash in app.session.getFlashes() %}
+                {{ alert(flash, type, null, true) }}
+            {% endfor %}
+            <div class="wysiwyg-browser">
+                {% block body %}
+                    {% render 'SnowcapAdminBundle:Wysiwyg:upload' %}
+                    {% if images|length > 0 %}
+                        <h2>Browse</h2>
+                        <hr/>
+                        <ul class="thumbnails">
+                            {% for image in images %}
+                            <li>
+                                <a href="javascript:void(0);" class="thumbnail">
+                                    {% imresize %}
+                                        <img height="100" src="{{ 'uploads/' ~ image.getRelativePathname() }}" data-src="{{ asset('uploads/' ~ image.getRelativePathname()) }}" alt="{{ image.alt|default('Alternate text for image') }}"/>
+                                    {% endimresize %}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                {% endblock %}
+            </div>
+        </div>
+        {% block javascripts %}
+            <script src="{{ asset('bundles/snowcapcore/vendor/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('bundles/snowcapadmin/vendor/ckeditor/ckeditor.js') }}"></script>
+            <script src="{{ asset('bundles/snowcapadmin/vendor/ckeditor/adapters/jquery.js') }}"></script>
+            <script src="{{ asset('bundles/snowcapadmin/js/ckeditor.js') }}"></script>
+        {% endblock %}
+	</body>
+</html>

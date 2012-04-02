@@ -13,13 +13,6 @@ jQuery(document).ready(function ($) {
         if (dialogName === 'image') {
             dialogDefinition.removeContents('advanced');
             var infoTab = dialogDefinition.getContents('info');
-            // TODO try to add a tag field
-            /*var uploadTab = dialogDefinition.getContents('Upload');
-            uploadTab.add( {
-            					type : 'text',
-            					label : 'Tags',
-            					id : 'tags'
-            				});*/
         }
         if(dialogName === 'table') {
             // No need for the advanced tab
@@ -54,8 +47,7 @@ jQuery(document).ready(function ($) {
             'contentsCss': $(wysiwyg).attr('data-cssfileurl'),
             'filebrowserBrowseUrl': $(wysiwyg).attr('data-browserurl'),
             'filebrowserImageWindowWidth': '960',
-            'filebrowserImageWindowHeight': '720',
-            'filebrowserUploadUrl': $(wysiwyg).attr('data-uploadurl')
+            'filebrowserImageWindowHeight': '720'
         }, wysiwygConfig);
         $('.widget-wysiwyg').ckeditor(function () {
         }, thisConfig);
@@ -86,8 +78,5 @@ jQuery(document).ready(function ($) {
         event.preventDefault();
         sendUrlToWysiwyg(this);
     });
-
-
-
 
 });
