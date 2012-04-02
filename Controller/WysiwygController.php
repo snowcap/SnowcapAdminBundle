@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\Request;
 
 use Snowcap\AdminBundle\Form\Type\FileType;
 use Snowcap\AdminBundle\Entity\File;
@@ -24,29 +24,38 @@ class WysiwygController extends Controller
      */
     public function browserAction()
     {
+        /** @var $request Request */
+        $request = $this->get('request');
+
         parse_str($this->getRequest()->getQueryString(), $arguments);
 
-        /*
-        $finder = new Finder();
-        $finder->files()->in($this->get('kernel')->getRootDir() . '/../web/uploads');
+        $builder = $this->get('form.factory')->createBuilder('search')->add('f.name', 'text');
+        $searchForm = $builder->getForm();
 
-        return array('images' => $finder, 'arguments' => $arguments);
-        */
-
-        /** @var $datalist \Snowcap\AdminBundle\Datalist\ContentDatalist */
-        $datalist = $this->get('snowcap_admin.datalist_factory')->create('thumbnail', 'browser');
-        $datalist
+        /** @var $list \Snowcap\AdminBundle\Datalist\ContentDatalist */
+        $list = $this->get('snowcap_admin.datalist_factory')->create('thumbnail', 'browser');
+        $list
             ->add('path', 'image')
-            ->add('tags', 'label')
+            ->add('name', 'label')
+            ->add('tags', 'description')
         ;
+
         /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
         $queryBuilder = $em->createQueryBuilder();
         $queryBuilder->select('f')->from('SnowcapAdminBundle:File', 'f');
 
-        $datalist->setQueryBuilder($queryBuilder);
+        $list->setQueryBuilder($queryBuilder);
+        //$list->paginate(2);
 
-        return array('list' => $datalist, 'arguments' => $arguments);
+        if ('POST' === $request->getMethod() && $request->get('search') !== null) {
+            $searchForm->bindRequest($this->get('request'));
+            $searchData = $searchForm->getData();
+            $filter = array('f.name' => $searchData['f.name'], 'f.tags' => $searchData['f.name']);
+            $list->filterData(array_filter($filter), 'OR');
+        }
+
+        return array('searchForm' => $searchForm->createView(), 'list' => $list, 'arguments' => $arguments);
     }
 
     /**
@@ -63,7 +72,7 @@ class WysiwygController extends Controller
         $file = new File();
         $form = $this->createForm(new FileType(), $file);
 
-        if ('POST' === $request->getMethod()) {
+        if ('POST' === $request->getMethod() && $request->get('admin_snowcap_file') !== null) {
             $form->bindRequest($request);
             if ($form->isValid()) {
                 /** @var $em \Doctrine\ORM\EntityManager */

@@ -5,9 +5,8 @@
 <hr/>
 {% if searchForm is defined and list.data is not empty %}
 <form action="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" method="GET" class="form-search">
-    <label>{{ "content.filter.label"|trans({}, 'SnowcapAdminBundle') }}</label>
     {% for field in searchForm %}
-    {{ form_widget(field) }}
+    {{ form_widget(field, { 'attr': { 'placeholder': "content.filter.label"|trans({}, 'SnowcapAdminBundle')}}) }}
     {% endfor %}
     <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
     <a href="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>

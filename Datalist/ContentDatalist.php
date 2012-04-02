@@ -3,6 +3,8 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+
 use Snowcap\AdminBundle\Exception;
 use Snowcap\CoreBundle\Manager\PaginatorManager;
 
@@ -48,13 +50,23 @@ class ContentDatalist extends AbstractDatalist
         return $this->data;
     }
 
-    public function filterData(array $data)
+    public function filterData(array $data, $glue = 'AND')
     {
         if(isset($this->data)){
             throw new Exception(sprintf('A content datalist cannot be filtered if its data has already been initialized'));
         }
         foreach($data as $field => $value){
-            $this->queryBuilder->add('where', $this->queryBuilder->expr()->like($field, $this->queryBuilder->expr()->literal('%' . $value . '%')));
+            switch ($glue) {
+                case 'AND':
+                    $this->queryBuilder->andWhere($this->queryBuilder->expr()->like($field, $this->queryBuilder->expr()->literal('%' . $value . '%')));
+                    break;
+                case 'OR':
+                    $this->queryBuilder->orWhere($this->queryBuilder->expr()->like($field, $this->queryBuilder->expr()->literal('%' . $value . '%')));
+                    break;
+                default:
+                    throw new InvalidArgumentException('Filter data only accept AND/OR glue');
+                    break;
+            }
         }
     }
 
