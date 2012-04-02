@@ -30,6 +30,12 @@ services:
     tags:
       -  { name: form.type, alias: snowcap_admin_inline }
 
+  snowcap_admin.translatable_entity:
+    class: Snowcap\AdminBundle\Form\Type\TranslatableEntityType
+    arguments: [@doctrine, @snowcap_admin]
+    tags:
+      -  { name: form.type, alias: snowcap_admin_translatable_entity }
+
   snowcap_admin.markdown:
     class: Snowcap\AdminBundle\Form\Type\MarkdownType
     tags:
