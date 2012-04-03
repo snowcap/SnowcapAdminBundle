@@ -48,7 +48,7 @@
             {{ block('list_thumbnail_visual') }}
             <div class="caption">
                 {% if list.view.label is not null %}
-                    <h5>{{ list_value(data_row, list.view.label.path, list.view.label.options) }}</h5>
+                    <h5 title="{{ list_value(data_row, list.view.label.path, list.view.label.options) }}">{{ list_value(data_row, list.view.label.path, list.view.label.options)|truncate(20) }}</h5>
                 {% endif %}
                 {% if list.view.description is not null %}
                 <p>{{ list_value(data_row, list.view.description.path, list.view.description.options) }}</p>

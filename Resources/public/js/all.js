@@ -60,7 +60,15 @@ jQuery(document).ready(function ($) {
         this.makeSlug = function (string) {
             var lowercased = string.toLowerCase();
             var hyphenized = lowercased.replace(/\s/g, '-');
-            var slug = hyphenized.replace(/[^a-zA-Z0-9\-]/g, '').replace('--', '-').replace(/\-+$/, '');
+            var slug = hyphenized
+                .replace(/[àâä]/g,'a')
+                .replace(/[éèêë]/g,'e')
+                .replace(/[îï]/g,'i')
+                .replace(/[ôö]/g,'o')
+                .replace(/[ûüù]/g,'u')
+                .replace(/[^a-zA-Z0-9\-]/g, '')
+                .replace('--', '-')
+                .replace(/\-+$/, '');
             return slug;
         };
         /**
