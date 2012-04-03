@@ -9,18 +9,17 @@
 <form action="{{ path(app.request.get('_route'), form_action_params) }}" method="post" {{ form_enctype(forms) }} novalidate="novalidate"
       class="row form-vertical">
     {% if admin.translatable %}
-    <div class="span2">
-        <div class="well" style="padding: 8px 0">
-            <ul class="nav nav-list">
-                {% for locale_key, locale_text in get_active_locales(app.request.locale) %}
-                   <li{% if locale_key == content_locale %} class="active"{% endif %}>
-                       <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">{{ locale_text }}</a>
-                   </li>
-                {% endfor %}
-            </ul>
+        <div class="span2">
+            <div class="well" style="padding: 8px 0">
+                <ul class="nav nav-list">
+                    {% for locale_key, locale_text in get_active_locales(app.request.locale) %}
+                       <li{% if locale_key == content_locale %} class="active"{% endif %}>
+                           <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">{{ locale_text }}</a>
+                       </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-
-    </div>
     {% endif %}
     <div class="span10">
         {% block form_fields %}
