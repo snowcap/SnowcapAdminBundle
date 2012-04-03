@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
+use Symfony\Component\HttpKernel\Config\FileLocator;
+use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
 /**
  * This controller provides generic capabilities for admin controllers
@@ -24,5 +27,24 @@ class BaseController extends Controller
     public function setFlash($name, $value, $parameters = array())
     {
         return $this->getRequest()->getSession()->setFlash($name, $this->get('translator')->trans($value, $parameters, 'SnowcapAdminBundle'));
+    }
+
+    /**
+     * Find a content-specific template name in the child bundle
+     *
+     * @param string $templateName the original template name as used in SnowcapAdminBundle
+     * @param string $code the specific content admin code
+     * @return string
+     */
+    protected function getTemplate($templateName, $code)
+    {
+        $templateNameParts = explode(':', $templateName);
+        $templateNameParts[0] = $this->get('snowcap_admin')->getBundle();
+        $templateNameParts[1] .= '/' . $code;
+        $candidate = implode(':', $templateNameParts);
+        if($this->get('templating')->exists($candidate)) {
+            return $candidate;
+        }
+        return $templateName;
     }
 }
