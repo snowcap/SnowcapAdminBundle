@@ -49,7 +49,6 @@ services:
   #Datalists
   snowcap_admin.datalist_factory:
     class: Snowcap\AdminBundle\Datalist\DatalistFactory
-    arguments: [[]]
 
   snowcap_admin.datalist_view.grid:
     class: Snowcap\AdminBundle\Datalist\View\GridView

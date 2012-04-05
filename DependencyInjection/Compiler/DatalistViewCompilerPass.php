@@ -23,14 +23,12 @@ class DatalistViewCompilerPass implements CompilerPassInterface
             return;
         }
         $definition = $container->getDefinition('snowcap_admin.datalist_factory');
-        $views = array();
         foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_view') as $serviceId => $tag) {
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
                 : $serviceId;
-            $views[$alias] = new Reference($serviceId);
+            $definition->addMethodCall('addView', array($alias, new Reference($serviceId)));
         }
-        $definition->replaceArgument(0, $views);
     }
 
 }

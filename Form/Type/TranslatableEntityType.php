@@ -70,6 +70,6 @@ class TranslatableEntityType extends AbstractType
 
     public function getName()
     {
-        return 'translatable_entity';
+        return 'snowcap_admin_translatable_entity';
     }
 }
