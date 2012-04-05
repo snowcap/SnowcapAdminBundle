@@ -18,8 +18,6 @@ class ContentController extends BaseController
     /**
      * Content homepage (listing)
      *
-     * @Template()
-     *
      * @param string $type
      * @return mixed
      */
@@ -32,7 +30,7 @@ class ContentController extends BaseController
             $list->setPage($page);
         }
         $searchForm = $admin->getSearchForm();
-        $vars = array(
+        $templateParams = array(
             'admin' => $admin,
             'list' => $list,
         );
@@ -40,15 +38,13 @@ class ContentController extends BaseController
             $searchForm->bindRequest($this->get('request'));
             $searchData = $searchForm->getData();
             $list->filterData(array_filter($searchData));
-            $vars['searchForm'] = $searchForm->createView();
+            $templateParams['searchForm'] = $searchForm->createView();
         }
-        return $vars;
+        return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $code), $templateParams);
     }
 
     /**
      * Create a new content entity
-     *
-     * @Template("SnowcapAdminBundle:Content:create.html.twig")
      *
      * @param string $code
      * @return mixed
@@ -84,18 +80,16 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'forms' => $forms->createView(),
-            'form_template' => $this->getTemplate('form', $code),
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $code),
         );
         if ($admin->isTranslatable()) {
             $templateParams['content_locale'] = $locale;
         }
-        return $templateParams;
+        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $code), $templateParams);
     }
 
     /**
      * Update an existing content entity
-     *
-     * @Template("SnowcapAdminBundle:Content:update.html.twig")
      *
      * @param string $code
      * @param int $id
@@ -117,7 +111,6 @@ class ContentController extends BaseController
             $translationForm = $admin->getTranslationForm($translationEntity);
             $forms->add($translationForm);
         }
-        $form = $admin->getForm($entity);
         if ('POST' === $request->getMethod()) {
             $forms->bindRequest($request);
             if ($admin->isTranslatable()) {
@@ -133,12 +126,12 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'forms' => $forms->createView(),
-            'form_template' => $this->getTemplate('form', $code),
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $code),
         );
         if ($admin->isTranslatable()) {
             $templateParams['content_locale'] = $locale;
         }
-        return $templateParams;
+        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $code), $templateParams);
     }
 
     /**
@@ -154,14 +147,5 @@ class ContentController extends BaseController
         $admin->deleteEntity($id);
         $this->setFlash('success', 'content.delete.flash.success');
         return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
-    }
-
-    protected function getTemplate($templateName, $code)
-    {
-        $bundle = $this->get('snowcap_admin')->getBundle();
-        // TODO check if available in bundle, otherwise use the default one
-        // $template = $bundle . ':Content:' . ucfirst($code) . '/'. $templateName . '.html.twig';
-        $template = "SnowcapAdminBundle:Content:form.html.twig";
-        return $template;
     }
 }

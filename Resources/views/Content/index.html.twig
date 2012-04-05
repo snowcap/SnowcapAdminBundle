@@ -1,30 +1,50 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 {% import 'SnowcapBootstrapBundle::macros.html.twig' as bootstrap %}
+
+{# body block #}
 {% block body %}
-<h2>{{ "content.list.title"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
-<hr/>
-{% if searchForm is defined and list.data is not empty %}
-<form action="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" method="GET" class="form-search">
-    {% for field in searchForm %}
-    {{ form_widget(field, { 'attr': { 'placeholder': "content.filter.label"|trans({}, 'SnowcapAdminBundle')}}) }}
-    {% endfor %}
-    <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
-    <a href="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
-</form>
-{% endif %}
-{% if list.data is not empty %}
-    {{ list_widget(list) }}
-    {% if list.paginator != null %}
-        {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
-    {% endif %}
-{% else %}
-{{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle')) }}
-{% endif %}
-<hr/>
-<p>
-    <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.code}) }}">
-        <i class="icon-plus icon-white"></i>
-        {{ "content.actions.create"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}
-    </a>
-</p>
-{% endblock %}
+
+    {# pageheader block #}
+    {% block pageheader %}
+        <div class="page-header">
+            <h2>{{ "content.list.title"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
+        </div>
+    {% endblock pageheader %}
+
+    {# searchform block #}
+    {% block searchform %}
+        {% if searchForm is defined and list.data is not empty %}
+            <form action="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" method="GET" class="form-search">
+                {% for field in searchForm %}
+                {{ form_widget(field, { 'attr': { 'placeholder': "content.filter.label"|trans({}, 'SnowcapAdminBundle')}}) }}
+                {% endfor %}
+                <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
+                <a href="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
+            </form>
+        {% endif %}
+    {% endblock searchform %}
+
+    {# list block #}
+    {% block list %}
+        {% if list.data is not empty %}
+            {{ list_widget(list) }}
+            {% if list.paginator != null %}
+                {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
+            {% endif %}
+        {% else %}
+            {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle')) }}
+        {% endif %}
+        <hr/>
+    {% endblock list %}
+
+    {# actions block #}
+    {% block actions %}
+        <p>
+            <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.code}) }}">
+                <i class="icon-plus icon-white"></i>
+                {{ "content.actions.create"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}
+            </a>
+        </p>
+    {% endblock actions %}
+
+{% endblock body %}

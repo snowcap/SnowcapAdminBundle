@@ -1,35 +1,61 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 {% form_theme forms 'SnowcapAdminBundle:Form:content.html.twig' %}
 
+{# body block #}
 {% block body %}
-<div class="page-header">
-    <h1>{{ form_title }}</h1>
-</div>
 
-<form action="{{ path(app.request.get('_route'), form_action_params) }}" method="post" {{ form_enctype(forms) }} novalidate="novalidate"
-      class="row form-vertical">
-    {% if admin.translatable %}
-        <div class="span2">
-            <div class="well" style="padding: 8px 0">
-                <ul class="nav nav-list">
-                    {% for locale_key, locale_text in get_active_locales(app.request.locale) %}
-                       <li{% if locale_key == content_locale %} class="active"{% endif %}>
-                           <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">{{ locale_text }}</a>
-                       </li>
-                    {% endfor %}
-                </ul>
+    {# pageheader block - to be provided by child templates  #}
+    {% block pageheader %}{% endblock pageheader %}
+
+    <div class="row">
+    {# sidebar block #}
+        {% block sidebar %}
+            <div class="span2">
+
+                {# translations block #}
+                {% block translations %}
+                    {% if admin.translatable %}
+                        <div class="well" style="padding: 8px 0">
+                            <ul class="nav nav-list">
+                                {% for locale_key, locale_text in get_active_locales(app.request.locale) %}
+                                   <li{% if locale_key == content_locale %} class="active"{% endif %}>
+                                       <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">{{ locale_text }}</a>
+                                   </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endblock translations %}
+
             </div>
-        </div>
-    {% endif %}
-    <div class="span10">
-        {% block form_fields %}
-            {{ form_rest(forms) }}
-        {% endblock %}
-        <div class="form-actions">
-            <button type="submit" class="btn btn-large btn-primary">{{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}</button>
-        </div>
+        {% endblock sidebar %}
+
+        {# main block #}
+        {% block main %}
+            <div class="span10">
+                <form
+                    action="{{ path(app.request.get('_route'), form_action_params) }}"
+                    method="post" {{ form_enctype(forms) }}
+                    novalidate="novalidate"
+                    class="form-vertical"
+                >
+
+                    {# formfields block #}
+                    {% block formfields %}
+                        {{ form_rest(forms) }}
+                    {% endblock formfields %}
+
+                    {# formaction block #}
+                    {% block formactions %}
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-large btn-primary">{{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}</button>
+                        </div>
+                    {% endblock formactions %}
+
+                </form>
+            </div>
+        {% endblock main %}
+
     </div>
-</form>
-{% endblock %}
 
-
+{% endblock body %}

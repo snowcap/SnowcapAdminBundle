@@ -1,6 +1,11 @@
 {% extends form_template %}
 
-{% set form_title = "content.create.title"|trans({'%content_name%': admin.param('label')|lower}, 'SnowcapAdminBundle') %}
+{# pageheader block #}
+{% block pageheader %}
+    <div class="page-header">
+        <h2>{{ "content.create.title"|trans({'%content_name%': admin.param('label')|lower}, 'SnowcapAdminBundle') }}</h2>
+    </div>
+{% endblock pageheader %}
 
 {% if admin.translatable %}
     {% set switch_route_params = {'code': admin.code} %}
