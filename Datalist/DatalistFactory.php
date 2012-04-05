@@ -1,8 +1,6 @@
 <?php
 namespace Snowcap\AdminBundle\Datalist;
 
-use Symfony\Component\DependencyInjection\Reference;
-
 use Snowcap\AdminBundle\Datalist\View\DatalistViewInterface;
 use Snowcap\AdminBundle\Exception;
 use Snowcap\AdminBundle\Datalist\ContentDatalist;
@@ -34,9 +32,9 @@ class DatalistFactory {
      * Register a view within the service
      *
      * @param string $alias
-     * @param \Symfony\Component\DependencyInjection\Reference $reference
+     * @param Snowcap\AdminBundle\Datalist\ContentDatalist $view
      */
-    public function addView($alias, Reference $reference) {
-        $this->views[$alias] = $reference;
+    public function addView($alias, DatalistViewInterface $view) {
+        $this->views[$alias] = $view;
     }
 }
