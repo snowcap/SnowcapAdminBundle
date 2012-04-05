@@ -31,6 +31,7 @@ jQuery(document).ready(function ($) {
      * Common config options
      */
     var wysiwygConfig = {
+        'language': $('html').attr('lang'),
         'skin':'BootstrapCK-Skin',
         'toolbar_Full':[
             ['PasteText', 'Bold', 'Italic', 'RemoveFormat', 'NumberedList', 'BulletedList', 'Blockquote', 'Link', 'Unlink', 'Image', 'Table', 'Styles', 'Source']
