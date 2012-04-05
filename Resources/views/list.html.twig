@@ -73,7 +73,6 @@
 {% endblock %}
 
 # common list widgets
-
 {% block row_actions %}
     {% for action_route, action_config in list.actions %}
     {% set action_path = path(action_route, action_config.parameters | merge({'id': data_row.id })) %}

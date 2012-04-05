@@ -9,3 +9,8 @@ snowcap_im:
             background: white
             gravity: center
             extent: 180x120
+        admin_smallthumb:
+            thumbnail: 50x30>
+            background: transparent
+            gravity: center
+            extent: 50x30

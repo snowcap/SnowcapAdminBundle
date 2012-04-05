@@ -29,6 +29,14 @@ class AdminExtension extends \Twig_Extension
     protected $adminEnvironment;
 
     /**
+     * @param \Snowcap\AdminBundle\Environment $environment
+     */
+    public function __construct(Environment $environment)
+    {
+        $this->adminEnvironment = $environment;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function initRuntime(\Twig_Environment $environment)
@@ -36,23 +44,25 @@ class AdminExtension extends \Twig_Extension
         $this->environment = $environment;
     }
 
-    public function setAdminEnvironment(Environment $environment)
-    {
-        $this->adminEnvironment = $environment;
-    }
-
-
+    /**
+     * @return array
+     */
     public function getFunctions()
     {
         return array(
             'list_widget' => new \Twig_Function_Method($this, 'renderList', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'list_value' => new \Twig_Function_Method($this, 'listValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
-            'grid_header' => new \Twig_Function_Method($this, 'renderHeader', array('pre_escape' => 'html', 'is_safe' => array('html'))),
-            'preview_widget' => new \Twig_Function_Method($this, 'renderPreview', array('pre_escape' => 'html', 'is_safe' => array('html'))),
+            'preview_value' => new \Twig_Function_Method($this, 'previewValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
         );
     }
 
-
+    /**
+     * Render a list widget
+     *
+     * @param \Snowcap\AdminBundle\DataList\AbstractDatalist $list
+     * @return string
+     * @throws \Snowcap\AdminBundle\Exception
+     */
     public function renderList(AbstractDatalist $list)
     {
         $loader = $this->environment->getLoader();
@@ -60,7 +70,7 @@ class AdminExtension extends \Twig_Extension
         $loader->addPath(__DIR__ . '/../../Resources/views/');
         $template = $this->environment->loadTemplate('list.html.twig');
         $blockName = 'list_' . $list->getView()->getName();
-        if(!$template->hasBlock($blockName)) {
+        if (!$template->hasBlock($blockName)) {
             throw new Exception(sprintf('The block "%s" could not be loaded whe trying to display the "%s" grid', $blockName, $list->getName()));
         }
         ob_start();
@@ -71,96 +81,76 @@ class AdminExtension extends \Twig_Extension
         return $html;
     }
 
+    /**
+     * Get a value to use in list widgets
+     *
+     * @param mixed $row
+     * @param string $path
+     * @param array $params
+     * @return mixed
+     */
     public function listValue($row, $path, $params)
     {
-        $output = "empty value";
-        if(strpos($path, '%locale%') !== false) {
-            $currentLocale = $this->adminEnvironment->getLocale();
+        return $this->getDataValue($row, $path);
+    }
+
+    /**
+     * Get a value to use in preview blocks (inline admins)
+     *
+     * @param mixed $entity
+     * @param string $path
+     * @return mixed
+     */
+    public function previewValue($entity, $path)
+    {
+        return $this->getDataValue($entity, $path);
+    }
+
+    /**
+     * Get a value by the specified path on the provided array or object
+     * Note that the valeu can be plain - such as "image.title" or translated
+     * for example "post.translations[%locale].title"
+     *
+     * @param mixed $data
+     * @param string $path
+     * @return mixed
+     * @throws \Snowcap\AdminBundle\Exception
+     */
+    private function getDataValue($data, $path)
+    {
+        $value = null;
+        if (strpos($path, '%locale%') !== false) {
+            if(!is_object($data) || !in_array('Snowcap\CoreBundle\Entity\TranslatableEntityInterface', class_implements($data))){
+                throw new Exception(sprintf('Localized paths such as %s may only be called on objects that implement the "TranslatableEntityInterface" interface', $path));
+            }
+            if($this->adminEnvironment->getWorkingLocale() !== null) {
+                $locale = $this->adminEnvironment->getWorkingLocale();
+            }
+            else {
+                $locale = $currentLocale = $this->adminEnvironment->getLocale();
+            }
             $activeLocales = $this->adminEnvironment->getLocales();
-            $mergedLocales = array_merge(array($currentLocale), array_diff($activeLocales, array($currentLocale)));
-            while(!empty($mergedLocales)) {
+            $mergedLocales = array_merge(array($locale), array_diff($activeLocales, array($locale)));
+            while (!empty($mergedLocales)) {
                 $testLocale = array_shift($mergedLocales);
                 $propertyPath = new PropertyPath(str_replace('%locale%', $testLocale, $path));
                 try {
-                    $output = $propertyPath->getValue($row);
+                    $value = $propertyPath->getValue($data);
                     break;
                 }
-                catch(UnexpectedTypeException $e) {
+                catch (UnexpectedTypeException $e) {
                     // do nothing
                 }
             }
         }
         else {
             $propertyPath = new PropertyPath($path);
-            $output = $propertyPath->getValue($row);
+            $value = $propertyPath->getValue($data);
         }
-        return $output;
-    }
-
-    public function renderHeader($property, $params)
-    {
-        $loader = $this->environment->getLoader();
-        /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
-        $loader->addPath(__DIR__ . '/../../Resources/views/');
-        $template = $this->environment->loadTemplate('grid.html.twig');
-        if (array_key_exists('label', $params)) {
-            $output = $params['label'];
+        if($value === null) {
+            $value = $this->adminEnvironment->get('translator')->trans('admin.data.emptyvalue', array(), 'SnowcapAdminBundle');
         }
-        else {
-            $output = $property;
-        }
-        ob_start();
-        $template->displayBlock('header', array('output' => $output));
-        $html = ob_get_clean();
-        return $html;
-    }
-
-    public function renderPreview($entity, $admin)
-    {
-        $loader = $this->environment->getLoader();
-        /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
-
-        // looking if there's some specific template in the users bundle
-        $finderBundles = new \Symfony\Component\Finder\Finder();
-        $finderBundles->directories()->in(__DIR__ . '/../../../../../../src')->depth('< 3')->name('*Bundle');
-        foreach ($finderBundles as $bundle) {
-            $finderTemplates = new \Symfony\Component\Finder\Finder();
-            $finderTemplates->files()->in($bundle . '/Resources/views/')->name("preview_widgets.html.twig")->depth('< 2');
-            if (count(iterator_count($finderTemplates)) > 0) {
-                $loader = $this->environment->getLoader();
-                /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
-                $loader->addPath($bundle . '/Resources/views/');
-                $template = $this->environment->loadTemplate('preview_widgets.html.twig');
-                break;
-            }
-        }
-
-        ob_start();
-        if (!$this->renderPreviewBlock($template, $admin->getPreviewBlockName(), array('entity' => $entity))) {
-            $loader->setPaths(__DIR__ . '/../../Resources/views/');
-            $template = $this->environment->loadTemplate('preview_widgets.html.twig');
-            $this->renderPreviewBlock($template, $admin->getPreviewBlockName(), array('entity' => $entity));
-        }
-        $html = ob_get_clean();
-        return $html;
-    }
-
-    private function renderPreviewBlock($template, $block, $options)
-    {
-        if ($template === null) {
-            return false;
-        }
-
-        if ($template->hasBlock($block)) {
-            $template->displayBlock($block, $options);
-            return true;
-        }
-
-        if ($template->hasBlock('default_preview')) {
-            $template->displayBlock('default_preview', $options);
-            return true;
-        }
-        return false;
+        return $value;
     }
 
     public function getName()

@@ -18,7 +18,6 @@ jQuery(document).ready(function ($) {
             _this.lockButton.click(function (event) {
                 event.preventDefault();
                 if (_this.lockButton.attr('href') === '#locked') {
-                    console.log(_modal);
                     _modal.modal('show');
                 }
                 else {
@@ -86,7 +85,6 @@ jQuery(document).ready(function ($) {
          * Instance init
          */
         this.init = function () {
-            //console.log(_modal);
             _modal.modal({show: false});
             var elementIdSplitted = _element.attr('id').split('_');
             elementIdSplitted.pop();
@@ -145,8 +143,8 @@ jQuery(document).ready(function ($) {
         var row = $(row);
         var trigger = row.find('a[rel=create]');
         var modal = $('#modal');
-        var select = $(trigger).parent().siblings('select');
-        var selected = $(trigger).parent().parent().find(".selected");
+        var select = row.find('select');
+        var selected = row.find(".selected");
 
         /**
          * Observe what's cooking in the add form
@@ -244,7 +242,8 @@ jQuery(document).ready(function ($) {
                 }
             });
             // Observe existing selections and hide empty text
-            selected.find('li a.identity').click(self.removeSelection);
+            selected.find('li a.identity').click(function(event){event.preventDefault()});
+            selected.find('li a.close').click(self.removeSelection);
             if(selected.find('li').length !== 0) {
                 row.find('.empty').hide();
             }
@@ -275,7 +274,6 @@ jQuery(document).ready(function ($) {
     $('#modal').on('hidden', function (event) {
         $(this).empty();
     });
-
     $('.type_snowcap_admin_inline').each(function (offset, row) {
         new InlineWidget(row);
     });

@@ -67,8 +67,8 @@ fieldset {
 
 .type_snowcap_admin_inline .selected li .close {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 2px;
+    right: 4px;
 }
 
 /**
@@ -82,10 +82,12 @@ fieldset {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    width: 300px;
 }
 
 .autocomplete-results li > a {
     padding: 5px;
+    overflow: auto;
 }
 
 .autocomplete-results li > a:hover h4 {

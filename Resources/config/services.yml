@@ -13,10 +13,9 @@ services:
   # Twig extensions
   snowcap_admin.twig:
     class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
+    arguments: [@snowcap_admin ]
     tags:
       -  { name: twig.extension }
-    calls:
-            - [setAdminEnvironment, [ @snowcap_admin ]]
 
   # Forms
   snowcap_admin.slug:

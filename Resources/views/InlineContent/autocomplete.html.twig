@@ -1,20 +1,11 @@
-{% if results is empty %}
-    <p>No result</p>
-{% else %}
-    <ul class="dropdown-menu">
-        {% for result in results %}
-            {% set preview = admin.preview(result) %}
-            <li>
-                <a class="identity" href="{{ preview.identity }}">
-                    {% if preview.image %}
-                        <img src="{{ asset(preview.image) }}" alt="{{ preview.title }}" width="50"/>
-                    {% endif  %}
-                    <h4>{{ preview.title }}</h4>
-                    {% if preview.description %}
-                        <p>{{ preview.description }}</p>
-                    {% endif %}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-{% endif  %}
+
+{% set preview = admin.preview %}
+<ul class="dropdown-menu">
+    {% for entity in results %}
+        <li>
+            {% include 'SnowcapAdminBundle:InlineContent:preview_item.html.twig' %}
+        </li>
+    {% else %}
+        <li class="noresult">{{ "inline_content.noresult"|trans({}, 'SnowcapAdminBundle') }}</li>
+    {% endfor %}
+</ul>

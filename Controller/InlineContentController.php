@@ -55,20 +55,27 @@ class InlineContentController extends Controller
                 'entity' => $entity,
                 'form' => $form->createView(),
             ))
-         );
+        );
 
         return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
     }
 
-    public function autocompleteAction($code, $input)
+    public function autocompleteAction($code, $input, $locale = null)
     {
+        if ($locale === null) {
+            $locale = $this->getRequest()->getLocale();
+        }
         $admin = $this->get('snowcap_admin')->getAdmin($code);
+        if($admin->isTranslatable()){
+            $this->get('snowcap_admin')->setWorkingLocale($locale);
+        }
         $return = array(
             'html' => $this->renderView('SnowcapAdminBundle:InlineContent:autocomplete.html.twig', array(
                 'results' => $admin->filterAutocomplete($input),
                 'admin' => $admin,
             ))
         );
+
         return new Response(json_encode($return), 201, array('content-type' => 'text/json'));
     }
 

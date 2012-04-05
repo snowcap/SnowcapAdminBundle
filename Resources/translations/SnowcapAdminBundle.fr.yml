@@ -41,6 +41,7 @@ inline_content:
     create: Nouveau
     search: Introduisez le nom du contenu recherché
     empty: Aucun élément sélectionné
+    noresult: Pas de résultat
 
 project:
     name: Admin

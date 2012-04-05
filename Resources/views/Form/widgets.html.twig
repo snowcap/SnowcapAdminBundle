@@ -2,42 +2,25 @@
 
 {% block snowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
-    <p class="empty">{{ "inline_content.empty"|trans({}, 'SnowcapAdminBundle') }}</p>
+    {% if value is empty %}<p class="empty">{{ "inline_content.empty"|trans({}, 'SnowcapAdminBundle') }}</p>{% endif %}
     <ul class="selected row">
         {% if value is not empty %}
             {% set results = multiple ? data : [data] %}
             {% for result in results %}
-                {% include 'SnowcapAdminBundle:InlineContent:preview.html.twig' with {'entity': result, 'admin': environment.admin(inline_admin) }%}
+                {% include 'SnowcapAdminBundle:InlineContent:preview.html.twig' with {'entity': result, 'admin': inline_admin }%}
             {% endfor %}
         {% endif %}
     </ul>
     <div class="autocomplete-wrapper">
-        <input class="autocomplete" placeholder="{{ "inline_content.search"|trans({}, 'SnowcapAdminBundle') }}" type="text" data-url="{{ path('snowcap_admin_inlinecontent_autocomplete', {'code': environment.admin(inline_admin).code, 'input': 'placeholder'}) }}"/>
-        <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inlinecontent_create', {'code': environment.admin(inline_admin).code }) }}">
-            <i class="icon-plus icon-white"></i> {{ "inline_content.create"|trans({}, 'SnowcapAdminBundle') }}
-        </a>
+        <input class="autocomplete" placeholder="{{ "inline_content.search"|trans({}, 'SnowcapAdminBundle') }}" type="text" data-url="{{ path('snowcap_admin_inlinecontent_autocomplete', {'code': inline_admin.code, 'input': 'placeholder'}) }}"/>
+        {% if allow_add %}
+            <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inlinecontent_create', {'code': inline_admin.code }) }}">
+                <i class="icon-plus icon-white"></i> {{ "inline_content.create"|trans({}, 'SnowcapAdminBundle') }}
+            </a>
+        {% endif %}
         <div class="autocomplete-results"></div>
     </div>
 {% endblock %}
-
-{% block field_row %}
-{% if attr is not defined %}{% set attr = {} %}{% endif %}
-{% spaceless %}
-    {% if 'snowcap_admin_inline' in types %}
-        <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
-            {{ form_widget(form, {'attr': attr}) }}
-            {% if help_block is defined %}
-                <p class="help-block">{{ help_block }}</p>
-            {% elseif help_inline is defined %}
-                <span class="help-inline">{{ help_inline }}</span>
-            {% endif %}
-            {{ form_errors(form) }}
-        </div>
-    {% else %}
-        {{ parent() }}
-    {% endif %}
-{% endspaceless %}
-{% endblock field_row %}
 
 {% block slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}

@@ -61,6 +61,7 @@ class ContentController extends BaseController
         $form = $admin->getForm($entity);
         $forms->add($form);
         if ($admin->isTranslatable()) {
+            $this->get('snowcap_admin')->setWorkingLocale($locale);
             $translationEntity = $admin->buildTranslationEntity($entity, $locale);
             $translationForm = $admin->getTranslationForm($translationEntity);
             $forms->add($translationForm);
@@ -107,6 +108,7 @@ class ContentController extends BaseController
         $form = $admin->getForm($entity);
         $forms->add($form);
         if ($admin->isTranslatable()) {
+            $this->get('snowcap_admin')->setWorkingLocale($locale);
             $translationEntity = $admin->findTranslationEntity($entity, $locale);
             $translationForm = $admin->getTranslationForm($translationEntity);
             $forms->add($translationForm);

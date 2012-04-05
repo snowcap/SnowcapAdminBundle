@@ -1,0 +1,10 @@
+<a class="identity" href="{{ preview_value(entity, preview.identity) }}">
+    {% if preview.image %}
+        {% set image_src = preview_value(entity, preview.image) %}
+        <img src="{{ image_src|imresize('admin_smallthumb') }}" data-src="{{ asset(image_src) }}"/>
+    {% endif  %}
+    <h4>{{ preview_value(entity, preview.title) }}</h4>
+    {% if 'description' in preview %}
+        <p>{{ preview_value(entity, preview.description) }}</p>
+    {% endif %}
+</a>

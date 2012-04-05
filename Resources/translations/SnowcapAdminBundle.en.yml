@@ -41,6 +41,7 @@ inline_content:
     create: New
     search: Start typing the name of the content
     empty: Nothing selected yet
+    noresult: No result
 
 project:
     name: Admin

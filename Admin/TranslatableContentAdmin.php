@@ -59,7 +59,6 @@ abstract class TranslatableContentAdmin extends ContentAdmin
         }
     }
 
-
     public function isTranslatable()
     {
         return true;

@@ -21,6 +21,11 @@ class Environment extends ContainerAware
     private $bundle;
 
     /**
+     * @var string
+     */
+    private $workingLocale = null;
+
+    /**
      * @param array $admins
      */
     public function __construct($admins)
@@ -106,6 +111,22 @@ class Environment extends ContainerAware
     public function getLocale()
     {
         return $this->get('request')->getLocale();
+    }
+
+    /**
+     * @param string $workingLocale
+     */
+    public function setWorkingLocale($workingLocale)
+    {
+        $this->workingLocale = $workingLocale;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkingLocale()
+    {
+        return $this->workingLocale;
     }
 
 

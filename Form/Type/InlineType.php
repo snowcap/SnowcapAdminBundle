@@ -46,6 +46,7 @@ class InlineType extends AbstractType
             'empty_value' => '---',
             'preview' => null,
             'property' => 'id',
+            'allow_add' => false
         );
     }
 
@@ -55,9 +56,14 @@ class InlineType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         if ($options['inline_admin'] === null) {
-            throw new FormException('Inline types must be given a valid "inline_admin" option');
+            throw new FormException('Inline types must be given a "inline_admin" option');
         }
-        $builder->setAttribute('inline_admin', $options['inline_admin']);
+        $inlineAdmin = $this->environment->getAdmin($options['inline_admin']);
+        if(!in_array('Snowcap\AdminBundle\Admin\InlineAdminInterface', class_implements($inlineAdmin))){
+            throw new FormException('Inline types must be given a valid "inline_admin" option - ie it must implement "Snowcap\AdminBundle\Admin\InlineAdminInterface"');
+        }
+        $builder->setAttribute('inline_admin', $this->environment->getAdmin($options['inline_admin']));
+        $builder->setAttribute('allow_add', $options['allow_add']);
     }
 
     /**
@@ -66,9 +72,8 @@ class InlineType extends AbstractType
     public function buildView(FormView $view, FormInterface $form)
     {
         $view->set('inline_admin', $form->getAttribute('inline_admin'));
-        $formData = $form->getData();
-        $view->set('data', $formData);
-        $view->set('environment', $this->environment);
+        $view->set('data', $form->getData());//TODO: check if necessary
+        $view->set('allow_add', $form->getAttribute('allow_add'));
     }
 
     /**
