@@ -26,6 +26,7 @@ content:
         header: Actions
         create: Create %content_name%
         save: Save
+        saveandcontinue: Save and continue
         edit: Edit
         delete: Delete
         back: Back to list

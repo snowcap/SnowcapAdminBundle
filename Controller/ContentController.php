@@ -121,7 +121,13 @@ class ContentController extends BaseController
             if ($forms->isValid()) {
                 $admin->saveEntity($entity);
                 $this->setFlash('success', 'content.update.flash.success');
-                return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
+                $saveMode = $this->getRequest()->get('saveMode');
+                if($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
+                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('code' => $code, 'id' => $id)));
+                }
+                else {
+                    return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
+                }
             }
         }
         $templateParams = array(

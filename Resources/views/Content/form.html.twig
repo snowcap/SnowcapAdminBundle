@@ -15,12 +15,15 @@
                 {# translations block #}
                 {% block translations %}
                     {% if admin.translatable %}
-                        <div class="well" style="padding: 8px 0">
+                        <div class="well content-translations" style="padding: 8px 0">
                             <ul class="nav nav-list">
+
                                 {% for locale_key, locale_text in get_active_locales(app.request.locale) %}
-                                   <li{% if locale_key == content_locale %} class="active"{% endif %}>
-                                       <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">{{ locale_text }}</a>
-                                   </li>
+                                    <li{% if locale_key == content_locale %} class="active"{% endif %}>
+                                        <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">
+                                            {{ locale_text }}{% if locale_key not in entity.translations|keys %} <i class="icon-warning-sign pull-right"></i>{% endif %}
+                                        </a>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -48,7 +51,12 @@
                     {# formaction block #}
                     {% block formactions %}
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-large btn-primary">{{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}</button>
+                            <button type="submit" name="saveMode" class="btn btn-large btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
+                                {{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}
+                            </button>
+                            <button type="submit" name="saveMode" class="btn btn-large" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_CONTINUE') }}">
+                                {{ "content.actions.saveandcontinue"|trans({}, 'SnowcapAdminBundle') }}
+                            </button>
                         </div>
                     {% endblock formactions %}
 

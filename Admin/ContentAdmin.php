@@ -14,6 +14,9 @@ use Snowcap\AdminBundle\Exception;
  */
 abstract class ContentAdmin extends AbstractAdmin
 {
+    const SAVEMODE_NORMAL = 'normal';
+    const SAVEMODE_CONTINUE = 'continue';
+
     public function getDefaultRoute()
     {
         return 'snowcap_admin_content_index';

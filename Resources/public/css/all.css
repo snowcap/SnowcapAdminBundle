@@ -1,6 +1,10 @@
 body {
     padding-top: 60px;
 }
+
+/**
+ * Form fine-tuning
+ */
 body.wysiwyg {
     padding-top: 0;
 }
@@ -33,7 +37,9 @@ fieldset {
 .form-vertical .add-on {
     margin-bottom: 9px;
 }
-
+.content-translations i {
+    opacity: 0.25;
+}
 /**
 * Inline widget
 */
@@ -130,3 +136,4 @@ fieldset {
     border: 0;
     border-bottom: 1px solid #EEE;
 }
+
