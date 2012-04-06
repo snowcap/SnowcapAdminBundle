@@ -3,8 +3,8 @@ navigation:
 
 content:
     list:
-        title: liste %content_name%
-        empty: Aucun %content_name% n'a été trouvé
+        title: Liste des contenus "%content_name%"
+        empty: Aucun contenu de type "%content_name%" n'a été trouvé
     filter:
         label: Filtrer
         submit: Filtrer
@@ -12,11 +12,11 @@ content:
     actions:
         header: Entête
     create:
-        title: Créer %content_name%
+        title: Nouveau contenu "%content_name%"
         flash:
             success: Le contenu à bien été crée.
     update:
-        title: Mettre à jour %content_name%
+        title: Mise à jour du contenu "%content_name%"
         flash:
             success: Le contenu à bien été mis à jour.
     delete:
@@ -24,7 +24,7 @@ content:
             success: Le contenu à bien été effacé
     actions:
         header: Actions
-        create: Créer %content_name%
+        create: Nouveau
         save: Sauvegarder
         saveandcontinue: Sauver et continuer
         edit: Modifier

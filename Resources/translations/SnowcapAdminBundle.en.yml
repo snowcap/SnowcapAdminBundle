@@ -3,8 +3,8 @@ navigation:
 
 content:
     list:
-        title: %content_name% list
-        empty: There is no %content_name% yet
+        title: List of "%content_name%" content
+        empty: There is no content of type "%content_name%" yet
     filter:
         label: Filter content
         submit: Filter
@@ -12,11 +12,11 @@ content:
     actions:
         header: Header
     create:
-        title: Create %content_name%
+        title: Create a "%content_name%" content
         flash:
             success: Your content has been created.
     update:
-        title: Update %content_name%
+        title: Update "%content_name%" content
         flash:
             success: Your content has been updated.
     delete:
@@ -24,7 +24,7 @@ content:
             success: Your content has been deleted
     actions:
         header: Actions
-        create: Create %content_name%
+        create: New
         save: Save
         saveandcontinue: Save and continue
         edit: Edit

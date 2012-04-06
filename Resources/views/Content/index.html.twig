@@ -7,7 +7,7 @@
     {# pageheader block #}
     {% block pageheader %}
         <div class="page-header">
-            <h2>{{ "content.list.title"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}</h2>
+            <h2>{{ "content.list.title"|trans({'%content_name%': admin.param('label')|transchoice(10)}, 'SnowcapAdminBundle') }}</h2>
         </div>
     {% endblock pageheader %}
 
@@ -32,7 +32,7 @@
                 {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
             {% endif %}
         {% else %}
-            {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle')) }}
+            {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.param('label')|transchoice(1)}, 'SnowcapAdminBundle')) }}
         {% endif %}
         <hr/>
     {% endblock list %}
@@ -42,7 +42,7 @@
         <p>
             <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.code}) }}">
                 <i class="icon-plus icon-white"></i>
-                {{ "content.actions.create"|trans({'%content_name%': admin.param('label')}, 'SnowcapAdminBundle') }}
+                {{ "content.actions.create"|trans({}, 'SnowcapAdminBundle') }}
             </a>
         </p>
     {% endblock actions %}

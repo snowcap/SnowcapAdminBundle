@@ -1,6 +1,6 @@
-{% macro menu_item(route, routeParams, label, title) %}
+{% macro menu_item(route, routeParams, label) %}
 <li>
-    <a href="{{ path(route, routeParams) }}" title="{{ title | trans }}">{{ label | trans }}</a>
+    <a href="{{ path(route, routeParams) }}" title="{{ label }}">{{ label }}</a>
 </li>
 {% endmacro %}
 <div class="navbar navbar-fixed-top">
@@ -11,7 +11,7 @@
             </a>
             <ul class="nav">
                 {% for admin in sections %}
-                {{ _self.menu_item(admin.defaultRoute, {'code': admin.code}, admin.param('label')) }}
+                {{ _self.menu_item(admin.defaultRoute, {'code': admin.code}, admin.param('label')|transchoice(10)) }}
                 {% endfor %}
             </ul>
             <ul class="nav pull-right">
