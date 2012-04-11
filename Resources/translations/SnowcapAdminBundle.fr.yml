@@ -14,14 +14,14 @@ content:
     create:
         title: Nouveau contenu "%content_name%"
         flash:
-            success: Le contenu à bien été crée.
+            success: Le contenu a bien été créé.
     update:
         title: Mise à jour du contenu "%content_name%"
         flash:
-            success: Le contenu à bien été mis à jour.
+            success: Le contenu a bien été mis à jour.
     delete:
         flash:
-            success: Le contenu à bien été effacé
+            success: Le contenu a bien été effacé.
     actions:
         header: Actions
         create: Nouveau

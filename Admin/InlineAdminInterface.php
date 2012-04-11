@@ -15,7 +15,7 @@ interface InlineAdminInterface {
 
     /**
      * @abstract
-     * @return array
+     *
      * @return array
      */
     public function getPreview();

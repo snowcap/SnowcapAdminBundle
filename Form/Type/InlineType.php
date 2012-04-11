@@ -46,7 +46,7 @@ class InlineType extends AbstractType
             'empty_value' => '---',
             'preview' => null,
             'property' => 'id',
-            'allow_add' => false
+            'allow_add' => false,
         );
     }
 

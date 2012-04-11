@@ -44,7 +44,7 @@ class ThumbnailView implements DatalistViewInterface
                 );
                 break;
             default:
-                throw new Exception(sprintf('Unknown type "%s" for grid %s', $type, $this->name));
+                throw new Exception(sprintf('Unknown type "%s" for grid %s', $type, get_class($this)));
                 break;
         }
     }

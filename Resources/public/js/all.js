@@ -208,7 +208,7 @@ jQuery(document).ready(function ($) {
          */
         self.removeSelection = function (event) {
             event.preventDefault();
-            var entityId = $(this).attr('href');
+            var entityId = $(this).prev('.identity').attr('href');
             $(this).parent().remove();
             select.find("option[value='" + entityId + "']").removeAttr('selected');
             if (selected.find('li').length === 0) {
