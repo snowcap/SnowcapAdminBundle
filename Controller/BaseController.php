@@ -36,11 +36,13 @@ class BaseController extends Controller
      * @param string $code the specific content admin code
      * @return string
      */
-    protected function getTemplate($templateName, $code)
+    protected function getTemplate($templateName, $code = null)
     {
         $templateNameParts = explode(':', $templateName);
         $templateNameParts[0] = $this->get('snowcap_admin')->getBundle();
-        $templateNameParts[1] .= '/' . $code;
+        if(null !== $code) {
+            $templateNameParts[1] .= '/' . $code;
+        }
         $candidate = implode(':', $templateNameParts);
         if($this->get('templating')->exists($candidate)) {
             return $candidate;
