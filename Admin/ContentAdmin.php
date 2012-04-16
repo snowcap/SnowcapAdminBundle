@@ -135,60 +135,36 @@ abstract class ContentAdmin extends AbstractAdmin
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param Entity instance $entity
-     * @return bool
+     * @param $entity
      */
-    public function prePersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
-    {
-        return true;
-    }
+    public function prePersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param Entity instance $entity
-     * @return bool
+     * @param $entity
      */
-    public function postPersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
-    {
-        return true;
-    }
+    public function postPersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param Entity instance $entity
-     * @return bool
+     * @param $entity
      */
-    public function postUpdate(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
-    {
-        return true;
-    }
+    public function postUpdate(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param Entity instance $entity
-     * @return bool
+     * @param $entity
      */
-    public function postRemove(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
-    {
-        return true;
-    }
+    public function postRemove(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs
-     * @return bool
      */
-    public function loadClassMetadata(\Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs)
-    {
-        return true;
-    }
+    public function loadClassMetadata(\Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs) {}
 
     /**
      * @param PreFlushEventArgs $ea
-     * @param Array of entities instances $entities
-     * @return bool
+     * @param $entities
      */
-    public function preFlush($ea, $entities)
-    {
-        return true;
-    }
+    public function preFlush($ea, $entities) {}
 }
