@@ -88,6 +88,7 @@ class ContentController extends BaseController
             'entity' => $entity,
             'forms' => $forms->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $code),
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:widgets.html.twig')
         );
         if ($admin->isTranslatable()) {
             $templateParams['content_locale'] = $locale;
@@ -141,6 +142,7 @@ class ContentController extends BaseController
             'entity' => $entity,
             'forms' => $forms->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $code),
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
         );
         if ($admin->isTranslatable()) {
             $templateParams['content_locale'] = $locale;
