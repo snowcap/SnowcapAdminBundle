@@ -10,6 +10,13 @@ services:
         - [setContainer, [ @service_container ]]
         - [setBundle, [ %bundle% ]]
 
+  # subscriber for activating admin classes shortcuts
+  snowcap_admin.admin_subscriber:
+    class: Snowcap\AdminBundle\Listener\AdminSubscriber
+    arguments: [@snowcap_admin]
+    tags:
+      - { name: doctrine.event_subscriber}
+
   # Twig extensions
   snowcap_admin.twig:
     class: Snowcap\AdminBundle\Twig\Extension\AdminExtension

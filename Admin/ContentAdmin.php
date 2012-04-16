@@ -132,4 +132,63 @@ abstract class ContentAdmin extends AbstractAdmin
     {
         return false;
     }
+
+    /**
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
+     * @param Entity instance $entity
+     * @return bool
+     */
+    public function prePersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
+    {
+        return true;
+    }
+
+    /**
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
+     * @param Entity instance $entity
+     * @return bool
+     */
+    public function postPersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
+    {
+        return true;
+    }
+
+    /**
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
+     * @param Entity instance $entity
+     * @return bool
+     */
+    public function postUpdate(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
+    {
+        return true;
+    }
+
+    /**
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
+     * @param Entity instance $entity
+     * @return bool
+     */
+    public function postRemove(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity)
+    {
+        return true;
+    }
+
+    /**
+     * @param \Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs
+     * @return bool
+     */
+    public function loadClassMetadata(\Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs)
+    {
+        return true;
+    }
+
+    /**
+     * @param PreFlushEventArgs $ea
+     * @param Array of entities instances $entities
+     * @return bool
+     */
+    public function preFlush($ea, $entities)
+    {
+        return true;
+    }
 }
