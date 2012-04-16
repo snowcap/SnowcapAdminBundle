@@ -68,15 +68,16 @@ class ContentController extends BaseController
         }
         if ('POST' === $request->getMethod()) {
             $forms->bindRequest($request);
-            if ($admin->isTranslatable()) {
-                $admin->attachTranslation($entity, $translationEntity);
-            }
             if ($forms->isValid()) {
                 $admin->saveEntity($entity);
+                if ($admin->isTranslatable()) {
+                    $admin->saveTranslationEntity($entity, $translationEntity);
+                }
+                $admin->flush();
                 $this->setFlash('success', 'content.create.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('code' => $code, 'id' => $entity->getId())));
+                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('code' => $code, 'id' => $entity->getId(), 'locale' => $locale)));
                 }
                 else {
                     return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
@@ -93,6 +94,7 @@ class ContentController extends BaseController
         if ($admin->isTranslatable()) {
             $templateParams['content_locale'] = $locale;
         }
+
         return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $code), $templateParams);
     }
 
@@ -122,15 +124,16 @@ class ContentController extends BaseController
         }
         if ('POST' === $request->getMethod()) {
             $forms->bindRequest($request);
-            if ($admin->isTranslatable()) {
-                $admin->attachTranslation($entity, $translationEntity);
-            }
             if ($forms->isValid()) {
                 $admin->saveEntity($entity);
+                if ($admin->isTranslatable()) {
+                    $admin->saveTranslationEntity($entity, $translationEntity);
+                }
+                $admin->flush();
                 $this->setFlash('success', 'content.update.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('code' => $code, 'id' => $id)));
+                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('code' => $code, 'id' => $id, 'locale' => $locale)));
                 }
                 else {
                     return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
@@ -147,6 +150,7 @@ class ContentController extends BaseController
         if ($admin->isTranslatable()) {
             $templateParams['content_locale'] = $locale;
         }
+
         return $this->render($this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $code), $templateParams);
     }
 
@@ -161,7 +165,9 @@ class ContentController extends BaseController
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $admin->deleteEntity($id);
+        $admin->flush();
         $this->setFlash('success', 'content.delete.flash.success');
+
         return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
     }
 }

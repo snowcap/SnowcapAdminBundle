@@ -112,6 +112,11 @@ abstract class ContentAdmin extends AbstractAdmin
     {
         $em = $this->environment->get('doctrine')->getEntityManager();
         $em->persist($entity);
+    }
+
+    public function flush()
+    {
+        $em = $this->environment->get('doctrine')->getEntityManager();
         $em->flush();
     }
 
@@ -125,7 +130,6 @@ abstract class ContentAdmin extends AbstractAdmin
         $entity = $this->findEntity($entityId);
         $em = $this->environment->get('doctrine')->getEntityManager();
         $em->remove($entity);
-        $em->flush();
     }
 
     public function isTranslatable()

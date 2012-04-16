@@ -38,7 +38,7 @@ class InlineContentController extends Controller
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
-
+                $admin->flush();
                 $return = array(
                     'html' => $this->renderView('SnowcapAdminBundle:InlineContent:preview.html.twig', array(
                         'admin' => $admin,

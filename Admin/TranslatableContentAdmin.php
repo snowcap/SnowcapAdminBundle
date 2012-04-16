@@ -25,9 +25,11 @@ abstract class TranslatableContentAdmin extends ContentAdmin
         return $translationEntity;
     }
 
-    public function attachTranslation(TranslatableEntityInterface $translatedEntity, TranslationEntityInterface $translationEntity)
+    public function saveTranslationEntity(TranslatableEntityInterface $translatedEntity, TranslationEntityInterface $translationEntity)
     {
-        $translatedEntity->getTranslations()->set($translationEntity->getLocale(), $translationEntity);
+        $translationEntity->setTranslatedEntity($translatedEntity);
+        $em = $this->environment->get('doctrine')->getEntityManager();
+        $em->persist($translationEntity);
     }
 
     public function findTranslationEntity(TranslatableEntityInterface $translatedEntity, $locale)
