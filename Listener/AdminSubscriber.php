@@ -78,19 +78,20 @@ class AdminSubscriber implements EventSubscriber
         $unitOfWork = $em->getUnitOfWork();
 
         $entitiesToProcess = array();
-        $keyToProcess = false;
         $entityMaps = $unitOfWork->getIdentityMap();
         foreach ($entityMaps as $entities) {
             foreach ($entities as $entity) {
                 $key = get_class($entity);
                 if(array_key_exists($key, $this->entityMapping)) {
-                    $entitiesToProcess[] = $entity;
-                    $keyToProcess = $key;
+                    if(!array_key_exists($key,$entitiesToProcess)) {
+                        $entitiesToProcess[$key] = array();
+                    }
+                    $entitiesToProcess[$key][] = $entity;
                 }
             }
         }
-        if(count($entitiesToProcess) > 0) {
-            call_user_func_array( array($this->entityMapping[$keyToProcess], 'preFlush'), array($ea, $entitiesToProcess));
+        foreach($entitiesToProcess as $key => $entities) {
+            call_user_func_array( array($this->entityMapping[$key], 'preFlush'), array($ea, $entities));
         }
     }
 
