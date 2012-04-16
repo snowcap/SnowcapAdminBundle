@@ -63,28 +63,6 @@
     {% if prototype is defined %}
         {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
     {% endif %}
-    {% if tabbable %}
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                {% for key, row in form %}
-                    {% set label = row[property].get('value') %}
-                    <li{% if loop.first %} class="active"{% endif %}><a href="#{{ html_id }}-{{label}}" data-toggle="tab">{{ label }}</a></li>
-                {% endfor %}
-            </ul>
-            <div class="tab-content">
-            {% for key, row in form %}
-                {% set label = row[property].get('value') %}
-                {% spaceless %}
-                        <div class="tab-pane{% if loop.first %} active{% endif %}" id="{{ html_id }}-{{label}}">
-                            {{ form_errors(row) }}
-                            {{ form_widget(row, {'attr': widget_attr|default({})}) }}
-                        </div>
-                {% endspaceless %}
-            {% endfor %}
-            </div>
-        </div>
-    {% else %}
-        {{ block('form_widget') }}
-    {% endif %}
+    {{ block('form_widget') }}
 {% endspaceless %}
 {% endblock collection_widget %}
