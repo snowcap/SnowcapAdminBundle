@@ -57,12 +57,3 @@
 {% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-stylefileurl': asset(style_file), 'data-cssfileurl': asset(css_file), 'data-browserurl': browser_url }) %}
 {{ block('textarea_widget') }}
 {% endblock %}
-
-{% block collection_widget %}
-{% spaceless %}
-    {% if prototype is defined %}
-        {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
-    {% endif %}
-    {{ block('form_widget') }}
-{% endspaceless %}
-{% endblock collection_widget %}
