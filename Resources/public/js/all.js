@@ -89,6 +89,9 @@ jQuery(document).ready(function ($) {
             var elementIdSplitted = _element.attr('id').split('_');
             elementIdSplitted.pop();
             _target = $('#' + elementIdSplitted.join('_') + '_' +  _element.attr('data-target'));
+            if(_target.length === 0) {
+                throw "wrong target specified for slug widget (" + _element.attr('data-target') + ")";
+            }
             _element.attr('readonly', 'readonly');
             initialState = 'locked';
             if (_element.val() === '') {
