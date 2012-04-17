@@ -48,3 +48,6 @@ inline_content:
 
 project:
     name: Admin
+
+data:
+    emptyvalue: ---
