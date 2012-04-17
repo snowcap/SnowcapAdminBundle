@@ -148,7 +148,7 @@ class AdminExtension extends \Twig_Extension
             $value = $propertyPath->getValue($data);
         }
         if($value === null) {
-            $value = $this->adminEnvironment->get('translator')->trans('admin.data.emptyvalue', array(), 'SnowcapAdminBundle');
+            $value = $this->adminEnvironment->get('translator')->trans('data.emptyvalue', array(), 'SnowcapAdminBundle');
         }
         return $value;
     }
