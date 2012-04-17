@@ -15,10 +15,12 @@ content:
         title: Create a "%content_name%" content
         flash:
             success: Your content has been created.
+            error: Your content cannot be created.
     update:
         title: Update "%content_name%" content
         flash:
             success: Your content has been updated.
+            error: Your content cannot be updated.
     delete:
         flash:
             success: Your content has been deleted

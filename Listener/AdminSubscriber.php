@@ -27,7 +27,7 @@ class AdminSubscriber implements EventSubscriber
         $this->adminEnvironment = $environment;
 
         $admins = $this->adminEnvironment->getAdmins();
-        foreach($admins as $admin) {
+        foreach ($admins as $admin) {
             $this->entityMapping[$admin->getParam('entity_class')] = $admin;
         }
     }
@@ -39,25 +39,35 @@ class AdminSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array('prePersist', 'postPersist', 'postUpdate', 'postRemove','loadClassMetadata','preFlush');
+        return array('prePersist', 'postPersist', 'preUpdate', 'postUpdate', 'postRemove', 'loadClassMetadata', 'preFlush');
     }
 
-    public function prePersist($ea) {
+    public function prePersist($ea)
+    {
         $entity = $ea->getEntity();
         $this->callEventOnAdmin('prePersist', $entity, array($ea, $entity));
     }
 
-    public function postPersist($ea) {
+    public function postPersist($ea)
+    {
         $entity = $ea->getEntity();
         $this->callEventOnAdmin('postPersist', $entity, array($ea, $entity));
     }
 
-    public function postUpdate($ea) {
+    public function preUpdate($ea)
+    {
+        $entity = $ea->getEntity();
+        $this->callEventOnAdmin('preUpdate', $entity, array($ea, $entity));
+    }
+
+    public function postUpdate($ea)
+    {
         $entity = $ea->getEntity();
         $this->callEventOnAdmin('postUpdate', $entity, array($ea, $entity));
     }
 
-    public function postRemove($ea) {
+    public function postRemove($ea)
+    {
         $entity = $ea->getEntity();
         $this->callEventOnAdmin('postRemove', $entity, array($ea, $entity));
     }
@@ -66,8 +76,8 @@ class AdminSubscriber implements EventSubscriber
     {
         $meta = $eventArgs->getClassMetadata();
         $key = $meta->getName();
-        if(array_key_exists($key, $this->entityMapping)) {
-            call_user_func_array( array($this->entityMapping[$key], 'loadClassMetadata'), array($eventArgs));
+        if (array_key_exists($key, $this->entityMapping)) {
+            call_user_func_array(array($this->entityMapping[$key], 'loadClassMetadata'), array($eventArgs));
         }
     }
 
@@ -82,24 +92,24 @@ class AdminSubscriber implements EventSubscriber
         foreach ($entityMaps as $entities) {
             foreach ($entities as $entity) {
                 $key = get_class($entity);
-                if(array_key_exists($key, $this->entityMapping)) {
-                    if(!array_key_exists($key,$entitiesToProcess)) {
+                if (array_key_exists($key, $this->entityMapping)) {
+                    if (!array_key_exists($key, $entitiesToProcess)) {
                         $entitiesToProcess[$key] = array();
                     }
                     $entitiesToProcess[$key][] = $entity;
                 }
             }
         }
-        foreach($entitiesToProcess as $key => $entities) {
-            call_user_func_array( array($this->entityMapping[$key], 'preFlush'), array($ea, $entities));
+        foreach ($entitiesToProcess as $key => $entities) {
+            call_user_func_array(array($this->entityMapping[$key], 'preFlush'), array($ea, $entities));
         }
     }
 
     private function callEventOnAdmin($event, $entity, $arguments)
     {
         $key = get_class($entity);
-        if(array_key_exists($key, $this->entityMapping)) {
-            call_user_func_array( array($this->entityMapping[$key], $event), $arguments);
+        if (array_key_exists($key, $this->entityMapping)) {
+            call_user_func_array(array($this->entityMapping[$key], $event), $arguments);
         }
     }
 }

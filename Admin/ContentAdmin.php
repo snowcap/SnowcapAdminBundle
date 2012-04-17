@@ -153,6 +153,12 @@ abstract class ContentAdmin extends AbstractAdmin
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
      * @param $entity
      */
+    public function preUpdate(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
+
+    /**
+     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
+     * @param $entity
+     */
     public function postUpdate(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
 
     /**

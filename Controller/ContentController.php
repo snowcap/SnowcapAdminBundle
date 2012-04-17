@@ -82,6 +82,8 @@ class ContentController extends BaseController
                 else {
                     return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
                 }
+            } else {
+                $this->setFlash('error', 'content.create.flash.error');
             }
         }
         $templateParams = array(
@@ -138,6 +140,8 @@ class ContentController extends BaseController
                 else {
                     return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
                 }
+            } else {
+                $this->setFlash('error', 'content.update.flash.error');
             }
         }
         $templateParams = array(
