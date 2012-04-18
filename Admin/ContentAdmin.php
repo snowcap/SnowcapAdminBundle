@@ -91,10 +91,10 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
-     * Find the entty with the given identifier
+     * Find the entity with the given identifier
      *
      * @param mixed $entityId
-     * @return mixed
+     * @return object
      */
     public function findEntity($entityId)
     {
@@ -104,7 +104,7 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
-     * Save an entity in the database
+     * Save the entity in the database
      *
      * @param $entity
      */
@@ -132,6 +132,11 @@ abstract class ContentAdmin extends AbstractAdmin
         $em->remove($entity);
     }
 
+    /**
+     * Determine if the admin is translatable - false in this case, to be overridden
+     *
+     * @return bool
+     */
     public function isTranslatable()
     {
         return false;

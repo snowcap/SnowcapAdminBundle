@@ -13,8 +13,22 @@ use Snowcap\CoreBundle\Entity\TranslationEntityInterface;
  */
 abstract class TranslatableContentAdmin extends ContentAdmin
 {
+
+    /**
+     * Return the form for the translation entity
+     *
+     * @param object $data
+     * @return \Symfony\Component\Form\Form
+     */
     abstract public function getTranslationForm($data = null);
 
+    /**
+     * Instantiate and return a blank translation entity
+     *
+     * @param TranslatableEntityInterface $translatedEntity
+     * @param string $locale
+     * @return object
+     */
     public function buildTranslationEntity(TranslatableEntityInterface $translatedEntity, $locale)
     {
         $translationEntityName = $this->getParam('translation_entity_class');
@@ -25,19 +39,32 @@ abstract class TranslatableContentAdmin extends ContentAdmin
         return $translationEntity;
     }
 
+    /**
+     * Find the translation entity for the provided entity and locale
+     *
+     * @param TranslatableEntityInterface $translatedEntity
+     * @param string $locale
+     * @return object
+     */
+    public function findTranslationEntity(TranslatableEntityInterface $translatedEntity, $locale)
+    {
+        if ($translatedEntity->getTranslations()->containsKey($locale)) {
+            return $translatedEntity->getTranslations()->get($locale);
+        }
+        return $this->buildTranslationEntity($translatedEntity, $locale);
+    }
+
+    /**
+     * Save the translation entity in the database
+     *
+     * @param TranslatableEntityInterface $translatedEntity
+     * @param TranslationEntityInterface $translationEntity
+     */
     public function saveTranslationEntity(TranslatableEntityInterface $translatedEntity, TranslationEntityInterface $translationEntity)
     {
         $translationEntity->setTranslatedEntity($translatedEntity);
         $em = $this->environment->get('doctrine')->getEntityManager();
         $em->persist($translationEntity);
-    }
-
-    public function findTranslationEntity(TranslatableEntityInterface $translatedEntity, $locale)
-    {
-        if($translatedEntity->getTranslations()->containsKey($locale)){
-            return $translatedEntity->getTranslations()->get($locale);
-        }
-        return $this->buildTranslationEntity($translatedEntity, $locale);
     }
 
     /**
@@ -53,14 +80,19 @@ abstract class TranslatableContentAdmin extends ContentAdmin
         if (!array_key_exists('translation_entity_class', $params)) {
             throw new Exception(sprintf('The admin section %s must be configured with a "translation_entity_class" parameter', $this->getCode()), Exception::ADMIN_INVALID);
         }
-        if(!in_array('Snowcap\CoreBundle\Entity\TranslatableEntityInterface', class_implements($params['entity_class']))) {
+        if (!in_array('Snowcap\CoreBundle\Entity\TranslatableEntityInterface', class_implements($params['entity_class']))) {
             throw new Exception(sprintf('The admin section %s "translation_entity_class" parameter (%s) must correspond to a class that implements Snowcap\CoreBundle\Entity\TranslatableEntityInterface', $this->getCode(), $params['entity_class']), Exception::ADMIN_INVALID);
         }
-        if(!in_array('Snowcap\CoreBundle\Entity\TranslationEntityInterface', class_implements($params['translation_entity_class']))) {
+        if (!in_array('Snowcap\CoreBundle\Entity\TranslationEntityInterface', class_implements($params['translation_entity_class']))) {
             throw new Exception(sprintf('The admin section %s "translation_entity_class" parameter (%s) must correspond to a class that implements Snowcap\CoreBundle\Entity\TranslationEntityInterface', $this->getCode(), $params['translation_entity_class']), Exception::ADMIN_INVALID);
         }
     }
 
+    /**
+     * Determine if the admin is translatable - false in this case, to be overridden
+     *
+     * @return bool
+     */
     public function isTranslatable()
     {
         return true;
