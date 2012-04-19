@@ -13,7 +13,7 @@
 
     {# searchform block #}
     {% block searchform %}
-        {% if searchForm is defined and list.data is not empty %}
+        {% if searchForm is defined and (list.data is not empty or searchForm.vars.value is not empty) %}
             <form action="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" method="GET" class="form-search">
                 {% for field in searchForm %}
                 {{ form_widget(field, { 'attr': { 'placeholder': "content.filter.label"|trans({}, 'SnowcapAdminBundle')}}) }}

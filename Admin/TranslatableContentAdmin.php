@@ -5,6 +5,7 @@ use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Exception;
 use Snowcap\CoreBundle\Entity\TranslatableEntityInterface;
 use Snowcap\CoreBundle\Entity\TranslationEntityInterface;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Content admin class
@@ -21,6 +22,21 @@ abstract class TranslatableContentAdmin extends ContentAdmin
      * @return \Symfony\Component\Form\Form
      */
     abstract public function getTranslationForm($data = null);
+
+    protected function getQueryBuilder()
+    {
+        $queryBuilder = parent::getQueryBuilder();
+        $activeLocales = $this->environment->getLocales();
+        $workingLocale = $this->environment->getWorkingLocale();
+        foreach($activeLocales as $activeLocale) {
+            $alias = ($activeLocale === $workingLocale) ? 'tr' : 'tr_' . $activeLocale;
+            $queryBuilder
+                ->addSelect($alias)
+                ->leftJoin('e.translations', $alias, Expr\Join::WITH, $alias . '.locale = ' . $queryBuilder->getEntityManager()->getConnection()->quote($activeLocale));
+        }
+
+        return $queryBuilder;
+    }
 
     /**
      * Instantiate and return a blank translation entity

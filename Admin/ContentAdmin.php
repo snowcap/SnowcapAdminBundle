@@ -39,10 +39,23 @@ abstract class ContentAdmin extends AbstractAdmin
 
     /**
      * Return the admin search form for this content (used in the list view)
+     * Each field in the form will be used to modify the querybuilder returned
+     * by the getQueryBuilder() method of this class and thus must be named
+     * accordingly
      *
      * @return \Symfony\Component\Form\Form
      */
     public function getSearchForm()
+    {
+        return null;
+    }
+
+    /**
+     * Return the admin filter form for this content (used in the list view)
+     *
+     * @return \Symfony\Component\Form\Form
+     */
+    public function getFilterForm()
     {
         return null;
     }

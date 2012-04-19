@@ -19,9 +19,10 @@
                             <ul class="nav nav-list">
 
                                 {% for locale_key, locale_text in get_active_locales(app.request.locale) %}
-                                    <li{% if locale_key == content_locale %} class="active"{% endif %}>
+                                    {% set untranslated = (locale_key not in entity.translations|keys) %}
+                                    <li{% if locale_key == content_locale %} class="active"{% elseif untranslated %} class="untranslated"{% endif %}>
                                         <a href="{{ path(app.request.get('_route'), switch_route_params|merge({'locale': locale_key})) }}">
-                                            {{ locale_text }}{% if locale_key not in entity.translations|keys %} <i class="icon-warning-sign pull-right"></i>{% endif %}
+                                            {{ locale_text }}{% if untranslated %} <i class="icon-warning-sign pull-right"></i>{% endif %}
                                         </a>
                                     </li>
                                 {% endfor %}

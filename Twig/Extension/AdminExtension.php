@@ -123,19 +123,17 @@ class AdminExtension extends \Twig_Extension
             if(!is_object($data) || !in_array('Snowcap\CoreBundle\Entity\TranslatableEntityInterface', class_implements($data))){
                 throw new Exception(sprintf('Localized paths such as %s may only be called on objects that implement the "TranslatableEntityInterface" interface', $path));
             }
-            if($this->adminEnvironment->getWorkingLocale() !== null) {
-                $locale = $this->adminEnvironment->getWorkingLocale();
-            }
-            else {
-                $locale = $currentLocale = $this->adminEnvironment->getLocale();
-            }
+            $workingLocale = $this->adminEnvironment->getWorkingLocale();
             $activeLocales = $this->adminEnvironment->getLocales();
-            $mergedLocales = array_merge(array($locale), array_diff($activeLocales, array($locale)));
+            $mergedLocales = array_merge(array($workingLocale), array_diff($activeLocales, array($workingLocale)));
             while (!empty($mergedLocales)) {
                 $testLocale = array_shift($mergedLocales);
                 $propertyPath = new PropertyPath(str_replace('%locale%', $testLocale, $path));
                 try {
                     $value = $propertyPath->getValue($data);
+                    if($testLocale !== $workingLocale) {
+                        $value = '<span class="untranslated">' . $value . ' (' . $testLocale . ')</span>';
+                    }
                     break;
                 }
                 catch (UnexpectedTypeException $e) {

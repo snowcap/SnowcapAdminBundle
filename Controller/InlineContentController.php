@@ -65,10 +65,8 @@ class InlineContentController extends Controller
         if ($locale === null) {
             $locale = $this->getRequest()->getLocale();
         }
+        $this->get('snowcap_admin')->setWorkingLocale($locale);
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        if($admin->isTranslatable()){
-            $this->get('snowcap_admin')->setWorkingLocale($locale);
-        }
         $return = array(
             'html' => $this->renderView('SnowcapAdminBundle:InlineContent:autocomplete.html.twig', array(
                 'results' => $admin->filterAutocomplete($input),

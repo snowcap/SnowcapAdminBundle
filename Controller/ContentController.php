@@ -23,19 +23,32 @@ class ContentController extends BaseController
      */
     public function indexAction($code)
     {
+        $locale = $this->getRequest()->getLocale();
+        $this->get('snowcap_admin')->setWorkingLocale($locale);
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $list = $admin->getDatalist();
         $request = $this->getRequest();
         if (($page = $request->get('page')) !== null) {
             $list->setPage($page);
         }
-        $searchForm = $admin->getSearchForm();
+
         $templateParams = array(
             'admin' => $admin,
             'list' => $list,
         );
-        if ($searchForm !== null) {
-            $searchForm->bindRequest($this->get('request'));
+
+        $contentForm = $this->createForm('form', array(), array('virtual' => true));
+        $searchForm = $admin->getSearchForm();
+        if($searchForm !== null) {
+            $contentForm->add($searchForm);
+        }
+        $filterForm = $admin->getFilterForm();
+        if($filterForm !== null) {
+            $contentForm->add($filterForm);
+        }
+
+        if ($searchForm !== null || $filterForm !== null) {
+            $contentForm->bindRequest($this->get('request'));
             $searchData = $searchForm->getData();
             $list->filterData(array_filter($searchData));
             $templateParams['searchForm'] = $searchForm->createView();
@@ -54,6 +67,7 @@ class ContentController extends BaseController
         if ($locale === null) {
             $locale = $this->getRequest()->getLocale();
         }
+        $this->get('snowcap_admin')->setWorkingLocale($locale);
         $request = $this->get('request');
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $entity = $admin->buildEntity();
@@ -61,7 +75,6 @@ class ContentController extends BaseController
         $form = $admin->getForm($entity);
         $forms->add($form);
         if ($admin->isTranslatable()) {
-            $this->get('snowcap_admin')->setWorkingLocale($locale);
             $translationEntity = $admin->buildTranslationEntity($entity, $locale);
             $translationForm = $admin->getTranslationForm($translationEntity);
             $forms->add($translationForm);
@@ -112,6 +125,7 @@ class ContentController extends BaseController
         if ($locale === null) {
             $locale = $this->getRequest()->getLocale();
         }
+        $this->get('snowcap_admin')->setWorkingLocale($locale);
         $request = $this->get('request');
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $entity = $admin->findEntity($id);
@@ -119,7 +133,6 @@ class ContentController extends BaseController
         $form = $admin->getForm($entity);
         $forms->add($form);
         if ($admin->isTranslatable()) {
-            $this->get('snowcap_admin')->setWorkingLocale($locale);
             $translationEntity = $admin->findTranslationEntity($entity, $locale);
             $translationForm = $admin->getTranslationForm($translationEntity);
             $forms->add($translationForm);

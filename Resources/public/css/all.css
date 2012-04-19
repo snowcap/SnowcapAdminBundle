@@ -5,6 +5,13 @@ body {
 /**
  * Form fine-tuning
  */
+.untranslated a {
+    color: #999;
+}
+.content-translations i {
+    margin-top: 1px;
+}
+
 body.wysiwyg {
     padding-top: 0;
 }
@@ -40,6 +47,7 @@ fieldset {
 .content-translations i {
     opacity: 0.25;
 }
+
 /**
 * Inline widget
 */
@@ -110,6 +118,14 @@ fieldset {
     margin-left: 10px;
 }
 
+
+/**
+ * Grid fine-tuning
+ */
+
+.table .untranslated {
+    color: #999;
+}
 /**
  * Tabs
  */
