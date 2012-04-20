@@ -53,6 +53,16 @@ services:
     tags:
       -  { name: form.type, alias: wysiwyg }
 
+  snowcap_admin.content_search:
+    class: Snowcap\AdminBundle\Form\Type\ContentSearchType
+    tags:
+      - { name: form.type, alias: snowcap_admin_content_search }
+
+  snowcap_admin.content_filter:
+    class: Snowcap\AdminBundle\Form\Type\ContentFilterType
+    tags:
+      - { name: form.type, alias: snowcap_admin_content_filter }
+
   #Datalists
   snowcap_admin.datalist_factory:
     class: Snowcap\AdminBundle\Datalist\DatalistFactory

@@ -48,6 +48,7 @@ class File {
      * @var UploadedFile
      *
      * @Assert\File(maxSize="6000000")
+     * @Assert\NotBlank()
      * @SnowcapCore\File(path="uploads/images", mappedBy="path", filename="name")
      */
     public $file;

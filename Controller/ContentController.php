@@ -37,7 +37,10 @@ class ContentController extends BaseController
             'list' => $list,
         );
 
-        $contentForm = $this->createForm('form', array(), array('virtual' => true));
+        $contentForm = $this->createForm('form', array(), array(
+            'virtual' => true,
+            'csrf_protection' => false,
+        ));
         $searchForm = $admin->getSearchForm();
         if($searchForm !== null) {
             $contentForm->add($searchForm);
@@ -47,11 +50,12 @@ class ContentController extends BaseController
             $contentForm->add($filterForm);
         }
 
-        if ($searchForm !== null || $filterForm !== null) {
+        if ($contentForm->hasChildren()) {
             $contentForm->bindRequest($this->get('request'));
-            $searchData = $searchForm->getData();
-            $list->filterData(array_filter($searchData));
-            $templateParams['searchForm'] = $searchForm->createView();
+            $searchData = $contentForm->getData();
+            $list->filterData($searchData);
+            $templateParams['contentForm'] = $contentForm->createView();
+            $templateParams['form_theme_template'] = $this->getTemplate('SnowcapAdminBundle:Form:widgets.html.twig');
         }
         return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $code), $templateParams);
     }

@@ -5,8 +5,12 @@ content:
     list:
         title: Liste des contenus "%content_name%"
         empty: Aucun contenu de type "%content_name%" n'a été trouvé
+    search:
+        label: Recherche
+        submit: Rechercher
+        reset: Annuler
     filter:
-        label: Filtrer
+        title: Fitres
         submit: Filtrer
         reset: Annuler
     actions:

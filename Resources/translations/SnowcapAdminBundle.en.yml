@@ -5,8 +5,12 @@ content:
     list:
         title: List of "%content_name%" content
         empty: There is no content of type "%content_name%" yet
+    search:
+        label: Search
+        submit: Search
+        reset: Reset
     filter:
-        label: Filter content
+        title: Filters
         submit: Filter
         reset: Reset
     actions:

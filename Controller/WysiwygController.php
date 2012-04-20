@@ -29,7 +29,7 @@ class WysiwygController extends Controller
 
         parse_str($this->getRequest()->getQueryString(), $arguments);
 
-        $builder = $this->get('form.factory')->createBuilder('search')->add('f.name', 'text');
+        $builder = $this->get('form.factory')->createBuilder('search')->add('name', 'text');
         $searchForm = $builder->getForm();
 
         /** @var $list \Snowcap\AdminBundle\Datalist\ContentDatalist */
@@ -51,8 +51,19 @@ class WysiwygController extends Controller
         if ('POST' === $request->getMethod() && $request->get('search') !== null) {
             $searchForm->bindRequest($this->get('request'));
             $searchData = $searchForm->getData();
-            $filter = array('f.name' => $searchData['f.name'], 'f.tags' => $searchData['f.name']);
-            $list->filterData(array_filter($filter), 'OR');
+            $filters = array(
+                'name' => array(
+                    'field' => 'f.name',
+                    'operator' => 'LIKE',
+                    'value' => $searchData['name'],
+                ),
+                'tags' => array(
+                    'field' => 'f.tags',
+                    'operator' => 'LIKE',
+                    'value' => $searchData['name']
+                )
+            );
+            $list->filterData($filters, 'OR');
         }
 
         return array('searchForm' => $searchForm->createView(), 'list' => $list, 'arguments' => $arguments);

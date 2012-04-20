@@ -22,6 +22,10 @@
     </div>
 {% endblock %}
 
+{% block snowcap_admin_content_filter_widget %}
+    {{ form_widget(form.value, {attr: attr}) }}
+{% endblock %}
+
 {% block slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}
     <div class="input-append">

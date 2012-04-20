@@ -20,7 +20,7 @@
                     {% render 'SnowcapAdminBundle:Wysiwyg:upload' %}
                     <h2>{{ "wysiwyg.browse.title"|trans({}, 'SnowcapAdminBundle') }}</h2>
                     <hr/>
-                    {% if searchForm is defined and list.data is not empty %}
+                    {% if searchForm is defined and (list.data is not empty or searchForm.vars.value is not empty) %}
                     <form action="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" method="post" class="form-search">
                         {% for field in searchForm %}
                         {{ form_widget(field, { 'attr': {'placeholder': "content.filter.label"|trans({}, 'SnowcapAdminBundle')}}) }}

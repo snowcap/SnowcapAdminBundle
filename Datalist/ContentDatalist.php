@@ -3,7 +3,7 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Doctrine\ORM\Mapping\MappingException;
 
 use Snowcap\AdminBundle\Exception;
 use Snowcap\CoreBundle\Manager\PaginatorManager;
@@ -50,32 +50,74 @@ class ContentDatalist extends AbstractDatalist
         return $this->data;
     }
 
-    public function filterData(array $data, $glue = 'AND')
+    /**
+     * Filter the datalist data
+     *
+     * @param array $filters
+     * @param string $glue
+     * @throws \Snowcap\AdminBundle\Exception|\Symfony\Component\Serializer\Exception\InvalidArgumentException
+     */
+    public function filterData(array $filters, $glue = 'AND')
     {
+        $queryBuilder = $this->queryBuilder;
+        $filters = array_filter($filters, function($filter){
+            return !empty($filter['value']);
+        });
+        array_walk($filters, function(&$filter) use($queryBuilder) {
+            $value = $filter['value'];
+            if(is_object($value)) {
+                try {
+                    $metaData = $queryBuilder->getEntityManager()->getClassMetaData(get_class($value));
+                    $filter['value'] = $value->getId();
+                    return $filter;
+                }
+                catch(MappingException $e){} // do nothing
+            }
+
+        });
+
         if(isset($this->data)){
             throw new Exception(sprintf('A content datalist cannot be filtered if its data has already been initialized'));
         }
-        foreach($data as $field => $value){
-            switch ($glue) {
-                case 'AND':
-                    $this->queryBuilder->andWhere($this->queryBuilder->expr()->like($field, $this->queryBuilder->expr()->literal('%' . $value . '%')));
+        foreach($filters as $filter){
+            switch($filter['operator']) {
+                case '=':
+                    $expression = $this->queryBuilder->expr()->eq($filter['field'], $filter['value']);
                     break;
-                case 'OR':
-                    $this->queryBuilder->orWhere($this->queryBuilder->expr()->like($field, $this->queryBuilder->expr()->literal('%' . $value . '%')));
+                case 'LIKE':
+                    $expression = $this->queryBuilder->expr()->like($filter['field'], $this->queryBuilder->expr()->literal('%' . $filter['value'] . '%'));
                     break;
                 default:
-                    throw new InvalidArgumentException('Filter data only accept AND/OR glue');
+                    throw new \InvalidArgumentException(sprintf('Filter operator "%s" not recognized', $filter['operator']));
+                    break;
+            }
+
+            switch ($glue) {
+                case 'AND':
+                    $this->queryBuilder->andWhere($expression);
+                    break;
+                case 'OR':
+                    $this->queryBuilder->orWhere($expression);
+                    break;
+                default:
+                    throw new \InvalidArgumentException('Filter data only accept AND/OR glue');
                     break;
             }
         }
     }
 
+    /**
+     * @param int $limitPerPage
+     */
     public function paginate($limitPerPage = 10)
     {
         $this->paginator = new PaginatorManager();
         $this->paginator->setLimitPerPage($limitPerPage);
     }
 
+    /**
+     * @param int $page
+     */
     public function setPage($page) {
         $this->paginator->setPage($page);
     }
