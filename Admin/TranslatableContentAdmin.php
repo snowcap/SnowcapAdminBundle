@@ -113,4 +113,19 @@ abstract class TranslatableContentAdmin extends ContentAdmin
     {
         return true;
     }
+
+    /**
+     * @param int $entityId
+     */
+    public function deleteEntity($entityId)
+    {
+        $entity = $this->findEntity($entityId);
+        $em = $this->environment->get('doctrine')->getEntityManager();
+        foreach($entity->getTranslations() as $translationEntity) {
+            $em->remove($translationEntity);
+        }
+        parent::deleteEntity($entityId);
+    }
+
+
 }
