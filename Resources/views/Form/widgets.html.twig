@@ -2,7 +2,6 @@
 
 {% block snowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
-    {% if value is empty %}<p class="empty">{{ "inline_content.empty"|trans({}, 'SnowcapAdminBundle') }}</p>{% endif %}
     <ul class="selected row">
         {% if value is not empty %}
             {% set results = multiple ? data : [data] %}
