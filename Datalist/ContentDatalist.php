@@ -44,7 +44,7 @@ class ContentDatalist extends AbstractDatalist
                 }
             }
             catch (\Doctrine\ORM\Query\QueryException $e) {
-                throw new Exception(sprintf('The "%s" list queryBuilder leads to an invalid query (probably due to lacking select or from clauses). The returned error was: %s', $this->name, $e->getMessage()));
+                throw new Exception(sprintf('The "%s" list queryBuilder leads to an invalid query. The returned error was: %s', $this->name, $e->getMessage()));
             }
         }
         return $this->data;
@@ -80,12 +80,15 @@ class ContentDatalist extends AbstractDatalist
             throw new Exception(sprintf('A content datalist cannot be filtered if its data has already been initialized'));
         }
         foreach($filters as $filter){
+            $placeholder = str_replace('.','_',$filter['field']);
             switch($filter['operator']) {
                 case '=':
-                    $expression = $this->queryBuilder->expr()->eq($filter['field'], $filter['value']);
+                    $expression = $this->queryBuilder->expr()->eq($filter['field'], ':' . $placeholder);
+                    $this->queryBuilder->setParameter($placeholder, $filter['value']);
                     break;
                 case 'LIKE':
-                    $expression = $this->queryBuilder->expr()->like($filter['field'], $this->queryBuilder->expr()->literal('%' . $filter['value'] . '%'));
+                    $expression = $this->queryBuilder->expr()->like($filter['field'], ':' . $placeholder);
+                    $this->queryBuilder->setParameter($placeholder, '%' . $filter['value'] . '%');
                     break;
                 default:
                     throw new \InvalidArgumentException(sprintf('Filter operator "%s" not recognized', $filter['operator']));
