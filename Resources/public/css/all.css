@@ -47,6 +47,12 @@ fieldset {
 .content-translations i {
     opacity: 0.25;
 }
+.help-block {
+    margin-top: -8px;
+    margin-bottom: 15px;
+    color: #aaa;
+}
+
 
 /**
 * Inline widget
