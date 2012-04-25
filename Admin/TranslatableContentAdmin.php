@@ -23,7 +23,7 @@ abstract class TranslatableContentAdmin extends ContentAdmin
      */
     abstract public function getTranslationForm($data = null);
 
-    protected function getQueryBuilder()
+    public function getQueryBuilder()
     {
         $queryBuilder = parent::getQueryBuilder();
         $activeLocales = $this->environment->getLocales();
@@ -115,16 +115,15 @@ abstract class TranslatableContentAdmin extends ContentAdmin
     }
 
     /**
-     * @param int $entityId
+     * @param object $entity
      */
-    public function deleteEntity($entityId)
+    public function deleteEntity($entity)
     {
-        $entity = $this->findEntity($entityId);
         $em = $this->environment->get('doctrine')->getEntityManager();
         foreach($entity->getTranslations() as $translationEntity) {
             $em->remove($translationEntity);
         }
-        parent::deleteEntity($entityId);
+        parent::deleteEntity($entity);
     }
 
 

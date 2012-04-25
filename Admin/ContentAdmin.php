@@ -65,7 +65,7 @@ abstract class ContentAdmin extends AbstractAdmin
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    protected function getQueryBuilder()
+    public function getQueryBuilder()
     {
         $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
         $queryBuilder
@@ -136,11 +136,10 @@ abstract class ContentAdmin extends AbstractAdmin
     /**
      * Deletes the entity with the given identifier
      *
-     * @param mixed $entityId
+     * @param object $entity
      */
-    public function deleteEntity($entityId)
+    public function deleteEntity($entity)
     {
-        $entity = $this->findEntity($entityId);
         $em = $this->environment->get('doctrine')->getEntityManager();
         $em->remove($entity);
     }
