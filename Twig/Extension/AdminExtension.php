@@ -89,7 +89,7 @@ class AdminExtension extends \Twig_Extension
      * @param array $params
      * @return mixed
      */
-    public function listValue($row, $path, $params)
+    public function listValue($row, $path, $params = array())
     {
         return $this->getDataValue($row, $path);
     }
