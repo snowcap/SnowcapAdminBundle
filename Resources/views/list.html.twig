@@ -1,4 +1,4 @@
-# grid view
+{# grid view #}
 {% block list_grid %}
 <table class="table table-bordered table-striped">
     <thead>
@@ -38,8 +38,7 @@
     <td><img src="/{{ list_value(data_row, column.path, column.options) }}"/></td>
 {% endblock %}
 
-# thumbnail view
-
+{# thumbnail view #}
 {% block list_thumbnail %}
 <ul class="thumbnails">
     {% for data_row in list.data %}
@@ -72,7 +71,7 @@
     {% endif %}
 {% endblock %}
 
-# common list widgets
+{# common list widgets #}
 {% block row_actions %}
     {% for action_route, action_config in list.actions %}
     {% set action_path = path(action_route, action_config.parameters | merge({'id': data_row.id })) %}
