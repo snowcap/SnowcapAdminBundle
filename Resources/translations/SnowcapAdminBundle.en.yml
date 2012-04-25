@@ -28,6 +28,7 @@ content:
     delete:
         flash:
             success: Your content has been deleted
+            error_has_children: You cannot delete content with children
     actions:
         header: Actions
         create: New
@@ -36,6 +37,7 @@ content:
         edit: Edit
         delete: Delete
         back: Back to list
+        reorder: Reorder
 
 wysiwyg:
     browse:
@@ -49,6 +51,10 @@ inline_content:
     search: Start typing the name of the content
     empty: Nothing selected yet
     noresult: No result
+
+reorderable_content:
+    reorder: Reorder
+    save: Save
 
 project:
     name: Admin

@@ -114,6 +114,11 @@ jQuery(document).ready(function ($) {
         });
     };
 
+    /**
+     * Markdown peviewer
+     *
+     * @param DOMElement element
+     */
     var MarkdownPreviewer = function (element) {
         var _element = $(element);
         var latestPreviewContent = "";
@@ -133,13 +138,17 @@ jQuery(document).ready(function ($) {
         });
 
     };
-
     $.fn.markdownPreviewer = function () {
         return this.each(function () {
             new MarkdownPreviewer(this);
         });
     };
 
+    /**
+     * Inline widget
+     *
+     * @param DOMElement row
+     */
     var InlineWidget = function (row) {
 
         var self = this;
@@ -267,18 +276,46 @@ jQuery(document).ready(function ($) {
         self.init();
     };
 
+    // Modal
+    $('#modal').modal({show:false}); //TODO: create modals on demand
+    $('#modal').on('hidden', function (event) {
+        $(this).empty();
+    });
+
     // Slug
     $('.widget-slug').slugger();
     // Markdown
     $('.widget-markdown').markdownPreviewer();
 
-    //TODO: create modals on demand
-    $('#modal').modal({show:false});
-    $('#modal').on('hidden', function (event) {
-        $(this).empty();
-    });
+    // Inline widgets
     $('.type_snowcap_admin_inline').each(function (offset, row) {
         new InlineWidget(row);
+    });
+
+    // Reorderable
+    $('.open-reorder').on('click', function(event) {
+        event.preventDefault();
+        var modal = $('#modal');
+        $.get($(this).attr('href'), function(data) {
+            modal.html(data.html);
+            var tree = modal.find('.tree');
+            tree
+                .on('loaded.jstree', function(event) {
+                    $(this).jstree('open_all');
+                    modal.find('a.save').on('click', function(event) {
+                        event.preventDefault();
+                        var treeData = tree.jstree('get_json', -1, [], []);
+                        $.post($(this).attr('href'), {'treeData': treeData}, function(data) {
+                            modal.html("");
+                            modal.modal('hide');
+                        });
+                    });
+                })
+                .jstree({
+                    'plugins' : [ 'themes', 'html_data', 'json_data', 'dnd']
+                });
+            modal.modal('show');
+        });
     });
 
 });

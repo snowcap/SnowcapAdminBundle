@@ -1,0 +1,29 @@
+{% extends "SnowcapAdminBundle::modal_base.html.twig" %}
+
+{% block modal_title %}
+    <h3>{{ "reorderable_content.reorder"|trans({}, 'SnowcapAdminBundle') }}</h3>
+{% endblock %}
+
+{% block modal_body %}
+<div class="tree">
+    {% set level = 0 %}
+    {% for item in entities %}
+        {% set level_diff = item.level - level %}
+        {% set level = level + level_diff %}
+        {% if level_diff > 0 %}
+            <ul>
+        {% elseif level_diff < 0 %}
+            {% for i in 1..-level_diff %}</li></ul>{% endfor %}
+        {% elseif loop.index0 != 0 %}
+            </li>
+        {% endif %}
+            <li data-id="{{ item.id }}"><a href="#">{{ list_value(item, admin.reorderLabel) }}</a>
+        {% set previous_item = item %}
+    {% endfor %}
+    {% for i in 1..level %}</li></ul>{% endfor %}
+</div>
+{% endblock %}
+
+{% block modal_footer %}
+<a class="btn btn-large btn-primary save" href="{{ path('snowcap_admin_reorderablecontent_reorder', {'code': admin.code}) }}">{{ "reorderable_content.save"|trans({}, 'SnowcapAdminBundle') }}</a>
+{% endblock %}

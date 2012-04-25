@@ -27,6 +27,11 @@ snowcap_admin_inlinecontent_create:
     pattern: /inline/{code}/create
     defaults: { _controller: SnowcapAdminBundle:InlineContent:create }
 
+# Reorder routes
+snowcap_admin_reorderablecontent_reorder:
+    pattern: /reorder/{code}/{locale}
+    defaults: { _controller: SnowcapAdminBundle:ReorderableContent:reorder, locale: null }
+
 # Default routes
 snowcap_admin_markdown:
     pattern: /markdown

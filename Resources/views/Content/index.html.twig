@@ -73,6 +73,12 @@
                 <i class="icon-plus icon-white"></i>
                 {{ "content.actions.create"|trans({}, 'SnowcapAdminBundle') }}
             </a>
+            {% if reorder %}
+                <a class="btn open-reorder" href="{{ path('snowcap_admin_reorderablecontent_reorder', {'code': admin.code}) }}">
+                    <i class="icon-plus"></i>
+                    {{ "content.actions.reorder"|trans({}, 'SnowcapAdminBundle') }}
+                </a>
+            {% endif %}
         </p>
     {% endblock actions %}
 

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Snowcap\AdminBundle\Environment;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
+use Snowcap\AdminBundle\Admin\ReorderableAdminInterface;
+use Snowcap\AdminBundle\Admin\CannotDeleteException;
 
 /**
  * This controller provides basic CRUD capabilities for content models
@@ -35,6 +37,7 @@ class ContentController extends BaseController
         $templateParams = array(
             'admin' => $admin,
             'list' => $list,
+            'reorder' => $admin instanceof ReorderableAdminInterface
         );
 
         $contentForm = $this->createForm('form', array(), array(
@@ -185,9 +188,18 @@ class ContentController extends BaseController
     public function deleteAction($code, $id)
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
-        $admin->deleteEntity($id);
-        $admin->flush();
-        $this->setFlash('success', 'content.delete.flash.success');
+        try {
+            $admin->deleteEntity($admin->findEntity($id));
+            $admin->flush();
+            $this->setFlash('success', 'content.delete.flash.success');
+        }
+        catch(CannotDeleteException $e) {
+            switch($e->getCode()) {
+                case CannotDeleteException::HAS_CHILDREN:
+                    $this->setFlash('error', 'content.delete.flash.error_has_children');
+                    break;
+            }
+        }
 
         return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
     }
