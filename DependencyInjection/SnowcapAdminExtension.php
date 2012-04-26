@@ -28,10 +28,6 @@ class SnowcapAdminExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $processor = new Processor();
-        $configuration = new Configuration();
-        $config = $processor->processConfiguration($configuration, $configs);
-
         foreach (array('sections','bundle') as $attribute) {
             $container->setParameter($attribute , $config[$attribute]);
         }
