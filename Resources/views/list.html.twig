@@ -74,10 +74,18 @@
 {# common list widgets #}
 {% block row_actions %}
     {% for action_route, action_config in list.actions %}
-    {% set action_path = path(action_route, action_config.parameters | merge({'id': data_row.id })) %}
-    <a class="btn btn-small" href="{{ action_path }}">
-        {% if action_config.options.icon is defined %}<i class="{{ action_config.options.icon }}"></i>{% endif %}
-        {{ action_config.options.label|trans({}, 'SnowcapAdminBundle') }}
-    </a>
+        {% set action_path = path(action_route, action_config.parameters | merge({'id': data_row.id })) %}
+        <a class="btn btn-small" {{ block('row_action_confirm_attributes') }}href="{{ action_path }}">
+            {% if action_config.options.icon is defined %}<i class="{{ action_config.options.icon }}"></i>{% endif %}
+            {{ action_config.options.label|trans({}, 'SnowcapAdminBundle') }}
+        </a>
     {% endfor %}
+{% endblock %}
+
+{% block row_action_confirm_attributes %}
+    {% if action_config.options.confirm %}
+        {% set options = action_config.options %}
+        {% set confirm_attrs = ['confirm_title', 'confirm_confirm', 'confirm_cancel', 'confirm_body'] %}
+        {% spaceless %}data-confirm="confirm" {% for confirm_attr in confirm_attrs %}data-{{ confirm_attr }}="{{ attribute(options, confirm_attr)|trans({}, 'SnowcapAdminBundle') }}" {% endfor %}{% endspaceless %}
+    {% endif %}
 {% endblock %}

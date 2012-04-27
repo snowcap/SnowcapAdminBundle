@@ -81,6 +81,13 @@ class AbstractDatalist
 
     public function addAction($routeName, array $parameters = array(), array $options = array())
     {
+        $options = array_merge(array(
+            'confirm' => false,
+            'confirm_title' => 'content.actions.confirm.title',
+            'confirm_body' => 'content.actions.confirm.body',
+            'confirm_confirm' => 'content.actions.confirm.confirm',
+            'confirm_cancel' => 'content.actions.confirm.cancel',
+        ), $options);
         if (!array_key_exists('label', $options)) {
             $options['label'] = ucfirst($routeName);
         }

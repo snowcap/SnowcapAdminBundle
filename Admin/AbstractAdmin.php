@@ -91,31 +91,6 @@ abstract class AbstractAdmin
     }
 
     /**
-     * Create a datalist with the provided view mode and name
-     *
-     * @param string $view a registered grid view mode
-     * @param string $name
-     * @return \Snowcap\AdminBundle\Datalist\AbstractDatalist
-     */
-    protected function createDatalist($view, $name)
-    {
-        $datalist = $this->environment->get('snowcap_admin.datalist_factory')->create($view, $name);
-        $datalist->setQueryBuilder($this->getQueryBuilder());
-        $datalist->addAction(
-            'snowcap_admin_content_update',
-            array('code' => $this->getCode()),
-            array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
-        );
-        $datalist->addAction(
-            'snowcap_admin_content_delete',
-            array('code' => $this->getCode()),
-            array('label' => 'content.actions.delete', 'icon' => 'icon-remove')
-        );
-
-        return $datalist;
-    }
-
-    /**
      * Get the default route, to be used in menus
      *
      * @return string

@@ -8,7 +8,7 @@ use Symfony\Component\Form\Exception\MissingOptionsException;
 
 use Snowcap\AdminBundle\Form\DataTransformer\ContentFilterTransformer;
 
-class ContentFilterType extends AbstractType {
+class   ContentFilterType extends AbstractType {
 
     const OPERATOR_EQUAL = '=';
 

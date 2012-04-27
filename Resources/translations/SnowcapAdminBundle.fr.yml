@@ -35,9 +35,18 @@ content:
         save: Sauvegarder
         saveandcontinue: Sauver et continuer
         edit: Modifier
-        delete: Effacer
+        delete:
+          label: Effacer
+          confirm:
+            title: Etes-vous certain de vouloir supprimer ce contenu ?
+            body: Cette opération effacera le contenu à titre définitif
         back: Retour à la liste
         reorder: Réordonner
+        confirm:
+          title: Confirmation
+          body: Etes-vous certains de vouloir effectuer cette action ?
+          confirm: J'en suis certain
+          cancel: Pas sur
 
 wysiwyg:
     browse:
