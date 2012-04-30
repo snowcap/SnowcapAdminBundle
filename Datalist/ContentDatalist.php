@@ -116,6 +116,7 @@ class ContentDatalist extends AbstractDatalist
     {
         $this->paginator = new PaginatorManager();
         $this->paginator->setLimitPerPage($limitPerPage);
+        return $this;
     }
 
     /**

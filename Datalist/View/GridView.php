@@ -2,17 +2,32 @@
 
 namespace Snowcap\AdminBundle\Datalist\View;
 
-class GridView implements DatalistViewInterface {
+use Snowcap\AdminBundle\Exception;
+
+class GridView implements DatalistViewInterface
+{
     protected $columns;
+
     public function add($path, $type = null, $options = array())
     {
-        if($type === null) {
+        if ($type === null) {
             $type = 'text';
         }
-        if(!isset($options['label'])) {
+        if (!isset($options['label'])) {
             $options['label'] = ucfirst($path);
         }
-        $this->columns[]= array(
+        if ($type === 'text') {
+            //nothing special
+        }
+        elseif ($type === 'label') {
+            if(!isset($options['mappings'])) {
+                throw new Exception('The "mappings" option is needed for label columns');
+            }
+        }
+        else {
+            throw new Exception(sprintf('Unknown type "%s" for datalist %s', $type, get_class($this)));
+        }
+        $this->columns[] = array(
             'path' => $path,
             'type' => $type,
             'options' => $options
@@ -24,7 +39,8 @@ class GridView implements DatalistViewInterface {
         return 'grid';
     }
 
-    public function getColumns(){
+    public function getColumns()
+    {
         return $this->columns;
     }
 

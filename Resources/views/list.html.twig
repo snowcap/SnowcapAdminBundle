@@ -34,8 +34,10 @@
     <td>{{ list_value(data_row, column.path, column.options) }}</td>
 {% endblock %}
 
-{% block grid_cell_image %}
-    <td><img src="/{{ list_value(data_row, column.path, column.options) }}"/></td>
+{% block grid_cell_label %}
+    {% set mappings = column.options.mappings %}
+    {% set value = list_value(data_row, column.path, column.options) %}
+    <td><span class="label label-{{ mappings[value][1] }}">{{ mappings[value][0]|trans }}</span></td>
 {% endblock %}
 
 {# thumbnail view #}
