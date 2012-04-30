@@ -2,10 +2,13 @@
 namespace Snowcap\AdminBundle\Admin;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormBuilder;
 
 use Snowcap\AdminBundle\Exception;
+use Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs;
 
 /**
  * Content admin class
@@ -189,40 +192,40 @@ abstract class ContentAdmin extends AbstractAdmin
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
      * @param $entity
      */
-    public function prePersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
+    public function prePersist(LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
      * @param $entity
      */
-    public function postPersist(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
+    public function postPersist(LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
      * @param $entity
      */
-    public function preUpdate(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
+    public function preUpdate(LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
      * @param $entity
      */
-    public function postUpdate(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
+    public function postUpdate(LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
      * @param $entity
      */
-    public function postRemove(\Doctrine\ORM\Event\LifecycleEventArgs $ea, $entity) {}
+    public function postRemove(LifecycleEventArgs $ea, $entity) {}
 
     /**
      * @param \Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs
      */
-    public function loadClassMetadata(\Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs) {}
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs) {}
 
     /**
-     * @param PreFlushEventArgs $ea
-     * @param $entities
+     * @param \Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs $ea
+     * @param array $entities
      */
-    public function preFlush($ea, $entities) {}
+    public function preFlush(PreFlushEventArgs $ea, $entities) {}
 }
