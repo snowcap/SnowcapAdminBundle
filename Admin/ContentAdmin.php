@@ -184,8 +184,27 @@ abstract class ContentAdmin extends AbstractAdmin
                 'confirm_body' => 'content.actions.delete.confirm.body',
             )
         );
-
         return $datalist;
+    }
+
+    /**
+     * Create a pre-configured search form builder
+     *
+     * @return FormBuilder
+     */
+    protected function createSearchFormBuilder()
+    {
+        return $this->environment->get('form.factory')->createNamedBuilder('form', 'search', null, array('virtual' => true));
+    }
+
+    /**
+     * Create a pre-configured filter form builder
+     *
+     * @return FormBuilder
+     */
+    protected function createFilterFormBuilder()
+    {
+        return $this->environment->get('form.factory')->createNamedBuilder('form', 'filters', null, array('virtual' => true));
     }
 
     /**
