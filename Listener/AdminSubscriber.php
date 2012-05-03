@@ -28,7 +28,9 @@ class AdminSubscriber implements EventSubscriber
 
         $admins = $this->adminEnvironment->getAdmins();
         foreach ($admins as $admin) {
-            $this->entityMapping[$admin->getParam('entity_class')] = $admin;
+            if($admin instanceof \Snowcap\AdminBundle\Admin\ContentAdmin) {
+                $this->entityMapping[$admin->getParam('entity_class')] = $admin;
+            }
         }
     }
 
