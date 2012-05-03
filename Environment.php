@@ -13,7 +13,7 @@ class Environment extends ContainerAware
     /**
      * @var array
      */
-    private $admins;
+    private $admins = array();
 
     /**
      * @var string
