@@ -143,10 +143,12 @@ class AdminExtension extends \Twig_Extension
         }
         else {
             $propertyPath = new PropertyPath($path);
-            $value = $propertyPath->getValue($data);
-        }
-        if($value === null) {
-            $value = $this->adminEnvironment->get('translator')->trans('data.emptyvalue', array(), 'SnowcapAdminBundle');
+            try {
+                $value = $propertyPath->getValue($data);
+            }
+            catch (UnexpectedTypeException $e) {
+                // do nothing
+            }
         }
         return $value;
     }

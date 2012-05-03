@@ -31,7 +31,24 @@
 {% endblock %}
 
 {% block grid_cell_text %}
-    <td>{{ list_value(data_row, column.path, column.options) }}</td>
+    <td>
+        {% set value = list_value(data_row, column.path, column.options) %}
+        {% if value is not null %}
+            {{ value  }}
+        {% else %}
+            <span class="emptyvalue">{{ "data.emptyvalue"|trans({}, 'SnowcapAdminBundle') }}</span>
+        {% endif %}
+{% endblock %}
+
+{% block grid_cell_datetime %}
+    <td>
+        {% set value = list_value(data_row, column.path, column.options) %}
+        {% if value is not null %}
+            {{ value|date(column.options.format)  }}
+        {% else %}
+            <span class="emptyvalue">{{ "data.emptyvalue"|trans({}, 'SnowcapAdminBundle') }}</span>
+        {% endif %}
+    </td>
 {% endblock %}
 
 {% block grid_cell_label %}

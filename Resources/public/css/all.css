@@ -129,7 +129,7 @@ fieldset {
  * Grid fine-tuning
  */
 
-.table .untranslated {
+.table .untranslated, .table .emptyvalue {
     color: #999;
 }
 /**

@@ -19,6 +19,11 @@ class GridView implements DatalistViewInterface
         if ($type === 'text') {
             //nothing special
         }
+        elseif($type === 'datetime') {
+            if(!isset($options['format'])) {
+                $options['format'] = 'd/m/Y H:i:s';
+            }
+        }
         elseif ($type === 'label') {
             if(!isset($options['mappings'])) {
                 throw new Exception('The "mappings" option is needed for label columns');
