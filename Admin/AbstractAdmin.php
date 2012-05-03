@@ -58,7 +58,7 @@ abstract class AbstractAdmin
     public function getParam($paramName)
     {
         if (!array_key_exists($paramName, $this->params)) {
-            throw new Exception(sprintf('The admin section %s must have a %s parameter', $this->getCode(), $paramName), Exception::SECTION_INVALID);
+            throw new Exception(sprintf('The admin section %s must have a %s parameter', $this->getCode(), $paramName));
         }
         return $this->params[$paramName];
     }
@@ -72,7 +72,7 @@ abstract class AbstractAdmin
     protected function validateParams(array $params)
     {
         if (!array_key_exists('label', $params)) {
-            throw new Exception(sprintf('The admin section %s must be configured with a "label" parameter', $this->getCode()), Exception::SECTION_INVALID);
+            throw new Exception(sprintf('The admin section %s must be configured with a "label" parameter', $this->getCode()));
         }
     }
 
