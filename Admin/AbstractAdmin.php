@@ -64,6 +64,17 @@ abstract class AbstractAdmin
     }
 
     /**
+     * Check the existence of a param
+     *
+     * @param string $paramName
+     * @return bool
+     */
+    public function hasParam($paramName)
+    {
+        return isset($this->params[$paramName]);
+    }
+
+    /**
      * Validate the admin params - to be overriden in child classes
      *
      * @param array $params
@@ -96,5 +107,14 @@ abstract class AbstractAdmin
      * @return string
      */
     abstract public function getDefaultRoute();
+
+    /**
+     * Get the default route params, to be used in menus
+     *
+     * @return array
+     */
+    public function getDefaultRouteParams() {
+        return array();
+    }
 
 }

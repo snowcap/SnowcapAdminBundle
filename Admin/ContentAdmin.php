@@ -247,4 +247,13 @@ abstract class ContentAdmin extends AbstractAdmin
      * @param array $entities
      */
     public function preFlush(PreFlushEventArgs $ea, $entities) {}
+
+    /**
+     * @return array
+     */
+    public function getDefaultRouteParams()
+    {
+        return array('code' => $this->getCode());
+    }
+
 }

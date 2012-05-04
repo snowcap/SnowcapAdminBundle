@@ -42,7 +42,7 @@ class Environment extends ContainerAware
      * Get the admin instance for the provided code
      *
      * @param string $code
-     * @return \Snowcap\AdminBundle\Admin\Base
+     * @return \Snowcap\AdminBundle\Admin\AbstractAdmin
      */
     public function getAdmin($code)
     {
