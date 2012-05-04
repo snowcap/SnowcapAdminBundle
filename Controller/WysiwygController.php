@@ -2,7 +2,6 @@
 
 namespace Snowcap\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -15,7 +14,7 @@ use Snowcap\AdminBundle\Entity\File;
  * Provides controller to manage wysiwyg related content
  *
  */
-class WysiwygController extends Controller
+class WysiwygController extends BaseController
 {
     /**
      * @return array

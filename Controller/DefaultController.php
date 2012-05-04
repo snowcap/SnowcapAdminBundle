@@ -1,7 +1,6 @@
 <?php
 namespace Snowcap\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  * admin users, and provides a few utilities methods for interface purposes
  * 
  */
-class DefaultController extends Controller
+class DefaultController extends BaseController
 {
     /**
      * Admin default action

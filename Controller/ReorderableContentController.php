@@ -1,7 +1,6 @@
 <?php
 namespace Snowcap\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
@@ -10,7 +9,7 @@ use Snowcap\AdminBundle\Admin\ContentAdmin;
  * This controller provides basic CRUD capabilities for content models
  *
  */
-class ReorderableContentController extends Controller
+class ReorderableContentController extends BaseController
 {
     /**
      * Create a new content entity

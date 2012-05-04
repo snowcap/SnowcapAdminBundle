@@ -1,13 +1,11 @@
 <?php
 namespace Snowcap\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Util\PropertyPath;
-
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 
@@ -15,7 +13,7 @@ use Snowcap\AdminBundle\Admin\ContentAdmin;
  * This controller provides basic CRUD capabilities for content models
  *
  */
-class InlineContentController extends Controller
+class InlineContentController extends BaseController
 {
     /**
      * Create a new content entity
