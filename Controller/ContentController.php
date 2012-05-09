@@ -91,6 +91,7 @@ class ContentController extends BaseController
             if ($forms->isValid()) {
                 $admin->saveEntity($entity);
                 if ($admin->isTranslatable()) {
+                    $entity->getTranslations()->set($translationEntity->getLocale(), $translationEntity);
                     $admin->saveTranslationEntity($entity, $translationEntity);
                 }
                 $admin->flush();
