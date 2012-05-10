@@ -31,13 +31,16 @@ class WysiwygController extends BaseController
         $builder = $this->get('form.factory')->createBuilder('search')->add('name', 'text');
         $searchForm = $builder->getForm();
 
+        $file = new File();
+        $uploadForm = $this->createForm(new FileType(), $file);
+        $extraParameters = array();
+
         /** @var $list \Snowcap\AdminBundle\Datalist\ContentDatalist */
         $list = $this->get('snowcap_admin.datalist_factory')->create('thumbnail', 'browser');
         $list
             ->add('path', 'image')
             ->add('name', 'label')
-            ->add('tags', 'description')
-        ;
+            ->add('tags', 'description');
 
         /** @var $em \Doctrine\ORM\EntityManager */
         $em = $this->getDoctrine()->getEntityManager();
@@ -45,57 +48,42 @@ class WysiwygController extends BaseController
         $queryBuilder->select('f')->from('SnowcapAdminBundle:File', 'f');
 
         $list->setQueryBuilder($queryBuilder);
-        //$list->paginate(2);
 
-        if ('POST' === $request->getMethod() && $request->get('search') !== null) {
-            $searchForm->bindRequest($this->get('request'));
-            $searchData = $searchForm->getData();
-            $filters = array(
-                'name' => array(
-                    'field' => 'f.name',
-                    'operator' => 'LIKE',
-                    'value' => $searchData['name'],
-                ),
-                'tags' => array(
-                    'field' => 'f.tags',
-                    'operator' => 'LIKE',
-                    'value' => $searchData['name']
-                )
-            );
-            $list->filterData($filters, 'OR');
-        }
 
-        return array('searchForm' => $searchForm->createView(), 'list' => $list, 'arguments' => $arguments);
-    }
+        if ('POST' === $request->getMethod()) {
+            // Manage search post
+            if ($request->get('search') !== null) {
+                $searchForm->bindRequest($this->get('request'));
+                $searchData = $searchForm->getData();
+                $filters = array(
+                    'name' => array(
+                        'field' => 'f.name',
+                        'operator' => 'LIKE',
+                        'value' => $searchData['name'],
+                    ),
+                    'tags' => array(
+                        'field' => 'f.tags',
+                        'operator' => 'LIKE',
+                        'value' => $searchData['name']
+                    )
+                );
+                $list->filterData($filters, 'OR');
+            }
+            // Manage upload post
+            if ($request->get('admin_snowcap_file') !== null) {
+                $uploadForm->bindRequest($request);
+                if ($uploadForm->isValid()) {
+                    /** @var $em \Doctrine\ORM\EntityManager */
+                    $em = $this->getDoctrine()->getEntityManager();
+                    $em->persist($file);
+                    $em->flush();
 
-    /**
-     * @return array
-     *
-     * @Template()
-     */
-    public function uploadAction()
-    {
-        $request = $this->get('request');
-
-        parse_str($this->getRequest()->getQueryString(), $arguments);
-
-        $file = new File();
-        $form = $this->createForm(new FileType(), $file);
-
-        if ('POST' === $request->getMethod() && $request->get('admin_snowcap_file') !== null) {
-            $form->bindRequest($request);
-            if ($form->isValid()) {
-                /** @var $em \Doctrine\ORM\EntityManager */
-                $em = $this->getDoctrine()->getEntityManager();
-                $em->persist($file);
-                $em->flush();
-
-                return array('form' => $form->createView(), 'url' => $file->getPath(), 'arguments' => $arguments);
+                    $extraParameters = array('url' => $file->getPath());
+                }
             }
         }
-        return array('form' => $form->createView(), 'arguments' => $arguments);
 
-
+        return array_merge(array('searchForm' => $searchForm->createView(), 'uploadForm' => $uploadForm->createView(), 'list' => $list, 'arguments' => $arguments), $extraParameters);
     }
 
 }

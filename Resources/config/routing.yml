@@ -44,6 +44,3 @@ snowcap_admin_switch_locale:
 snowcap_admin_wysiwyg_browser:
     pattern: /wysiwyg/browser
     defaults: { _controller: SnowcapAdminBundle:Wysiwyg:browser }
-snowcap_admin_wysiwyg_upload:
-    pattern: /wysiwyg/upload
-    defaults: { _controller: SnowcapAdminBundle:Wysiwyg:upload }

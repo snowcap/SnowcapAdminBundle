@@ -17,7 +17,7 @@
             {% endfor %}
             <div class="wysiwyg-browser">
                 {% block body %}
-                    {% render 'SnowcapAdminBundle:Wysiwyg:upload' %}
+                    {% include 'SnowcapAdminBundle:Wysiwyg:upload.html.twig' with {'form': uploadForm } %}
                     <h2>{{ "wysiwyg.browse.title"|trans({}, 'SnowcapAdminBundle') }}</h2>
                     <hr/>
                     {% if searchForm is defined and (list.data is not empty or searchForm.vars.value is not empty) %}
