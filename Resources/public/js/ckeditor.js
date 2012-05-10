@@ -72,6 +72,7 @@ jQuery(document).ready(function ($) {
      * Common config options
      */
     var wysiwygConfig = {
+        'entities': false,
         'language': $('html').attr('lang'),
         'skin':'BootstrapCK-Skin',
         'toolbar_Full':[
