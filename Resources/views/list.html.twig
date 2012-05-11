@@ -84,9 +84,9 @@
 {% block list_thumbnail_visual %}
     {% if(list.view.image is defined) %}
         {% set image_src = list_value(data_row, list.view.image.path, list.view.image.options) %}
-        <img src="{{ image_src|imresize('admin_thumb') }}" data-src="{{ asset(image_src) }}"/>
+        <img src="{{ image_src|imresize('admin_thumb') }}" data-src="{{ asset(image_src) }}" alt="Caption"/>
     {% else %}
-        <img src="http://placehold.it/260x180"/>
+        <img src="http://placehold.it/260x180" alt="Caption"/>
     {% endif %}
 {% endblock %}
 
