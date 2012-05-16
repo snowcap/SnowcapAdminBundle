@@ -53,6 +53,7 @@ class AdminExtension extends \Twig_Extension
             'list_widget' => new \Twig_Function_Method($this, 'renderList', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'list_value' => new \Twig_Function_Method($this, 'listValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'preview_value' => new \Twig_Function_Method($this, 'previewValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
+            'is_array'  => new \Twig_Function_Method($this, 'is_array', array()),
         );
     }
 
@@ -104,6 +105,17 @@ class AdminExtension extends \Twig_Extension
     public function previewValue($entity, $path)
     {
         return $this->getDataValue($entity, $path);
+    }
+
+    /**
+     * Not obvious ? :)
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function is_array($value)
+    {
+        return is_array($value);
     }
 
     /**

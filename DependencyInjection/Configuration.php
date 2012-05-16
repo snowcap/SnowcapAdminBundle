@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('bundle')->end()
+                ->arrayNode('translation_catalogues')->prototype('scalar')->end()->end()
                 ->arrayNode('sections')
                     ->useAttributeAsKey('key')
                     ->prototype('variable')->end()

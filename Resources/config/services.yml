@@ -1,6 +1,7 @@
 parameters:
   sections: ~
   bundle: ~
+  translation_catalogues: ~
 
 services:
   snowcap_admin:
@@ -9,6 +10,7 @@ services:
     calls:
         - [setContainer, [ @service_container ]]
         - [setBundle, [ %bundle% ]]
+        - [setTranslationCatalogues, [ %translation_catalogues% ]]
 
   # subscriber for activating admin classes shortcuts
   snowcap_admin.admin_subscriber:

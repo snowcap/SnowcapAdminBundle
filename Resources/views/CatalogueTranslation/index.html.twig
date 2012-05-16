@@ -1,0 +1,60 @@
+{% macro element(key, value, level, parent) %}
+
+    {% if is_array(value) %}
+        <h{{ level }} class="level-header">{{ key }}</h{{level}}>
+        {% for subkey, subvalue in value %}
+            <ul class="level{{ level }} {% if level == 3 %} well{%endif%}" >
+                {{ _self.element(subkey, subvalue, (level+1), parent ~ '[' ~ key ~ ']')}}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <li>
+            <div class="row-fluid">
+                <div class="span2">{{ key }}</div>
+                <div class="span9"><input class="span9" type="text" name="data{{ parent }}[{{ key }}]" value="{{ value }}" /></div>
+            </div>
+        </li>
+    {% endif %}
+{% endmacro %}
+{% set active_locales = get_active_locales(_locale) %}
+{% extends "SnowcapAdminBundle::base.html.twig" %}
+{% block body %}
+    <div class="page-header">
+        <h2>{{ 'cataloguetranslation.title' | trans({}, 'SnowcapAdminBundle') }}</h2>
+    </div>
+
+    <div class="row">
+        <div class="span2 well">
+            {% for catalogue, languages in catalogues %}
+                <h4>{{ catalogue }}</h4>
+                {% for language, content in languages %}
+                    {% if activeCatalogueName == catalogue and activeCatalogueLocale == language %}
+                        {{ active_locales[language] }}<br/>
+                    {% else %}
+                        <a href=" {{ path('snowcap_admin_cataloguetranslation_index', { 'catalogue': catalogue, 'locale': language})}}">{{ active_locales[language] }}</a><br/>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="span9 catalogue-translation">
+
+            <form method="post">
+
+            {% for key, element in activeCatalogue %}
+                {{ _self.element(key, element, 3)}}
+            {% else %}
+                {{ 'cataloguetranslation.novalues' | trans({}, 'SnowcapAdminBundle') }}
+            {% endfor %}
+
+            {% if is_array(activeCatalogue) and (activeCatalogue | length) > 0 %}
+                <div class="form-actions">
+                    <input type="submit" class="btn" value="{{ 'cataloguetranslation.submit' | trans({}, 'SnowcapAdminBundle') }}" />
+                </div>
+            {% endif %}
+
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}

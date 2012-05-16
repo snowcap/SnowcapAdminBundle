@@ -1,5 +1,6 @@
 navigation:
     link: Manage %type%
+    interfacecontent: Interface content
 
 content:
     list:
@@ -70,3 +71,9 @@ project:
 
 data:
     emptyvalue: ---
+
+cataloguetranslation:
+    title: Interface content
+    submit: Update
+    success: Your content has been updated.
+    novalues: No translation keys have been defined for this language yet.

@@ -31,5 +31,10 @@ class SnowcapAdminExtension extends Extension
         foreach (array('sections','bundle') as $attribute) {
             $container->setParameter($attribute , $config[$attribute]);
         }
+
+        if(array_key_exists('translation_catalogues', $config)) {
+            $container->setParameter('translation_catalogues', $config['translation_catalogues']);
+        }
+
     }
 }

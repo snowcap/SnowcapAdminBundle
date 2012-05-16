@@ -1,5 +1,6 @@
 navigation:
     link: Gestion %type%
+    interfacecontent: Contenu d'interface
 
 content:
     list:
@@ -70,3 +71,9 @@ project:
 
 data:
     emptyvalue: ---
+
+cataloguetranslation:
+    title: Contenu d'interface
+    submit: Sauvegarder
+    success: Le contenu a bien été mis à jour.
+    novalues: Aucune clé de traduction n'a encore été définie pour cette langue.

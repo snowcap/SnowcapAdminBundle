@@ -31,6 +31,12 @@
                             {{ _self.menu_item(admin) }}
                         {% endfor %}
 
+                        {% if hasTranslationCatalogues %}
+                            <li>
+                                <a href="{{ path('snowcap_admin_cataloguetranslation_index')}}">{{ 'navigation.interfacecontent' | trans({}, 'SnowcapAdminBundle') }}</a>
+                            </li>
+                        {% endif %}
+
                     {% endblock main_nav %}
 
                 </ul>

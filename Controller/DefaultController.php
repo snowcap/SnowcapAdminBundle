@@ -35,7 +35,10 @@ class DefaultController extends BaseController
      */
     public function navigationAction() {
 
-        return array('sections' => $this->get('snowcap_admin')->getAdmins());
+        return array(
+            'sections' => $this->get('snowcap_admin')->getAdmins(),
+            'hasTranslationCatalogues' => $this->get('snowcap_admin')->hasTranslationCatalogues(),
+        );
     }
 
     public function markdownAction() {

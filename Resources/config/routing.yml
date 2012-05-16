@@ -44,3 +44,8 @@ snowcap_admin_switch_locale:
 snowcap_admin_wysiwyg_browser:
     pattern: /wysiwyg/browser
     defaults: { _controller: SnowcapAdminBundle:Wysiwyg:browser }
+
+# Translatable catalogues routes
+snowcap_admin_cataloguetranslation_index:
+    pattern: /catalogue-translation/{catalogue}/{locale}
+    defaults: { _controller: SnowcapAdminBundle:CatalogueTranslation:index, catalogue: messages, locale: null }

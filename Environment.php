@@ -21,6 +21,11 @@ class Environment extends ContainerAware
     private $bundle;
 
     /**
+     * @var array
+     */
+    private $translationCatalogues;
+
+    /**
      * @var string
      */
     private $workingLocale = null;
@@ -129,5 +134,28 @@ class Environment extends ContainerAware
         return $this->workingLocale;
     }
 
+    /**
+     * Sets a list of translation catalogues to use in admin
+     * Format sounds like namespace\bundle\catalogname
+     *
+     * @param array $translationCatalogues
+     */
+    public function setTranslationCatalogues($translationCatalogues)
+    {
+        $this->translationCatalogues = $translationCatalogues;
+    }
 
+    /**
+     * @return array
+     */
+    public function getTranslationCatalogues() {
+        return $this->translationCatalogues;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTranslationCatalogues() {
+        return (count($this->translationCatalogues) > 0);
+    }
 }
