@@ -77,3 +77,33 @@ cataloguetranslation:
     submit: Sauvegarder
     success: Le contenu a bien été mis à jour.
     novalues: Aucune clé de traduction n'a encore été définie pour cette langue.
+    help:
+        button: Aide
+        title: Aide
+        introduction: |
+          Cette rubrique reprend tous les contenus nécéssaires à l'interface du site, comme un titre de page ou un message de confirmation.<br/>
+          La plupart de ces champs sont des textes simples, mais certains champs contiennent des particularités pour satisfaire des besoins spécifiques:
+        example: Exemple
+        dynamic:
+            title: Valeurs dynamiques
+            description: |
+              Certaines traductions contiennent des valeurs dynamiques<br/>
+              Ces valeurs sont définies en les entourant du caractère '<strong>%</strong>'.<br/>
+              Il ne faut pas les traduire puisqu'elles représentent une clé et non le texte définitif.
+            example: |
+              <code>Hello %firstname% %lastname%</code><br/>
+              se traduit par<br/>
+              <code>Bonjour %firstname% %lastname%</code><br/>
+        plural:
+            title: Pluralisation
+            description: |
+              Certaines traductions dépendent d'un nombre donné<br/>
+              Elles peuvent répondre aux différents cas des figure.<br/>
+              Il ne faut donc pas modifier la stucture de la phrase, uniquement les mots traduisibles
+            example: |
+              Une traduction d'un résultat d'une recherche pourrait afficher, dependemment du nombre de résultats:<br/>
+              <strong>"Aucun résultat", "1 résultat", "x résultats"</strong><br/><br/>
+              Une syntaxe spéciale est alors prise en compte:<br/>
+              <code>{0}No results|{1}1 result|]1,Inf]%count% results</code><br/>
+              se traduit par<br/>
+              <code>{0}Aucun résultat|{1}1 résultat|]1,Inf]%count% résultats</code><br/>

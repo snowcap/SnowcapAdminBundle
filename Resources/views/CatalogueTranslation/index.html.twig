@@ -19,22 +19,28 @@
 {% set active_locales = get_active_locales(_locale) %}
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 {% block body %}
-    <div class="page-header">
+
+<a data-toggle="modal" href="#catalog-translation-help-modal" class="btn btn-info pull-right"><i class="icon-question-sign icon-white"></i>&nbsp;{{ 'cataloguetranslation.help.button' | trans({}, 'SnowcapAdminBundle') }}</a>
+
+<div class="page-header">
         <h2>{{ 'cataloguetranslation.title' | trans({}, 'SnowcapAdminBundle') }}</h2>
     </div>
 
     <div class="row">
-        <div class="span2 well">
-            {% for catalogue, languages in catalogues %}
-                <h4>{{ catalogue }}</h4>
-                {% for language, content in languages %}
-                    {% if activeCatalogueName == catalogue and activeCatalogueLocale == language %}
-                        {{ active_locales[language] }}<br/>
-                    {% else %}
-                        <a href=" {{ path('snowcap_admin_cataloguetranslation_index', { 'catalogue': catalogue, 'locale': language})}}">{{ active_locales[language] }}</a><br/>
-                    {% endif %}
+        <div class="span3">
+            <div class="well">
+                {% for catalogue, languages in catalogues %}
+                    <h4>{{ catalogue }}</h4>
+                    {% for language, content in languages %}
+                        {% if activeCatalogueName == catalogue and activeCatalogueLocale == language %}
+                            {{ active_locales[language] }}<br/>
+                        {% else %}
+                            <a href=" {{ path('snowcap_admin_cataloguetranslation_index', { 'catalogue': catalogue, 'locale': language})}}">{{ active_locales[language] }}</a><br/>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
+            </div>
+
         </div>
         <div class="span9 catalogue-translation">
 
@@ -54,6 +60,35 @@
 
             </form>
 
+        </div>
+    </div>
+
+    <div id="catalog-translation-help-modal" class="modal hide fade span10">
+
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>{{ 'cataloguetranslation.help.title' | trans({}, 'SnowcapAdminBundle') }}</h3>
+        </div>
+        <div class="modal-body">
+
+            <p>{{ ('cataloguetranslation.help.introduction') | trans({}, 'SnowcapAdminBundle') | raw}}</p>
+
+            {% set helptopics = ['dynamic', 'plural'] %}
+            {% for helptopic in helptopics %}
+
+            <h4>{{ ('cataloguetranslation.help.' ~ helptopic ~ '.title') | trans({}, 'SnowcapAdminBundle') }}</h4>
+
+            {{ ('cataloguetranslation.help.' ~ helptopic ~ '.description') | trans({}, 'SnowcapAdminBundle') | raw}}
+
+            <br/><br/>
+
+            <h5>{{ 'cataloguetranslation.help.example' | trans({}, 'SnowcapAdminBundle') }}</h5>
+            <div class="alert alert-info">
+                {{ ('cataloguetranslation.help.' ~ helptopic ~ '.example') | trans({}, 'SnowcapAdminBundle') | raw }}
+            </div>
+
+            <br/>
+            {% endfor %}
         </div>
     </div>
 

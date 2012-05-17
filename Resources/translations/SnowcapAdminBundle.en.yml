@@ -77,3 +77,33 @@ cataloguetranslation:
     submit: Update
     success: Your content has been updated.
     novalues: No translation keys have been defined for this language yet.
+    help:
+        button: Help
+        title: Help
+        introduction: |
+          This menu contains all the content needed for the website interface, like the title of a page or a confirmation message.<br/>
+          Most of those fields are plain text, but some contains particularities to fit some special needs:
+        example: Example
+        dynamic:
+            title: Dynamic values
+            description: |
+              Some translations contains dynamic values<br/>
+              Those values are surrounded by the '<strong>%</strong>' character.<br/>
+              They don't need to be translated since there are keys, not the final text.
+            example: |
+              <code>Hello %firstname% %lastname%</code><br/>
+              can be translated by<br/>
+              <code>Bonjour %firstname% %lastname%</code><br/>
+        plural:
+            title: Pluralization
+            description: |
+              Some translations depends on a given number<br/>
+              They can answer to different cases.<br/>
+              The structure must therefore stay the same, only the text within needs to be translated
+            example: |
+              Translating a search result could show, depending on the amount of results found:<br/>
+              <strong>"No results", "1 result", "x results"</strong><br/><br/>
+              A specific syntax is then taken into account:<br/>
+              <code>{0}No results|{1}1 result|]1,Inf]%count% results</code><br/>
+              can be translated by<br/>
+              <code>{0}Aucun résultat|{1}1 résultat|]1,Inf]%count% résultats</code><br/>
