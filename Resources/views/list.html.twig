@@ -34,7 +34,7 @@
     <td>
         {% set value = list_value(data_row, column.path, column.options) %}
         {% if value is not null %}
-            {{ value  }}
+            {{ value | raw }}
         {% else %}
             <span class="emptyvalue">{{ "data.emptyvalue"|trans({}, 'SnowcapAdminBundle') }}</span>
         {% endif %}
