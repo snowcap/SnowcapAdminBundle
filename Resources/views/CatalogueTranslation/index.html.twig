@@ -1,17 +1,19 @@
-{% macro element(key, value, level, parent) %}
-
+{% macro element(key, value, level, parent, fallback) %}
     {% if is_array(value) %}
         <h{{ level }} class="level-header">{{ key }}</h{{level}}>
         {% for subkey, subvalue in value %}
             <ul class="level{{ level }} {% if level == 3 %} well{%endif%}" >
-                {{ _self.element(subkey, subvalue, (level+1), parent ~ '[' ~ key ~ ']')}}
+                {{ _self.element(subkey, subvalue, (level+1), parent ~ '[' ~ key ~ ']', fallback[subkey])}}
             </ul>
         {% endfor %}
     {% else %}
         <li>
             <div class="row-fluid">
                 <div class="span2">{{ key }}</div>
-                <div class="span9"><input class="span9" type="text" name="data{{ parent }}[{{ key }}]" value="{{ value }}" /></div>
+                <div class="span9">
+                    <input class="span9" type="text" name="data{{ parent }}[{{ key }}]" value="{{ value }}" />
+                    <p class="help-block">{{ fallback }}</p>
+                </div>
             </div>
         </li>
     {% endif %}
@@ -47,7 +49,7 @@
             <form method="post">
 
             {% for key, element in activeCatalogue %}
-                {{ _self.element(key, element, 3)}}
+                {{ _self.element(key, element, 3, null, fallbackCatalogue[key])}}
             {% else %}
                 {{ 'cataloguetranslation.novalues' | trans({}, 'SnowcapAdminBundle') }}
             {% endfor %}

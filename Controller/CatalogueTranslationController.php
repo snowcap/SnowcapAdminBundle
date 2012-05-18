@@ -27,6 +27,8 @@ class CatalogueTranslationController extends BaseController
         }
 
         $locales = $admin->getLocales();
+        $fallbackLocale = $locales[0];
+
         $catalogueReferences = $admin->getTranslationCatalogues();
 
         /** Getting all source catalogues */
@@ -46,6 +48,13 @@ class CatalogueTranslationController extends BaseController
         /** Setting the active one */
         $activeCatalogue = $catalogues[$catalogue][$locale];
 
+        /** Setting the fallback one */
+        if($locale !== $fallbackLocale) {
+            $fallbackCatalogue = $this->mergeSourceAndGenerated($catalogue, $catalogues[$catalogue][$fallbackLocale], $fallbackLocale);
+        } else {
+            $fallbackCatalogue = array();
+        }
+
         /** (re)Generating a yaml with the computed differences from the source catalogue */
         if ($this->getRequest()->getMethod() === 'POST') {
             $data = $this->getRequest()->get('data');
@@ -58,20 +67,40 @@ class CatalogueTranslationController extends BaseController
             $this->setFlash('success','cataloguetranslation.success');
         }
 
-        /** Merging source and generated catalogue to show the full computed values */
-        $filePath = $this->getGeneratedCataloguePath($catalogue, $locale);
-        if (file_exists($filePath)) {
-            $generatedYaml = $yaml->parse(file_get_contents($filePath));
-            $activeCatalogue = $this->merge($activeCatalogue, $generatedYaml);
-        }
+        /** merging after the post to prevent persisting source values in the generated one */
+        $activeCatalogue = $this->mergeSourceAndGenerated($catalogue, $activeCatalogue, $locale);
 
         return array(
             'activeCatalogue' => $activeCatalogue,
             'activeCatalogueName' => $catalogue,
             'activeCatalogueLocale' => $locale,
             'catalogues' => $catalogues,
+            'fallbackCatalogue' => $fallbackCatalogue,
         );
     }
+
+
+
+    /**
+     * Merges source and generated catalogue to get the full computed values
+     *
+     * @param $catalogueName
+     * @param $catalogue
+     * @param $locale
+     * @return array|mixed
+     */
+    private function mergeSourceAndGenerated($catalogueName, $catalogue, $locale)
+    {
+        $yaml = new Yaml();
+        $filePath = $this->getGeneratedCataloguePath($catalogueName, $locale);
+        if (file_exists($filePath)) {
+            $generatedYaml = $yaml->parse(file_get_contents($filePath));
+            return $this->merge($catalogue, $generatedYaml);
+        } else {
+            return $catalogue;
+        }
+    }
+
 
     /**
      * Returns an array with the differences of the multi array b compared to multi array a
@@ -165,5 +194,4 @@ class CatalogueTranslationController extends BaseController
     {
         return $this->get('kernel');
     }
-
 }
