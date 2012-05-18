@@ -11,7 +11,7 @@
             <div class="row-fluid">
                 <div class="span2">{{ key }}</div>
                 <div class="span9">
-                    <input class="span9" type="text" name="data{{ parent }}[{{ key }}]" value="{{ value }}" />
+                    <textarea rows="1" class="span9" name="data{{ parent }}[{{ key }}]">{{ value }}</textarea>
                     <p class="help-block">{{ fallback }}</p>
                 </div>
             </div>

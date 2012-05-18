@@ -311,4 +311,8 @@ jQuery(document).ready(function ($) {
             modal.modal('show');
         });
     });
+
+    // autosize for textareas
+    $('.catalogue-translation textarea').autosize();
+
 });
