@@ -126,5 +126,37 @@ abstract class TranslatableContentAdmin extends ContentAdmin
         parent::deleteEntity($entity);
     }
 
+    public function toString($entity)
+    {
+        $path = $this->toStringPath();
+
+        if($path === null) {
+            return null;
+        }
+
+        $output = "empty value";
+        if(strpos($path, '%locale%') !== false) {
+            $currentLocale = $this->environment->getLocale();
+            $activeLocales = $this->environment->getLocales();
+            $mergedLocales = array_merge(array($currentLocale), array_diff($activeLocales, array($currentLocale)));
+            while(!empty($mergedLocales)) {
+                $testLocale = array_shift($mergedLocales);
+                $propertyPath = new \Symfony\Component\Form\Util\PropertyPath(str_replace('%locale%', $testLocale, $path));
+                try {
+                    $output = $propertyPath->getValue($entity);
+                    break;
+                }
+                catch(UnexpectedTypeException $e) {
+                    // do nothing
+                }
+            }
+        }
+        else {
+            $propertyPath = new PropertyPath($path);
+            $output = $propertyPath->getValue($entity);
+        }
+
+        return $output;
+    }
 
 }

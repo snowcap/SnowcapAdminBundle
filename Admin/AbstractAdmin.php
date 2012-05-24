@@ -117,4 +117,14 @@ abstract class AbstractAdmin
         return array();
     }
 
+    /**
+     * Used to retrieve a __toString on an entity
+     * it must return a propertypath
+     * Example: translations[%locale%].title
+     *
+     * @return string
+     */
+    public function toStringPath() {
+        return null;
+    }
 }

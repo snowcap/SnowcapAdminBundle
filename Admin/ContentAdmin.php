@@ -256,4 +256,18 @@ abstract class ContentAdmin extends AbstractAdmin
         return array('code' => $this->getCode());
     }
 
+    public function toString($entity)
+    {
+        $path = $this->toStringPath();
+
+        if($path === null) {
+            return null;
+        }
+
+        $propertyPath = new PropertyPath($path);
+        $output = $propertyPath->getValue($entity);
+
+        return $output;
+    }
+
 }
