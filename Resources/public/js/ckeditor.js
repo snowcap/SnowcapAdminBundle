@@ -76,7 +76,7 @@ jQuery(document).ready(function ($) {
         'language': $('html').attr('lang'),
         'skin':'BootstrapCK-Skin',
         'toolbar_Full':[
-            ['PasteText', 'Bold', 'Italic', 'RemoveFormat', 'NumberedList', 'BulletedList', 'Blockquote', 'Link', 'Unlink', 'Image', 'Table', 'Styles', 'Source']
+            ['PasteText', 'Bold', 'Italic', 'RemoveFormat', 'NumberedList', 'BulletedList', 'Outdent','Indent', 'CreateDiv', 'Blockquote', 'Link', 'Unlink', 'Image', 'Table', 'HorizontalRule', 'Styles', 'Source']
         ],
         'forcePasteAsPlainText':true,
         'startupOutlineBlocks':true
