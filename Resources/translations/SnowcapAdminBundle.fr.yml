@@ -107,3 +107,36 @@ cataloguetranslation:
               <code>{0}No results|{1}1 result|]1,Inf]%count% results</code><br/>
               se traduit par<br/>
               <code>{0}Aucun résultat|{1}1 résultat|]1,Inf]%count% résultats</code><br/>
+
+dashboard:
+    introduction: |
+        Bienvenue sur le module d'administration du site.<br/>
+        Cette interface vous permet de créer, modifier ou supprimer du contenu.<br/>
+        Pour toute question ou problème, vous pouvez créer un ticket sur la <a href="http://redmine.snowcap.be">plateforme de tickets Snowcap</a>,<br/>ou vous pouvez nous contacter à <a href="mailto:shoot@snowcap.be">shoot@snowcap.be</a>
+
+logger:
+    title: Activités récentes
+    empty: Il n'y a actuellement aucune activité enregistrée.
+    heads:
+        date: Date
+        action: Action
+        category: Catégorie
+        description: Description
+        modifications: Modifications
+        author: Auteur
+    actions:
+        create:
+            markup: success
+            label: Nouveau
+        update:
+            markup: info
+            label: Mise à jour
+        delete:
+            markup: important
+            label: Suppression
+
+error:
+    content:
+        notfound:
+            title: Oh! Ce document est introuvable ...
+            message: Le document que vous avez demandé n'existe pas.<br/>Si vous êtes arrivés ici via un lien, il est fort probable que le document a été supprimé.

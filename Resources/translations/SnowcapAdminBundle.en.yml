@@ -107,3 +107,39 @@ cataloguetranslation:
               <code>{0}No results|{1}1 result|]1,Inf]%count% results</code><br/>
               can be translated by<br/>
               <code>{0}Aucun résultat|{1}1 résultat|]1,Inf]%count% résultats</code><br/>
+
+dashboard:
+    introduction: |
+        Welcome on the adminitration module of your website.<br/>
+        This interface allows you to create, edit, adn delete content.<br/>
+        For any question or problem, you can create a ticket on the <a href="http://redmine.snowcap.be">Snowcat ticketing platform</a>,<br/>or you can contact us at <a href="mailto:shoot@snowcap.be">shoot@snowcap.be</a>
+
+logger:
+    title: Recent activity
+    empty: There are actually no recent activities recorded.
+    heads:
+        date: Date
+        action: Action
+        category: Category
+        description: Description
+        modifications: Modifications
+        author: Author
+    actions:
+        create:
+            markup: success
+            label: New
+            inline: created
+        update:
+            markup: info
+            label: Update
+            inline: updated
+        delete:
+            markup: important
+            label: Deletion
+            inline: deleted
+
+error:
+    content:
+        notfound:
+            title: Ow! Unable to find this document ...
+            message: The document you tried to reach doesn't exist.<br/>If you came here through a link, it's more likely that the document has been deleted.

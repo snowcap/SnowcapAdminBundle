@@ -78,3 +78,7 @@ services:
     class: Snowcap\AdminBundle\Datalist\View\ThumbnailView
     tags:
       - { name: snowcap_admin.datalist_view, alias: thumbnail }
+
+  snowcap_admin.logger:
+    class: Snowcap\AdminBundle\Logger\Logger
+    arguments: [@doctrine, @security.context]

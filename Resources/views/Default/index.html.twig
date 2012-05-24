@@ -1,4 +1,75 @@
+{% macro transact(action, type) %}
+{{ ('logger.actions.' ~ action ~ '.' ~ type ) | trans({}, 'SnowcapAdminBundle') }}
+{% endmacro %}
+{% macro trans(string) %}
+{{ string | trans({}, 'SnowcapAdminBundle') | raw }}
+{% endmacro %}
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 {% block body %}
-    <h2>Dashboard</h2>
+<h2 xmlns="http://www.w3.org/1999/html">Dashboard</h2>
+
+    <p>{{ _self.trans('dashboard.introduction') }}</p>
+
+    <h3>{{ _self.trans('logger.title')}}</h3>
+
+
+    <table class="logs table table-striped">
+    <thead>
+        <tr>
+            <th>{{ _self.trans('logger.heads.date')}}</th>
+            <th>{{ _self.trans('logger.heads.action')}}</th>
+            <th>{{ _self.trans('logger.heads.category')}}</th>
+            <th>{{ _self.trans('logger.heads.description')}}</th>
+            <th>{{ _self.trans('logger.heads.modifications')}}</th>
+            <th>{{ _self.trans('logger.heads.author')}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+            <tr>
+                <td>{{ log.createdAt | time_ago }}</td>
+                <td>
+                    <span class="label label-{{ _self.transact(log.action, 'markup') }}">
+                        {{ _self.transact(log.action, 'label') }}
+                    </span>
+                </td>
+                {% if log.type == 'content' %}
+                    <td>
+                        {% if log.action != 'delete' %}<a href="{{ path('snowcap_admin_content_update', {'code':get_admin_for_entity_name(log.params.entity, 'code'), 'id':log.params.entityId})}}">{% endif %}
+                            {{ get_admin_for_entity_name(log.params.entity, 'label') | transchoice(1, {})}}
+                        {% if log.action != 'delete' %}</a>{% endif %}
+                    </td>
+                    <td>
+                        {% if log.action != 'delete' %}<a href="{{ path('snowcap_admin_content_update', {'code':get_admin_for_entity_name(log.params.entity, 'code'), 'id':log.params.entityId})}}">{% endif %}
+                            {{ log.description }}
+                        {% if log.action != 'delete' %}</a>{% endif %}
+                    </td>
+                {% elseif log.type == 'catalog_translation' %}
+                    <td>
+                        <a href="{{ path('snowcap_admin_cataloguetranslation_index', {'catalogue':log.params.catalogue,'locale':log.params.locale})}}">{{ _self.trans('navigation.interfacecontent')}}</a>
+                    </td>
+                    <td>
+                        <a href="{{ path('snowcap_admin_cataloguetranslation_index', {'catalogue':log.params.catalogue,'locale':log.params.locale})}}">{{ log.description }}</a>
+                    </td>
+                {% endif %}
+                <td>
+                    {% if log.diff | length > 0%}
+                    <ul class="unstyled">
+                        {% for key, value in log.diff %}
+                        <li>{{ key | lower | title | trans }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </td>
+                <td>{{ log.username }}</td>
+            </tr>
+        {% else %}
+           <tr>
+               <td colspan="6" class="empty">{{ _self.trans('logger.empty')}}</td>
+           </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+
 {% endblock %}

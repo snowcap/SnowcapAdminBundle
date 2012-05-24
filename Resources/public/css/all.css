@@ -175,3 +175,24 @@ fieldset {
     padding-left: 5px;
     padding-top: 5px;
 }
+
+/**
+ * Logs
+ */
+.logs h5 {
+    float: left;
+}
+.logs ul {
+    float: left;
+    overflow: hidden;
+    margin-left: 5px;
+}
+.logs ul li {
+    float: left;
+}
+.logs ul li:not(:last-child):after {
+    content: ", ";
+}
+.logs td.empty {
+    text-align: center;
+}

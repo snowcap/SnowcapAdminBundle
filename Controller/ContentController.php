@@ -11,6 +11,8 @@ use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Admin\ReorderableAdminInterface;
 use Snowcap\AdminBundle\Admin\CannotDeleteException;
 
+use Snowcap\AdminBundle\Logger\Logger;
+
 /**
  * This controller provides basic CRUD capabilities for content models
  *
@@ -95,6 +97,7 @@ class ContentController extends BaseController
                     $admin->saveTranslationEntity($entity, $translationEntity);
                 }
                 $admin->flush();
+                $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_CREATE, $admin, $entity, $locale);
                 $this->setFlash('success', 'content.create.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
@@ -137,6 +140,11 @@ class ContentController extends BaseController
         $request = $this->get('request');
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         $entity = $admin->findEntity($id);
+
+        if($entity === null) {
+            return $this->renderError('error.content.notfound', 404);
+        }
+
         $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
         $forms->add($form);
@@ -153,6 +161,9 @@ class ContentController extends BaseController
                     $entity->getTranslations()->set($translationEntity->getLocale(), $translationEntity);
                     $admin->saveTranslationEntity($entity, $translationEntity);
                 }
+
+                $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_UPDATE, $admin, $entity, $locale);
+
                 $admin->flush();
                 $this->setFlash('success', 'content.update.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
@@ -191,7 +202,9 @@ class ContentController extends BaseController
     {
         $admin = $this->get('snowcap_admin')->getAdmin($code);
         try {
-            $admin->deleteEntity($admin->findEntity($id));
+            $entity = $admin->findEntity($id);
+            $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_DELETE, $admin, $entity, $this->getRequest()->getLocale());
+            $admin->deleteEntity($entity);
             $admin->flush();
             $this->setFlash('success', 'content.delete.flash.success');
         }

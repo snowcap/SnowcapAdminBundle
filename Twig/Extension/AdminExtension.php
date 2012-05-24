@@ -54,6 +54,18 @@ class AdminExtension extends \Twig_Extension
             'list_value' => new \Twig_Function_Method($this, 'listValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'preview_value' => new \Twig_Function_Method($this, 'previewValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'is_array'  => new \Twig_Function_Method($this, 'is_array', array()),
+            'get_admin_for_entity_name' => new \Twig_Function_Method($this, 'getAdminForEntityName'),
+        );
+    }
+
+    /**
+     * Get all available filters
+     *
+     * @return array
+     */
+    public function getFilters()
+    {
+        return array(
         );
     }
 
@@ -170,5 +182,18 @@ class AdminExtension extends \Twig_Extension
         return 'snowcap_admin';
     }
 
+    public function getAdminForEntityName($namespace, $param = null)
+    {
+        $entity = new $namespace;
+        $admin = $this->adminEnvironment->getAdminForEntity($entity);
+        if($param === 'code') {
+            return $admin->getCode();
+        }
+        elseif($param !== null) {
+            return $admin->getParam($param);
+        } else {
+            return $admin;
+        }
+    }
 
 }

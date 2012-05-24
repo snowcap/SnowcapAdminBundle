@@ -59,13 +59,16 @@ class CatalogueTranslationController extends BaseController
         if ($this->getRequest()->getMethod() === 'POST') {
             $data = $this->getRequest()->get('data');
             $diff = $this->compare($data, $activeCatalogue);
+            $logdiff = $this->compare($yaml->parse(file_get_contents($this->getGeneratedCataloguePath($catalogue,$locale))), $data);
             file_put_contents(
                 $this->getGeneratedCataloguePath($catalogue, $locale),
                 $yaml->dump($diff)
             );
+            $this->get('snowcap_admin.logger')->logCatalogTranslation($catalogue, $locale, $logdiff);
             $this->clearTranslationsCache();
             $this->setFlash('success','cataloguetranslation.success');
         }
+
 
         /** merging after the post to prevent persisting source values in the generated one */
         $activeCatalogue = $this->mergeSourceAndGenerated($catalogue, $activeCatalogue, $locale);

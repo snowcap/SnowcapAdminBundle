@@ -62,6 +62,17 @@ class Environment extends ContainerAware
         return $this->admins;
     }
 
+    public function getAdminForEntity($entity)
+    {
+        $class = get_class($entity);
+        foreach($this->admins as $adminCode => $admin) {
+            if($class === $admin->getParam('entity_class')) {
+                return $admin;
+            }
+        }
+        return null;
+    }
+
     /**
      * @param string $adminName
      * @param array $adminParams

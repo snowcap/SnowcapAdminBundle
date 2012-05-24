@@ -23,7 +23,14 @@ class DefaultController extends BaseController
      */
     public function indexAction()
     {
-        return array();
+        $logs = $this->getDoctrine()->getRepository('SnowcapAdminBundle:Log')
+            ->createQueryBuilder('l')
+            ->orderBy('l.createdAt','DESC')
+            ->setMaxResults(25)
+            ->getQuery()->getResult();
+        return array(
+            'logs' => $logs,
+        );
     }
 
     /**
