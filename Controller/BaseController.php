@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * This controller provides generic capabilities for admin controllers
  *
@@ -48,5 +50,12 @@ class BaseController extends Controller
             return $candidate;
         }
         return $templateName;
+    }
+
+    public function renderError($type, $code)
+    {
+        $translatedTitle = $this->get('translator')->trans($type . '.title', array(), 'SnowcapAdminBundle');
+        $translatedMessages = $this->get('translator')->trans($type . '.message', array(), 'SnowcapAdminBundle');
+        return new Response($this->renderView('SnowcapAdminBundle:Error:' . $code . '.html.twig', array('title' => $translatedTitle, 'message' => $translatedMessages)), $code);
     }
 }
