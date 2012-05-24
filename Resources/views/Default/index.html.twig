@@ -27,7 +27,7 @@
     <tbody>
         {% for log in logs %}
             <tr>
-                <td>{{ log.createdAt | time_ago }}</td>
+                <td><time rel="tooltip" data-original-title="{{ log.createdAt|locale_date('short','short') }}">{{ log.createdAt | time_ago }}</time></td>
                 <td>
                     <span class="label label-{{ _self.transact(log.action, 'markup') }}">
                         {{ _self.transact(log.action, 'label') }}
@@ -70,6 +70,8 @@
         {% endfor %}
     </tbody>
     </table>
+
+    {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': logsPaginator }%}
 
 
 {% endblock %}

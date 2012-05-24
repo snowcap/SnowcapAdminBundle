@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
 
+use Snowcap\CoreBundle\Manager\PaginatorManager;
 
 /**
  * The default admin controller is used as a dashboard for
@@ -23,13 +24,16 @@ class DefaultController extends BaseController
      */
     public function indexAction()
     {
-        $logs = $this->getDoctrine()->getRepository('SnowcapAdminBundle:Log')
+        $logsQuery = $this->getDoctrine()->getRepository('SnowcapAdminBundle:Log')
             ->createQueryBuilder('l')
             ->orderBy('l.createdAt','DESC')
-            ->setMaxResults(25)
-            ->getQuery()->getResult();
+            ->getQuery();
+
+        $logs = new PaginatorManager($logsQuery, $this->getRequest()->get('page'), 25);
+
         return array(
-            'logs' => $logs,
+            'logs' => $logs->getResult(),
+            'logsPaginator' => $logs,
         );
     }
 
