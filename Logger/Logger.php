@@ -38,9 +38,9 @@ class Logger
 
         $token = $this->securityContext->getToken();
         if (null !== $token && $this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $log->setUsername($token);
+            $log->setUsername($token->getUsername());
         } else {
-            $log->setUsername('admin');
+            $log->setUsername('anonymous');
         }
 
         return $log;
