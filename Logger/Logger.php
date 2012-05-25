@@ -54,7 +54,10 @@ class Logger
      */
     public function logContent($action, $admin, $entity, $locale)
     {
+
         $em = $this->doctrine->getEntityManager();
+
+        /*
         $uow = $em->getUnitOfWork();
         $uow->computeChangeSets();
 
@@ -64,6 +67,9 @@ class Logger
             $changesetLocale = $uow->getEntityChangeSet($translationEntity);
             $changeset = array_merge_recursive($changeset, $changesetLocale);
         }
+        */
+        /* TODO find a way to get this info without duplicating update queries */
+        $changeset = array();
 
         $log = $this->initLog(Log::TYPE_CONTENT, $action);
         $log->setParams( array(
