@@ -8,10 +8,10 @@
         {% endfor %}
     {% else %}
         <li>
-            <div class="row-fluid">
-                <div class="span2">{{ key }}</div>
-                <div class="span9">
-                    <textarea rows="1" class="span9" name="data{{ parent }}[{{ key }}]">{{ value }}</textarea>
+            <div class="control-group">
+                <label class="control-label">{{ key }}</label>
+                <div class="controls">
+                    <textarea rows="1" name="data{{ parent }}[{{ key }}]">{{ value }}</textarea>
                     <p class="help-block">{{ fallback }}</p>
                 </div>
             </div>
@@ -46,7 +46,7 @@
         </div>
         <div class="span9 catalogue-translation">
 
-            <form method="post">
+            <form method="post" class="form-horizontal">
 
             {% for key, element in activeCatalogue %}
                 {{ _self.element(key, element, 3, null, fallbackCatalogue[key])}}

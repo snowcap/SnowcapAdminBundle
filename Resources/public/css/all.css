@@ -162,6 +162,9 @@ fieldset {
 /**
  * Catalogue translations
  */
+.catalogue-translation textarea {
+    width: 70%;
+}
 .catalogue-translation .level-header {
     padding-top: 10px;
     padding-bottom: 10px;
