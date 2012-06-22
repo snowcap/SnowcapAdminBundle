@@ -66,7 +66,7 @@ jQuery(document).ready(function ($) {
                 .replace(/[ôö]/g,'o')
                 .replace(/[ûüù]/g,'u')
                 .replace(/[^a-zA-Z0-9\-]/g, '')
-                .replace('--', '-')
+                .replace(/\-+/g, '-')
                 .replace(/\-+$/, '');
             return slug;
         };
