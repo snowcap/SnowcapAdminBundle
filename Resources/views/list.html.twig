@@ -61,15 +61,15 @@
 {% block list_thumbnail %}
 <ul class="thumbnails">
     {% for data_row in list.data %}
-    <li>
+    <li class="span3">
         <div class="thumbnail">
             {{ block('list_thumbnail_visual') }}
             <div class="caption">
                 {% if list.view.label is not null %}
-                    <h5 title="{{ list_value(data_row, list.view.label.path, list.view.label.options) }}">{{ list_value(data_row, list.view.label.path, list.view.label.options)|truncate(20) }}</h5>
+                    <h4 title="{{ list_value(data_row, list.view.label.path, list.view.label.options) }}">{{ list_value(data_row, list.view.label.path, list.view.label.options)|truncate(20) }}</h4>
                 {% endif %}
                 {% if list.view.description is not null %}
-                <p>{{ list_value(data_row, list.view.description.path, list.view.description.options) }}</p>
+                    <p>{{ list_value(data_row, list.view.description.path, list.view.description.options)|truncate(25) }}</p>
                 {% endif %}
                 <p>
                     {{ block('row_actions') }}
