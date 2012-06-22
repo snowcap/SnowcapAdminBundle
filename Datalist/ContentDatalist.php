@@ -112,10 +112,11 @@ class ContentDatalist extends AbstractDatalist
     /**
      * @param int $limitPerPage
      */
-    public function paginate($limitPerPage = 10)
+    public function paginate($limitPerPage = 10, $limitRange = 10)
     {
         $this->paginator = new PaginatorManager();
         $this->paginator->setLimitPerPage($limitPerPage);
+        $this->paginator->setLimitRange($limitRange);
         return $this;
     }
 
