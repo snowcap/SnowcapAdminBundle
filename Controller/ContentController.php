@@ -62,6 +62,7 @@ class ContentController extends BaseController
             $templateParams['contentForm'] = $contentForm->createView();
             $templateParams['form_theme_template'] = $this->getTemplate('SnowcapAdminBundle:Form:widgets.html.twig');
         }
+
         return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $code), $templateParams);
     }
 

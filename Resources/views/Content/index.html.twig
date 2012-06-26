@@ -15,6 +15,9 @@
         </div>
     {% endblock pageheader %}
 
+    {# above block #}
+    {% block above %}{% endblock %}
+
     {# searchform block #}
     {% block searchform %}
         {% if contentForm.search is defined and (list.data is not empty or contentForm.search.vars.value is not empty) %}
@@ -65,6 +68,9 @@
         {% endif %}
         <hr/>
     {% endblock list %}
+
+    {# below block #}
+    {% block below %}{% endblock %}
 
     {# actions block #}
     {% block actions %}
