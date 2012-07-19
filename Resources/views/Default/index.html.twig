@@ -36,7 +36,7 @@
                 {% if log.type == 'content' %}
                     <td>
                         {% if log.action != 'delete' %}<a href="{{ path('snowcap_admin_content_update', {'code':get_admin_for_entity_name(log.params.entity, 'code'), 'id':log.params.entityId})}}">{% endif %}
-                            {{ get_admin_for_entity_name(log.params.entity, 'label') | transchoice(1, {})}}
+                            {{ get_admin_for_entity_name(log.params.entity, 'label') | transchoice(1, {}, 'SnowcapAdminBundle')}}
                         {% if log.action != 'delete' %}</a>{% endif %}
                     </td>
                     <td>
