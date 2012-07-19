@@ -39,11 +39,13 @@ class AbstractDatalist
     /**
      * @param string $name
      * @param string $type
+     * @param array  $options
      * @return AbstractDatalist
      */
     public function add($path, $type, array $options = array())
     {
         $this->view->add($path, $type, $options);
+
         return $this;
     }
 
@@ -92,6 +94,8 @@ class AbstractDatalist
             $options['label'] = ucfirst($routeName);
         }
         $this->actions[$routeName] = array('parameters' => $parameters, 'options' => $options);
+
+        return $this;
     }
 
     public function getActions()
