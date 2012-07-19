@@ -1,6 +1,6 @@
 {% macro menu_item(admin) %}
 <li>
-    <a href="{{ path(admin.defaultRoute, admin.defaultRouteParams) }}" title="{{ admin.param('label')|transchoice(10) }}">{{ admin.param('label')|transchoice(10) }}</a>
+    <a href="{{ path(admin.defaultRoute, admin.defaultRouteParams) }}" title="{{ admin.param('label')|transchoice(10, {}, 'SnowcapAdminBundle') }}">{{ admin.param('label')|transchoice(10, {}, 'SnowcapAdminBundle') }}</a>
 </li>
 {% endmacro %}
 
