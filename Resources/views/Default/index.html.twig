@@ -56,7 +56,7 @@
                     {% if log.diff | length > 0%}
                     <ul class="unstyled">
                         {% for key, value in log.diff %}
-                        <li>{{ key | lower | title | trans }}</li>
+                        <li>{{ key | lower | title | trans({}, 'SnowcapAdminBundle') }}</li>
                         {% endfor %}
                     </ul>
                     {% endif %}
