@@ -98,6 +98,13 @@ class AbstractDatalist
         return $this;
     }
 
+    public function removeAction($routeName)
+    {
+        if (array_key_exists($routeName, $this->actions)) {
+            unset($this->actions[$routeName]);
+        }
+    }
+
     public function getActions()
     {
         return $this->actions;
