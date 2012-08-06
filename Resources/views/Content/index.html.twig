@@ -11,7 +11,7 @@
     {# pageheader block #}
     {% block pageheader %}
         <div class="page-header">
-            <h2>{{ "content.list.title"|trans({'%content_name%': admin.param('label')|transchoice(10, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle') }}</h2>
+            <h2>{{ "content.list.title"|trans({'%content_name%': admin.param('label')|transchoice(10)}, 'SnowcapAdminBundle') }}</h2>
         </div>
     {% endblock pageheader %}
 
