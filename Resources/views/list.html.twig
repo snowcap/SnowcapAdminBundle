@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block grid_header %}
-    <th>{{ column.options.label|trans({}, 'SnowcapAdminBundle') }}</th>
+    <th>{{ column.options.label|trans }}</th>
 {% endblock %}
 
 {% block grid_cell_text %}
@@ -54,7 +54,7 @@
 {% block grid_cell_label %}
     {% set mappings = column.options.mappings %}
     {% set value = list_value(data_row, column.path, column.options) %}
-    <td><span class="label label-{{ mappings[value][1] }}">{{ mappings[value][0]|trans({}, 'SnowcapAdminBundle') }}</span></td>
+    <td><span class="label label-{{ mappings[value][1] }}">{{ mappings[value][0]|trans }}</span></td>
 {% endblock %}
 
 {# thumbnail view #}
