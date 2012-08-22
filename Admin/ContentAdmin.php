@@ -6,6 +6,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\Util\PropertyPath;
 
 use Snowcap\AdminBundle\Exception;
 use Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs;
