@@ -68,32 +68,12 @@ jQuery(document).ready(function ($) {
         );
     });
 
-    /**
-     * Common config options
-     */
-    var wysiwygConfig = {
-        'entities': false,
-        'language': $('html').attr('lang'),
-        'skin':'BootstrapCK-Skin',
-        'toolbar_Full':[
-            ['PasteText', 'Bold', 'Italic', 'RemoveFormat', 'NumberedList', 'BulletedList', 'Outdent','Indent', 'CreateDiv', 'Blockquote', 'Link', 'Unlink', 'Image', 'Table', 'HorizontalRule', 'Styles', 'Source']
-        ],
-        'forcePasteAsPlainText':true,
-        'startupOutlineBlocks':true
-
-    };
-
     /* Loop over each wysiwyg textarea */
     $('.widget-wysiwyg').each(function (offset, wysiwyg) {
-        var thisConfig = $.extend({
-            'stylesSet': 'my_styles:' + $(wysiwyg).attr('data-stylefileurl'),
-            'contentsCss': $(wysiwyg).attr('data-cssfileurl'),
-            'filebrowserBrowseUrl': $(wysiwyg).attr('data-browserurl'),
-            'filebrowserImageWindowWidth': '960',
-            'filebrowserImageWindowHeight': '720'
-        }, wysiwygConfig);
-        $('.widget-wysiwyg').ckeditor(function () {
-        }, thisConfig);
+        var thisConfig = {
+            customConfig : $(wysiwyg).attr('data-wysiwyg')
+        };
+        $(wysiwyg).ckeditor(function () {}, thisConfig);
     });
 
     // Helper function to get parameters from the query string.
