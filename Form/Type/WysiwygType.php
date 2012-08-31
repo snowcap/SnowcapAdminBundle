@@ -33,9 +33,7 @@ class WysiwygType extends AbstractType
      */
     public function getDefaultOptions(array $options) {
         return array(
-            'style_file' => 'bundles/snowcapadmin/vendor/ckeditor/plugin/styles/styles/ckeditor_styles.js',
-            'css_file' => 'bundles/snowcapadmin/vendor/ckeditor/contents.css',
-            'browser_url' => $this->router->generate('snowcap_admin_wysiwyg_browser'),
+            'wysiwyg_config' => '/bundles/snowcapadmin/js/ckeditor_config.js',
         );
     }
 
@@ -43,9 +41,7 @@ class WysiwygType extends AbstractType
      * {@inheritdoc}
      */
     public function buildForm(FormBuilder $builder, array $options) {
-        $builder->setAttribute('style_file', $options['style_file']);
-        $builder->setAttribute('css_file', $options['css_file']);
-        $builder->setAttribute('browser_url', $options['browser_url']);
+        $builder->setAttribute('wysiwyg_config', $options['wysiwyg_config']);
         parent::buildForm($builder, $options);
     }
 
@@ -54,9 +50,7 @@ class WysiwygType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form)
     {
-        $view->set('style_file', $form->getAttribute('style_file'));
-        $view->set('css_file', $form->getAttribute('css_file'));
-        $view->set('browser_url', $form->getAttribute('browser_url'));
+        $view->set('wysiwyg_config', $form->getAttribute('wysiwyg_config'));
         parent::buildView($view, $form);
     }
 
