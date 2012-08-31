@@ -11,8 +11,8 @@ CKEDITOR.editorConfig = function( config )
     config.startupOutlineBlocks = true;
     config.stylesSet = 'default:/bundles/snowcapadmin/vendor/ckeditor/plugins/styles/styles/default.js';
     config.contentsCss = '/bundles/snowcapadmin/vendor/ckeditor/contents.css';
-    //config.filebrowserBrowseUrl = '/admin/browser';
     config.templates_files = ['/bundles/snowcapadmin/vendor/ckeditor/plugins/templates/templates/default.js'];
+    config.filebrowserBrowseUrl = '/admin/wysiwyg/browser';
     config.filebrowserImageWindowWidth = '960';
     config.filebrowserImageWindowHeight = '720';
 };
