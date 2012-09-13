@@ -76,7 +76,7 @@ class Logger
             'entity'    => get_class($entity),
             'entityId'  => $entity->getId(),
         ));
-        $log->setDescription($admin->toString($entity));
+        $log->setDescription($admin->toString($entity, $locale));
         $log->setDiff($changeset);
 
         $em->persist($log);

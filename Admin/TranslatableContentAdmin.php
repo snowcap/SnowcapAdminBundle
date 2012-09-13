@@ -126,7 +126,7 @@ abstract class TranslatableContentAdmin extends ContentAdmin
         parent::deleteEntity($entity);
     }
 
-    public function toString($entity)
+    public function toString($entity, $locale = null)
     {
         $path = $this->toStringPath();
 
@@ -136,7 +136,7 @@ abstract class TranslatableContentAdmin extends ContentAdmin
 
         $output = "empty value";
         if(strpos($path, '%locale%') !== false) {
-            $currentLocale = $this->environment->getLocale();
+            $currentLocale = ($locale === null) ? $this->environment->getLocale() : $locale;
             $activeLocales = $this->environment->getLocales();
             $mergedLocales = array_merge(array($currentLocale), array_diff($activeLocales, array($currentLocale)));
             while(!empty($mergedLocales)) {
