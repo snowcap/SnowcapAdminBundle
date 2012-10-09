@@ -66,7 +66,7 @@ class Environment extends ContainerAware
     {
         $class = get_class($entity);
         foreach($this->admins as $adminCode => $admin) {
-            if($class === $admin->getParam('entity_class')) {
+            if($admin instanceof \Snowcap\AdminBundle\Admin\ContentAdmin && $class === $admin->getParam('entity_class')) {
                 return $admin;
             }
         }
