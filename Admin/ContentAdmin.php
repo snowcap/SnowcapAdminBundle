@@ -74,7 +74,8 @@ abstract class ContentAdmin extends AbstractAdmin
         $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('e')
-            ->from($this->getParam('entity_class'), 'e');
+            ->from($this->getParam('entity_class'), 'e')
+            ->orderBy('e.id', 'DESC');
         return $queryBuilder;
     }
 
