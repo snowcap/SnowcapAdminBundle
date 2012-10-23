@@ -22,8 +22,13 @@ class CatalogueTranslationController extends BaseController
 
         $yaml = new Yaml();
 
-        if ($locale === null) {
-            $locale = $admin->getLocale();
+        $activeLocale = $this->getRequest()->get('activeCatalogueLocale');
+        if ($activeLocale === null) {
+            if ($locale !== null) {
+                $activeLocale = $locale;
+            } else {
+                $activeLocale = $admin->getLocale();
+            }
         }
 
         $locales = $admin->getLocales();
@@ -46,10 +51,10 @@ class CatalogueTranslationController extends BaseController
         }
 
         /** Setting the active one */
-        $activeCatalogue = $catalogues[$catalogue][$locale];
+        $activeCatalogue = $catalogues[$catalogue][$activeLocale];
 
         /** Setting the fallback one */
-        if($locale !== $fallbackLocale) {
+        if($activeLocale !== $fallbackLocale) {
             $fallbackCatalogue = $this->mergeSourceAndGenerated($catalogue, $catalogues[$catalogue][$fallbackLocale], $fallbackLocale);
         } else {
             $fallbackCatalogue = array();
@@ -59,24 +64,27 @@ class CatalogueTranslationController extends BaseController
         if ($this->getRequest()->getMethod() === 'POST') {
             $data = $this->getRequest()->get('data');
             $diff = $this->compare($data, $activeCatalogue);
-            $logdiff = $this->compare($yaml->parse(file_get_contents($this->getGeneratedCataloguePath($catalogue,$locale))), $data);
+            if (!$oldData = @file_get_contents($this->getGeneratedCataloguePath($catalogue,$activeLocale))) {
+                $oldData = "{}";
+            }
+            $logdiff = $this->compare($yaml->parse($oldData), $data);
             file_put_contents(
-                $this->getGeneratedCataloguePath($catalogue, $locale),
+                $this->getGeneratedCataloguePath($catalogue, $activeLocale),
                 $yaml->dump($diff)
             );
-            $this->get('snowcap_admin.logger')->logCatalogTranslation($catalogue, $locale, $logdiff);
+            $this->get('snowcap_admin.logger')->logCatalogTranslation($catalogue, $activeLocale, $logdiff);
             $this->clearTranslationsCache();
             $this->setFlash('success','cataloguetranslation.success');
         }
 
 
         /** merging after the post to prevent persisting source values in the generated one */
-        $activeCatalogue = $this->mergeSourceAndGenerated($catalogue, $activeCatalogue, $locale);
+        $activeCatalogue = $this->mergeSourceAndGenerated($catalogue, $activeCatalogue, $activeLocale);
 
         return array(
             'activeCatalogue' => $activeCatalogue,
             'activeCatalogueName' => $catalogue,
-            'activeCatalogueLocale' => $locale,
+            'activeCatalogueLocale' => $activeLocale,
             'catalogues' => $catalogues,
             'fallbackCatalogue' => $fallbackCatalogue,
         );
