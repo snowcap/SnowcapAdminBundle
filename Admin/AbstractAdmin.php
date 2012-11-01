@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormFactory;
 use Snowcap\AdminBundle\Environment;
 use Snowcap\AdminBundle\Exception;
 
-abstract class AbstractAdmin
+abstract class AbstractAdmin implements AdminInterface
 {
 
     /**
@@ -99,32 +99,5 @@ abstract class AbstractAdmin
     {
         $form = $this->environment->get('form.factory')->create($type, $data, $options);
         return $form;
-    }
-
-    /**
-     * Get the default route, to be used in menus
-     *
-     * @return string
-     */
-    abstract public function getDefaultRoute();
-
-    /**
-     * Get the default route params, to be used in menus
-     *
-     * @return array
-     */
-    public function getDefaultRouteParams() {
-        return array();
-    }
-
-    /**
-     * Used to retrieve a __toString on an entity
-     * it must return a propertypath
-     * Example: translations[%locale%].title
-     *
-     * @return string
-     */
-    public function toStringPath() {
-        return null;
     }
 }

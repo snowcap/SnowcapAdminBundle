@@ -28,13 +28,13 @@ class SnowcapAdminExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        foreach (array('sections','bundle') as $attribute) {
+        /*foreach (array('sections','bundle') as $attribute) {
             $container->setParameter($attribute , $config[$attribute]);
         }
 
         if(array_key_exists('translation_catalogues', $config)) {
             $container->setParameter('translation_catalogues', $config['translation_catalogues']);
-        }
+        }*/
 
     }
 }

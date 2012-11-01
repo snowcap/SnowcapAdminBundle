@@ -3,30 +3,30 @@
 namespace Snowcap\AdminBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
-use Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs;
-use Snowcap\AdminBundle\Environment;
+use Snowcap\AdminBundle\AdminManager;
 
 class AdminSubscriber implements EventSubscriber
 {
+    /**
+     * @var \Snowcap\AdminBundle\AdminManager
+     */
+    protected $adminManager;
 
     /**
-     * @var Snowcap\AdminBundle\Environment
+     * @var array
      */
-    protected $adminEnvironment;
-
     protected $entityMapping = array();
 
     /**
-     * @param \Snowcap\AdminBundle\Environment $environment
+     * @param \Snowcap\AdminBundle\AdminManager $environment
      */
-    public function __construct(Environment $environment)
+    public function __construct(AdminManager $adminManager)
     {
-        $this->adminEnvironment = $environment;
+        $this->adminManager = $adminManager;
 
-        $admins = $this->adminEnvironment->getAdmins();
+        $admins = $this->adminManager->getAdmins();
         foreach ($admins as $admin) {
             if($admin instanceof \Snowcap\AdminBundle\Admin\ContentAdmin) {
                 $this->entityMapping[$admin->getParam('entity_class')] = $admin;
@@ -41,77 +41,90 @@ class AdminSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array('prePersist', 'postPersist', 'preUpdate', 'postUpdate', 'postRemove', 'loadClassMetadata', 'preFlush');
+        return array(
+            'preRemove',
+            'postRemove',
+            'prePersist',
+            'postPersist',
+            'preUpdate',
+            'postUpdate',
+            'postLoad',
+        );
     }
 
-    public function prePersist($ea)
+    /**
+     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $ea
+     */
+    public function preRemove(LifecycleEventArgs $ea)
     {
         $entity = $ea->getEntity();
-        $this->callEventOnAdmin('prePersist', $entity, array($ea, $entity));
+        $this->callEventOnAdmin('preRemove', $entity, array($ea, $entity));
     }
 
-    public function postPersist($ea)
-    {
-        $entity = $ea->getEntity();
-        $this->callEventOnAdmin('postPersist', $entity, array($ea, $entity));
-    }
-
-    public function preUpdate($ea)
-    {
-        $entity = $ea->getEntity();
-        $this->callEventOnAdmin('preUpdate', $entity, array($ea, $entity));
-    }
-
-    public function postUpdate($ea)
-    {
-        $entity = $ea->getEntity();
-        $this->callEventOnAdmin('postUpdate', $entity, array($ea, $entity));
-    }
-
-    public function postRemove($ea)
+    /**
+     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $ea
+     */
+    public function postRemove(LifecycleEventArgs $ea)
     {
         $entity = $ea->getEntity();
         $this->callEventOnAdmin('postRemove', $entity, array($ea, $entity));
     }
 
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    /**
+     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $ea
+     */
+    public function prePersist(LifecycleEventArgs $ea)
     {
-        $meta = $eventArgs->getClassMetadata();
-        $key = $meta->getName();
-        if (array_key_exists($key, $this->entityMapping)) {
-            call_user_func_array(array($this->entityMapping[$key], 'loadClassMetadata'), array($eventArgs));
-        }
+        $entity = $ea->getEntity();
+        $this->callEventOnAdmin('prePersist', $entity, array($ea, $entity));
     }
 
-    public function preFlush(PreFlushEventArgs $ea)
+    /**
+     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $ea
+     */
+    public function postPersist(LifecycleEventArgs $ea)
     {
-        /** @var $em \Doctrine\ORM\EntityManager */
-        $em = $ea->getEntityManager();
-        $unitOfWork = $em->getUnitOfWork();
-
-        $entitiesToProcess = array();
-        $entityMaps = $unitOfWork->getIdentityMap();
-        foreach ($entityMaps as $entities) {
-            foreach ($entities as $entity) {
-                $key = get_class($entity);
-                if (array_key_exists($key, $this->entityMapping)) {
-                    if (!array_key_exists($key, $entitiesToProcess)) {
-                        $entitiesToProcess[$key] = array();
-                    }
-                    $entitiesToProcess[$key][] = $entity;
-                }
-            }
-        }
-        foreach ($entitiesToProcess as $key => $entities) {
-            call_user_func_array(array($this->entityMapping[$key], 'preFlush'), array($ea, $entities));
-        }
+        $entity = $ea->getEntity();
+        $this->callEventOnAdmin('postPersist', $entity, array($ea, $entity));
     }
 
-    private function callEventOnAdmin($event, $entity, $arguments)
+    /**
+     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $ea
+     */
+    public function preUpdate(LifecycleEventArgs $ea)
+    {
+        $entity = $ea->getEntity();
+        $this->callEventOnAdmin('preUpdate', $entity, array($ea, $entity));
+    }
+
+    /**
+     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $ea
+     */
+    public function postUpdate(LifecycleEventArgs $ea)
+    {
+        $entity = $ea->getEntity();
+        $this->callEventOnAdmin('postUpdate', $entity, array($ea, $entity));
+    }
+
+    /**
+     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $ea
+     */
+    public function postLoad(LifecycleEventArgs $ea)
+    {
+        $entity = $ea->getEntity();
+        $this->callEventOnAdmin('postLoad', $entity, array($ea, $entity));
+    }
+
+    /**
+     * @param string $eventName
+     * @param object $entity
+     * @param array $arguments
+     */
+    private function callEventOnAdmin($eventName, $entity, array $arguments)
     {
         $key = get_class($entity);
         if (array_key_exists($key, $this->entityMapping)) {
-            call_user_func_array(array($this->entityMapping[$key], $event), $arguments);
+            call_user_func_array(array($this->entityMapping[$key], $eventName), $arguments);
         }
     }
 }

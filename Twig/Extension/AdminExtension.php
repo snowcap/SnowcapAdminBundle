@@ -5,8 +5,7 @@ use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 use Snowcap\AdminBundle\DataList\AbstractDatalist;
-use Snowcap\AdminBundle\Exception;
-use Snowcap\AdminBundle\Environment;
+use Snowcap\AdminBundle\AdminManager;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -24,20 +23,20 @@ class AdminExtension extends \Twig_Extension
     protected $environment;
 
     /**
-     * @var Snowcap\AdminBundle\Environment
+     * @var \Snowcap\AdminBundle\AdminManager
      */
-    protected $adminEnvironment;
+    private $adminManager;
 
     /**
-     * @param \Snowcap\AdminBundle\Environment $environment
+     * @param \Snowcap\AdminBundle\AdminManager $adminManager
      */
-    public function __construct(Environment $environment)
+    public function __construct(AdminManager $adminManager)
     {
-        $this->adminEnvironment = $environment;
+        $this->adminManager = $adminManager;
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Twig_Environment $environment
      */
     public function initRuntime(\Twig_Environment $environment)
     {
@@ -59,32 +58,20 @@ class AdminExtension extends \Twig_Extension
     }
 
     /**
-     * Get all available filters
-     *
-     * @return array
-     */
-    public function getFilters()
-    {
-        return array(
-        );
-    }
-
-    /**
      * Render a list widget
      *
      * @param \Snowcap\AdminBundle\DataList\AbstractDatalist $list
      * @return string
-     * @throws \Snowcap\AdminBundle\Exception
+     * @throws \Exception
      */
     public function renderList(AbstractDatalist $list)
     {
         $loader = $this->environment->getLoader();
-        /* @var \Symfony\Bundle\TwigBundle\Loader\FilesystemLoader $loader */
         $loader->addPath(__DIR__ . '/../../Resources/views/');
         $template = $this->environment->loadTemplate('list.html.twig');
         $blockName = 'list_' . $list->getView()->getName();
         if (!$template->hasBlock($blockName)) {
-            throw new Exception(sprintf('The block "%s" could not be loaded whe trying to display the "%s" grid', $blockName, $list->getName()));
+            throw new \Exception(sprintf('The block "%s" could not be loaded whe trying to display the "%s" grid', $blockName, $list->getName()));
         }
         ob_start();
         $template->displayBlock($blockName, array(
@@ -131,24 +118,20 @@ class AdminExtension extends \Twig_Extension
     }
 
     /**
-     * Get a value by the specified path on the provided array or object
-     * Note that the valeu can be plain - such as "image.title" or translated
-     * for example "post.translations[%locale].title"
-     *
      * @param mixed $data
      * @param string $path
      * @return mixed
-     * @throws \Snowcap\AdminBundle\Exception
+     * @throws \Exception
      */
     private function getDataValue($data, $path)
     {
         $value = null;
         if (strpos($path, '%locale%') !== false) {
             if(!is_object($data) || !in_array('Snowcap\CoreBundle\Entity\TranslatableEntityInterface', class_implements($data))){
-                throw new Exception(sprintf('Localized paths such as %s may only be called on objects that implement the "TranslatableEntityInterface" interface', $path));
+                throw new \Exception(sprintf('Localized paths such as %s may only be called on objects that implement the "TranslatableEntityInterface" interface', $path));
             }
-            $workingLocale = $this->adminEnvironment->getWorkingLocale();
-            $activeLocales = $this->adminEnvironment->getLocales();
+            $workingLocale = 'en';
+            $activeLocales = array('en');
             $mergedLocales = array_merge(array($workingLocale), array_diff($activeLocales, array($workingLocale)));
             while (!empty($mergedLocales)) {
                 $testLocale = array_shift($mergedLocales);

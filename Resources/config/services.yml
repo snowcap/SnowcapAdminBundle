@@ -4,15 +4,11 @@ parameters:
   translation_catalogues: ~
 
 services:
+  # Main admin class
   snowcap_admin:
-    class: Snowcap\AdminBundle\Environment
-    arguments: [%sections%]
-    calls:
-        - [setContainer, [ @service_container ]]
-        - [setBundle, [ %bundle% ]]
-        - [setTranslationCatalogues, [ %translation_catalogues% ]]
+    class: Snowcap\AdminBundle\AdminManager
 
-  # subscriber for activating admin classes shortcuts
+  # Subscriber for activating admin classes shortcuts
   snowcap_admin.admin_subscriber:
     class: Snowcap\AdminBundle\Listener\AdminSubscriber
     arguments: [@snowcap_admin]
@@ -22,7 +18,7 @@ services:
   # Twig extensions
   snowcap_admin.twig:
     class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
-    arguments: [@snowcap_admin ]
+    arguments: [@snowcap_admin]
     tags:
       -  { name: twig.extension }
 
