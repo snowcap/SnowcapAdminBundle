@@ -56,7 +56,7 @@ class Log {
 
     /**
      * @var string
-     * @ORM\Column(name="username", type="string", length="255", nullable=true)
+     * @ORM\Column(name="username", type="string", length=255, nullable=true)
      */
     protected $username;
 
