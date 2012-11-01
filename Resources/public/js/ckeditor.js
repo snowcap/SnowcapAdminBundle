@@ -2,13 +2,14 @@ jQuery(document).ready(function ($) {
     CKEDITOR.on('dialogDefinition', function (ev) {
         var dialogName = ev.data.name;
         var dialogDefinition = ev.data.definition;
-        if (dialogName === 'link') {
+        if (dialogName == 'link') {
             dialogDefinition.removeContents('advanced');
+            //dialogDefinition.removeContents( 'target' );
+            // Get a reference to the "Target" tab.
             var targetTab = dialogDefinition.getContents('target');
+            // Set the default value for the URL field.
             var targetField = targetTab.get('linkTargetType');
-            var infoTab = dialogDefinition.getContents('info');
-            infoTab.add(targetField);
-            dialogDefinition.removeContents('target');
+            targetField[ 'default' ] = '_blank';
         }
         if (dialogName === 'image') {
             dialogDefinition.removeContents('advanced');
