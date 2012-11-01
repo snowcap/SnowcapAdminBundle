@@ -26,19 +26,6 @@ abstract class AbstractAdmin implements AdminInterface
     protected $params;
 
     /**
-     * @param string $code
-     * @param array $params
-     * @param \Snowcap\AdminBundle\Environment $environment
-     */
-    public function __construct($code, array $params, Environment $environment)
-    {
-        $this->code = $code;
-        $this->validateParams($params); //TODO: check if necessary
-        $this->params = $params;
-        $this->environment = $environment;
-    }
-
-    /**
      * Return the admin code
      *
      * @return string
@@ -46,21 +33,6 @@ abstract class AbstractAdmin implements AdminInterface
     public function getCode()
     {
         return $this->code;
-    }
-
-    /**
-     * Get a simple param for this admin instance
-     *
-     * @param $paramName
-     * @return mixed
-     * @throws \Snowcap\AdminBundle\Exception
-     */
-    public function getParam($paramName)
-    {
-        if (!array_key_exists($paramName, $this->params)) {
-            throw new Exception(sprintf('The admin section %s must have a %s parameter', $this->getCode(), $paramName));
-        }
-        return $this->params[$paramName];
     }
 
     /**

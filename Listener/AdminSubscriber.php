@@ -3,7 +3,7 @@
 namespace Snowcap\AdminBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 use Snowcap\AdminBundle\AdminManager;
 
@@ -29,7 +29,7 @@ class AdminSubscriber implements EventSubscriber
         $admins = $this->adminManager->getAdmins();
         foreach ($admins as $admin) {
             if($admin instanceof \Snowcap\AdminBundle\Admin\ContentAdmin) {
-                $this->entityMapping[$admin->getParam('entity_class')] = $admin;
+                $this->entityMapping[$admin->getEntityClass()] = $admin;
             }
         }
     }

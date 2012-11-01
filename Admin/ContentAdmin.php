@@ -271,4 +271,6 @@ abstract class ContentAdmin extends AbstractAdmin
         return $output;
     }
 
+    abstract public function getEntityClass();
+
 }

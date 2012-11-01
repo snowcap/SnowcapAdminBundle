@@ -1,10 +1,8 @@
 {% macro menu_item(admin) %}
 <li>
-    <a href="{{ path(admin.defaultRoute, admin.defaultRouteParams) }}" title="{{ admin.param('label')|transchoice(10) }}">{{ admin.param('label')|transchoice(10) }}</a>
+    <a href="{{ path(admin.defaultRoute, admin.defaultRouteParams) }}" >{{ admin.name }}</a>
 </li>
 {% endmacro %}
-
-{% set active_locales = get_active_locales(app.request.locale) %}
 
 {# navigation block #}
 {% block navigation %}
@@ -31,34 +29,7 @@
                             {{ _self.menu_item(admin) }}
                         {% endfor %}
 
-                        {% if hasTranslationCatalogues %}
-                            <li>
-                                <a href="{{ path('snowcap_admin_cataloguetranslation_index')}}">{{ 'navigation.interfacecontent' | trans({}, 'SnowcapAdminBundle') }}</a>
-                            </li>
-                        {% endif %}
-
                     {% endblock main_nav %}
-
-                </ul>
-                <ul class="nav pull-right">
-
-                    {# block dropdown #}
-                    {% block dropdown %}
-
-                        {% if active_locales|length > 1 %}
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ active_locales[app.request.locale] }}
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    {% for locale_key, locale_value in active_locales if locale_key != app.request.locale %}
-                                        <li><a href="{{ path('snowcap_admin_switch_locale', {'locale': locale_key}) }}">{{ locale_value }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endif %}
-
-                    {% endblock dropdown %}
 
                 </ul>
             </div>

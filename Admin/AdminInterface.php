@@ -15,4 +15,9 @@ interface AdminInterface
      * @return string
      */
     public function getDefaultUrl();
+
+    /**
+     * @return string
+     */
+    public function getName();
 }

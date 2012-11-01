@@ -168,7 +168,7 @@ class AdminExtension extends \Twig_Extension
     public function getAdminForEntityName($namespace, $param = null)
     {
         $entity = new $namespace;
-        $admin = $this->adminEnvironment->getAdminForEntity($entity);
+        $admin = $this->adminManager->getAdminForEntity($entity);
         if($param === 'code') {
             return $admin->getCode();
         }

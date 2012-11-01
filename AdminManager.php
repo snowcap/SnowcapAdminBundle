@@ -49,7 +49,7 @@ class AdminManager
     {
         $class = get_class($entity);
         foreach($this->admins as $adminCode => $admin) {
-            if($admin instanceof \Snowcap\AdminBundle\Admin\ContentAdmin && $class === $admin->getParam('entity_class')) {
+            if($admin instanceof \Snowcap\AdminBundle\Admin\ContentAdmin && $class === $admin->getEntityClass()) {
                 return $admin;
             }
         }

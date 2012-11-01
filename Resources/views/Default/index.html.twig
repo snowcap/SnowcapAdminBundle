@@ -25,9 +25,9 @@
         </tr>
     </thead>
     <tbody>
-        {% for log in logs %}
+        {% for log in paginator %}
             <tr>
-                <td><time rel="tooltip" data-original-title="{{ log.createdAt|locale_date('short','short') }}">{{ log.createdAt | time_ago }}</time></td>
+                <td><time rel="tooltip" data-original-title="{{ log.createdAt|date }}">{{ log.createdAt | time_ago }}</time></td>
                 <td>
                     <span class="label label-{{ _self.transact(log.action, 'markup') }}">
                         {{ _self.transact(log.action, 'label') }}
@@ -36,7 +36,7 @@
                 {% if log.type == 'content' %}
                     <td>
                         {% if log.action != 'delete' %}<a href="{{ path('snowcap_admin_content_update', {'code':get_admin_for_entity_name(log.params.entity, 'code'), 'id':log.params.entityId})}}">{% endif %}
-                            {{ get_admin_for_entity_name(log.params.entity, 'label') | transchoice(1, {}, 'SnowcapAdminBundle')}}
+                            {{ get_admin_for_entity_name(log.params.entity, 'code') | transchoice(1, {}, 'SnowcapAdminBundle')}}
                         {% if log.action != 'delete' %}</a>{% endif %}
                     </td>
                     <td>
@@ -71,7 +71,7 @@
     </tbody>
     </table>
 
-    {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': logsPaginator }%}
+    {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': paginator }%}
 
 
 {% endblock %}
