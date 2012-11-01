@@ -2,6 +2,8 @@
 
 namespace Snowcap\AdminBundle\Admin;
 
+use Symfony\Component\Routing\RouteCollection;
+
 interface AdminInterface
 {
     /**
@@ -15,6 +17,12 @@ interface AdminInterface
      * @return string
      */
     public function getDefaultUrl();
+
+    /**
+     * @param string $alias
+     * @param \Symfony\Component\Routing\RouteCollection $routeCollection
+     */
+    public function addRoutes($alias, RouteCollection $routeCollection);
 
     /**
      * @return string

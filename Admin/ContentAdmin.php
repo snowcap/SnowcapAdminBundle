@@ -21,11 +21,6 @@ abstract class ContentAdmin extends AbstractAdmin
     const SAVEMODE_NORMAL = 'normal';
     const SAVEMODE_CONTINUE = 'continue';
 
-    public function getDefaultRoute()
-    {
-        return 'snowcap_admin_content_index';
-    }
-
     /**
      * Return the main admin form for this content
      *
@@ -248,14 +243,6 @@ abstract class ContentAdmin extends AbstractAdmin
      * @param array $entities
      */
     public function preFlush(PreFlushEventArgs $ea, $entities) {}
-
-    /**
-     * @return array
-     */
-    public function getDefaultRouteParams()
-    {
-        return array('code' => $this->getCode());
-    }
 
     public function toString($entity)
     {

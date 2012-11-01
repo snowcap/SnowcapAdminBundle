@@ -1,6 +1,6 @@
 {% macro menu_item(admin) %}
 <li>
-    <a href="{{ path(admin.defaultRoute, admin.defaultRouteParams) }}" >{{ admin.name }}</a>
+    <a href="{{ admin.defaultUrl }}" >{{ admin.name }}</a>
 </li>
 {% endmacro %}
 

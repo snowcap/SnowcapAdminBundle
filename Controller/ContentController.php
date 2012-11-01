@@ -25,11 +25,9 @@ class ContentController extends BaseController
      * @param string $type
      * @return mixed
      */
-    public function indexAction($code)
+    public function indexAction($alias)
     {
-        $locale = $this->getRequest()->getLocale();
-        $this->get('snowcap_admin')->setWorkingLocale($locale);
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $admin = $this->get('snowcap_admin')->getAdmin($alias);
         $list = $admin->getDatalist();
         $request = $this->getRequest();
         if (($page = $request->get('page')) !== null) {
@@ -63,7 +61,7 @@ class ContentController extends BaseController
             $templateParams['form_theme_template'] = $this->getTemplate('SnowcapAdminBundle:Form:widgets.html.twig');
         }
 
-        return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $code), $templateParams);
+        return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $alias), $templateParams);
     }
 
     /**

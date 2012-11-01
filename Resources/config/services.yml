@@ -1,68 +1,76 @@
 parameters:
-  sections: ~
-  bundle: ~
-  translation_catalogues: ~
+    sections: ~
+    bundle: ~
+    translation_catalogues: ~
 
 services:
-  # Main admin class
-  snowcap_admin:
-    class: Snowcap\AdminBundle\AdminManager
+    # Main admin class
+    snowcap_admin:
+        class: Snowcap\AdminBundle\AdminManager
 
-  # Subscriber for activating admin classes shortcuts
-  snowcap_admin.admin_subscriber:
-    class: Snowcap\AdminBundle\Listener\AdminSubscriber
-    arguments: [@snowcap_admin]
-    tags:
-      - { name: doctrine.event_subscriber}
+    # Routing loader
+    snowcap_admin.routing_loader:
+        class: Snowcap\AdminBundle\Routing\Loader\AdminLoader
+        arguments: [@snowcap_admin]
+        tags:
+            - { name: routing.loader }
 
-  # Twig extensions
-  snowcap_admin.twig:
-    class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
-    arguments: [@snowcap_admin]
-    tags:
-      -  { name: twig.extension }
+    # Subscriber for activating admin classes shortcuts
+    snowcap_admin.admin_subscriber:
+        class: Snowcap\AdminBundle\Listener\AdminSubscriber
+        arguments: [@snowcap_admin]
+        tags:
+            - { name: doctrine.event_subscriber}
 
-  # Form types (for edition)
-  snowcap_admin.form_type_slug:
-    class: Snowcap\AdminBundle\Form\Type\SlugType
-    tags:
-      -  { name: form.type, alias: snowcap_admin_slug }
+    # Twig extensions
+    snowcap_admin.twig:
+        class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
+        arguments: [@snowcap_admin]
+        tags:
+            -  { name: twig.extension }
 
-  snowcap_admin.form_type_markdown:
-    class: Snowcap\AdminBundle\Form\Type\MarkdownType
-    tags:
-      -  { name: form.type, alias: snowcap_admin_markdown }
+    # Form types (for edition)
+    snowcap_admin.form_type_slug:
+        class: Snowcap\AdminBundle\Form\Type\SlugType
+        tags:
+            -  { name: form.type, alias: snowcap_admin_slug }
 
-  snowcap_admin.form_type_wysiwyg:
-    class: Snowcap\AdminBundle\Form\Type\WysiwygType
-    tags:
-      -  { name: form.type, alias: snowcap_admin_wysiwyg }
+    snowcap_admin.form_type_markdown:
+        class: Snowcap\AdminBundle\Form\Type\MarkdownType
+        tags:
+            -  { name: form.type, alias: snowcap_admin_markdown }
 
-  # Form types (for search /filter)
-  snowcap_admin.form_type_content_search:
-    class: Snowcap\AdminBundle\Form\Type\Content\SearchType
-    tags:
-      - { name: form.type, alias: snowcap_admin_content_search }
+    snowcap_admin.form_type_wysiwyg:
+        class: Snowcap\AdminBundle\Form\Type\WysiwygType
+        tags:
+            -  { name: form.type, alias: snowcap_admin_wysiwyg }
 
-  snowcap_admin.form_type_content_filter:
-    class: Snowcap\AdminBundle\Form\Type\Content\FilterType
-    tags:
-      - { name: form.type, alias: snowcap_admin_content_filter }
+    # Form types (for search /filter)
+    snowcap_admin.form_type_content_search:
+        class: Snowcap\AdminBundle\Form\Type\Content\SearchType
+        tags:
+            - { name: form.type, alias: snowcap_admin_content_search }
 
-  #Datalists
-  snowcap_admin.datalist_factory:
-    class: Snowcap\AdminBundle\Datalist\DatalistFactory
+    snowcap_admin.form_type_content_filter:
+        class: Snowcap\AdminBundle\Form\Type\Content\FilterType
+        tags:
+            - { name: form.type, alias: snowcap_admin_content_filter }
 
-  snowcap_admin.datalist_view.grid:
-    class: Snowcap\AdminBundle\Datalist\View\GridView
-    tags:
-      - { name: snowcap_admin.datalist_view, alias: grid }
+    #Datalists
+    snowcap_admin.datalist_factory:
+        class: Snowcap\AdminBundle\Datalist\DatalistFactory
 
-  snowcap_admin.datalist_view.thumbnail:
-    class: Snowcap\AdminBundle\Datalist\View\ThumbnailView
-    tags:
-      - { name: snowcap_admin.datalist_view, alias: thumbnail }
+    snowcap_admin.datalist_view.grid:
+        class: Snowcap\AdminBundle\Datalist\View\GridView
+        tags:
+            - { name: snowcap_admin.datalist_view, alias: grid }
 
-  snowcap_admin.logger:
-    class: Snowcap\AdminBundle\Logger\Logger
-    arguments: [@doctrine, @security.context]
+    snowcap_admin.datalist_view.thumbnail:
+        class: Snowcap\AdminBundle\Datalist\View\ThumbnailView
+        tags:
+            - { name: snowcap_admin.datalist_view, alias: thumbnail }
+
+    # Admin logger
+    snowcap_admin.logger:
+        class: Snowcap\AdminBundle\Logger\Logger
+        arguments: [@doctrine, @security.context]
