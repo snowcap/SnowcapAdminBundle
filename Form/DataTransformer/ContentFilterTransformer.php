@@ -5,7 +5,6 @@ namespace Snowcap\AdminBundle\Form\DataTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 
 class ContentFilterTransformer implements DataTransformerInterface {
-
     /**
      * @var string
      */
@@ -18,7 +17,7 @@ class ContentFilterTransformer implements DataTransformerInterface {
 
     /**
      * @param string $field the field to filter on
-     * @param string operator $operator the sql operator
+     * @param string $operator the filter operator
      */
     public function __construct($field, $operator) {
         $this->field = $field;
@@ -45,5 +44,4 @@ class ContentFilterTransformer implements DataTransformerInterface {
             'operator' => $this->operator,
         ));
     }
-
 }

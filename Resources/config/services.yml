@@ -26,42 +26,30 @@ services:
     tags:
       -  { name: twig.extension }
 
-  # Forms
-  snowcap_admin.slug:
+  # Form types (for edition)
+  snowcap_admin.form_type_slug:
     class: Snowcap\AdminBundle\Form\Type\SlugType
     tags:
-      -  { name: form.type, alias: slug }
+      -  { name: form.type, alias: snowcap_admin_slug }
 
-  snowcap_admin.inline:
-    class: Snowcap\AdminBundle\Form\Type\InlineType
-    arguments: [@snowcap_admin]
-    tags:
-      -  { name: form.type, alias: snowcap_admin_inline }
-
-  snowcap_admin.translatable_entity:
-    class: Snowcap\AdminBundle\Form\Type\TranslatableEntityType
-    arguments: [@doctrine, @snowcap_admin]
-    tags:
-      -  { name: form.type, alias: snowcap_admin_translatable_entity }
-
-  snowcap_admin.markdown:
+  snowcap_admin.form_type_markdown:
     class: Snowcap\AdminBundle\Form\Type\MarkdownType
     tags:
-      -  { name: form.type, alias: markdown }
+      -  { name: form.type, alias: snowcap_admin_markdown }
 
-  snowcap_admin.wysiwyg:
+  snowcap_admin.form_type_wysiwyg:
     class: Snowcap\AdminBundle\Form\Type\WysiwygType
-    arguments: [@router]
     tags:
-      -  { name: form.type, alias: wysiwyg }
+      -  { name: form.type, alias: snowcap_admin_wysiwyg }
 
-  snowcap_admin.content_search:
-    class: Snowcap\AdminBundle\Form\Type\ContentSearchType
+  # Form types (for search /filter)
+  snowcap_admin.form_type_content_search:
+    class: Snowcap\AdminBundle\Form\Type\Content\SearchType
     tags:
       - { name: form.type, alias: snowcap_admin_content_search }
 
-  snowcap_admin.content_filter:
-    class: Snowcap\AdminBundle\Form\Type\ContentFilterType
+  snowcap_admin.form_type_content_filter:
+    class: Snowcap\AdminBundle\Form\Type\Content\FilterType
     tags:
       - { name: form.type, alias: snowcap_admin_content_filter }
 

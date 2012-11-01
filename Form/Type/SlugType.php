@@ -1,53 +1,48 @@
 <?php
+
 namespace Snowcap\AdminBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * Slug field type class
- * 
- */
 class SlugType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getName()
     {
-        return 'slug';
+        return 'snowcap_admin_slug';
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
-    public function getDefaultOptions(array $options) {
-        return array('target' => 'title');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilder $builder, array $options) {
-        parent::buildForm($builder, $options);
-        $builder->setAttribute('target', $options['target']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildView(FormView $view, FormInterface $form)
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        parent::buildView($view, $form);
-        $view->set('target', $form->getAttribute('target'));
+        $resolver
+            ->setRequired(array('target'))
+            ->setAllowedTypes(array(
+                'target' => 'string'
+            ));
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Symfony\Component\Form\FormView $view
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param array $options
      */
-    public function getParent(array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['target'] = $options['target'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getParent()
     {
         return 'text';
     }
