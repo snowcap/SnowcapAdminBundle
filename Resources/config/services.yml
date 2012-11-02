@@ -8,6 +8,12 @@ services:
     snowcap_admin:
         class: Snowcap\AdminBundle\AdminManager
 
+    # Base admin services
+    snowcap_admin.admin_content:
+        class: Snowcap\AdminBundle\Admin\ContentAdmin
+        abstract: true
+
+
     # Routing loader
     snowcap_admin.routing_loader:
         class: Snowcap\AdminBundle\Routing\Loader\AdminLoader

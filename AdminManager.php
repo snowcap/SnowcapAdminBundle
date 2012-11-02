@@ -21,6 +21,7 @@ class AdminManager
      */
     public function registerAdmin($alias, AdminInterface $admin)
     {
+        $admin->setAlias($alias);
         $this->admins[$alias] = $admin;
     }
 

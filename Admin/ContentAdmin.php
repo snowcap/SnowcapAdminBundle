@@ -74,24 +74,6 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
-     * Validate the admin section params
-     *
-     * @param array $params
-     * @throws \Snowcap\AdminBundle\Exception
-     */
-    public function validateParams(array $params)
-    {
-        parent::validateParams($params);
-        // Checks that there is a valid entity class in the config
-        if (!array_key_exists('entity_class', $params)) {
-            throw new Exception(sprintf('The admin section %s must be configured with a "entity_class" parameter', $this->getCode()));
-        }
-        elseif (!class_exists($params['entity_class'])) {
-            throw new Exception(sprintf('The admin section %s has an invalid "entity_class" parameter', $this->getCode()));
-        }
-    }
-
-    /**
      * Instantiate and return a blank entity
      *
      * @return mixed

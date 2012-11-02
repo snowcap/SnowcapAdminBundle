@@ -7,13 +7,6 @@ use Symfony\Component\Routing\RouteCollection;
 interface AdminInterface
 {
     /**
-     * Return the admin code
-     *
-     * @return string
-     */
-    public function getCode();
-
-    /**
      * @return string
      */
     public function getDefaultUrl();
@@ -25,7 +18,12 @@ interface AdminInterface
     public function addRoutes($alias, RouteCollection $routeCollection);
 
     /**
+     * @param string $alias
+     */
+    public function setAlias($alias);
+
+    /**
      * @return string
      */
-    public function getName();
+    public function getAlias();
 }

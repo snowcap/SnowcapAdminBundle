@@ -165,18 +165,12 @@ class AdminExtension extends \Twig_Extension
         return 'snowcap_admin';
     }
 
-    public function getAdminForEntityName($namespace, $param = null)
+    public function getAdminForEntityName($namespace)
     {
         $entity = new $namespace;
         $admin = $this->adminManager->getAdminForEntity($entity);
-        if($param === 'code') {
-            return $admin->getCode();
-        }
-        elseif($param !== null) {
-            return $admin->getParam($param);
-        } else {
-            return $admin;
-        }
+
+        return $admin;
     }
 
 }
