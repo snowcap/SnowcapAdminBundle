@@ -1,7 +1,4 @@
 parameters:
-    sections: ~
-    bundle: ~
-    translation_catalogues: ~
 
 services:
     # Main admin class
@@ -16,13 +13,18 @@ services:
             - [ setEntityManager, [@doctrine.orm.entity_manager] ]
             - [ setDatalistFactory, [@snowcap_admin.datalist_factory] ]
             - [ setFormFactory, [@form.factory] ]
+            - [ setRoutingHelper, [@snowcap_admin.routing_helper_content] ]
 
-    # Routing loader
+    # Routing
     snowcap_admin.routing_loader:
         class: Snowcap\AdminBundle\Routing\Loader\AdminLoader
         arguments: [@snowcap_admin]
         tags:
             - { name: routing.loader }
+
+    snowcap_admin.routing_helper_content:
+        class: Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
+        arguments: ["", ""]
 
     # Subscriber for activating admin classes shortcuts
 #    snowcap_admin.admin_subscriber:

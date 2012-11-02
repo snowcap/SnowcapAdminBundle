@@ -75,7 +75,7 @@
     {# actions block #}
     {% block actions %}
         <p>
-            <a class="btn btn-primary" href="{{ path('snowcap_admin_content_create', {'code': admin.alias}) }}">
+            <a class="btn btn-primary" href="{{ admin_content_path(admin, 'create') }}">
                 <i class="icon-plus icon-white"></i>
                 {{ "content.actions.create"|trans({}, 'SnowcapAdminBundle') }}
             </a>

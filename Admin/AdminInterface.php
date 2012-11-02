@@ -15,7 +15,7 @@ interface AdminInterface
      * @param string $alias
      * @param \Symfony\Component\Routing\RouteCollection $routeCollection
      */
-    public function addRoutes($alias, RouteCollection $routeCollection);
+    public function addRoutes(RouteCollection $routeCollection);
 
     /**
      * @param string $alias

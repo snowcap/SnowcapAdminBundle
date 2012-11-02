@@ -3,13 +3,6 @@
 {# pageheader block #}
 {% block pageheader %}
     <div class="page-header">
-        <h2>{{ "content.create.title"|trans({'%content_name%': admin.param('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle') }}</h2>
+        <h2>{{ "content.create.title"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle') }}</h2>
     </div>
 {% endblock pageheader %}
-
-{% if admin.translatable %}
-    {% set switch_route_params = {'code': admin.code} %}
-    {% set form_action_params = {'code': admin.code, 'locale': content_locale} %}
-{% else %}
-    {% set form_action_params = {'code': admin.code} %}
-{% endif %}

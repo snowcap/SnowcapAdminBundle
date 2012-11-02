@@ -6,6 +6,7 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 use Snowcap\AdminBundle\DataList\AbstractDatalist;
 use Snowcap\AdminBundle\AdminManager;
+use Snowcap\AdminBundle\Admin\ContentAdmin;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -54,6 +55,7 @@ class AdminExtension extends \Twig_Extension
             'preview_value' => new \Twig_Function_Method($this, 'previewValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'is_array'  => new \Twig_Function_Method($this, 'is_array', array()),
             'get_admin_for_entity_name' => new \Twig_Function_Method($this, 'getAdminForEntityName'),
+            'admin_content_path' => new \Twig_Function_Method($this, 'getAdminContentPath'),
         );
     }
 
@@ -173,4 +175,8 @@ class AdminExtension extends \Twig_Extension
         return $admin;
     }
 
+    public function getAdminContentPath(ContentAdmin $admin, $action)
+    {
+
+    }
 }

@@ -9,9 +9,12 @@ use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Util\PropertyPath;
 use Snowcap\AdminBundle\Datalist\DatalistFactory;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Routing\RouteCollection;
 
 use Snowcap\AdminBundle\Exception;
 use Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs;
+use Symfony\Component\Routing\Route;
+use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
 /**
  * Content admin class
@@ -37,6 +40,11 @@ abstract class ContentAdmin extends AbstractAdmin
      * @var FormFactory
      */
     protected $formFactory;
+
+    /**
+     * @var ContentRoutingHelper
+     */
+    protected $routingHelper;
 
     /**
      * Return the main admin form for this content
@@ -97,7 +105,8 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function buildEntity()
     {
-        return new $this->getEntityClass();
+        $entityClassName = $this->getEntityClass();
+        return new $entityClassName;
     }
 
     /**
@@ -276,5 +285,23 @@ abstract class ContentAdmin extends AbstractAdmin
     public function setDatalistFactory(DatalistFactory $datalistFactory)
     {
         $this->datalistFactory = $datalistFactory;
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper $routingHelper
+     */
+    public function setRoutingHelper(ContentRoutingHelper $routingHelper)
+    {
+        $this->routingHelper = $routingHelper;
+    }
+
+    /**
+     * @param string $alias
+     * @param \Symfony\Component\Routing\RouteCollection $routeCollection
+     */
+    public function addRoutes(RouteCollection $routeCollection)
+    {
+        $routeCollection->add($this->routingHelper->getRouteName($this, 'index'), $this->routingHelper->getRoute($this, 'index'));
+        $routeCollection->add($this->routingHelper->getRouteName($this, 'create'), $this->routingHelper->getRoute($this, 'create'));
     }
 }

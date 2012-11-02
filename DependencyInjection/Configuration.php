@@ -20,11 +20,13 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('bundle')->end()
-                ->arrayNode('translation_catalogues')->prototype('scalar')->end()->end()
-                ->arrayNode('sections')
-                    ->useAttributeAsKey('key')
-                    ->prototype('variable')->end()
+                ->arrayNode('content')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('route_prefix')->defaultValue('/admin')->end()
+                        ->scalarNode('route_name_prefix')->defaultValue('snowcap_admin')->end()
+                    ->end()
+                ->end()
             ->end()
         ;
         return $treeBuilder;

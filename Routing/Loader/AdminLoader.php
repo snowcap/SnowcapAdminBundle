@@ -32,8 +32,10 @@ class AdminLoader implements LoaderInterface {
         $routes = new RouteCollection();
 
         foreach($this->adminManager->getAdmins() as $alias => $admin) {
-            $admin->addRoutes($alias, $routes);
+            $admin->addRoutes($routes);
         }
+
+        $routes->addPrefix('/admin');
 
         return $routes;
     }

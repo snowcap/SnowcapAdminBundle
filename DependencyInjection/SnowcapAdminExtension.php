@@ -28,6 +28,10 @@ class SnowcapAdminExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
+        $container->findDefinition('snowcap_admin.routing_helper_content')
+            ->replaceArgument(0, $config['content']['route_prefix'])
+            ->replaceArgument(1, $config['content']['route_name_prefix']);
+
         /*foreach (array('sections','bundle') as $attribute) {
             $container->setParameter($attribute , $config[$attribute]);
         }

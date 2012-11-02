@@ -67,43 +67,31 @@ class ContentController extends BaseController
     /**
      * Create a new content entity
      *
-     * @param string $code
+     * @param string $alias
      * @return mixed
      */
-    public function createAction($code, $locale = null)
+    public function createAction($alias)
     {
-        if ($locale === null) {
-            $locale = $this->getRequest()->getLocale();
-        }
-        $this->get('snowcap_admin')->setWorkingLocale($locale);
         $request = $this->get('request');
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $admin = $this->get('snowcap_admin')->getAdmin($alias);
         $entity = $admin->buildEntity();
         $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
         $forms->add($form);
-        if ($admin->isTranslatable()) {
-            $translationEntity = $admin->buildTranslationEntity($entity, $locale);
-            $translationForm = $admin->getTranslationForm($translationEntity);
-            $forms->add($translationForm);
-        }
         if ('POST' === $request->getMethod()) {
-            $forms->bindRequest($request);
+            $forms->bind($request);
             if ($forms->isValid()) {
                 $admin->saveEntity($entity);
-                if ($admin->isTranslatable()) {
-                    $entity->getTranslations()->set($translationEntity->getLocale(), $translationEntity);
-                    $admin->saveTranslationEntity($entity, $translationEntity);
-                }
                 $admin->flush();
-                $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_CREATE, $admin, $entity, $locale);
+                // Todo: reactivate using event dispatcher
+                //$this->get('snowcap_admin.logger')->logContent(Logger::ACTION_CREATE, $admin, $entity, $locale);
                 $this->setFlash('success', 'content.create.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('code' => $code, 'id' => $entity->getId(), 'locale' => $locale)));
+                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('alias' => $alias, 'id' => $entity->getId())));
                 }
                 else {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
+                    return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('alias' => $alias)));
                 }
             } else {
                 $this->setFlash('error', 'content.create.flash.error');
@@ -113,12 +101,10 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'forms' => $forms->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $code),
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $alias),
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
+            'form_action' => $this->getRouter()->generate('snowcap_admin_content_create', array('alias' => $alias))
         );
-        if ($admin->isTranslatable()) {
-            $templateParams['content_locale'] = $locale;
-        }
 
         return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $code), $templateParams);
     }
@@ -214,5 +200,21 @@ class ContentController extends BaseController
         }
 
         return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
+    }
+
+    /**
+     * @return \Snowcap\AdminBundle\AdminManager
+     */
+    private function getAdminManager()
+    {
+        return $this->get('snowcap_admin');
+    }
+
+    /**
+     * @return \Symfony\Component\Routing\RouterInterface
+     */
+    private function getRouter()
+    {
+        return $this->get('router');
     }
 }
