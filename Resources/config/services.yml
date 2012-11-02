@@ -12,7 +12,10 @@ services:
     snowcap_admin.admin_content:
         class: Snowcap\AdminBundle\Admin\ContentAdmin
         abstract: true
-
+        calls:
+            - [ setEntityManager, [@doctrine.orm.entity_manager] ]
+            - [ setDatalistFactory, [@snowcap_admin.datalist_factory] ]
+            - [ setFormFactory, [@form.factory] ]
 
     # Routing loader
     snowcap_admin.routing_loader:
@@ -22,11 +25,11 @@ services:
             - { name: routing.loader }
 
     # Subscriber for activating admin classes shortcuts
-    snowcap_admin.admin_subscriber:
-        class: Snowcap\AdminBundle\Listener\AdminSubscriber
-        arguments: [@snowcap_admin]
-        tags:
-            - { name: doctrine.event_subscriber}
+#    snowcap_admin.admin_subscriber:
+#        class: Snowcap\AdminBundle\Listener\AdminSubscriber
+#        arguments: [@snowcap_admin]
+#        tags:
+#            - { name: doctrine.event_subscriber}
 
     # Twig extensions
     snowcap_admin.twig:
@@ -62,7 +65,7 @@ services:
         tags:
             - { name: form.type, alias: snowcap_admin_content_filter }
 
-    #Datalists
+    # Datalists
     snowcap_admin.datalist_factory:
         class: Snowcap\AdminBundle\Datalist\DatalistFactory
 

@@ -7,6 +7,8 @@ use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Util\PropertyPath;
+use Snowcap\AdminBundle\Datalist\DatalistFactory;
+use Doctrine\ORM\EntityManager;
 
 use Snowcap\AdminBundle\Exception;
 use Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs;
@@ -20,6 +22,21 @@ abstract class ContentAdmin extends AbstractAdmin
 {
     const SAVEMODE_NORMAL = 'normal';
     const SAVEMODE_CONTINUE = 'continue';
+
+    /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
+     * @var DatalistFactory
+     */
+    protected $datalistFactory;
+
+    /**
+     * @var FormFactory
+     */
+    protected $formFactory;
 
     /**
      * Return the main admin form for this content
@@ -66,10 +83,10 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function getQueryBuilder()
     {
-        $queryBuilder = $this->environment->get('doctrine')->getEntityManager()->createQueryBuilder();
+        $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder
             ->select('e')
-            ->from($this->getParam('entity_class'), 'e');
+            ->from($this->getEntityClass(), 'e');
         return $queryBuilder;
     }
 
@@ -80,8 +97,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function buildEntity()
     {
-        $entityName = $this->getParam('entity_class');
-        return new $entityName;
+        return new $this->getEntityClass();
     }
 
     /**
@@ -92,8 +108,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function findEntity($entityId)
     {
-        $em = $this->environment->get('doctrine')->getEntityManager();
-        $entity = $em->getRepository($this->getParam('entity_class'))->find($entityId);
+        $entity = $this->em->getRepository($this->getEntityClass())->find($entityId);
         return $entity;
     }
 
@@ -104,14 +119,12 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function saveEntity($entity)
     {
-        $em = $this->environment->get('doctrine')->getEntityManager();
-        $em->persist($entity);
+        $this->em->persist($entity);
     }
 
     public function flush()
     {
-        $em = $this->environment->get('doctrine')->getEntityManager();
-        $em->flush();
+        $this->em->flush();
     }
 
     /**
@@ -121,8 +134,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function deleteEntity($entity)
     {
-        $em = $this->environment->get('doctrine')->getEntityManager();
-        $em->remove($entity);
+        $this->em->remove($entity);
     }
 
     /**
@@ -144,16 +156,16 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     protected function createDatalist($view, $name)
     {
-        $datalist = $this->environment->get('snowcap_admin.datalist_factory')->create($view, $name);
+        $datalist = $this->datalistFactory->create($view, $name);
         $datalist->setQueryBuilder($this->getQueryBuilder());
         $datalist->addAction(
             'snowcap_admin_content_update',
-            array('code' => $this->getCode()),
+            array('code' => $this->getAlias()),
             array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
         );
         $datalist->addAction(
             'snowcap_admin_content_delete',
-            array('code' => $this->getCode()),
+            array('code' => $this->getAlias()),
             array(
                 'label' => 'content.actions.delete.label',
                 'icon' => 'icon-remove',
@@ -172,7 +184,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     protected function createSearchFormBuilder()
     {
-        return $this->environment->get('form.factory')->createNamedBuilder('form', 'search', null, array('virtual' => true));
+        return $this->formFactory->createNamedBuilder('form', 'search', null, array('virtual' => true));
     }
 
     /**
@@ -182,7 +194,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     protected function createFilterFormBuilder()
     {
-        return $this->environment->get('form.factory')->createNamedBuilder('form', 'filters', null, array('virtual' => true));
+        return $this->formFactory->createNamedBuilder('form', 'filters', null, array('virtual' => true));
     }
 
     /**
@@ -242,4 +254,27 @@ abstract class ContentAdmin extends AbstractAdmin
 
     abstract public function getEntityClass();
 
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     */
+    public function setEntityManager(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormFactory $formFactory
+     */
+    public function setFormFactory(FormFactory $formFactory)
+    {
+        $this->formFactory = $formFactory;
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\DatalistFactory $datalistFactory
+     */
+    public function setDatalistFactory(DatalistFactory $datalistFactory)
+    {
+        $this->datalistFactory = $datalistFactory;
+    }
 }
