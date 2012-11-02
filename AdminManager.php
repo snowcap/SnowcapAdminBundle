@@ -19,9 +19,10 @@ class AdminManager
      * @param string $alias
      * @param \Snowcap\AdminBundle\Admin\AdminInterface $admin
      */
-    public function registerAdmin($alias, AdminInterface $admin)
+    public function registerAdmin($alias, AdminInterface $admin, array $options)
     {
         $admin->setAlias($alias);
+        $admin->setOptions($options);
         $this->admins[$alias] = $admin;
     }
 

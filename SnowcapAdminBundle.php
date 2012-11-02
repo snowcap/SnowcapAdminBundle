@@ -9,11 +9,13 @@ use Snowcap\AdminBundle\DependencyInjection\Compiler\DatalistViewCompilerPass;
 
 class SnowcapAdminBundle extends Bundle
 {
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
         $container->addCompilerPass(new AdminCompilerPass());
         $container->addCompilerPass(new DatalistViewCompilerPass());
     }
-
 }

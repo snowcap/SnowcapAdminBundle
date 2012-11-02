@@ -22,7 +22,12 @@ class AdminCompilerPass implements CompilerPassInterface
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
                 : $serviceId;
-            $definition->addMethodCall('registerAdmin', array($alias, new Reference($serviceId)));
+            $label = isset($tag[0]['label'])
+                ? $tag[0]['label']
+                : $serviceId;
+            $definition->addMethodCall('registerAdmin', array($alias, new Reference($serviceId), array(
+                'label' => $label,
+            )));
         }
     }
 }
