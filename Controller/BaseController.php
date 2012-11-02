@@ -40,15 +40,22 @@ class BaseController extends Controller
      */
     protected function getTemplate($templateName, $code = null)
     {
-        $templateNameParts = explode(':', $templateName);
-        $templateNameParts[0] = $this->get('snowcap_admin')->getBundle();
-        if(null !== $code) {
-            $templateNameParts[1] .= '/' . $code;
+        $kernel = $this->get('kernel');
+        foreach($kernel->getBundles() as $bundle) {
+            if('SnowcapAdminBundle' === $bundle->getParent()) {
+                $adminBundleName = $bundle->getName();
+                $templateNameParts = explode(':', $templateName);
+                $templateNameParts[0] = $adminBundleName;
+                if(null !== $code) {
+                    $templateNameParts[1] .= '/' . $code;
+                }
+                $candidate = implode(':', $templateNameParts);
+                if($this->get('templating')->exists($candidate)) {
+                    return $candidate;
+                }
+            }
         }
-        $candidate = implode(':', $templateNameParts);
-        if($this->get('templating')->exists($candidate)) {
-            return $candidate;
-        }
+
         return $templateName;
     }
 
