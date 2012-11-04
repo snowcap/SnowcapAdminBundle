@@ -2,50 +2,26 @@ snowcap_admin_default_index:
     pattern: ""
     defaults: { _controller: SnowcapAdminBundle:Default:index }
 
-# Content routes
-snowcap_admin_content_index:
-    pattern: /content/{code}
-    defaults: { _controller: SnowcapAdminBundle:Content:index }
-
-snowcap_admin_content_create:
-    pattern: /content/{code}/create/{locale}
-    defaults: { _controller: SnowcapAdminBundle:Content:create, locale: null }
-
-snowcap_admin_content_update:
-    pattern: /content/{code}/update/{id}/{locale}
-    defaults: { _controller: SnowcapAdminBundle:Content:update, locale: null }
-
-snowcap_admin_content_delete:
-    pattern: /content/{code}/delete/{id}
-    defaults: { _controller: SnowcapAdminBundle:Content:delete }
-
-# Inline routes
-snowcap_admin_inlinecontent_autocomplete:
-    pattern: /inline/{code}/autocomplete/{input}/{locale}
-    defaults: { _controller: SnowcapAdminBundle:InlineContent:autocomplete, locale: null }
-snowcap_admin_inlinecontent_create:
-    pattern: /inline/{code}/create
-    defaults: { _controller: SnowcapAdminBundle:InlineContent:create }
-
-# Reorder routes
 snowcap_admin_reorderablecontent_reorder:
     pattern: /reorder/{code}/{locale}
     defaults: { _controller: SnowcapAdminBundle:ReorderableContent:reorder, locale: null }
 
-# Default routes
 snowcap_admin_markdown:
     pattern: /markdown
     defaults: { _controller: SnowcapAdminBundle:Default:markdown }
+
 snowcap_admin_switch_locale:
     pattern: /switch-locale/{locale}
     defaults: { _controller: SnowcapAdminBundle:Default:switchLocale }
 
-# Wysiwyg routes
 snowcap_admin_wysiwyg_browser:
     pattern: /wysiwyg/browser
     defaults: { _controller: SnowcapAdminBundle:Wysiwyg:browser }
 
-# Translatable catalogues routes
 snowcap_admin_cataloguetranslation_index:
     pattern: /catalogue-translation/{catalogue}/{locale}
     defaults: { _controller: SnowcapAdminBundle:CatalogueTranslation:index, catalogue: messages, locale: null }
+
+snowcap_admin_extra:
+    resource: .
+    type: snowcap_admin_extra
