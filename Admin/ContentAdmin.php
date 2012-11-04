@@ -168,13 +168,13 @@ abstract class ContentAdmin extends AbstractAdmin
         $datalist = $this->datalistFactory->create($view, $name);
         $datalist->setQueryBuilder($this->getQueryBuilder());
         $datalist->addAction(
-            'snowcap_admin_content_update',
-            array('code' => $this->getAlias()),
+            $this->routingHelper->getRouteName($this, 'update'),
+            array('alias' => $this->getAlias()),
             array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
         );
         $datalist->addAction(
-            'snowcap_admin_content_delete',
-            array('code' => $this->getAlias()),
+            $this->routingHelper->getRouteName($this, 'delete'),
+            array('alias' => $this->getAlias()),
             array(
                 'label' => 'content.actions.delete.label',
                 'icon' => 'icon-remove',
@@ -301,7 +301,25 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function addRoutes(RouteCollection $routeCollection)
     {
-        $routeCollection->add($this->routingHelper->getRouteName($this, 'index'), $this->routingHelper->getRoute($this, 'index'));
-        $routeCollection->add($this->routingHelper->getRouteName($this, 'create'), $this->routingHelper->getRoute($this, 'create'));
+        // Add index route
+        $routeCollection->add(
+            $this->routingHelper->getRouteName($this, 'index'),
+            $this->routingHelper->getRoute($this, 'index', array(), true)
+        );
+        // Add create route
+        $routeCollection->add(
+            $this->routingHelper->getRouteName($this, 'create'),
+            $this->routingHelper->getRoute($this, 'create')
+        );
+        // Add update route
+        $routeCollection->add(
+            $this->routingHelper->getRouteName($this, 'update'),
+            $this->routingHelper->getRoute($this, 'update', array('id'))
+        );
+        // Add delete route
+        $routeCollection->add(
+            $this->routingHelper->getRouteName($this, 'delete'),
+            $this->routingHelper->getRoute($this, 'delete', array('id'))
+        );
     }
 }

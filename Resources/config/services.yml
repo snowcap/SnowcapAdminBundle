@@ -24,7 +24,7 @@ services:
 
     snowcap_admin.routing_helper_content:
         class: Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
-        arguments: ["", ""]
+        arguments: [@router, "", ""]
 
     # Subscriber for activating admin classes shortcuts
 #    snowcap_admin.admin_subscriber:
@@ -36,7 +36,7 @@ services:
     # Twig extensions
     snowcap_admin.twig:
         class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
-        arguments: [@snowcap_admin]
+        arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
         tags:
             -  { name: twig.extension }
 

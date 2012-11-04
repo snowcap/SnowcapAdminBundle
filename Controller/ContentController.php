@@ -1,17 +1,10 @@
 <?php
 namespace Snowcap\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Snowcap\AdminBundle\Environment;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
-use Snowcap\AdminBundle\Admin\ReorderableAdminInterface;
 use Snowcap\AdminBundle\Admin\CannotDeleteException;
-
-use Snowcap\AdminBundle\Logger\Logger;
 
 /**
  * This controller provides basic CRUD capabilities for content models
@@ -20,14 +13,11 @@ use Snowcap\AdminBundle\Logger\Logger;
 class ContentController extends BaseController
 {
     /**
-     * Content homepage (listing)
-     *
-     * @param string $type
-     * @return mixed
+     * Display the index screen (listing)
      */
     public function indexAction($alias)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($alias);
+        $admin = $this->getAdminManager()->getAdmin($alias);
         $list = $admin->getDatalist();
         $request = $this->getRequest();
         if (($page = $request->get('page')) !== null) {
@@ -37,7 +27,7 @@ class ContentController extends BaseController
         $templateParams = array(
             'admin' => $admin,
             'list' => $list,
-            'reorder' => $admin instanceof ReorderableAdminInterface
+            'reorder' => false // TODO: reimplement reorder
         );
 
         $contentForm = $this->createForm('form', array(), array(
@@ -66,14 +56,11 @@ class ContentController extends BaseController
 
     /**
      * Create a new content entity
-     *
-     * @param string $alias
-     * @return mixed
      */
     public function createAction($alias)
     {
         $request = $this->get('request');
-        $admin = $this->get('snowcap_admin')->getAdmin($alias);
+        $admin = $this->getAdminManager()->getAdmin($alias);
         $entity = $admin->buildEntity();
         $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
@@ -83,16 +70,18 @@ class ContentController extends BaseController
             if ($forms->isValid()) {
                 $admin->saveEntity($entity);
                 $admin->flush();
-                // Todo: reactivate using event dispatcher
+                // TODO: reactivate using event dispatcher
                 //$this->get('snowcap_admin.logger')->logContent(Logger::ACTION_CREATE, $admin, $entity, $locale);
                 $this->setFlash('success', 'content.create.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('alias' => $alias, 'id' => $entity->getId())));
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId()));
                 }
                 else {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('alias' => $alias)));
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
                 }
+
+                return $this->redirect($redirectUrl);
             } else {
                 $this->setFlash('error', 'content.create.flash.error');
             }
@@ -103,27 +92,19 @@ class ContentController extends BaseController
             'forms' => $forms->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $alias),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
-            'form_action' => $this->getRouter()->generate('snowcap_admin_content_create', array('alias' => $alias))
+            'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'create'),
         );
 
-        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $code), $templateParams);
+        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $alias), $templateParams);
     }
 
     /**
      * Update an existing content entity
-     *
-     * @param string $code
-     * @param int $id
-     * @return mixed
      */
-    public function updateAction($code, $id, $locale = null)
+    public function updateAction($alias, $id)
     {
-        if ($locale === null) {
-            $locale = $this->getRequest()->getLocale();
-        }
-        $this->get('snowcap_admin')->setWorkingLocale($locale);
         $request = $this->get('request');
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $admin = $this->getAdminManager()->getAdmin($alias);
         $entity = $admin->findEntity($id);
 
         if($entity === null) {
@@ -133,29 +114,23 @@ class ContentController extends BaseController
         $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
         $forms->add($form);
-        if ($admin->isTranslatable()) {
-            $translationEntity = $admin->findTranslationEntity($entity, $locale);
-            $translationForm = $admin->getTranslationForm($translationEntity);
-            $forms->add($translationForm);
-        }
         if ('POST' === $request->getMethod()) {
             $forms->bindRequest($request);
             if ($forms->isValid()) {
                 $admin->saveEntity($entity);
-                if ($admin->isTranslatable()) {
-                    $entity->getTranslations()->set($translationEntity->getLocale(), $translationEntity);
-                    $admin->saveTranslationEntity($entity, $translationEntity);
-                }
                 $admin->flush();
-                $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_UPDATE, $admin, $entity, $locale);
+                // TODO: reactivate using event dispatcher
+                //$this->get('snowcap_admin.logger')->logContent(Logger::ACTION_UPDATE, $admin, $entity, $locale);
                 $this->setFlash('success', 'content.update.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_update', array('code' => $code, 'id' => $id, 'locale' => $locale)));
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId()));
                 }
                 else {
-                    return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
                 }
+
+                return $this->redirect($redirectUrl);
             } else {
                 $this->setFlash('error', 'content.update.flash.error');
             }
@@ -164,31 +139,26 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'forms' => $forms->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $code),
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $alias),
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
+            'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())),
         );
-        if ($admin->isTranslatable()) {
-            $templateParams['content_locale'] = $locale;
-        }
 
-        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $code), $templateParams);
+        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $alias), $templateParams);
     }
 
     /**
-     * Deletes a content entity.
-     *
-     * @param string $type
-     * @param int $id
-     * @return mixed
+     * Delete a content entity
      */
-    public function deleteAction($code, $id)
+    public function deleteAction($alias, $id)
     {
-        $admin = $this->get('snowcap_admin')->getAdmin($code);
+        $admin = $this->getAdminManager()->getAdmin($alias);
         try {
             $entity = $admin->findEntity($id);
             $admin->deleteEntity($entity);
             $admin->flush();
-            $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_DELETE, $admin, $entity, $this->getRequest()->getLocale());
+            // TODO: reactivate using event dispatcher
+            // $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_DELETE, $admin, $entity, $this->getRequest()->getLocale());
             $this->setFlash('success', 'content.delete.flash.success');
         }
         catch(CannotDeleteException $e) {
@@ -199,7 +169,7 @@ class ContentController extends BaseController
             }
         }
 
-        return $this->redirect($this->generateUrl('snowcap_admin_content_index', array('code' => $code)));
+        return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
     }
 
     /**
@@ -211,10 +181,10 @@ class ContentController extends BaseController
     }
 
     /**
-     * @return \Symfony\Component\Routing\RouterInterface
+     * @return \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
      */
-    private function getRouter()
+    private function getRoutingHelper()
     {
-        return $this->get('router');
+        return $this->get('snowcap_admin.routing_helper_content');
     }
 }

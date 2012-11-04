@@ -7,6 +7,7 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Snowcap\AdminBundle\DataList\AbstractDatalist;
 use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
+use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
 /**
  * Created by JetBrains PhpStorm.
@@ -21,7 +22,7 @@ class AdminExtension extends \Twig_Extension
     /**
      * @var \Twig_Environment
      */
-    protected $environment;
+    private $environment;
 
     /**
      * @var \Snowcap\AdminBundle\AdminManager
@@ -29,11 +30,19 @@ class AdminExtension extends \Twig_Extension
     private $adminManager;
 
     /**
+     * @var \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
+     */
+    private $contentRoutingHelper;
+
+    /**
      * @param \Snowcap\AdminBundle\AdminManager $adminManager
      */
-    public function __construct(AdminManager $adminManager)
-    {
+    public function __construct(
+        AdminManager $adminManager,
+        ContentRoutingHelper $contentRoutingHelper
+    ){
         $this->adminManager = $adminManager;
+        $this->contentRoutingHelper = $contentRoutingHelper;
     }
 
     /**
@@ -175,8 +184,13 @@ class AdminExtension extends \Twig_Extension
         return $admin;
     }
 
+    /**
+     * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
+     * @param $action
+     * @return string
+     */
     public function getAdminContentPath(ContentAdmin $admin, $action)
     {
-
+        return $this->contentRoutingHelper->generateUrl($admin, $action);
     }
 }

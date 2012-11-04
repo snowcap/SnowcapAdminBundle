@@ -44,7 +44,7 @@ class ThumbnailView implements DatalistViewInterface
                 );
                 break;
             default:
-                throw new Exception(sprintf('Unknown type "%s" for datalist %s', $type, get_class($this)));
+                throw new \Exception(sprintf('Unknown type "%s" for datalist %s', $type, get_class($this)));
                 break;
         }
     }
