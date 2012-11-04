@@ -1,23 +1,20 @@
 <?php
-namespace Snowcap\AdminBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Admin\CannotDeleteException;
 
 /**
  * This controller provides basic CRUD capabilities for content models
- *
  */
 class ContentController extends BaseController
 {
     /**
      * Display the index screen (listing)
      */
-    public function indexAction($alias)
+    public function indexAction(ContentAdmin $admin)
     {
-        $admin = $this->getAdminManager()->getAdmin($alias);
         $list = $admin->getDatalist();
         $request = $this->getRequest();
         if (($page = $request->get('page')) !== null) {
@@ -51,16 +48,15 @@ class ContentController extends BaseController
             $templateParams['form_theme_template'] = $this->getTemplate('SnowcapAdminBundle:Form:widgets.html.twig');
         }
 
-        return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $alias), $templateParams);
+        return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()), $templateParams);
     }
 
     /**
      * Create a new content entity
      */
-    public function createAction($alias)
+    public function createAction(ContentAdmin $admin)
     {
         $request = $this->get('request');
-        $admin = $this->getAdminManager()->getAdmin($alias);
         $entity = $admin->buildEntity();
         $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
@@ -90,21 +86,20 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'forms' => $forms->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $alias),
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
             'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'create'),
         );
 
-        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $alias), $templateParams);
+        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $admin->getAlias()), $templateParams);
     }
 
     /**
      * Update an existing content entity
      */
-    public function updateAction($alias, $id)
+    public function updateAction(ContentAdmin $admin, $id)
     {
         $request = $this->get('request');
-        $admin = $this->getAdminManager()->getAdmin($alias);
         $entity = $admin->findEntity($id);
 
         if($entity === null) {
@@ -139,20 +134,19 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'forms' => $forms->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $alias),
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
             'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())),
         );
 
-        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $alias), $templateParams);
+        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $admin->getAlias()), $templateParams);
     }
 
     /**
      * Delete a content entity
      */
-    public function deleteAction($alias, $id)
+    public function deleteAction(ContentAdmin $admin, $id)
     {
-        $admin = $this->getAdminManager()->getAdmin($alias);
         try {
             $entity = $admin->findEntity($id);
             $admin->deleteEntity($entity);
@@ -170,14 +164,6 @@ class ContentController extends BaseController
         }
 
         return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
-    }
-
-    /**
-     * @return \Snowcap\AdminBundle\AdminManager
-     */
-    private function getAdminManager()
-    {
-        return $this->get('snowcap_admin');
     }
 
     /**

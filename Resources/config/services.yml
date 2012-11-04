@@ -26,6 +26,13 @@ services:
         class: Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
         arguments: [@router, "", ""]
 
+    # Param converters
+    snowcap_admin.param_converter:
+        class: Snowcap\AdminBundle\Request\ParamConverter\AdminParamConverter
+        arguments: [@snowcap_admin]
+        tags:
+            - { name: request.param_converter }
+
     # Subscriber for activating admin classes shortcuts
 #    snowcap_admin.admin_subscriber:
 #        class: Snowcap\AdminBundle\Listener\AdminSubscriber
