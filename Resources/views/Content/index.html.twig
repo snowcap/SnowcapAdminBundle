@@ -21,12 +21,12 @@
     {# searchform block #}
     {% block searchform %}
         {% if contentForm.search is defined and (list.data is not empty or contentForm.search.vars.value is not empty) %}
-            <form action="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" method="GET" class="form-search" novalidate="novalidate">
+            <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-search">
                 {% for field in contentForm.search %}
                     {{ form_widget(field, { 'attr': { 'placeholder': "content.search.label"|trans({}, 'SnowcapAdminBundle')}}) }}
                 {% endfor %}
                 <button type="submit" class="btn">{{ "content.search.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
-                <a href="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" class="btn primary">{{ "content.search.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
+                <a href="{{ admin_content_path(admin, 'index') }}" class="btn primary">{{ "content.search.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
             </form>
         {% endif %}
     {% endblock searchform %}
@@ -35,14 +35,14 @@
     {% block list %}
 
         {% set list_content %}
-            {% if list.data is not empty %}
-                {{ list_widget(list) }}
-                {% if list.paginator != null %}
-                    {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
-                {% endif %}
-            {% else %}
-                {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle')) }}
+        {% if list.data is not empty %}
+            {{ list_widget(list) }}
+            {% if list.paginator != null %}
+                {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
             {% endif %}
+        {% else %}
+            {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle')) }}
+        {% endif %}
         {% endset %}
 
         {% set has_filters = contentForm.filters is defined %}
@@ -53,12 +53,12 @@
                 <div class="span3">
                     <div class="well">
                         <h3>{{ "content.filter.title"|trans({}, 'SnowcapAdminBundle') }}</h3>
-                        <form action="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" method="GET" class="form-filter" novalidate="novalidate">
+                        <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-filter">
                             {% for filter in contentForm.filters %}
                                 {{ form_row(filter, {'attr': {'class': 'input-medium'}}) }}
                             {% endfor %}
                             <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
-                            <a href="{{ path('snowcap_admin_content_index', {'code': admin.code}) }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
+                            <a href="{{ admin_content_path(admin, 'index') }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
                         </form>
                     </div>
                 </div>

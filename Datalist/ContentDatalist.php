@@ -19,6 +19,10 @@ class ContentDatalist extends AbstractDatalist
      */
     protected $paginator;
 
+    /**
+     * @var array
+     */
+    protected $pagination;
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
@@ -34,6 +38,12 @@ class ContentDatalist extends AbstractDatalist
             throw new \Exception(sprintf('The "%s" list must have a valid queryBuilder property (see Snowcap\AdminBundle\Grid\Content::setQueryBuilder)', $this->name));
         }
         if (!isset($this->data)) {
+            if(isset($this->pagination)) { //TODO: find better approach
+                $this->paginator = new Paginator($this->queryBuilder->getQuery(), true);
+                $this->paginator->setLimitPerPage($this->pagination[0]);
+                $this->paginator->setLimitRange($this->pagination[1]);
+                $this->paginator->setPage($this->pagination[2]);
+            }
             try {
                 if ($this->paginator !== null) {
                     $this->data = $this->paginator;
@@ -112,9 +122,8 @@ class ContentDatalist extends AbstractDatalist
      */
     public function paginate($limitPerPage = 10, $limitRange = 10)
     {
-        $this->paginator = new Paginator($this->queryBuilder->getQuery(), true);
-        $this->paginator->setLimitPerPage($limitPerPage);
-        $this->paginator->setLimitRange($limitRange);
+        $this->pagination = array($limitPerPage, $limitRange, 1);//TODO: find better approach
+
         return $this;
     }
 
@@ -122,7 +131,7 @@ class ContentDatalist extends AbstractDatalist
      * @param int $page
      */
     public function setPage($page) {
-        $this->paginator->setPage($page);
+        $this->pagination[2] = $page;
     }
 
     /**
@@ -132,6 +141,4 @@ class ContentDatalist extends AbstractDatalist
     {
         return $this->paginator;
     }
-
-
 }

@@ -94,7 +94,8 @@ abstract class ContentAdmin extends AbstractAdmin
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder
             ->select('e')
-            ->from($this->getEntityClass(), 'e');
+            ->from($this->getEntityClass(), 'e')
+            ->orderBy('e.id', 'DESC');
         return $queryBuilder;
     }
 
@@ -193,7 +194,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     protected function createSearchFormBuilder()
     {
-        return $this->formFactory->createNamedBuilder('form', 'search', null, array('virtual' => true));
+        return $this->formFactory->createNamedBuilder('search', 'form', null, array('virtual' => true));
     }
 
     /**
@@ -203,7 +204,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     protected function createFilterFormBuilder()
     {
-        return $this->formFactory->createNamedBuilder('form', 'filters', null, array('virtual' => true));
+        return $this->formFactory->createNamedBuilder('filters', 'form', null, array('virtual' => true));
     }
 
     /**
