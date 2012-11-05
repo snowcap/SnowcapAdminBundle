@@ -29,7 +29,7 @@
         "symfony/framework-bundle": "2.1.*",
         "sensio/framework-extra-bundle": "2.1.x-dev",
         "snowcap/core-bundle": "dev-future",
-        "snowcap/bootstrap-bundle": "dev-master"
+        "snowcap/bootstrap-bundle": "dev-future"
     },
     "autoload": {
         "psr-0": { "Snowcap\\AdminBundle": "" }
