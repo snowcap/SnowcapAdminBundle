@@ -5,8 +5,7 @@ namespace Snowcap\AdminBundle\Datalist;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Mapping\MappingException;
 
-use Snowcap\AdminBundle\Exception;
-use Snowcap\CoreBundle\Manager\PaginatorManager;
+use Snowcap\CoreBundle\Paginator\Paginator;
 
 class ContentDatalist extends AbstractDatalist
 {
@@ -16,7 +15,7 @@ class ContentDatalist extends AbstractDatalist
     protected $queryBuilder;
 
     /**
-     * @var PaginatorManager
+     * @var Paginator
      */
     protected $paginator;
 
@@ -32,19 +31,18 @@ class ContentDatalist extends AbstractDatalist
     public function getData()
     {
         if (!isset($this->queryBuilder) || !$this->queryBuilder instanceof QueryBuilder) {
-            throw new Exception(sprintf('The "%s" list must have a valid queryBuilder property (see Snowcap\AdminBundle\Grid\Content::setQueryBuilder)', $this->name));
+            throw new \Exception(sprintf('The "%s" list must have a valid queryBuilder property (see Snowcap\AdminBundle\Grid\Content::setQueryBuilder)', $this->name));
         }
         if (!isset($this->data)) {
             try {
                 if ($this->paginator !== null) {
-                    $this->paginator->setQuery($this->queryBuilder->getQuery());
-                    $this->data = $this->paginator->getResult();
+                    $this->data = $this->paginator;
                 } else {
                     $this->data = $this->queryBuilder->getQuery()->getResult();
                 }
             }
             catch (\Doctrine\ORM\Query\QueryException $e) {
-                throw new Exception(sprintf('The "%s" list queryBuilder leads to an invalid query. The returned error was: %s', $this->name, $e->getMessage()));
+                throw new \Exception(sprintf('The "%s" list queryBuilder leads to an invalid query. The returned error was: %s', $this->name, $e->getMessage()));
             }
         }
         return $this->data;
@@ -77,7 +75,7 @@ class ContentDatalist extends AbstractDatalist
         });
 
         if(isset($this->data)){
-            throw new Exception(sprintf('A content datalist cannot be filtered if its data has already been initialized'));
+            throw new \Exception(sprintf('A content datalist cannot be filtered if its data has already been initialized'));
         }
         foreach($filters as $filter){
             $placeholder = str_replace('.','_',$filter['field']);
@@ -114,7 +112,7 @@ class ContentDatalist extends AbstractDatalist
      */
     public function paginate($limitPerPage = 10, $limitRange = 10)
     {
-        $this->paginator = new PaginatorManager();
+        $this->paginator = new Paginator($this->queryBuilder->getQuery(), true);
         $this->paginator->setLimitPerPage($limitPerPage);
         $this->paginator->setLimitRange($limitRange);
         return $this;

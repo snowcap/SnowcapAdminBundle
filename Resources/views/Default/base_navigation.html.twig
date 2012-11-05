@@ -1,6 +1,6 @@
 {% macro menu_item(admin) %}
 <li>
-    <a href="{{ admin.defaultUrl }}" >{{ admin.name }}</a>
+    <a href="{{ admin.defaultUrl }}" >{{ admin.option('label')|transchoice(10) }}</a>
 </li>
 {% endmacro %}
 
