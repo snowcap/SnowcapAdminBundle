@@ -35,7 +35,7 @@
     {{ modal('modal-' ~ id, 'ATTENTION', 'If you change the slug, you can break links on other pages') }}
 {% endblock slug_widget %}
 
-{% block markdown_widget %}
+{% block snowcap_admin_markdown_widget %}
 {% set attr = attr|merge({'class': attr.class|default('widget-markdown')}) %}
 {% spaceless %}
     <div class="tabbable tabs-below">

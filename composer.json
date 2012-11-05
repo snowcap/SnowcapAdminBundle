@@ -29,7 +29,8 @@
         "symfony/framework-bundle": "2.1.*",
         "sensio/framework-extra-bundle": "2.1.x-dev",
         "snowcap/core-bundle": "dev-future",
-        "snowcap/bootstrap-bundle": "dev-future"
+        "snowcap/bootstrap-bundle": "dev-future",
+        "knplabs/knp-markdown-bundle": "1.2.x-dev"
     },
     "autoload": {
         "psr-0": { "Snowcap\\AdminBundle": "" }
