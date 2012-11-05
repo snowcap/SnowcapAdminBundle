@@ -56,7 +56,7 @@
 {% endspaceless %}
 {% endblock %}
 
-{% block wysiwyg_widget %}
+{% block snowcap_admin_wysiwyg_widget %}
 {% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-wysiwyg': wysiwyg_config}) %}
 {{ block('textarea_widget') }}
 {% endblock %}

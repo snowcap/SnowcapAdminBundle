@@ -27,7 +27,7 @@ class WysiwygType extends AbstractType
                 'wysiwyg_config' => '/bundles/snowcapadmin/js/ckeditor_config.js'
             ))
             ->setAllowedTypes(array(
-                'wysiwig_config' => 'string'
+                'wysiwyg_config' => 'string'
             ));
     }
 
