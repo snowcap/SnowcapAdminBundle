@@ -323,4 +323,12 @@ abstract class ContentAdmin extends AbstractAdmin
             $this->routingHelper->getRoute($this, 'delete', array('id'))
         );
     }
+
+    /**
+     * @return string
+     */
+    public function getDefaultUrl()
+    {
+        return $this->routingHelper->generateUrl($this, 'index');
+    }
 }
