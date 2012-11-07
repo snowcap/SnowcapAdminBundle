@@ -45,7 +45,7 @@ class ContentController extends BaseController
             $searchData = $contentForm->getData();
             $list->filterData($searchData);
             $templateParams['contentForm'] = $contentForm->createView();
-            $templateParams['form_theme_template'] = $this->getTemplate('SnowcapAdminBundle:Form:widgets.html.twig');
+            $templateParams['form_theme_template'] = $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig');
         }
 
         return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()), $templateParams);
