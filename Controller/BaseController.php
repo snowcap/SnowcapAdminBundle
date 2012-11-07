@@ -3,14 +3,8 @@
 namespace Snowcap\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
-use Symfony\Component\HttpKernel\Config\FileLocator;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-
 use Symfony\Component\HttpFoundation\Response;
+use Snowcap\CoreBundle\Util\String;
 
 /**
  * This controller provides generic capabilities for admin controllers
@@ -18,13 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BaseController extends Controller
 {
-
     /**
      * Sets a translateed flash message.
      *
      * @param string $name
      * @param string $value
      * @param array $params
+     *
+     * //TODO: replace by getSession() usage
      */
     public function setFlash($name, $value, $parameters = array())
     {
@@ -36,6 +31,7 @@ class BaseController extends Controller
      *
      * @param string $templateName the original template name as used in SnowcapAdminBundle
      * @param string $code the specific content admin code
+     *
      * @return string
      */
     protected function getTemplate($templateName, $code = null)
@@ -47,7 +43,7 @@ class BaseController extends Controller
                 $templateNameParts = explode(':', $templateName);
                 $templateNameParts[0] = $adminBundleName;
                 if(null !== $code) {
-                    $templateNameParts[1] .= '/' . $code;
+                    $templateNameParts[1] .= '/' . String::camelize($code);
                 }
                 $candidate = implode(':', $templateNameParts);
                 if($this->get('templating')->exists($candidate)) {
@@ -59,10 +55,18 @@ class BaseController extends Controller
         return $templateName;
     }
 
+    /**
+     * @param $type
+     * @param $code
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @TODO: check if still relevant
+     */
     public function renderError($type, $code)
     {
         $translatedTitle = $this->get('translator')->trans($type . '.title', array(), 'SnowcapAdminBundle');
         $translatedMessages = $this->get('translator')->trans($type . '.message', array(), 'SnowcapAdminBundle');
+
         return new Response($this->renderView('SnowcapAdminBundle:Error:' . $code . '.html.twig', array('title' => $translatedTitle, 'message' => $translatedMessages)), $code);
     }
 }
