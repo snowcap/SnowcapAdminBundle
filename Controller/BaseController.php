@@ -18,10 +18,8 @@ class BaseController extends Controller
      * @param string $name
      * @param string $value
      * @param array $params
-     *
-     * //TODO: replace by getSession() usage
      */
-    public function setFlash($name, $value, $parameters = array())
+    public function setFlash($name, $value, $parameters = array()) //TODO: replace by getSession() usage
     {
         return $this->getRequest()->getSession()->setFlash($name, $this->get('translator')->trans($value, $parameters, 'SnowcapAdminBundle'));
     }
@@ -60,9 +58,8 @@ class BaseController extends Controller
      * @param $code
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @TODO: check if still relevant
      */
-    public function renderError($type, $code)
+    public function renderError($type, $code) //TODO: check if still relevant
     {
         $translatedTitle = $this->get('translator')->trans($type . '.title', array(), 'SnowcapAdminBundle');
         $translatedMessages = $this->get('translator')->trans($type . '.message', array(), 'SnowcapAdminBundle');
