@@ -64,6 +64,7 @@ class AdminExtension extends \Twig_Extension
             'preview_value' => new \Twig_Function_Method($this, 'previewValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'is_array'  => new \Twig_Function_Method($this, 'is_array', array()),
             'get_admin_for_entity_name' => new \Twig_Function_Method($this, 'getAdminForEntityName'),
+            'admin' => new \Twig_Function_Method($this, 'getAdminByCode'),
             'admin_content_path' => new \Twig_Function_Method($this, 'getAdminContentPath'),
         );
     }
@@ -185,12 +186,22 @@ class AdminExtension extends \Twig_Extension
     }
 
     /**
+     * @param $code
+     * @return \Snowcap\AdminBundle\Admin\AdminInterface
+     */
+    public function getAdminByCode($code)
+    {
+        return $this->adminManager->getAdmin($code);
+    }
+
+    /**
      * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
      * @param $action
+     * @param array $params
      * @return string
      */
-    public function getAdminContentPath(ContentAdmin $admin, $action)
+    public function getAdminContentPath(ContentAdmin $admin, $action, array $params = array())
     {
-        return $this->contentRoutingHelper->generateUrl($admin, $action);
+        return $this->contentRoutingHelper->generateUrl($admin, $action, $params);
     }
 }

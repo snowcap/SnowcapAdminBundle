@@ -8,8 +8,11 @@
     {# pageheader block - to be provided by child templates  #}
     {% block pageheader %}{% endblock pageheader %}
 
+    {# preform block - to be provided by child templates  #}
+    {% block preform %}{% endblock preform %}
+
     {# main block #}
-    {% block main %}
+    {% block form %}
         <form
             action="{{ form_action }}"
             method="post" {{ form_enctype(forms) }}
@@ -23,7 +26,7 @@
 
             {{ form_rest(forms) }}
 
-            {# formaction block #}
+            {# formactions block #}
             {% block formactions %}
                 <div class="form-actions">
                     <button type="submit" name="saveMode" class="btn btn-large btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
@@ -36,6 +39,9 @@
             {% endblock formactions %}
 
         </form>
-    {% endblock main %}
+    {% endblock form %}
+
+    {# postform block - to be provided by child templates  #}
+    {% block postform %}{% endblock postform %}
 
 {% endblock body %}
