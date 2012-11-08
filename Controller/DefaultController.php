@@ -41,20 +41,6 @@ class DefaultController extends BaseController
         );
     }
 
-    /**
-     * Get the navigation for content management
-     * 
-     * @Template()
-     *
-     * @return mixed
-     */
-    public function navigationAction() {
-
-        return array(
-            'sections' => $this->get('snowcap_admin')->getAdmins(),
-        );
-    }
-
     public function markdownAction() {
 		$content = $this->getRequest()->request->get("content");
 		$result = $this->container->get('markdown.parser')->transform($content);

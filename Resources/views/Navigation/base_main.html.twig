@@ -1,8 +1,4 @@
-{% macro menu_item(admin) %}
-<li>
-    <a href="{{ admin.defaultUrl }}" >{{ admin.option('label')|transchoice(10) }}</a>
-</li>
-{% endmacro %}
+{% import 'SnowcapAdminBundle:Navigation:macros.html.twig' as macros %}
 
 {# navigation block #}
 {% block navigation %}
@@ -13,25 +9,20 @@
 
                 {# brand block #}
                 {% block brand %}
-
                     <a class="brand" href="{{ path('snowcap_admin_default_index') }}">
                         {{ "project.name"|trans({}, 'SnowcapAdminBundle') }}
                     </a>
-
                 {% endblock brand %}
 
-                <ul class="nav">
-
-                    {# main_nav block #}
-                    {% block main_nav %}
-
-                        {% for admin in sections %}
-                            {{ _self.menu_item(admin) }}
+                {# admins block #}
+                {% block admins %}
+                    <ul class="nav">
+                        {% for admin in admins %}
+                            {{ macros.menu_item(admin) }}
                         {% endfor %}
+                    </ul>
+                {% endblock admins %}
 
-                    {% endblock main_nav %}
-
-                </ul>
             </div>
         </div>
     </div>
