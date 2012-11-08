@@ -11,7 +11,7 @@ content:
         submit: Rechercher
         reset: Annuler
     filter:
-        title: Fitres
+        title: Filtres
         submit: Filtrer
         reset: Annuler
     actions:
