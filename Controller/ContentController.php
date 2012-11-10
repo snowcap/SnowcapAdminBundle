@@ -3,7 +3,6 @@
 namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
-use Snowcap\AdminBundle\Admin\CannotDeleteException;
 
 /**
  * This controller provides basic CRUD capabilities for content models
@@ -160,20 +159,12 @@ class ContentController extends BaseController
      */
     public function deleteAction(ContentAdmin $admin, $id)
     {
-        try {
-            $entity = $admin->findEntity($id);
-            $admin->deleteEntity($entity);
-            $admin->flush();
-            // TODO: reactivate using event dispatcher
-            // $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_DELETE, $admin, $entity, $this->getRequest()->getLocale());
-            $this->setFlash('success', 'content.delete.flash.success');
-        } catch (CannotDeleteException $e) {
-            switch ($e->getCode()) {
-                case CannotDeleteException::HAS_CHILDREN:
-                    $this->setFlash('error', 'content.delete.flash.error_has_children');
-                    break;
-            }
-        }
+        $entity = $admin->findEntity($id);
+        $admin->deleteEntity($entity);
+        $admin->flush();
+        // TODO: reactivate using event dispatcher
+        // $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_DELETE, $admin, $entity, $this->getRequest()->getLocale());
+        $this->setFlash('success', 'content.delete.flash.success');
 
         return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
     }

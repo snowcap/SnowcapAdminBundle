@@ -23,16 +23,10 @@ class DefaultController extends BaseController
         return array();
     }
 
-    public function markdownAction() {
+    public function markdownAction() { //TODO: move elsewhere
 		$content = $this->getRequest()->request->get("content");
 		$result = $this->container->get('markdown.parser')->transform($content);
-		return new Response($result);
-    }
 
-    public function switchLocaleAction($locale) {
-        $this->getRequest()->setLocale($locale);
-        $referer = $this->getRequest()->headers->get('referer');
-        return $this->redirect($referer);
+        return new Response($result);
     }
-
 }

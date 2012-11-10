@@ -1,11 +1,7 @@
 <?php
 namespace Snowcap\AdminBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Response;
-
-use Snowcap\CoreBundle\Paginator\Paginator;
 
 /**
  * The default admin controller is used as a dashboard for

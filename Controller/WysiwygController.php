@@ -85,5 +85,4 @@ class WysiwygController extends BaseController
 
         return array_merge(array('searchForm' => $searchForm->createView(), 'uploadForm' => $uploadForm->createView(), 'list' => $list, 'arguments' => $arguments), $extraParameters);
     }
-
 }
