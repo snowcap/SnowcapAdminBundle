@@ -4,6 +4,8 @@ namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * This controller provides basic CRUD capabilities for content models
  */
@@ -12,7 +14,7 @@ class ContentController extends BaseController
     /**
      * Display the index screen (listing)
      */
-    public function indexAction(ContentAdmin $admin)
+    public function indexAction(Request $request, ContentAdmin $admin)
     {
         $list = $admin->getDatalist();
         $request = $this->getRequest();
@@ -54,9 +56,8 @@ class ContentController extends BaseController
     /**
      * Create a new content entity
      */
-    public function createAction(ContentAdmin $admin)
+    public function createAction(Request $request, ContentAdmin $admin)
     {
-        $request = $this->get('request');
         $entity = $admin->buildEntity();
         $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
@@ -103,10 +104,9 @@ class ContentController extends BaseController
     /**
      * Update an existing content entity
      */
-    public function updateAction(ContentAdmin $admin, $id)
+    public function updateAction(Request $request, ContentAdmin $admin)
     {
-        $request = $this->get('request');
-        $entity = $admin->findEntity($id);
+        $entity = $admin->findEntity($request->attributes->get('id'));
 
         if ($entity === null) {
             return $this->renderError('error.content.notfound', 404);
@@ -157,9 +157,9 @@ class ContentController extends BaseController
     /**
      * Delete a content entity
      */
-    public function deleteAction(ContentAdmin $admin, $id)
+    public function deleteAction(Request $request, ContentAdmin $admin)
     {
-        $entity = $admin->findEntity($id);
+        $entity = $admin->findEntity($request->attributes->get('id'));
         $admin->deleteEntity($entity);
         $admin->flush();
         // TODO: reactivate using event dispatcher
