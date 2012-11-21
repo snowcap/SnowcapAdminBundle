@@ -1,8 +1,11 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 {% import 'SnowcapBootstrapBundle::macros.html.twig' as bootstrap %}
 
-{% if contentForm is defined %}
-    {% form_theme contentForm form_theme_template %}
+{% if search_form is defined %}
+    {% form_theme search_form form_theme_template %}
+{% endif %}
+{% if filter_form is defined %}
+    {% form_theme filter_form form_theme_template %}
 {% endif %}
 
 {# body block #}
@@ -20,9 +23,9 @@
 
     {# searchform block #}
     {% block searchform %}
-        {% if contentForm.search is defined and (list.data is not empty or contentForm.search.vars.value is not empty) %}
+        {% if search_form is not null and (list.data is not empty or search_form.vars.value is not empty) %}
             <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-search">
-                {% for field in contentForm.search %}
+                {% for field in search_form %}
                     {{ form_widget(field, { 'attr': { 'placeholder': "content.search.label"|trans({}, 'SnowcapAdminBundle')}}) }}
                 {% endfor %}
                 <button type="submit" class="btn">{{ "content.search.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
@@ -45,16 +48,14 @@
         {% endif %}
         {% endset %}
 
-        {% set has_filters = contentForm.filters is defined %}
-
-        {% if has_filters %}
+        {% if filter_form is not null %}
             <div class="row">
                 <div class="span9">{{ list_content }}</div>
                 <div class="span3">
                     <div class="well">
                         <h3>{{ "content.filter.title"|trans({}, 'SnowcapAdminBundle') }}</h3>
                         <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-filter">
-                            {% for filter in contentForm.filters %}
+                            {% for filter in filter_form %}
                                 {{ form_row(filter, {'attr': {'class': 'input-medium'}}) }}
                             {% endfor %}
                             <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>

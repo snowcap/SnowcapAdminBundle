@@ -194,7 +194,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     protected function createSearchFormBuilder()
     {
-        return $this->formFactory->createNamedBuilder('search', 'form', null, array('virtual' => true));
+        return $this->formFactory->createNamedBuilder('', 'form', null, array('virtual' => true, 'csrf_protection' => false));
     }
 
     /**
@@ -204,7 +204,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     protected function createFilterFormBuilder()
     {
-        return $this->formFactory->createNamedBuilder('filters', 'form', null, array('virtual' => true));
+        return $this->formFactory->createNamedBuilder('', 'form', null, array('virtual' => true, 'csrf_protection' => false));
     }
 
     /**

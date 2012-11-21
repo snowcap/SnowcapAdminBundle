@@ -21,34 +21,35 @@ class ContentController extends BaseController
             $list->setPage($page);
         }
 
+        $searchForm = $admin->getSearchForm();
+        $filterForm = $admin->getFilterForm();
+
+        $criteria = array();
+        if (null !== $searchForm) {
+            $searchForm->bind($request);
+            $criteria = array_merge($criteria, $searchForm->getData());
+        }
+        if (null !== $filterForm) {
+            $filterForm->bind($request);
+            $criteria = array_merge($criteria, $filterForm->getData());
+        }
+        if (!empty($criteria)) {
+            $list->filterData($criteria);
+        }
+
         $templateParams = array(
             'admin' => $admin,
             'list' => $list,
-            'reorder' => false // TODO: reimplement reorder
+            'reorder' => false, // TODO: reimplement reorder
+            'search_form' => $searchForm->createView(),
+            'filter_form' => $filterForm->createView(),
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
         );
 
-        $contentForm = $this->createForm('form', array(), array(
-            'virtual' => true,
-            'csrf_protection' => false,
-        ));
-        $searchForm = $admin->getSearchForm();
-        if($searchForm !== null) {
-            $contentForm->add($searchForm);
-        }
-        $filterForm = $admin->getFilterForm();
-        if($filterForm !== null) {
-            $contentForm->add($filterForm);
-        }
-
-        if ($contentForm->hasChildren()) {
-            $contentForm->bindRequest($this->get('request'));
-            $searchData = $contentForm->getData();
-            $list->filterData($searchData);
-            $templateParams['contentForm'] = $contentForm->createView();
-            $templateParams['form_theme_template'] = $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig');
-        }
-
-        return $this->render($this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()), $templateParams);
+        return $this->render(
+            $this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()),
+            $templateParams
+        );
     }
 
     /**
@@ -71,9 +72,12 @@ class ContentController extends BaseController
                 $this->setFlash('success', 'content.create.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId()));
-                }
-                else {
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl(
+                        $admin,
+                        'update',
+                        array('id' => $entity->getId())
+                    );
+                } else {
                     $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
                 }
 
@@ -91,7 +95,10 @@ class ContentController extends BaseController
             'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'create'),
         );
 
-        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $admin->getAlias()), $templateParams);
+        return $this->render(
+            $this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $admin->getAlias()),
+            $templateParams
+        );
     }
 
     /**
@@ -102,7 +109,7 @@ class ContentController extends BaseController
         $request = $this->get('request');
         $entity = $admin->findEntity($id);
 
-        if($entity === null) {
+        if ($entity === null) {
             return $this->renderError('error.content.notfound', 404);
         }
 
@@ -119,9 +126,12 @@ class ContentController extends BaseController
                 $this->setFlash('success', 'content.update.flash.success');
                 $saveMode = $this->getRequest()->get('saveMode');
                 if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId()));
-                }
-                else {
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl(
+                        $admin,
+                        'update',
+                        array('id' => $entity->getId())
+                    );
+                } else {
                     $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
                 }
 
@@ -139,7 +149,10 @@ class ContentController extends BaseController
             'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())),
         );
 
-        return $this->render($this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $admin->getAlias()), $templateParams);
+        return $this->render(
+            $this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $admin->getAlias()),
+            $templateParams
+        );
     }
 
     /**
@@ -154,9 +167,8 @@ class ContentController extends BaseController
             // TODO: reactivate using event dispatcher
             // $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_DELETE, $admin, $entity, $this->getRequest()->getLocale());
             $this->setFlash('success', 'content.delete.flash.success');
-        }
-        catch(CannotDeleteException $e) {
-            switch($e->getCode()) {
+        } catch (CannotDeleteException $e) {
+            switch ($e->getCode()) {
                 case CannotDeleteException::HAS_CHILDREN:
                     $this->setFlash('error', 'content.delete.flash.error_has_children');
                     break;
