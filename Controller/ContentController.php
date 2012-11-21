@@ -21,6 +21,13 @@ class ContentController extends BaseController
             $list->setPage($page);
         }
 
+        $templateParams = array(
+            'admin' => $admin,
+            'list' => $list,
+            'reorder' => false, // TODO: reimplement reorder
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
+        );
+
         $searchForm = $admin->getSearchForm();
         $filterForm = $admin->getFilterForm();
 
@@ -28,23 +35,16 @@ class ContentController extends BaseController
         if (null !== $searchForm) {
             $searchForm->bind($request);
             $criteria = array_merge($criteria, $searchForm->getData());
+            $templateParams['search_form'] = $searchForm->createView();
         }
         if (null !== $filterForm) {
             $filterForm->bind($request);
             $criteria = array_merge($criteria, $filterForm->getData());
+            $templateParams['filter_form'] = $filterForm->createView();
         }
         if (!empty($criteria)) {
             $list->filterData($criteria);
         }
-
-        $templateParams = array(
-            'admin' => $admin,
-            'list' => $list,
-            'reorder' => false, // TODO: reimplement reorder
-            'search_form' => $searchForm->createView(),
-            'filter_form' => $filterForm->createView(),
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
-        );
 
         return $this->render(
             $this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()),

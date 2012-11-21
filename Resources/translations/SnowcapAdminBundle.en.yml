@@ -109,6 +109,7 @@ cataloguetranslation:
               <code>{0}Aucun résultat|{1}1 résultat|]1,Inf]%count% résultats</code><br/>
 
 dashboard:
+    title: Dashboard
     introduction: |
         Welcome on the adminitration module of your website.<br/>
         This interface allows you to create, edit, adn delete content.<br/>

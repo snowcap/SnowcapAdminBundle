@@ -1,11 +1,8 @@
 <?php
 namespace Snowcap\AdminBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
-
-use Snowcap\CoreBundle\Paginator\Paginator;
 
 /**
  * The default admin controller is used as a dashboard for
@@ -17,28 +14,13 @@ class DefaultController extends BaseController
     /**
      * Admin default action
      *
-     * @Route("", name="admin_index")
      * @Template()
      *
      * @return mixed
      */
     public function indexAction()
     {
-        $logsQuery = $this->getDoctrine()->getRepository('SnowcapAdminBundle:Log')
-            ->createQueryBuilder('l')
-            ->orderBy('l.createdAt','DESC')
-            ->getQuery();
-
-        $paginator = new Paginator($logsQuery, true);
-        $paginator
-            ->setPage($this->getRequest()->get('page'))
-            ->setLimitPerPage(25);
-
-
-
-        return array(
-            'paginator' => $paginator,
-        );
+        return array();
     }
 
     public function markdownAction() {
