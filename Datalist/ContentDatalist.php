@@ -2,6 +2,8 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Form;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Mapping\MappingException;
 
@@ -23,6 +25,16 @@ class ContentDatalist extends AbstractDatalist
      * @var array
      */
     protected $pagination;
+
+    /**
+     * @var \Symfony\Component\Form\Form
+     */
+    protected $searchForm;
+
+    /**
+     * @var \Symfony\Component\Form\Form
+     */
+    protected $filterForm;
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
@@ -140,5 +152,44 @@ class ContentDatalist extends AbstractDatalist
     public function getPaginator()
     {
         return $this->paginator;
+    }
+
+
+    //TODO: check everything below
+
+    public function setFilterForm(Form $form)
+    {
+        $this->filterForm = $form;
+    }
+
+    public function setSearchForm(Form $form)
+    {
+        $this->searchForm = $form;
+    }
+
+    public function bind(Request $request)
+    {
+        // Bind search and filter forms
+        if(isset($this->searchForm)) {
+            $this->searchForm->bind($request);
+        }
+        if(isset($this->filterForm)) {
+            $this->filterForm->bind($request);
+        }
+
+        // Set paginator page if GET parameter exists
+        if (($page = $request->query->get('page')) !== null) {
+            $this->setPage($page);
+        }
+    }
+
+    public function getContentForm()
+    {
+
+
+        $contentForm = $this->createForm('form', array(), array(
+            'virtual' => true,
+            'csrf_protection' => false,
+        ));
     }
 }

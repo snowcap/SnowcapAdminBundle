@@ -5,16 +5,17 @@ namespace Snowcap\AdminBundle\Datalist;
 use Snowcap\AdminBundle\Exception;
 use Snowcap\AdminBundle\Datalist\View\DatalistViewInterface;
 
-class AbstractDatalist
+class Datalist
 {
     /**
      * @var string
      */
     protected $name;
+
     /**
-     * @var \Snowcap\AdminBundle\Datalist\View\DatalistViewInterface
+     * @var array
      */
-    protected $view;
+    protected $options;
 
     /**
      * @var array
@@ -30,10 +31,10 @@ class AbstractDatalist
      * @param string $code
      * @param string $view
      */
-    public function __construct($name, DatalistViewInterface $view)
+    public function __construct($name, array $options)
     {
         $this->name = $name;
-        $this->view = $view;
+        $this->options = $options;
     }
 
     /**

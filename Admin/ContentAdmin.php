@@ -57,7 +57,7 @@ abstract class ContentAdmin extends AbstractAdmin
     /**
      * Return the main admin list for this content
      *
-     * @return \Snowcap\AdminBundle\Datalist\AbstractDatalist
+     * @return \Snowcap\AdminBundle\Datalist\ContentDatalist
      */
     abstract public function getDatalist();
 
