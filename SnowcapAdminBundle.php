@@ -5,7 +5,7 @@ namespace Snowcap\AdminBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Snowcap\AdminBundle\DependencyInjection\Compiler\AdminCompilerPass;
-use Snowcap\AdminBundle\DependencyInjection\Compiler\DatalistViewCompilerPass;
+use Snowcap\AdminBundle\DependencyInjection\Compiler\DatalistCompilerPass;
 use Snowcap\AdminBundle\DependencyInjection\Compiler\ImCompilerPass;
 
 class SnowcapAdminBundle extends Bundle
@@ -17,7 +17,7 @@ class SnowcapAdminBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new AdminCompilerPass());
-        $container->addCompilerPass(new DatalistViewCompilerPass());
+        $container->addCompilerPass(new DatalistCompilerPass());
         $container->addCompilerPass(new ImCompilerPass());
     }
 }

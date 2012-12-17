@@ -74,7 +74,7 @@ class DatalistFactory {
             throw new \InvalidArgumentException(sprintf('The view must be a string or an instance of DatalistViewInterface'));
         }
 
-        $builder = new DatalistBuilder($name, $view);
+        $builder = new DatalistBuilder($name, $view, $options);
         $type->buildDatalist($builder, $options);
 
         return $builder;

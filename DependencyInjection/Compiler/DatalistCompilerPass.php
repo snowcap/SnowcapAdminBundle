@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class DatalistViewCompilerPass implements CompilerPassInterface
+class DatalistCompilerPass implements CompilerPassInterface
 {
     /**
      * You can modify the container here before it is dumped to PHP code.
@@ -23,11 +23,19 @@ class DatalistViewCompilerPass implements CompilerPassInterface
             return;
         }
         $definition = $container->getDefinition('snowcap_admin.datalist_factory');
+
         foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_view') as $serviceId => $tag) {
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
                 : $serviceId;
             $definition->addMethodCall('addView', array($alias, new Reference($serviceId)));
+        }
+
+        foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_type') as $serviceId => $tag) {
+            $alias = isset($tag[0]['alias'])
+                ? $tag[0]['alias']
+                : $serviceId;
+            $definition->addMethodCall('addType', array($alias, new Reference($serviceId)));
         }
     }
 

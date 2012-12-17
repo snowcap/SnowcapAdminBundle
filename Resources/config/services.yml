@@ -78,6 +78,11 @@ services:
     snowcap_admin.datalist_factory:
         class: Snowcap\AdminBundle\Datalist\DatalistFactory
 
+    snowcap_admin.datalist_type.datalist:
+        class: Snowcap\AdminBundle\Datalist\Type\DatalistType
+        tags:
+            - { name: snowcap_admin.datalist_type, alias: datalist }
+
     snowcap_admin.datalist_view.grid:
         class: Snowcap\AdminBundle\Datalist\View\GridView
         tags:

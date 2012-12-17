@@ -46,7 +46,7 @@ class DatalistBuilder {
 
     public function getDatalist()
     {
-        $datalist = new Datalist($this->name, $options);
+        $datalist = new Datalist($this->name, array());
         foreach($this->fields as $field => $fieldConfig){
             $datalist->add($field, $fieldConfig['type'], $fieldConfig['options']);
         }
