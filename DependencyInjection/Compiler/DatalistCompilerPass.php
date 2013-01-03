@@ -24,18 +24,18 @@ class DatalistCompilerPass implements CompilerPassInterface
         }
         $definition = $container->getDefinition('snowcap_admin.datalist_factory');
 
-        foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_view') as $serviceId => $tag) {
-            $alias = isset($tag[0]['alias'])
-                ? $tag[0]['alias']
-                : $serviceId;
-            $definition->addMethodCall('addView', array($alias, new Reference($serviceId)));
-        }
-
         foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_type') as $serviceId => $tag) {
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
                 : $serviceId;
-            $definition->addMethodCall('addType', array($alias, new Reference($serviceId)));
+            $definition->addMethodCall('registerType', array($alias, new Reference($serviceId)));
+        }
+
+        foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_fieldtype') as $serviceId => $tag) {
+            $alias = isset($tag[0]['alias'])
+                ? $tag[0]['alias']
+                : $serviceId;
+            $definition->addMethodCall('registerFieldType', array($alias, new Reference($serviceId)));
         }
     }
 

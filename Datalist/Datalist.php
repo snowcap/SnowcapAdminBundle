@@ -2,10 +2,11 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
-use Snowcap\AdminBundle\Exception;
-use Snowcap\AdminBundle\Datalist\View\DatalistViewInterface;
+use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
+use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 
-class Datalist
+class Datalist implements DatalistInterface
 {
     /**
      * @var string
@@ -13,57 +14,79 @@ class Datalist
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $type;
+
+    /**
      * @var array
      */
     protected $options;
 
     /**
-     * @var array
+     * @var DatasourceInterface
      */
-    protected $data;
+    protected $datasource;
 
     /**
      * @var array
      */
-    protected $actions;
+    protected $fields = array();
+
+    /**
+     * @var array
+     */
+    protected $actions = array();
 
     /**
      * @param string $code
-     * @param string $view
+     * @param array $options
      */
-    public function __construct($name, array $options)
+    public function __construct($name, DatalistTypeInterface $type, array $options)
     {
         $this->name = $name;
+        $this->type = $type;
         $this->options = $options;
     }
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param array  $options
-     * @return AbstractDatalist
+     * @param DatalistFieldInterface $field
+     * @return Datalist
      */
-    public function add($path, $type, array $options = array())
+    public function addField(DatalistFieldInterface $field)
     {
-        $this->view->add($path, $type, $options);
+        $this->fields[]= $field;
 
         return $this;
     }
 
     /**
-     * @param array $data
+     * @return array
      */
-    public function setData($data)
+    public function getFields()
     {
-        $this->data = $data;
+        return $this->fields;
     }
 
     /**
-     * @return array
+     * @param DatasourceInterface $datasource
      */
-    public function getData()
+    public function setDatasource($datasource)
     {
-        return $this->data;
+        $this->datasource = $datasource;
+    }
+
+    /**
+     * @return DatasourceInterface
+     */
+    public function getDatasource()
+    {
+        return $this->datasource;
+    }
+
+    public function getIterator()
+    {
+        return $this->getDatasource()->getIterator();
     }
 
     /**
@@ -75,11 +98,16 @@ class Datalist
     }
 
     /**
-     * @return \Snowcap\AdminBundle\Datalist\View\DatalistViewInterface
+     * @param string $name
+     * @return mixed
      */
-    public function getView()
+    public function getOption($name)
     {
-        return $this->view;
+        if (!array_key_exists($name, $this->options)) {
+            throw new \InvalidArgumentException(sprintf('The option "%s" does not exist', $name));
+        }
+
+        return $this->options[$name];
     }
 
     public function addAction($routeName, array $parameters = array(), array $options = array())

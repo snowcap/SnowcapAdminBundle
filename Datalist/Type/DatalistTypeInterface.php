@@ -2,13 +2,18 @@
 
 namespace Snowcap\AdminBundle\Datalist\Type;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 use Snowcap\AdminBundle\Datalist\DatalistBuilder;
 
 interface DatalistTypeInterface {
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver);
+
     /**
-     * Build the Datalist view
-     *
-     * @param \Snowcap\AdminBundle\Datalist\View\DatalistViewInterface $view
+     * @param \Snowcap\AdminBundle\Datalist\DatalistBuilder $builder
+     * @param array $options
+     * @return mixed
      */
     public function buildDatalist(DatalistBuilder $builder, array $options);
 
@@ -16,4 +21,9 @@ interface DatalistTypeInterface {
      * @return string
      */
     public function getName();
+
+    /**
+     * @return string
+     */
+    public function getParent();
 }

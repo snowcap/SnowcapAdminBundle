@@ -1,21 +1,17 @@
 <?php
 
-namespace Snowcap\AdminBundle\Datalist\Type;
+namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Snowcap\AdminBundle\Datalist\DatalistBuilder;
-
-class DatalistType extends AbstractDatalistType {
+class LabelFieldType extends AbstractFieldType
+{
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => null,
-            'display_mode' => 'grid'
-        ));
+        $resolver->setRequired(array('mappings'));
     }
 
     /**
@@ -23,6 +19,6 @@ class DatalistType extends AbstractDatalistType {
      */
     public function getName()
     {
-        return 'datalist';
+        return 'label';
     }
 }

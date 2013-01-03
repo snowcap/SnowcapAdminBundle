@@ -41,9 +41,14 @@ services:
 #            - { name: doctrine.event_subscriber}
 
     # Twig extensions
-    snowcap_admin.twig:
+    snowcap_admin.twig_admin:
         class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
         arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
+        tags:
+            -  { name: twig.extension }
+
+    snowcap_admin.twig_datalist:
+        class: Snowcap\AdminBundle\Twig\Extension\DatalistExtension
         tags:
             -  { name: twig.extension }
 
@@ -83,15 +88,30 @@ services:
         tags:
             - { name: snowcap_admin.datalist_type, alias: datalist }
 
-    snowcap_admin.datalist_view.grid:
-        class: Snowcap\AdminBundle\Datalist\View\GridView
+    snowcap_admin.datalist_field_datetime:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\DateTimeFieldType
         tags:
-            - { name: snowcap_admin.datalist_view, alias: grid }
+            - { name: snowcap_admin.datalist_fieldtype, alias: datetime }
 
-    snowcap_admin.datalist_view.thumbnail:
-        class: Snowcap\AdminBundle\Datalist\View\ThumbnailView
+    snowcap_admin.datalist_field_heading:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\HeadingFieldType
         tags:
-            - { name: snowcap_admin.datalist_view, alias: thumbnail }
+            - { name: snowcap_admin.datalist_fieldtype, alias: heading }
+
+    snowcap_admin.datalist_field_image:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\ImageFieldType
+        tags:
+            - { name: snowcap_admin.datalist_fieldtype, alias: image }
+
+    snowcap_admin.datalist_field_label:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\LabelFieldType
+        tags:
+            - { name: snowcap_admin.datalist_fieldtype, alias: label }
+
+    snowcap_admin.datalist_field_image:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\TextFieldType
+        tags:
+            - { name: snowcap_admin.datalist_fieldtype, alias: text }
 
     # Admin logger
     snowcap_admin.logger:

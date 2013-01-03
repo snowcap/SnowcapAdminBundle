@@ -6,23 +6,29 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Snowcap\AdminBundle\Datalist\DatalistBuilder;
 
-class DatalistType extends AbstractDatalistType {
+abstract class AbstractDatalistType implements DatalistTypeInterface {
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => null,
-            'display_mode' => 'grid'
-        ));
+
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\DatalistBuilder $builder
+     * @param array $options
+     */
+    public function buildDatalist(DatalistBuilder $builder, array $options)
+    {
+
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getParent()
     {
-        return 'datalist';
+        return null;
     }
 }

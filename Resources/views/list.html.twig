@@ -1,23 +1,23 @@
 {# grid view #}
-{% block list_grid %}
+{% block datalist_grid %}
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            {% for column in list.view.columns %}
-                {{ block('grid_header') }}
+            {% for field in datalist.fields %}
+                {{ datalist_header(field) }}
             {% endfor %}
-            {% if list.actions|length > 0 %}
+            {% if datalist.actions|length > 0 %}
                 <th>{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
             {% endif %}
         </tr>
     </thead>
     <tbody>
-        {% for data_row in list.data %}
+        {% for data_row in datalist %}
         <tr>
-            {% for column in list.view.columns %}
-                {{ block('grid_cell_' ~ column.type) }}
+            {% for field in datalist.fields %}
+                {{ datalist_cell(field, data_row) }}
             {% endfor %}
-            {% if list.actions | length > 0 %}
+            {% if datalist.actions | length > 0 %}
                 <td class="listing-actions">{{ block('row_actions') }}</td>
             {% endif %}
         </tr>
@@ -26,15 +26,14 @@
 </table>
 {% endblock %}
 
-{% block grid_header %}
-    <th>{{ column.options.label|trans }}</th>
+{% block datalist_grid_header %}
+    <th>{{ field.options.label|trans }}</th>
 {% endblock %}
 
-{% block grid_cell_text %}
+{% block datalist_grid_cell_text %}
     <td>
-        {% set value = list_value(data_row, column.path, column.options) %}
         {% if value is not null %}
-            {{ value | raw }}
+            {{ value|raw }}
         {% else %}
             <span class="emptyvalue">{{ "data.emptyvalue"|trans({}, 'SnowcapAdminBundle') }}</span>
         {% endif %}
@@ -42,7 +41,7 @@
 
 {% block grid_cell_datetime %}
     <td>
-        {% set value = list_value(data_row, column.path, column.options) %}
+        {% set value = datalist_value(data_row, column.path, column.options) %}
         {% if value is not null %}
             {{ value|date(column.options.format)  }}
         {% else %}
@@ -53,7 +52,7 @@
 
 {% block grid_cell_label %}
     {% set mappings = column.options.mappings %}
-    {% set value = list_value(data_row, column.path, column.options) %}
+    {% set value = datalist_value(data_row, column.path, column.options) %}
     <td><span class="label label-{{ mappings[value][1] }}">{{ mappings[value][0]|trans }}</span></td>
 {% endblock %}
 
@@ -66,10 +65,10 @@
             {{ block('list_thumbnail_visual') }}
             <div class="caption">
                 {% if list.view.label is not null %}
-                    <h4 title="{{ list_value(data_row, list.view.label.path, list.view.label.options) }}">{{ list_value(data_row, list.view.label.path, list.view.label.options)|truncate(20) }}</h4>
+                    <h4 title="{{ datalist_value(data_row, list.view.label.path, list.view.label.options) }}">{{ datalist_value(data_row, list.view.label.path, list.view.label.options)|truncate(20) }}</h4>
                 {% endif %}
                 {% if list.view.description is not null %}
-                    <p>{{ list_value(data_row, list.view.description.path, list.view.description.options)|truncate(25) }}</p>
+                    <p>{{ datalist_value(data_row, list.view.description.path, list.view.description.options)|truncate(25) }}</p>
                 {% endif %}
                 <p>
                     {{ block('row_actions') }}
@@ -83,7 +82,7 @@
 
 {% block list_thumbnail_visual %}
     {% if(list.view.image is defined) %}
-        {% set image_src = list_value(data_row, list.view.image.path, list.view.image.options) %}
+        {% set image_src = datalist_value(data_row, list.view.image.path, list.view.image.options) %}
         <img src="{{ image_src|imresize('admin_thumb') }}" data-src="{{ asset(image_src) }}" alt="Caption"/>
     {% else %}
         <img src="http://placehold.it/260x180" alt="Caption"/>

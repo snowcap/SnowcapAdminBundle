@@ -1,29 +1,19 @@
 <?php
+
 namespace Snowcap\AdminBundle\Twig\Extension;
 
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
-use Snowcap\AdminBundle\DataList\AbstractDatalist;
 use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
 /**
- * Created by JetBrains PhpStorm.
- * User: edwin
- * Date: 28/08/11
- * Time: 21:47
- * To change this template use File | Settings | File Templates.
+ * Global, general-purpose admin extension
  */
-
 class AdminExtension extends \Twig_Extension
 {
-    /**
-     * @var \Twig_Environment
-     */
-    private $environment;
-
     /**
      * @var \Snowcap\AdminBundle\AdminManager
      */
@@ -46,76 +36,16 @@ class AdminExtension extends \Twig_Extension
     }
 
     /**
-     * @param \Twig_Environment $environment
-     */
-    public function initRuntime(\Twig_Environment $environment)
-    {
-        $this->environment = $environment;
-    }
-
-    /**
      * @return array
      */
     public function getFunctions()
     {
         return array(
-            'list_widget' => new \Twig_Function_Method($this, 'renderList', array('pre_escape' => 'html', 'is_safe' => array('html'))),
-            'list_value' => new \Twig_Function_Method($this, 'listValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
-            'preview_value' => new \Twig_Function_Method($this, 'previewValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'is_array'  => new \Twig_Function_Method($this, 'is_array', array()),
             'get_admin_for_entity_name' => new \Twig_Function_Method($this, 'getAdminForEntityName'),
             'admin' => new \Twig_Function_Method($this, 'getAdminByCode'),
             'admin_content_path' => new \Twig_Function_Method($this, 'getAdminContentPath'),
         );
-    }
-
-    /**
-     * Render a list widget
-     *
-     * @param \Snowcap\AdminBundle\DataList\AbstractDatalist $list
-     * @return string
-     * @throws \Exception
-     */
-    public function renderList(AbstractDatalist $list)
-    {
-        $loader = $this->environment->getLoader();
-        $loader->addPath(__DIR__ . '/../../Resources/views/');
-        $template = $this->environment->loadTemplate('list.html.twig');
-        $blockName = 'list_' . $list->getView()->getName();
-        if (!$template->hasBlock($blockName)) {
-            throw new \Exception(sprintf('The block "%s" could not be loaded whe trying to display the "%s" grid', $blockName, $list->getName()));
-        }
-        ob_start();
-        $template->displayBlock($blockName, array(
-            'list' => $list,
-        ));
-        $html = ob_get_clean();
-        return $html;
-    }
-
-    /**
-     * Get a value to use in list widgets
-     *
-     * @param mixed $row
-     * @param string $path
-     * @param array $params
-     * @return mixed
-     */
-    public function listValue($row, $path, $params = array())
-    {
-        return $this->getDataValue($row, $path);
-    }
-
-    /**
-     * Get a value to use in preview blocks (inline admins)
-     *
-     * @param mixed $entity
-     * @param string $path
-     * @return mixed
-     */
-    public function previewValue($entity, $path)
-    {
-        return $this->getDataValue($entity, $path);
     }
 
     /**
@@ -130,62 +60,6 @@ class AdminExtension extends \Twig_Extension
     }
 
     /**
-     * @param mixed $data
-     * @param string $path
-     * @return mixed
-     * @throws \Exception
-     */
-    private function getDataValue($data, $path)
-    {
-        $value = null;
-        if (strpos($path, '%locale%') !== false) {
-            if(!is_object($data) || !in_array('Snowcap\CoreBundle\Entity\TranslatableEntityInterface', class_implements($data))){
-                throw new \Exception(sprintf('Localized paths such as %s may only be called on objects that implement the "TranslatableEntityInterface" interface', $path));
-            }
-            $workingLocale = 'en';
-            $activeLocales = array('en');
-            $mergedLocales = array_merge(array($workingLocale), array_diff($activeLocales, array($workingLocale)));
-            while (!empty($mergedLocales)) {
-                $testLocale = array_shift($mergedLocales);
-                $propertyPath = new PropertyPath(str_replace('%locale%', $testLocale, $path));
-                try {
-                    $value = $propertyPath->getValue($data);
-                    if($testLocale !== $workingLocale) {
-                        $value = '<span class="untranslated">' . $value . ' (' . $testLocale . ')</span>';
-                    }
-                    break;
-                }
-                catch (UnexpectedTypeException $e) {
-                    // do nothing
-                }
-            }
-        }
-        else {
-            $propertyPath = new PropertyPath($path);
-            try {
-                $value = $propertyPath->getValue($data);
-            }
-            catch (UnexpectedTypeException $e) {
-                // do nothing
-            }
-        }
-        return $value;
-    }
-
-    public function getName()
-    {
-        return 'snowcap_admin';
-    }
-
-    public function getAdminForEntityName($namespace)
-    {
-        $entity = new $namespace;
-        $admin = $this->adminManager->getAdminForEntity($entity);
-
-        return $admin;
-    }
-
-    /**
      * @param $code
      * @return \Snowcap\AdminBundle\Admin\AdminInterface
      */
@@ -195,13 +69,33 @@ class AdminExtension extends \Twig_Extension
     }
 
     /**
+     * @param $namespace
+     * @return \Snowcap\AdminBundle\Admin\ContentAdmin
+     */
+    public function getAdminForEntityName($namespace)
+    {
+        $entity = new $namespace;
+        $admin = $this->adminManager->getAdminForEntity($entity);
+
+        return $admin;
+    }
+
+    /**
      * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
-     * @param $action
+     * @param string $action
      * @param array $params
      * @return string
      */
     public function getAdminContentPath(ContentAdmin $admin, $action, array $params = array())
     {
         return $this->contentRoutingHelper->generateUrl($admin, $action, $params);
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'snowcap_admin';
     }
 }
