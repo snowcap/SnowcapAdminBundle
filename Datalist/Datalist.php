@@ -84,8 +84,15 @@ class Datalist implements DatalistInterface
         return $this->datasource;
     }
 
+    /**
+     * @return \Traversable
+     */
     public function getIterator()
     {
+        if(!isset($this->datasource)) {
+            return new \EmptyIterator();
+        }
+
         return $this->getDatasource()->getIterator();
     }
 

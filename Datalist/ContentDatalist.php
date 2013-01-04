@@ -7,8 +7,6 @@ use Symfony\Component\Form\Form;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Mapping\MappingException;
 
-use Snowcap\CoreBundle\Paginator\Paginator;
-
 class ContentDatalist extends AbstractDatalist
 {
     /**

@@ -4,7 +4,9 @@ namespace Snowcap\AdminBundle\Datalist\Datasource;
 
 use Doctrine\ORM\QueryBuilder;
 
-class DoctrineORMDatasource implements DatasourceInterface
+use Snowcap\CoreBundle\Paginator\Paginator;
+
+class DoctrineORMDatasource extends AbstractDatasource
 {
     /**
      * @var \Doctrine\ORM\QueryBuilder
@@ -17,9 +19,9 @@ class DoctrineORMDatasource implements DatasourceInterface
     private $initialized = false;
 
     /**
-     * @var array
+     * @var \Traversable
      */
-    private $items = array();
+    private $iterator;
 
     /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
@@ -36,7 +38,7 @@ class DoctrineORMDatasource implements DatasourceInterface
     {
         $this->initialize();
 
-        return new \ArrayIterator($this->items);
+        return $this->iterator;
     }
 
     /**
@@ -49,7 +51,20 @@ class DoctrineORMDatasource implements DatasourceInterface
             return;
         }
 
-        $this->items = $this->queryBuilder->getQuery()->getResult();
+        if(isset($this->limitPerPage)) {
+            $paginator = new Paginator($this->queryBuilder->getQuery());
+            $paginator
+                ->setLimitPerPage($this->limitPerPage)
+                ->setLimitRange($this->limitRange)
+                ->setPage($this->page);
+
+            $this->iterator = $paginator->getIterator();
+        }
+        else {
+            $items = $this->queryBuilder->getQuery()->getResult();
+            $this->iterator = new \ArrayIterator($items);
+        }
+
         $this->initialized = true;
     }
 }

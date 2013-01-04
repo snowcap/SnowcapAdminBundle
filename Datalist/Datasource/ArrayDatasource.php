@@ -4,7 +4,7 @@ namespace Snowcap\AdminBundle\Datalist\Datasource;
 
 use Doctrine\ORM\QueryBuilder;
 
-class ArrayDatasource implements DatasourceInterface
+class ArrayDatasource extends AbstractDatasource
 {
     /**
      * @var array
