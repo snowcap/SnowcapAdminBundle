@@ -46,7 +46,7 @@
         </div>
         <div class="span9 catalogue-translation">
 
-            <form method="post" class="form-horizontal">
+            <form method="post" class="form-horizontal" novalidate="novalidate">
 
             {% for key, element in activeCatalogue %}
                 {{ _self.element(key, element, 3, null, fallbackCatalogue[key]|default(null))}}
