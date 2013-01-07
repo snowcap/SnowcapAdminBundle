@@ -24,7 +24,7 @@
     {# searchform block #}
     {% block searchform %}
         {% if search_form is defined and (list.data is not empty or search_form.vars.value is not empty) %}
-            <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-search">
+            <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-search" novalidate="novalidate">
                 {% for field in search_form %}
                     {{ form_widget(field, { 'attr': { 'placeholder': "content.search.label"|trans({}, 'SnowcapAdminBundle')}}) }}
                 {% endfor %}
@@ -54,7 +54,7 @@
                 <div class="span3">
                     <div class="well">
                         <h3>{{ "content.filter.title"|trans({}, 'SnowcapAdminBundle') }}</h3>
-                        <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-filter">
+                        <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-filter" novalidate="novalidate">
                             {% for filter in filter_form %}
                                 {{ form_row(filter, {'attr': {'class': 'input-medium'}}) }}
                             {% endfor %}
