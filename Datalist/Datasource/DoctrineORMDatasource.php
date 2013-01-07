@@ -4,7 +4,7 @@ namespace Snowcap\AdminBundle\Datalist\Datasource;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Snowcap\CoreBundle\Paginator\Paginator;
+use Snowcap\CoreBundle\Paginator\DoctrineORMPaginator;
 
 class DoctrineORMDatasource extends AbstractDatasource
 {
@@ -52,10 +52,10 @@ class DoctrineORMDatasource extends AbstractDatasource
         }
 
         if(isset($this->limitPerPage)) {
-            $paginator = new Paginator($this->queryBuilder->getQuery());
+            $paginator = new DoctrineORMPaginator($this->queryBuilder->getQuery());
             $paginator
                 ->setLimitPerPage($this->limitPerPage)
-                ->setLimitRange($this->limitRange)
+                ->setRangeLimit($this->limitRange)
                 ->setPage($this->page);
 
             $this->iterator = $paginator->getIterator();
