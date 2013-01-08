@@ -7,11 +7,18 @@ interface DatasourceInterface extends \IteratorAggregate
     /**
      * @param int $limitPerPage
      * @param int $limitRange
+     *
+     * @return DatasourceInterface
      */
-    public function paginate($limitPerPage = 10, $limitRange = 10);
+    public function paginate($limitPerPage, $rangeLimit);
 
     /**
      * @param int $page
      */
     public function setPage($page);
+
+    /**
+     * @return \Snowcap\CoreBundle\Paginator\PaginatorInterface
+     */
+    public function getPaginator();
 }

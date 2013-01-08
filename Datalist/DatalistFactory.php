@@ -81,7 +81,7 @@ class DatalistFactory
         $resolvedOptions = $resolver->resolve($options);
 
         // Build datalist
-        $builder = new DatalistBuilder($name, $type, $this, $resolvedOptions);
+        $builder = new DatalistBuilder($name, $type, $resolvedOptions, $this);
         $this->buildDatalist($type, $builder, $resolvedOptions);
 
         return $builder;

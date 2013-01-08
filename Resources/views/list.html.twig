@@ -1,4 +1,4 @@
-{# grid view #}
+{# datalist grid block #}
 {% block datalist_grid %}
 <table class="table table-bordered table-striped">
     <thead>
@@ -24,11 +24,16 @@
         {% endfor %}
     </tbody>
 </table>
-{% endblock %}
+{% if datalist.paginator is not null %}
+    {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with {'paginator': datalist.paginator} %}
+{% endif %}
+{% endblock datalist_grid %}
 
+{# datalist grid header block #}
 {% block datalist_grid_header %}
     <th>{{ field.options.label|trans }}</th>
 {% endblock %}
+
 
 {% block datalist_grid_cell_text %}
     <td>

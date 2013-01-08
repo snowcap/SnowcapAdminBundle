@@ -17,16 +17,18 @@ abstract class AbstractDatasource implements DatasourceInterface
     /**
      * @var int
      */
-    protected $limitRange;
+    protected $rangeLimit;
 
     /**
      * @param int $limitPerPage
      * @param int $limitRange
+     *
+     * @return AbstractDatasource
      */
-    public function paginate($limitPerPage = 10, $limitRange = 10)
+    public function paginate($limitPerPage, $rangeLimit)
     {
         $this->limitPerPage = $limitPerPage;
-        $this->limitRange = $limitRange;
+        $this->rangeLimit = $rangeLimit;
 
         return $this;
     }

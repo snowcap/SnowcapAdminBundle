@@ -8,21 +8,11 @@ use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistField;
 
-class DatalistBuilder {
+class DatalistBuilder extends DatalistConfig {
     /**
      * @var array
      */
     private $fields = array();
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var Type\DatalistTypeInterface
-     */
-    private $type;
 
     /**
      * @var DatalistFactory
@@ -30,20 +20,13 @@ class DatalistBuilder {
     private $factory;
 
     /**
-     * @var array
-     */
-    private $options;
-
-    /**
      * @param string $name
      * @param DatalistFactory $factory
      * @param array $options
      */
-    public function __construct($name, DatalistTypeInterface $type, DatalistFactory $factory, array $options){
-        $this->name = $name;
-        $this->type = $type;
+    public function __construct($name, DatalistTypeInterface $type, array $options, DatalistFactory $factory){
+        parent::__construct($name, $type, $options);
         $this->factory = $factory;
-        $this->options = $options;
     }
 
     /**
@@ -66,7 +49,7 @@ class DatalistBuilder {
      */
     public function getDatalist()
     {
-        $datalist = new Datalist($this->name, $this->type, $this->options);
+        $datalist = new Datalist($this->getDatalistConfig());
 
         foreach($this->fields as $fieldName => $fieldConfig){
             $field = $this->createField($fieldName, $fieldConfig);
@@ -75,6 +58,14 @@ class DatalistBuilder {
         }
 
         return $datalist;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
     }
 
     /**
@@ -111,10 +102,12 @@ class DatalistBuilder {
     }
 
     /**
-     * @return array
+     * @return DatalistBuilder
      */
-    public function getFields()
+    private function getDatalistConfig()
     {
-        return $this->fields;
+        $config = clone $this;
+
+        return $config;
     }
 }

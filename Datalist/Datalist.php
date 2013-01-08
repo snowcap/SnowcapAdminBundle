@@ -2,26 +2,15 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
-use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 
 class Datalist implements DatalistInterface
 {
     /**
-     * @var string
+     * @var DatalistConfig
      */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var array
-     */
-    protected $options;
+    protected $config;
 
     /**
      * @var DatasourceInterface
@@ -39,14 +28,17 @@ class Datalist implements DatalistInterface
     protected $actions = array();
 
     /**
+     * @var int
+     */
+    protected $page = 1;
+
+    /**
      * @param string $code
      * @param array $options
      */
-    public function __construct($name, DatalistTypeInterface $type, array $options)
+    public function __construct(DatalistConfig $config)
     {
-        $this->name = $name;
-        $this->type = $type;
-        $this->options = $options;
+        $this->config = $config;
     }
 
     /**
@@ -74,6 +66,8 @@ class Datalist implements DatalistInterface
     public function setDatasource($datasource)
     {
         $this->datasource = $datasource;
+
+        return $this;
     }
 
     /**
@@ -93,7 +87,27 @@ class Datalist implements DatalistInterface
             return new \EmptyIterator();
         }
 
-        return $this->getDatasource()->getIterator();
+        $datasource = $this->getDatasource();
+        if($this->hasOption('limit_per_page')) {
+            $datasource
+                ->paginate($this->getOption('limit_per_page'), $this->getOption('range_limit'))
+                ->setPage($this->page);
+        }
+
+        return $datasource->getIterator();
+    }
+
+    public function getPaginator()
+    {
+        return $this->datasource->getPaginator();
+    }
+
+    /**
+     * @param int $page
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
     }
 
     /**
@@ -101,20 +115,33 @@ class Datalist implements DatalistInterface
      */
     public function getName()
     {
-        return $this->name;
+        return $this->config->getName();
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->config->getOptions();
     }
 
     /**
      * @param string $name
-     * @return mixed
+     * @return bool
      */
-    public function getOption($name)
+    public function hasOption($name)
     {
-        if (!array_key_exists($name, $this->options)) {
-            throw new \InvalidArgumentException(sprintf('The option "%s" does not exist', $name));
-        }
+        return $this->config->hasOption($name);
+    }
 
-        return $this->options[$name];
+    /**
+     * @param string $name
+     * @param mixed $default
+     */
+    public function getOption($name, $default = null)
+    {
+        return $this->config->getOption($name, $default);
     }
 
     public function addAction($routeName, array $parameters = array(), array $options = array())
@@ -145,5 +172,4 @@ class Datalist implements DatalistInterface
     {
         return $this->actions;
     }
-
 }

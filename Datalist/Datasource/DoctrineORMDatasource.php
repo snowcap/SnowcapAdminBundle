@@ -24,11 +24,26 @@ class DoctrineORMDatasource extends AbstractDatasource
     private $iterator;
 
     /**
+     * @var DoctrineORMPaginator
+     */
+    private $paginator;
+
+    /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
      */
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
+    }
+
+    /**
+     * @return \Snowcap\CoreBundle\Paginator\DoctrineORMPaginator
+     */
+    public function getPaginator()
+    {
+        $this->initialize();
+
+        return $this->paginator;
     }
 
     /**
@@ -55,14 +70,15 @@ class DoctrineORMDatasource extends AbstractDatasource
             $paginator = new DoctrineORMPaginator($this->queryBuilder->getQuery());
             $paginator
                 ->setLimitPerPage($this->limitPerPage)
-                ->setRangeLimit($this->limitRange)
+                ->setRangeLimit($this->rangeLimit)
                 ->setPage($this->page);
-
             $this->iterator = $paginator->getIterator();
+            $this->paginator = $paginator;
         }
         else {
             $items = $this->queryBuilder->getQuery()->getResult();
             $this->iterator = new \ArrayIterator($items);
+            $this->paginator = null;
         }
 
         $this->initialized = true;

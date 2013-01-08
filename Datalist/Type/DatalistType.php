@@ -14,7 +14,9 @@ class DatalistType extends AbstractDatalistType {
     {
         $resolver->setDefaults(array(
             'data_class' => null,
-            'display_mode' => 'grid'
+            'display_mode' => 'grid',
+            'limit_per_page' => null,
+            'range_limit' => 10
         ));
     }
 

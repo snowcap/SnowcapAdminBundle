@@ -12,7 +12,7 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-
+        
     }
 
     /**

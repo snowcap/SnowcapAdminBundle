@@ -28,12 +28,6 @@ interface DatalistInterface extends \IteratorAggregate
      */
     public function getName();
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function getOption($name);
-
     public function addAction($routeName, array $parameters = array(), array $options = array());
 
     /**
