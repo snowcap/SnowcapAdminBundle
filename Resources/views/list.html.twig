@@ -25,7 +25,7 @@
     </tbody>
 </table>
 {% if datalist.paginator is not null %}
-    {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with {'paginator': datalist.paginator} %}
+    {{ paginator_widget(datalist.paginator) }}
 {% endif %}
 {% endblock datalist_grid %}
 
