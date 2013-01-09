@@ -8,19 +8,9 @@ use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
 class DatalistField implements DatalistFieldInterface
 {
     /**
-     * @var string
+     * @var DatalistFieldConfig
      */
-    private $name;
-
-    /**
-     * @var FieldTypeInterface
-     */
-    private $type;
-
-    /**
-     * @var array
-     */
-    private $options;
+    private $config;
 
     /**
      * @var DatalistInterface
@@ -32,11 +22,17 @@ class DatalistField implements DatalistFieldInterface
      * @param FieldTypeInterface $type
      * @param array $options
      */
-    public function __construct($name, FieldTypeInterface $type, array $options = array())
+    public function __construct(DatalistFieldConfig $config)
     {
-        $this->name = $name;
-        $this->type = $type;
-        $this->options = $options;
+        $this->config = $config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->config->getName();
     }
 
     /**
@@ -44,20 +40,25 @@ class DatalistField implements DatalistFieldInterface
      */
     public function getOptions()
     {
-        return $this->options;
+        return $this->config->getOptions();
     }
 
     /**
      * @param string $name
-     * @return mixed
+     * @return bool
      */
-    public function getOption($name)
+    public function hasOption($name)
     {
-        if (!array_key_exists($name, $this->options)) {
-            throw new \InvalidArgumentException(sprintf('The option "%s" does not exist', $name));
-        }
+        return $this->config->hasOption($name);
+    }
 
-        return $this->options[$name];
+    /**
+     * @param string $name
+     * @param mixed $default
+     */
+    public function getOption($name, $default = null)
+    {
+        return $this->config->getOption($name, $default);
     }
 
     /**
@@ -67,7 +68,7 @@ class DatalistField implements DatalistFieldInterface
     {
         $propertyPath = $this->getOption('property_path');
         if (null === $propertyPath) {
-            $propertyPath = $this->name;
+            $propertyPath = $this->config->getName();
             if (null === $this->datalist->getOption('data_class')) {
                 $propertyPath = '[' . $propertyPath . ']';
             }
@@ -98,6 +99,6 @@ class DatalistField implements DatalistFieldInterface
      */
     public function getType()
     {
-        return $this->type;
+        return $this->config->getType();
     }
 }

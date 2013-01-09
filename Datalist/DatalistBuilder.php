@@ -7,6 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistField;
+use Snowcap\AdminBundle\Datalist\Field\DatalistFieldConfig;
 
 class DatalistBuilder extends DatalistConfig {
     /**
@@ -78,14 +79,16 @@ class DatalistBuilder extends DatalistConfig {
         $type = $this->factory->getFieldType($fieldConfig['type'] ?: 'text');
 
         // Handle field options
-        $resolver = new OptionsResolver(); //TODO: should be done in FieldType base class, with form-like inheritance ?
+        $resolver = new OptionsResolver();
         $resolver->setDefaults(array(
             'label' => ucfirst($fieldName)
         ));
         $this->resolveDatalistFieldTypeOptions($type, $resolver);
         $resolvedOptions = $resolver->resolve($fieldConfig['options']);
 
-        return new DatalistField($fieldName, $type, $resolvedOptions);
+        $config = new DatalistFieldConfig($fieldName, $type, $resolvedOptions);
+
+        return new DatalistField($config);
     }
 
     /**

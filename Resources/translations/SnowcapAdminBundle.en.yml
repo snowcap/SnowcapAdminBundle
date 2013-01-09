@@ -69,8 +69,8 @@ reorderable_content:
 project:
     name: Admin
 
-data:
-    emptyvalue: ---
+datalist:
+    empty_value: ---
 
 cataloguetranslation:
     title: Interface content

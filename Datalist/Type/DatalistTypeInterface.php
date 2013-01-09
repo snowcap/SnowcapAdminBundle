@@ -2,13 +2,10 @@
 
 namespace Snowcap\AdminBundle\Datalist\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Snowcap\AdminBundle\Datalist\DatalistBuilder;
+use Snowcap\AdminBundle\Datalist\TypeInterface;
 
-interface DatalistTypeInterface {
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver);
+interface DatalistTypeInterface extends TypeInterface {
 
     /**
      * @param \Snowcap\AdminBundle\Datalist\DatalistBuilder $builder
@@ -16,11 +13,6 @@ interface DatalistTypeInterface {
      * @return mixed
      */
     public function buildDatalist(DatalistBuilder $builder, array $options);
-
-    /**
-     * @return string
-     */
-    public function getName();
 
     /**
      * @return string

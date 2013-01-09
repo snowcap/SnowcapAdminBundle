@@ -29,7 +29,7 @@ class DatalistExtension extends \Twig_Extension
         return array(
             'datalist_widget' => new \Twig_Function_Method($this, 'renderDatalistWidget', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'datalist_header' => new \Twig_Function_Method($this, 'renderDatalistHeader', array('pre_escape' => 'html', 'is_safe' => array('html'))),
-            'datalist_cell' => new \Twig_Function_Method($this, 'renderDatalistCell', array('pre_escape' => 'html', 'is_safe' => array('html'))),
+            'datalist_field' => new \Twig_Function_Method($this, 'renderDatalistField', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'datalist_value' => new \Twig_Function_Method($this, 'listValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
         );
     }
@@ -68,15 +68,16 @@ class DatalistExtension extends \Twig_Extension
      * @param mixed $row
      * @return string
      */
-    public function renderDatalistCell(DatalistFieldInterface $field, $row)
+    public function renderDatalistField(DatalistFieldInterface $field, $row)
     {
-        $blockName = 'datalist_grid_cell_' . $field->getType()->getName();
+        $blockName = 'datalist_grid_field_' . $field->getType()->getName();
 
         $propertyPath = new PropertyPath($field->getPropertyPath());
         $value = $propertyPath->getValue($row);
 
         return $this->renderBlock('list.html.twig', $blockName, array(
             'value' => $value,
+            'options' => $field->getOptions()
         ));
     }
 

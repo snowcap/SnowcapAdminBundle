@@ -15,7 +15,7 @@
         {% for data_row in datalist %}
         <tr>
             {% for field in datalist.fields %}
-                {{ datalist_cell(field, data_row) }}
+                {{ datalist_field(field, data_row) }}
             {% endfor %}
             {% if datalist.actions | length > 0 %}
                 <td class="listing-actions">{{ block('row_actions') }}</td>
@@ -32,28 +32,28 @@
 {# datalist grid header block #}
 {% block datalist_grid_header %}
     <th>{{ field.options.label|trans }}</th>
-{% endblock %}
+{% endblock datalist_grid_header %}
 
-
-{% block datalist_grid_cell_text %}
+{# datalist text field type block #}
+{% block datalist_grid_field_text %}
     <td>
         {% if value is not null %}
             {{ value|raw }}
         {% else %}
-            <span class="emptyvalue">{{ "data.emptyvalue"|trans({}, 'SnowcapAdminBundle') }}</span>
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
         {% endif %}
 {% endblock %}
 
-{% block grid_cell_datetime %}
+{# datalist datetime field type block #}
+{% block datalist_grid_field_datetime %}
     <td>
-        {% set value = datalist_value(data_row, column.path, column.options) %}
         {% if value is not null %}
-            {{ value|date(column.options.format)  }}
+            {{ value|date(options.format)  }}
         {% else %}
-            <span class="emptyvalue">{{ "data.emptyvalue"|trans({}, 'SnowcapAdminBundle') }}</span>
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
         {% endif %}
     </td>
-{% endblock %}
+{% endblock datalist_grid_field_datetime %}
 
 {% block grid_cell_label %}
     {% set mappings = column.options.mappings %}

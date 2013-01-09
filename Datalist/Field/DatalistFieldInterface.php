@@ -12,15 +12,26 @@ interface DatalistFieldInterface
     public function getType();
 
     /**
+     * @return string
+     */
+    public function getName();
+
+    /**
      * @return array
      */
     public function getOptions();
 
     /**
      * @param string $name
-     * @return mixed
+     * @return bool
      */
-    public function getOption($name);
+    public function hasOption($name);
+
+    /**
+     * @param string $name
+     * @param mixed $default
+     */
+    public function getOption($name, $default = null);
 
     /**
      * @return string
