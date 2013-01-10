@@ -77,41 +77,14 @@ class DatalistFactory
 
         // Handle datalist options
         $resolver = new OptionsResolver();
-        $this->resolveDatalistTypeOptions($type, $resolver);
+        $type->setDefaultOptions($resolver);
         $resolvedOptions = $resolver->resolve($options);
 
         // Build datalist
         $builder = new DatalistBuilder($name, $type, $resolvedOptions, $this);
-        $this->buildDatalist($type, $builder, $resolvedOptions);
+        $type->buildDatalist($builder, $options);
 
         return $builder;
-    }
-
-    /**
-     * @param Type\DatalistTypeInterface $type
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $optionsResolver
-     */
-    private function resolveDatalistTypeOptions(DatalistTypeInterface $type, OptionsResolver $optionsResolver)
-    {
-        if (null !== $type->getParent()) {
-            $this->resolveDatalistTypeOptions($type->getParent(), $optionsResolver);
-        }
-
-        $type->setDefaultOptions($optionsResolver);
-    }
-
-    /**
-     * @param Type\DatalistTypeInterface $type
-     * @param DatalistBuilder $datalistBuilder
-     * @param array $options
-     */
-    private function buildDatalist(DatalistTypeInterface $type, DatalistBuilder $datalistBuilder, array $options)
-    {
-        if (null !== $type->getParent()) {
-            $this->buildDatalist($type->getParent(), $datalistBuilder, $options);
-        }
-
-        $type->buildDatalist($datalistBuilder, $options);
     }
 
     /**

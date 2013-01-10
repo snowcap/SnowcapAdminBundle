@@ -3,6 +3,8 @@
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Snowcap\AdminBundle\Datalist\ViewContext;
+use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 
 abstract class AbstractFieldType implements FieldTypeInterface
 {
@@ -18,10 +20,13 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * @return string
+     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewCobtext
+     * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
+     * @param mixed $value
+     * @param array $options
      */
-    public function getParent()
+    public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $value, array $options)
     {
-        return null;
+        $viewContext['value'] = $value;
     }
 }

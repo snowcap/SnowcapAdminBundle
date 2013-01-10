@@ -31,7 +31,7 @@
 
 {# datalist grid header block #}
 {% block datalist_grid_header %}
-    <th>{{ field.options.label|trans }}</th>
+    <th>{{ label|trans }}</th>
 {% endblock datalist_grid_header %}
 
 {# datalist text field type block #}
@@ -48,17 +48,16 @@
 {% block datalist_grid_field_datetime %}
     <td>
         {% if value is not null %}
-            {{ value|date(options.format)  }}
+            {{ value|date(format)  }}
         {% else %}
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
         {% endif %}
     </td>
 {% endblock datalist_grid_field_datetime %}
 
-{% block grid_cell_label %}
-    {% set mappings = column.options.mappings %}
-    {% set value = datalist_value(data_row, column.path, column.options) %}
-    <td><span class="label label-{{ mappings[value][1] }}">{{ mappings[value][0]|trans }}</span></td>
+{# datalist label field type block #}
+{% block datalist_grid_field_label %}
+    <td><span class="label label-{{ class }}">{{ value }}</span></td>
 {% endblock %}
 
 {# thumbnail view #}
@@ -70,10 +69,10 @@
             {{ block('list_thumbnail_visual') }}
             <div class="caption">
                 {% if list.view.label is not null %}
-                    <h4 title="{{ datalist_value(data_row, list.view.label.path, list.view.label.options) }}">{{ datalist_value(data_row, list.view.label.path, list.view.label.options)|truncate(20) }}</h4>
+                    <h4>VALUE</h4>
                 {% endif %}
                 {% if list.view.description is not null %}
-                    <p>{{ datalist_value(data_row, list.view.description.path, list.view.description.options)|truncate(25) }}</p>
+                    <p>VALUE</p>
                 {% endif %}
                 <p>
                     {{ block('row_actions') }}
@@ -87,7 +86,7 @@
 
 {% block list_thumbnail_visual %}
     {% if(list.view.image is defined) %}
-        {% set image_src = datalist_value(data_row, list.view.image.path, list.view.image.options) %}
+        {% set image_src = "VALUE" %}
         <img src="{{ image_src|imresize('admin_thumb') }}" data-src="{{ asset(image_src) }}" alt="Caption"/>
     {% else %}
         <img src="http://placehold.it/260x180" alt="Caption"/>

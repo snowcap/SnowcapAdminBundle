@@ -5,7 +5,6 @@ namespace Snowcap\AdminBundle\Datalist;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
-use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistField;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldConfig;
 
@@ -31,9 +30,10 @@ class DatalistBuilder extends DatalistConfig {
     }
 
     /**
-     * @param $field
+     * @param string $field
      * @param string $type
      * @param array $options
+     * @return DatalistBuilder
      */
     public function addField($field, $type = null, array $options = array())
     {
@@ -83,25 +83,12 @@ class DatalistBuilder extends DatalistConfig {
         $resolver->setDefaults(array(
             'label' => ucfirst($fieldName)
         ));
-        $this->resolveDatalistFieldTypeOptions($type, $resolver);
+        $type->setDefaultOptions($resolver);
         $resolvedOptions = $resolver->resolve($fieldConfig['options']);
 
         $config = new DatalistFieldConfig($fieldName, $type, $resolvedOptions);
 
         return new DatalistField($config);
-    }
-
-    /**
-     * @param Field\Type\FieldTypeInterface $type
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $optionsResolver
-     */
-    private function resolveDatalistFieldTypeOptions(FieldTypeInterface $type, OptionsResolver $optionsResolver)
-    {
-        if (null !== $type->getParent()) {
-            $this->resolveDatalistFieldTypeOptions($type->getParent(), $optionsResolver);
-        }
-
-        $type->setDefaultOptions($optionsResolver);
     }
 
     /**

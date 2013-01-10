@@ -4,8 +4,6 @@ namespace Snowcap\AdminBundle\Datalist\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Snowcap\AdminBundle\Datalist\DatalistBuilder;
-
 class DatalistType extends AbstractDatalistType {
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver

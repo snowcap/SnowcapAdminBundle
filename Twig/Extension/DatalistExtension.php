@@ -5,6 +5,8 @@ use Symfony\Component\Form\Util\PropertyPath;
 
 use Snowcap\AdminBundle\Datalist\DatalistInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Snowcap\AdminBundle\Datalist\ViewContext;
+
 
 class DatalistExtension extends \Twig_Extension
 {
@@ -30,16 +32,12 @@ class DatalistExtension extends \Twig_Extension
             'datalist_widget' => new \Twig_Function_Method($this, 'renderDatalistWidget', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'datalist_header' => new \Twig_Function_Method($this, 'renderDatalistHeader', array('pre_escape' => 'html', 'is_safe' => array('html'))),
             'datalist_field' => new \Twig_Function_Method($this, 'renderDatalistField', array('pre_escape' => 'html', 'is_safe' => array('html'))),
-            'datalist_value' => new \Twig_Function_Method($this, 'listValue', array('pre_escape' => 'html', 'is_safe' => array('html'))),
         );
     }
 
     /**
-     * Render a list widget
-     *
-     * @param DatalistInterface $list
+     * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
      * @return string
-     * @throws \Exception
      */
     public function renderDatalistWidget(DatalistInterface $datalist)
     {
@@ -59,7 +57,7 @@ class DatalistExtension extends \Twig_Extension
         $blockName = 'datalist_' . $field->getDatalist()->getOption('display_mode') . '_header'; //TODO: dynamic
 
         return $this->renderBlock('list.html.twig', $blockName, array(
-            'field' => $field,
+            'label' => $field->getOption('label'),
         ));
     }
 
@@ -75,10 +73,10 @@ class DatalistExtension extends \Twig_Extension
         $propertyPath = new PropertyPath($field->getPropertyPath());
         $value = $propertyPath->getValue($row);
 
-        return $this->renderBlock('list.html.twig', $blockName, array(
-            'value' => $value,
-            'options' => $field->getOptions()
-        ));
+        $viewContext = new ViewContext();
+        $field->getType()->buildViewContext($viewContext, $field, $value, $field->getOptions());
+
+        return $this->renderBlock('list.html.twig', $blockName, $viewContext->all());
     }
 
     /**
@@ -99,19 +97,6 @@ class DatalistExtension extends \Twig_Extension
         }
 
         return $template->renderBlock($blockName, $context);
-    }
-
-    /**
-     * Get a value to use in list widgets
-     *
-     * @param mixed $row
-     * @param string $path
-     * @param array $params
-     * @return mixed
-     */
-    public function listValue($row, $path, $params = array())
-    {
-        return $this->getDataValue($row, $path);
     }
 
     /**

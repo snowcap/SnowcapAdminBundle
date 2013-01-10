@@ -97,6 +97,9 @@ class Datalist implements DatalistInterface
         return $datasource->getIterator();
     }
 
+    /**
+     * @return \Snowcap\CoreBundle\Paginator\PaginatorInterface
+     */
     public function getPaginator()
     {
         return $this->datasource->getPaginator();
@@ -143,6 +146,12 @@ class Datalist implements DatalistInterface
     {
         return $this->config->getOption($name, $default);
     }
+
+
+
+
+
+
 
     public function addAction($routeName, array $parameters = array(), array $options = array())
     {

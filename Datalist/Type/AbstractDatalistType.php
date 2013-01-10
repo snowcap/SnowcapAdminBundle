@@ -5,6 +5,8 @@ namespace Snowcap\AdminBundle\Datalist\Type;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Snowcap\AdminBundle\Datalist\DatalistBuilder;
+use Snowcap\AdminBundle\Datalist\ViewContext;
+use Snowcap\AdminBundle\Datalist\DatalistInterface;
 
 abstract class AbstractDatalistType implements DatalistTypeInterface {
     /**
@@ -25,10 +27,12 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
     }
 
     /**
-     * @return string
+     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewContext
+     * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
+     * @param array $options
      */
-    public function getParent()
+    public function buildViewContext(ViewContext $viewContext, DatalistInterface $datalist, array $options)
     {
-        return null;
+
     }
 }

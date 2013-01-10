@@ -15,6 +15,7 @@ interface DatalistInterface extends \IteratorAggregate
 
     /**
      * @param DatasourceInterface $datasource
+     * @return DatalistInterface
      */
     public function setDatasource($datasource);
 
@@ -45,9 +46,10 @@ interface DatalistInterface extends \IteratorAggregate
      */
     public function getOption($name, $default = null);
 
-
-
-
+    /**
+     * @param int $page
+     */
+    public function setPage($page);
 
 
 
