@@ -16,7 +16,7 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
     {
         $resolver->setDefaults(array(
             'data_class' => null,
-            'display_mode' => 'grid',
+            'layout' => 'grid',
             'limit_per_page' => null,
             'range_limit' => 10
         ));

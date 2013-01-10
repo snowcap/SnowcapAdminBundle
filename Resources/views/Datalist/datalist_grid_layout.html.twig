@@ -1,0 +1,73 @@
+{# datalist grid block #}
+{% block datalist %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            {% for field in datalist.fields %}
+                {{ datalist_header(field) }}
+            {% endfor %}
+            {% if datalist.actions|length > 0 %}
+                <th>{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for data_row in datalist %}
+        <tr>
+            {% for field in datalist.fields %}
+                {{ datalist_field(field, data_row) }}
+            {% endfor %}
+            {% if datalist.actions | length > 0 %}
+                <td class="listing-actions">{{ block('row_actions') }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if datalist.paginator is not null %}
+    {{ paginator_widget(datalist.paginator) }}
+{% endif %}
+{% endblock datalist %}
+
+{# datalist grid header block #}
+{% block datalist_header %}
+    <th>{{ label|trans }}</th>
+{% endblock datalist_header %}
+
+{# datalist text field type block #}
+{% block datalist_field_text %}
+    <td>
+        {% if value is not null %}
+            {{ value|raw }}
+        {% else %}
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
+        {% endif %}
+    </td>
+{% endblock datalist_field_text %}
+
+{# datalist datetime field type block #}
+{% block datalist_field_datetime %}
+    <td>
+        {% if value is not null %}
+            {{ value|date(format)  }}
+        {% else %}
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
+        {% endif %}
+    </td>
+{% endblock datalist_field_datetime %}
+
+{# datalist label field type block #}
+{% block datalist_field_label %}
+    <td><span class="label label-{{ class }}">{{ value }}</span></td>
+{% endblock datalist_field_label %}
+
+{# datalist heading field type block #}
+{% block datalist_field_heading %}
+<th>
+    {% if value is not null %}
+        {{ value|raw }}
+    {% else %}
+        <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
+    {% endif %}
+</th>
+{% endblock datalist_field_heading %}

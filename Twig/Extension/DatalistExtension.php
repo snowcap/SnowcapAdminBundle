@@ -41,9 +41,9 @@ class DatalistExtension extends \Twig_Extension
      */
     public function renderDatalistWidget(DatalistInterface $datalist)
     {
-        $blockName = 'datalist_' . $datalist->getOption('display_mode');
+        $blockName = 'datalist';
 
-        return $this->renderBlock('list.html.twig', $blockName, array(
+        return $this->renderBlock($datalist->getOption('layout'), $blockName, array(
             'datalist' => $datalist,
         ));
     }
@@ -54,9 +54,9 @@ class DatalistExtension extends \Twig_Extension
      */
     public function renderDatalistHeader(DatalistFieldInterface $field)
     {
-        $blockName = 'datalist_' . $field->getDatalist()->getOption('display_mode') . '_header'; //TODO: dynamic
+        $blockName = 'datalist_header'; //TODO: dynamic
 
-        return $this->renderBlock('list.html.twig', $blockName, array(
+        return $this->renderBlock($field->getDatalist()->getOption('layout'), $blockName, array(
             'label' => $field->getOption('label'),
         ));
     }
@@ -68,7 +68,7 @@ class DatalistExtension extends \Twig_Extension
      */
     public function renderDatalistField(DatalistFieldInterface $field, $row)
     {
-        $blockName = 'datalist_grid_field_' . $field->getType()->getName();
+        $blockName = 'datalist_field_' . $field->getType()->getName();
 
         $propertyPath = new PropertyPath($field->getPropertyPath());
         $value = $propertyPath->getValue($row);
@@ -76,20 +76,21 @@ class DatalistExtension extends \Twig_Extension
         $viewContext = new ViewContext();
         $field->getType()->buildViewContext($viewContext, $field, $value, $field->getOptions());
 
-        return $this->renderBlock('list.html.twig', $blockName, $viewContext->all());
+        return $this->renderBlock($field->getDatalist()->getOption('layout'), $blockName, $viewContext->all());
     }
 
     /**
-     * @param string $templateName
+     * @param string $layout
      * @param string $blockName
      * @param array $context
      * @return string
      * @throws \Exception
      */
-    private function renderblock($templateName, $blockName, array $context = array())
+    private function renderblock($layout, $blockName, array $context = array())
     {
+        $templateName = 'datalist_' . $layout . '_layout.html.twig';
         $loader = $this->environment->getLoader();
-        $loader->addPath(__DIR__ . '/../../Resources/views/');
+        $loader->addPath(__DIR__ . '/../../Resources/views/Datalist');
         $template = $this->environment->loadTemplate($templateName);
 
         if (!$template->hasBlock($blockName)) {
