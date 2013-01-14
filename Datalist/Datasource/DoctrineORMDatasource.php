@@ -31,8 +31,10 @@ class DoctrineORMDatasource extends AbstractDatasource
     /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
      */
-    public function __construct(QueryBuilder $queryBuilder)
+    public function __construct(QueryBuilder $queryBuilder, array $options = array())
     {
+        parent::__construct($options);
+
         $this->queryBuilder = $queryBuilder;
     }
 
@@ -66,6 +68,28 @@ class DoctrineORMDatasource extends AbstractDatasource
             return;
         }
 
+        // Handle search
+        if(isset($this->searchQuery)) {
+            if(!isset($this->options['search'])) {
+                throw new \Exception('Missing "search" option');
+            }
+
+            $search = $this->options['search'];
+            if(is_string($search)) {
+                $search = array($search);
+            }
+            if(is_array($search)) {
+                foreach($search as $searchField) {
+                    $this->queryBuilder->orWhere($this->queryBuilder->expr()->like($searchField, ':query'));
+                }
+                $this->queryBuilder->setParameter('query', '%'. $this->searchQuery . '%');
+            }
+            else {
+                throw new \InvalidArgumentException(sprintf('Unexpected type "%s" for "search" options', gettype($search)));
+            }
+        }
+
+        // Handle pagination
         if(isset($this->limitPerPage)) {
             $paginator = new DoctrineORMPaginator($this->queryBuilder->getQuery());
             $paginator

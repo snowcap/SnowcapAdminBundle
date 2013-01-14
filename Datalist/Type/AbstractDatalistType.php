@@ -18,7 +18,8 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
             'data_class' => null,
             'layout' => 'grid',
             'limit_per_page' => null,
-            'range_limit' => 10
+            'range_limit' => 10,
+            'searchable' => false
         ));
     }
 
@@ -38,6 +39,7 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
      */
     public function buildViewContext(ViewContext $viewContext, DatalistInterface $datalist, array $options)
     {
-
+        $viewContext['datalist'] = $datalist;
+        $viewContext['options'] = $options;
     }
 }

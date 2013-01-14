@@ -1,5 +1,8 @@
 {# datalist grid block #}
 {% block datalist %}
+{% if(datalist.option('searchable')) %}
+    {{ datalist_searchform(datalist) }}
+{% endif %}
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -71,3 +74,12 @@
     {% endif %}
 </th>
 {% endblock datalist_field_heading %}
+
+{# datalist seach form block #}
+{% block datalist_searchform %}
+
+<form method="get">
+    {{ form_widget(form) }}
+    <input type="submit"/>
+</form>
+{% endblock datalist_searchform %}

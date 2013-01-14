@@ -18,6 +18,11 @@ interface DatasourceInterface extends \IteratorAggregate
     public function setPage($page);
 
     /**
+     * @param string $query
+     */
+    public function setSearchQuery($query);
+
+    /**
      * @return \Snowcap\CoreBundle\Paginator\PaginatorInterface
      */
     public function getPaginator();

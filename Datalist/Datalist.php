@@ -33,6 +33,11 @@ class Datalist implements DatalistInterface
     protected $page = 1;
 
     /**
+     * @var string
+     */
+    protected $searchQuery;
+
+    /**
      * @param string $code
      * @param array $options
      */
@@ -42,12 +47,20 @@ class Datalist implements DatalistInterface
     }
 
     /**
+     * @return Type\DatalistTypeInterface
+     */
+    public function getType()
+    {
+        return $this->config->getType();
+    }
+
+    /**
      * @param DatalistFieldInterface $field
      * @return Datalist
      */
     public function addField(DatalistFieldInterface $field)
     {
-        $this->fields[]= $field;
+        $this->fields[] = $field;
 
         return $this;
     }
@@ -83,15 +96,19 @@ class Datalist implements DatalistInterface
      */
     public function getIterator()
     {
-        if(!isset($this->datasource)) {
+        if (!isset($this->datasource)) {
             return new \EmptyIterator();
         }
 
         $datasource = $this->getDatasource();
-        if($this->hasOption('limit_per_page')) {
+        if ($this->hasOption('limit_per_page')) {
             $datasource
                 ->paginate($this->getOption('limit_per_page'), $this->getOption('range_limit'))
                 ->setPage($this->page);
+        }
+        if (true === $this->getOption('searchable') && !empty($this->searchQuery)) {
+            $datasource
+                ->setSearchQuery($this->searchQuery);
         }
 
         return $datasource->getIterator();
@@ -107,11 +124,28 @@ class Datalist implements DatalistInterface
 
     /**
      * @param int $page
+     *
+     * @return DatalistInterface
      */
     public function setPage($page)
     {
         $this->page = $page;
+
+        return $this;
     }
+
+    /**
+     * @param string $query
+     *
+     * @return DatalistInterface
+     */
+    public function setSearchQuery($query)
+    {
+        $this->searchQuery = $query;
+
+        return $this;
+    }
+
 
     /**
      * @return string
@@ -153,15 +187,19 @@ class Datalist implements DatalistInterface
 
 
 
+
     public function addAction($routeName, array $parameters = array(), array $options = array())
     {
-        $options = array_merge(array(
-            'confirm' => false,
-            'confirm_title' => 'content.actions.confirm.title',
-            'confirm_body' => 'content.actions.confirm.body',
-            'confirm_confirm' => 'content.actions.confirm.confirm',
-            'confirm_cancel' => 'content.actions.confirm.cancel',
-        ), $options);
+        $options = array_merge(
+            array(
+                'confirm' => false,
+                'confirm_title' => 'content.actions.confirm.title',
+                'confirm_body' => 'content.actions.confirm.body',
+                'confirm_confirm' => 'content.actions.confirm.confirm',
+                'confirm_cancel' => 'content.actions.confirm.cancel',
+            ),
+            $options
+        );
         if (!array_key_exists('label', $options)) {
             $options['label'] = ucfirst($routeName);
         }

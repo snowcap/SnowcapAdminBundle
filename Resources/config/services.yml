@@ -49,6 +49,9 @@ services:
 
     snowcap_admin.twig_datalist:
         class: Snowcap\AdminBundle\Twig\Extension\DatalistExtension
+        arguments: [@form.factory]
+        calls:
+            - [ setContainer, [@service_container]]
         tags:
             -  { name: twig.extension }
 
