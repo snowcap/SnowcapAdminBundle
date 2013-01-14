@@ -20,8 +20,9 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
             'limit_per_page' => null,
             'range_limit' => 10,
             'searchable' => false,
-            'placeholder_text' => 'datalist.search.placeholder',
-            'submit_text' => 'datalist.search.submit'
+            'search_placeholder' => 'datalist.search.placeholder',
+            'search_submit' => 'datalist.search.submit',
+            'filter_submit' => 'datalist.filter.submit',
         ));
     }
 

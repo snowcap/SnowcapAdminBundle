@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormFactory;
 
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
@@ -24,6 +25,19 @@ class DatalistFactory
      * @var array
      */
     private $filterTypes = array();
+
+    /**
+     * @var FormFactory
+     */
+    private $formFactory;
+
+    /**
+     * @param \Symfony\Component\Form\FormFactory $formFactory
+     */
+    public function __construct(FormFactory $formFactory)
+    {
+        $this->formFactory = $formFactory;
+    }
 
     /**
      * @param string $type
@@ -87,7 +101,7 @@ class DatalistFactory
         $resolvedOptions = $resolver->resolve($options);
 
         // Build datalist
-        $builder = new DatalistBuilder($name, $type, $resolvedOptions, $this);
+        $builder = new DatalistBuilder($name, $type, $resolvedOptions, $this, $this->formFactory);
         $type->buildDatalist($builder, $options);
 
         return $builder;
@@ -115,7 +129,9 @@ class DatalistFactory
     }
 
     /**
+     * @param $alias
      * @return FieldTypeInterface
+     * @throws \InvalidArgumentException
      */
     public function getFieldType($alias)
     {

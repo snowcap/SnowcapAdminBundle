@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Datalist\Filter\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormBuilder;
 
 abstract class AbstractFilterType implements FilterTypeInterface
 {

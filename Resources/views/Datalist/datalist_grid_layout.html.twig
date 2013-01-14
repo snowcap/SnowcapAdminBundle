@@ -1,10 +1,28 @@
 {# datalist grid block #}
 {% block datalist %}
-{% if(datalist.option('searchable')) %}
-    {{ datalist_searchform(datalist) }}
+{% if datalist.searchable %}
+    {{ datalist_search(datalist) }}
 {% endif %}
-<table class="table table-bordered table-striped">
-    <thead>
+{% if datalist.filterable %}
+    <div class="row-fluid">
+        <div class="span9">
+            {{ block('datalist_table') }}
+        </div>
+        <div class="span3">{{ datalist_filters(datalist) }}</div>
+    </div>
+{% else  %}
+    {{ block('datalist_table') }}
+{% endif %}
+
+{% if datalist.paginator is not null %}
+    {{ paginator_widget(datalist.paginator) }}
+{% endif %}
+{% endblock datalist %}
+
+{# datalist table block #}
+{% block datalist_table %}
+    <table class="table table-bordered table-striped">
+        <thead>
         <tr>
             {% for field in datalist.fields %}
                 {{ datalist_header(field) }}
@@ -13,24 +31,21 @@
                 <th>{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
             {% endif %}
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {% for data_row in datalist %}
-        <tr>
-            {% for field in datalist.fields %}
-                {{ datalist_field(field, data_row) }}
-            {% endfor %}
-            {% if datalist.actions | length > 0 %}
-                <td class="listing-actions">{{ block('row_actions') }}</td>
-            {% endif %}
-        </tr>
+            <tr>
+                {% for field in datalist.fields %}
+                    {{ datalist_field(field, data_row) }}
+                {% endfor %}
+                {% if datalist.actions | length > 0 %}
+                    <td class="listing-actions">{{ block('row_actions') }}</td>
+                {% endif %}
+            </tr>
         {% endfor %}
-    </tbody>
-</table>
-{% if datalist.paginator is not null %}
-    {{ paginator_widget(datalist.paginator) }}
-{% endif %}
-{% endblock datalist %}
+        </tbody>
+    </table>
+{% endblock datalist_table %}
 
 {# datalist grid header block #}
 {% block datalist_header %}
@@ -75,10 +90,30 @@
 </th>
 {% endblock datalist_field_heading %}
 
-{# datalist seach form block #}
-{% block datalist_searchform %}
+{# datalist seach block #}
+{% block datalist_search %}
 <form class="form-search" method="get">
     {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, 'SnowcapAdminBundle'), 'class': 'input-xlarge search-query'}}) }}
     <button type="submit" class="btn">{{ submit|trans({}, 'SnowcapAdminBundle') }}</button>
 </form>
-{% endblock datalist_searchform %}
+{% endblock datalist_search %}
+
+{# datalist filter block #}
+{% block datalist_filters %}
+<div class="well">
+    <form class="form-search" method="get">
+        {% for filter in filters %}
+            {{ datalist_filter(filter) }}
+        {% endfor %}
+        <button type="submit" class="btn">{{ submit|trans({}, 'SnowcapAdminBundle') }}</button>
+    </form>
+</div>
+
+{% endblock datalist_filters %}
+
+{% block datalist_filter_choice %}
+    <div class="control-group">
+        {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'input-small'}}) }}
+    </div>
+{% endblock datalist_filter_choice %}

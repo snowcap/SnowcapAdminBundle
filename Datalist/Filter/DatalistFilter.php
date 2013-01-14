@@ -2,12 +2,19 @@
 
 namespace Snowcap\AdminBundle\Datalist\Filter;
 
+use Snowcap\AdminBundle\Datalist\DatalistInterface;
+
 class DatalistFilter implements DatalistFilterInterface
 {
     /**
      * @var DatalistFilterConfig
      */
     private $config;
+
+    /**
+     * @var
+     */
+    private $datalist;
 
     /**
      * @param DatalistFilterConfig $config
@@ -52,10 +59,26 @@ class DatalistFilter implements DatalistFilterInterface
     }
 
     /**
-     * @return \Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface
+     * @return \Snowcap\AdminBundle\Datalist\Filter\Type\FilterTypeInterface
      */
     public function getType()
     {
         return $this->config->getType();
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
+     */
+    public function setDatalist(DatalistInterface $datalist)
+    {
+        $this->datalist = $datalist;
+    }
+
+    /**
+     * @return DatalistInterface
+     */
+    public function getDatalist()
+    {
+        return $this->datalist;
     }
 }

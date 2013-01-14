@@ -74,6 +74,8 @@ datalist:
     search:
         submit: Search
         placeholder: Enter your search terms
+    filter:
+        submit: Filter
 
 cataloguetranslation:
     title: Interface content

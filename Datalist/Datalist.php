@@ -2,6 +2,8 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
+use Symfony\Component\Form\Form;
+
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
@@ -11,37 +13,41 @@ class Datalist implements DatalistInterface
     /**
      * @var DatalistConfig
      */
-    protected $config;
+    private $config;
 
     /**
      * @var DatasourceInterface
      */
-    protected $datasource;
+    private $datasource;
 
     /**
      * @var array
      */
-    protected $fields = array();
+    private $fields = array();
 
     /**
      * @var array
      */
-    protected $filters = array();
+    private $filters = array();
 
     /**
      * @var array
      */
-    protected $actions = array();
+    private $actions = array();
 
     /**
      * @var int
      */
-    protected $page = 1;
+    private $page = 1;
 
     /**
      * @var string
      */
-    protected $searchQuery;
+    private $searchQuery;
+
+    private $searchForm;
+
+    private $filterForm;
 
     /**
      * @param string $code
@@ -88,6 +94,14 @@ class Datalist implements DatalistInterface
         $this->filters[] = $filter;
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->filters;
     }
 
     /**
@@ -196,6 +210,42 @@ class Datalist implements DatalistInterface
     public function getOption($name, $default = null)
     {
         return $this->config->getOption($name, $default);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true === $this->getOption('searchable');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFilterable()
+    {
+        return count($this->filters) > 0;
+    }
+
+    public function setSearchForm(Form $form)
+    {
+        $this->searchForm = $form;
+    }
+
+    public function setFilterForm(Form $form)
+    {
+        $this->filterForm = $form;
+    }
+
+    public function getSearchForm()
+    {
+        return $this->searchForm;
+    }
+
+    public function getFilterForm()
+    {
+        return $this->filterForm;
     }
 
 

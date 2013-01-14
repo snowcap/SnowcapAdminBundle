@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormFactory;
 
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistField;
@@ -28,14 +29,21 @@ class DatalistBuilder extends DatalistConfig
     private $factory;
 
     /**
+     * @var FormFactory
+     */
+    private $formFactory;
+
+    /**
      * @param string $name
      * @param DatalistFactory $factory
      * @param array $options
      */
-    public function __construct($name, DatalistTypeInterface $type, array $options, DatalistFactory $factory)
+    public function __construct($name, DatalistTypeInterface $type, array $options, DatalistFactory $factory, FormFactory $formFactory)
     {
         parent::__construct($name, $type, $options);
+
         $this->factory = $factory;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -92,11 +100,15 @@ class DatalistBuilder extends DatalistConfig
             $datalist->addField($field);
         }
 
-        // Add filters
+        // Add filters and filter form
+        $filterFormBuilder = $this->formFactory->createNamedBuilder('');
         foreach ($this->filters as $filterName => $filterConfig) {
             $filter = $this->createFilter($filterName, $filterConfig);
+            $filter->setDatalist($datalist);
+            $filter->getType()->buildForm($filterFormBuilder, $filter, $filter->getOptions());
             $datalist->addFilter($filter);
         }
+        $datalist->setFilterForm($filterFormBuilder->getForm());
 
         return $datalist;
     }
@@ -121,6 +133,11 @@ class DatalistBuilder extends DatalistConfig
         return new DatalistField($config);
     }
 
+    /**
+     * @param string $filterName
+     * @param array $filterConfig
+     * @return Filter\DatalistFilter
+     */
     private function createFilter($filterName, array $filterConfig)
     {
         $type = $this->factory->getFilterType($filterConfig['type']);
@@ -134,7 +151,6 @@ class DatalistBuilder extends DatalistConfig
         $config = new DatalistFilterConfig($filterName, $type, $resolvedOptions);
 
         return new DatalistFilter($config);
-
     }
 
     /**
