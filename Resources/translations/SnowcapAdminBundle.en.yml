@@ -71,6 +71,9 @@ project:
 
 datalist:
     empty_value: ---
+    search:
+        submit: Search
+        placeholder: Enter your search terms
 
 cataloguetranslation:
     title: Interface content

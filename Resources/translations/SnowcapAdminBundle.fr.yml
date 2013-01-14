@@ -71,6 +71,9 @@ project:
 
 data:
     emptyvalue: ---
+    search:
+        submit: Rechercher
+        placeholder: Entrez vos termes de recherche
 
 cataloguetranslation:
     title: Contenu d'interface

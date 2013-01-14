@@ -52,7 +52,7 @@
 {% block datalist_field_datetime %}
     <td>
         {% if value is not null %}
-            {{ value|date(format)  }}
+            {{ value|date(options['format'])  }}
         {% else %}
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
         {% endif %}
@@ -77,9 +77,8 @@
 
 {# datalist seach form block #}
 {% block datalist_searchform %}
-
-<form method="get">
-    {{ form_widget(form) }}
-    <input type="submit"/>
+<form class="form-search" method="get">
+    {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, 'SnowcapAdminBundle'), 'class': 'input-xlarge search-query'}}) }}
+    <button type="submit" class="btn">{{ submit|trans({}, 'SnowcapAdminBundle') }}</button>
 </form>
 {% endblock datalist_searchform %}

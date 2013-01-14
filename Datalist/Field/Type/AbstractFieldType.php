@@ -28,5 +28,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
     public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $value, array $options)
     {
         $viewContext['value'] = $value;
+        $viewContext['field'] = $field;
+        $viewContext['options'] = $options;
     }
 }

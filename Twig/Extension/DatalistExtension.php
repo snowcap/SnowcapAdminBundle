@@ -126,7 +126,9 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         $form->bind(array('search' => $this->container->get('request', null)));
 
         return $this->renderblock($datalist->getOption('layout'), $blockName, array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'placeholder' => $datalist->getOption('placeholder_text'),
+            'submit' => $datalist->getOption('submit_text'),
         ));
     }
 

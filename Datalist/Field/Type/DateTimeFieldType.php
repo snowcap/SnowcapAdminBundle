@@ -22,19 +22,6 @@ class DateTimeFieldType extends AbstractFieldType
     }
 
     /**
-     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewContext
-     * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
-     * @param mixed $value
-     * @param array $options
-     */
-    public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $value, array $options)
-    {
-        parent::buildViewContext($viewContext, $field, $value, $options);
-
-        $viewContext['format'] = $options['format'];
-    }
-
-    /**
      * @return string
      */
     public function getName()
