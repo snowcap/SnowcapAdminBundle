@@ -4,20 +4,26 @@ namespace Snowcap\AdminBundle\Datalist;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
+use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
+use Snowcap\AdminBundle\Datalist\Filter\Type\FilterTypeInterface;
 
 class DatalistFactory
 {
     /**
      * @var array
      */
-    protected $types = array();
+    private $types = array();
 
     /**
      * @var array
      */
-    protected $fieldTypes = array();
+    private $fieldTypes = array();
+
+    /**
+     * @var array
+     */
+    private $filterTypes = array();
 
     /**
      * @param string $type
@@ -90,10 +96,10 @@ class DatalistFactory
     /**
      * @return DatalistTypeInterface
      */
-    private function getType($alias)
+    public function getType($alias)
     {
         if (!array_key_exists($alias, $this->types)) {
-            throw new \InvalidArgumentException(sprintf('Unkown type "%s"', $alias));
+            throw new \InvalidArgumentException(sprintf('Unknown type "%s"', $alias));
         }
 
         return $this->types[$alias];
@@ -114,7 +120,7 @@ class DatalistFactory
     public function getFieldType($alias)
     {
         if (!array_key_exists($alias, $this->fieldTypes)) {
-            throw new \InvalidArgumentException(sprintf('Unkown type "%s"', $alias));
+            throw new \InvalidArgumentException(sprintf('Unknown field type "%s"', $alias));
         }
 
         return $this->fieldTypes[$alias];
@@ -127,5 +133,28 @@ class DatalistFactory
     public function registerFieldType($alias, FieldTypeInterface $fieldType)
     {
         $this->fieldTypes[$alias] = $fieldType;
+    }
+
+    /**
+     * @param string $alias
+     * @return FilterTypeInterface
+     * @throws \InvalidArgumentException
+     */
+    public function getFilterType($alias)
+    {
+        if (!array_key_exists($alias, $this->filterTypes)) {
+            throw new \InvalidArgumentException(sprintf('Unknown filter type "%s"', $alias));
+        }
+
+        return $this->filterTypes[$alias];
+    }
+
+    /**
+     * @param string $alias
+     * @param Filter\Type\FilterTypeInterface $filterType
+     */
+    public function registerFilterType($alias, FilterTypeInterface $filterType)
+    {
+        $this->filterTypes[$alias] = $filterType;
     }
 }

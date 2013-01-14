@@ -18,9 +18,7 @@ class DatalistField implements DatalistFieldInterface
     private $datalist;
 
     /**
-     * @param string $name
-     * @param FieldTypeInterface $type
-     * @param array $options
+     * @param DatalistFieldConfig $config
      */
     public function __construct(DatalistFieldConfig $config)
     {

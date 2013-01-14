@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 
@@ -15,9 +16,15 @@ interface DatalistInterface extends \IteratorAggregate
 
     /**
      * @param DatalistFieldInterface $field
-     * @return Datalist
+     * @return DatalistInterface
      */
     public function addField(DatalistFieldInterface $field);
+
+    /**
+     * @param Filter\DatalistFilterInterface $filter
+     * @return DatalistInterface
+     */
+    public function addFilter(DatalistFilterInterface $filter);
 
     /**
      * @param DatasourceInterface $datasource

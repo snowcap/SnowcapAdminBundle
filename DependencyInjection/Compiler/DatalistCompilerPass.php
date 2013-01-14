@@ -24,6 +24,7 @@ class DatalistCompilerPass implements CompilerPassInterface
         }
         $definition = $container->getDefinition('snowcap_admin.datalist_factory');
 
+        // Datalist types
         foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_type') as $serviceId => $tag) {
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
@@ -31,11 +32,20 @@ class DatalistCompilerPass implements CompilerPassInterface
             $definition->addMethodCall('registerType', array($alias, new Reference($serviceId)));
         }
 
+        // Field types
         foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_fieldtype') as $serviceId => $tag) {
             $alias = isset($tag[0]['alias'])
                 ? $tag[0]['alias']
                 : $serviceId;
             $definition->addMethodCall('registerFieldType', array($alias, new Reference($serviceId)));
+        }
+
+        // Filter types
+        foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_filtertype') as $serviceId => $tag) {
+            $alias = isset($tag[0]['alias'])
+                ? $tag[0]['alias']
+                : $serviceId;
+            $definition->addMethodCall('registerFilterType', array($alias, new Reference($serviceId)));
         }
     }
 

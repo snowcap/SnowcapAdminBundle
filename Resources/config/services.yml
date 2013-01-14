@@ -116,6 +116,11 @@ services:
         tags:
             - { name: snowcap_admin.datalist_fieldtype, alias: text }
 
+    snowcap_admin.datalist_filter_choice:
+        class: Snowcap\AdminBundle\Datalist\Filter\Type\ChoiceFilterType
+        tags:
+            - { name: snowcap_admin.datalist_filtertype, alias: choice }
+
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger

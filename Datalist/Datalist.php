@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 
 class Datalist implements DatalistInterface
@@ -21,6 +22,11 @@ class Datalist implements DatalistInterface
      * @var array
      */
     protected $fields = array();
+
+    /**
+     * @var array
+     */
+    protected $filters = array();
 
     /**
      * @var array
@@ -71,6 +77,17 @@ class Datalist implements DatalistInterface
     public function getFields()
     {
         return $this->fields;
+    }
+
+    /**
+     * @param Filter\DatalistFilterInterface $filter
+     * @return DatalistInterface
+     */
+    public function addFilter(DatalistFilterInterface $filter)
+    {
+        $this->filters[] = $filter;
+
+        return $this;
     }
 
     /**
@@ -180,12 +197,6 @@ class Datalist implements DatalistInterface
     {
         return $this->config->getOption($name, $default);
     }
-
-
-
-
-
-
 
 
     public function addAction($routeName, array $parameters = array(), array $options = array())
