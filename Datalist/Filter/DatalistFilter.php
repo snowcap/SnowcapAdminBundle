@@ -81,4 +81,20 @@ class DatalistFilter implements DatalistFilterInterface
     {
         return $this->datalist;
     }
+
+    /**
+     * @return string
+     */
+    public function getPropertyPath()
+    {
+        $propertyPath = $this->getOption('property_path');
+        if (null === $propertyPath) {
+            $propertyPath = $this->config->getName();
+            if (null === $this->datalist->getOption('data_class')) {
+                $propertyPath = '[' . $propertyPath . ']';
+            }
+        }
+
+        return $propertyPath;
+    }
 }

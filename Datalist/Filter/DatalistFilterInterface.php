@@ -18,4 +18,9 @@ interface DatalistFilterInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * @return string
+     */
+    public function getPropertyPath();
 }

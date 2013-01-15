@@ -21,6 +21,8 @@ class ChoiceFilterType extends AbstractFilterType
 
     public function buildForm(FormBuilderInterface $builder, DatalistFilterInterface $filter, array $options)
     {
+        parent::buildForm($builder, $filter, $options);
+
         $builder->add($filter->getName(), 'choice', array(
             'choices' => $options['choices'],
             'label' => $options['label']

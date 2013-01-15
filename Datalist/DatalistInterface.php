@@ -80,13 +80,6 @@ interface DatalistInterface extends \IteratorAggregate
     public function setPage($page);
 
     /**
-     * @param string $query
-     *
-     * @return DatalistInterface
-     */
-    public function setSearchQuery($query);
-
-    /**
      * @return bool
      */
     public function isSearchable();
@@ -102,12 +95,21 @@ interface DatalistInterface extends \IteratorAggregate
 
     public function setFilterForm(Form $form);
 
+    /**
+     * @return \Symfony\Component\Form\FormInterface
+     */
     public function getSearchForm();
 
     /**
      * @return \Symfony\Component\Form\FormInterface
      */
     public function getFilterForm();
+
+    /**
+     * @param mixed $data
+     * @return DatalistInterface
+     */
+    public function bind($data);
 
 
 

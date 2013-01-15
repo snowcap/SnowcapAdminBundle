@@ -3,6 +3,8 @@
 namespace Snowcap\AdminBundle\Datalist;
 
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Util\PropertyPath;
 
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
@@ -45,8 +47,19 @@ class Datalist implements DatalistInterface
      */
     private $searchQuery;
 
+    /**
+     * @var array
+     */
+    private $filterData = array();
+
+    /**
+     * @var Form
+     */
     private $searchForm;
 
+    /**
+     * @var Form
+     */
     private $filterForm;
 
     /**
@@ -91,7 +104,7 @@ class Datalist implements DatalistInterface
      */
     public function addFilter(DatalistFilterInterface $filter)
     {
-        $this->filters[] = $filter;
+        $this->filters[$filter->getName()] = $filter;
 
         return $this;
     }
@@ -132,14 +145,25 @@ class Datalist implements DatalistInterface
         }
 
         $datasource = $this->getDatasource();
+
+        // Handle pagination
         if ($this->hasOption('limit_per_page')) {
             $datasource
                 ->paginate($this->getOption('limit_per_page'), $this->getOption('range_limit'))
                 ->setPage($this->page);
         }
+
+        // Handle search
         if (true === $this->getOption('searchable') && !empty($this->searchQuery)) {
-            $datasource
-                ->setSearchQuery($this->searchQuery);
+            $datasource->setSearchQuery($this->searchQuery);
+        }
+
+        // Handle filters
+        if(!empty($this->filterData)) {
+            foreach($this->filterData as $filterName => $filterValue) {
+                $filter = $this->filters[$filterName];
+                //TODO: do something with this
+            }
         }
 
         return $datasource->getIterator();
@@ -164,19 +188,6 @@ class Datalist implements DatalistInterface
 
         return $this;
     }
-
-    /**
-     * @param string $query
-     *
-     * @return DatalistInterface
-     */
-    public function setSearchQuery($query)
-    {
-        $this->searchQuery = $query;
-
-        return $this;
-    }
-
 
     /**
      * @return string
@@ -246,6 +257,36 @@ class Datalist implements DatalistInterface
     public function getFilterForm()
     {
         return $this->filterForm;
+    }
+
+    /**
+     * Bind search / filter data to the datalist
+     *
+     * @param mixed $data a data array, a Request instance or an arbitrary object
+     * @return DatalistInterface
+     */
+    public function bind($data)
+    {
+        if($data instanceof Request) {
+            $data = $data->query->all();
+        }
+
+        // Handle search
+        if(isset($data['search'])) {
+            $this->searchQuery = $data['search'];
+            $this->searchForm->bind(array('search' => $data['search']));
+        }
+
+        // Handle filters
+        foreach($this->filters as $filter) {
+            $filterPropertyPath = $filter->getPropertyPath();
+            $propertyPath = new PropertyPath($filterPropertyPath);
+            $filterValue = $propertyPath->getValue($data);
+            if(null !== $filterValue) {
+                $this->filterData[$filter->getName()] = $data[$filter->getName()];
+            }
+            $this->filterForm->bind($this->filterData);
+        }
     }
 
 

@@ -80,8 +80,8 @@ abstract class AbstractDatasource implements DatasourceInterface
         $resolver
             ->setOptional(array('search', 'search_mode'))
             ->setAllowedTypes(array(
-                    'search' => array('string', 'array')
-                ));
+                'search' => array('string', 'array')
+            ));
 
         $this->options = $resolver->resolve($options);
     }

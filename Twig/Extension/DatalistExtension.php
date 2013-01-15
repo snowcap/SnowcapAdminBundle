@@ -121,15 +121,8 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     {
         $blockName = 'datalist_search';
 
-        $form = $this->formFactory->createNamedBuilder('', 'form', null, array(
-                'csrf_protection' => false
-            ))
-            ->add('search', 'search')
-            ->getForm();
-        $form->bind(array('search' => $this->container->get('request')->get('search', null)));
-
         return $this->renderblock($datalist->getOption('layout'), $blockName, array(
-            'form' => $form->createView(),
+            'form' => $datalist->getSearchForm()->createView(),
             'placeholder' => $datalist->getOption('search_placeholder'),
             'submit' => $datalist->getOption('search_submit'),
         ));
