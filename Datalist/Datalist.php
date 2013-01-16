@@ -282,14 +282,11 @@ class Datalist implements DatalistInterface
 
         // Handle filters
         foreach($this->filters as $filter) {
-            $filterPropertyPath = $filter->getPropertyPath();
-            $propertyPath = new PropertyPath($filterPropertyPath);
-            $filterValue = $propertyPath->getValue($data);
-            if(null !== $filterValue) {
+            if(isset($data[$filter->getName()])) {
                 $this->filterData[$filter->getName()] = $data[$filter->getName()];
             }
-            $this->filterForm->bind($this->filterData);
         }
+        $this->filterForm->bind($this->filterData);
     }
 
     /**
