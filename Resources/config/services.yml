@@ -122,6 +122,11 @@ services:
         tags:
             - { name: snowcap_admin.datalist_filtertype, alias: choice }
 
+    snowcap_admin.datalist_action_simple:
+        class: Snowcap\AdminBundle\Datalist\Action\Type\SimpleActionType
+        tags:
+            - { name: snowcap_admin.datalist_actiontype, alias: simple }
+
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger

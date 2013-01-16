@@ -6,6 +6,7 @@ use Symfony\Component\Form\Form;
 
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
+use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 
@@ -37,6 +38,17 @@ interface DatalistInterface extends \IteratorAggregate
      * @return array
      */
     public function getFilters();
+
+    /**
+     * @param Action\DatalistActionInterface $action
+     * @return DatalistInterface
+     */
+    public function addAction(DatalistActionInterface $action);
+
+    /**
+     * @return array
+     */
+    public function getActions();
 
     /**
      * @param DatasourceInterface $datasource
@@ -89,10 +101,16 @@ interface DatalistInterface extends \IteratorAggregate
      */
     public function isFilterable();
 
-
-
+    /**
+     * @param \Symfony\Component\Form\Form $form
+     * @return DatalistInterface
+     */
     public function setSearchForm(Form $form);
 
+    /**
+     * @param \Symfony\Component\Form\Form $form
+     * @return DatalistInterface
+     */
     public function setFilterForm(Form $form);
 
     /**
@@ -110,19 +128,4 @@ interface DatalistInterface extends \IteratorAggregate
      * @return DatalistInterface
      */
     public function bind($data);
-
-
-
-    public function addAction($routeName, array $parameters = array(), array $options = array());
-
-    /**
-     * @param string $routeName
-     * @return mixed
-     */
-    public function removeAction($routeName);
-
-    /**
-     * @return array
-     */
-    public function getActions();
 }

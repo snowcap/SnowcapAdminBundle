@@ -10,6 +10,8 @@ use Snowcap\AdminBundle\Datalist\Field\DatalistField;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldConfig;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilter;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterConfig;
+use Snowcap\AdminBundle\Datalist\Action\DatalistAction;
+use Snowcap\AdminBundle\Datalist\Action\DatalistActionConfig;
 
 class DatalistBuilder extends DatalistConfig
 {
@@ -22,6 +24,11 @@ class DatalistBuilder extends DatalistConfig
      * @var array
      */
     private $filters = array();
+
+    /**
+     * @var array
+     */
+    private $actions = array();
 
     /**
      * @var DatalistFactory
@@ -87,6 +94,21 @@ class DatalistBuilder extends DatalistConfig
     }
 
     /**
+     * @param $action
+     * @param string $type
+     * @param array $options
+     */
+    public function addAction($action, $type = null, array $options = array())
+    {
+        $this->actions[$action] = array(
+            'type' => $type,
+            'options' => $options
+        );
+
+        return $this;
+    }
+
+    /**
      * @return DatalistInterface
      */
     public function getDatalist()
@@ -119,6 +141,13 @@ class DatalistBuilder extends DatalistConfig
             $datalist->addFilter($filter);
         }
         $datalist->setFilterForm($filterFormBuilder->getForm());
+
+        // Add actions
+        foreach($this->actions as $actionName => $actionConfig) {
+            $action = $this->createAction($actionName, $actionConfig);
+            $action->setDatalist($datalist);
+            $datalist->addAction($action);
+        }
 
         return $datalist;
     }
@@ -161,6 +190,21 @@ class DatalistBuilder extends DatalistConfig
         $config = new DatalistFilterConfig($filterName, $type, $resolvedOptions);
 
         return new DatalistFilter($config);
+    }
+
+    private function createAction($actionName, array $actionConfig)
+    {
+        $type = $this->factory->getActionType($actionConfig['type'] ?: 'simple');
+
+        // Handle action options
+        $resolver = new OptionsResolver();
+        $resolver->setDefaults(array('label' => ucfirst($actionName)));
+        $type->setDefaultOptions($resolver);
+        $resolvedOptions = $resolver->resolve($actionConfig['options']);
+
+        $config = new DatalistActionConfig($actionName, $type, $resolvedOptions);
+
+        return new DatalistAction($config);
     }
 
     /**

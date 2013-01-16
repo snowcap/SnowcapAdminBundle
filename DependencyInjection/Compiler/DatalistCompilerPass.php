@@ -47,6 +47,14 @@ class DatalistCompilerPass implements CompilerPassInterface
                 : $serviceId;
             $definition->addMethodCall('registerFilterType', array($alias, new Reference($serviceId)));
         }
+
+        // Action types
+        foreach ($container->findTaggedServiceIds('snowcap_admin.datalist_actiontype') as $serviceId => $tag) {
+            $alias = isset($tag[0]['alias'])
+                ? $tag[0]['alias']
+                : $serviceId;
+            $definition->addMethodCall('registerActionType', array($alias, new Reference($serviceId)));
+        }
     }
 
 }

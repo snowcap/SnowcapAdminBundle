@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormFactory;
 use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
 use Snowcap\AdminBundle\Datalist\Filter\Type\FilterTypeInterface;
+use Snowcap\AdminBundle\Datalist\Action\Type\ActionTypeInterface;
 
 class DatalistFactory
 {
@@ -25,6 +26,11 @@ class DatalistFactory
      * @var array
      */
     private $filterTypes = array();
+
+    /**
+     * @var array
+     */
+    private $actionTypes = array();
 
     /**
      * @var FormFactory
@@ -172,5 +178,28 @@ class DatalistFactory
     public function registerFilterType($alias, FilterTypeInterface $filterType)
     {
         $this->filterTypes[$alias] = $filterType;
+    }
+
+    /**
+     * @param string $alias
+     * @return FilterTypeInterface
+     * @throws \InvalidArgumentException
+     */
+    public function getActionType($alias)
+    {
+        if (!array_key_exists($alias, $this->actionTypes)) {
+            throw new \InvalidArgumentException(sprintf('Unknown action type "%s"', $alias));
+        }
+
+        return $this->actionTypes[$alias];
+    }
+
+    /**
+     * @param string $alias
+     * @param Action\Type\ActionTypeInterface $actionType
+     */
+    public function registerActionType($alias, ActionTypeInterface $actionType)
+    {
+        $this->actionTypes[$alias] = $actionType;
     }
 }

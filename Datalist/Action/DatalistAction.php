@@ -1,13 +1,13 @@
 <?php
 
-namespace Snowcap\AdminBundle\Datalist\Field;
+namespace Snowcap\AdminBundle\Datalist\Action;
 
 use Snowcap\AdminBundle\Datalist\DatalistInterface;
 
-class DatalistField implements DatalistFieldInterface
+class DatalistAction implements DatalistActionInterface
 {
     /**
-     * @var DatalistFieldConfig
+     * @var DatalistActionConfig
      */
     private $config;
 
@@ -17,9 +17,9 @@ class DatalistField implements DatalistFieldInterface
     private $datalist;
 
     /**
-     * @param DatalistFieldConfig $config
+     * @param DatalistActionConfig $config
      */
-    public function __construct(DatalistFieldConfig $config)
+    public function __construct(DatalistActionConfig $config)
     {
         $this->config = $config;
     }
@@ -56,22 +56,6 @@ class DatalistField implements DatalistFieldInterface
     public function getOption($name, $default = null)
     {
         return $this->config->getOption($name, $default);
-    }
-
-    /**
-     * @return string
-     */
-    public function getPropertyPath()
-    {
-        $propertyPath = $this->getOption('property_path');
-        if (null === $propertyPath) {
-            $propertyPath = $this->config->getName();
-            if (null === $this->datalist->getOption('data_class')) {
-                $propertyPath = '[' . $propertyPath . ']';
-            }
-        }
-
-        return $propertyPath;
     }
 
     /**

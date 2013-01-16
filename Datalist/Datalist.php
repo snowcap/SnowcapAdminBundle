@@ -8,6 +8,7 @@ use Symfony\Component\Form\Util\PropertyPath;
 
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
+use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
 
@@ -116,6 +117,25 @@ class Datalist implements DatalistInterface
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    /**
+     * @param Action\DatalistActionInterface $action
+     * @return DatalistInterface
+     */
+    public function addAction(DatalistActionInterface $action)
+    {
+        $this->actions[$action->getName()] = $action;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActions()
+    {
+        return $this->actions;
     }
 
     /**
@@ -287,40 +307,5 @@ class Datalist implements DatalistInterface
             }
         }
         $this->filterForm->bind($this->filterData);
-    }
-
-    /**
-     * TODO: CHECK
-     */
-    public function addAction($routeName, array $parameters = array(), array $options = array())
-    {
-        $options = array_merge(
-            array(
-                'confirm' => false,
-                'confirm_title' => 'content.actions.confirm.title',
-                'confirm_body' => 'content.actions.confirm.body',
-                'confirm_confirm' => 'content.actions.confirm.confirm',
-                'confirm_cancel' => 'content.actions.confirm.cancel',
-            ),
-            $options
-        );
-        if (!array_key_exists('label', $options)) {
-            $options['label'] = ucfirst($routeName);
-        }
-        $this->actions[$routeName] = array('parameters' => $parameters, 'options' => $options);
-
-        return $this;
-    }
-
-    public function removeAction($routeName)
-    {
-        if (array_key_exists($routeName, $this->actions)) {
-            unset($this->actions[$routeName]);
-        }
-    }
-
-    public function getActions()
-    {
-        return $this->actions;
     }
 }
