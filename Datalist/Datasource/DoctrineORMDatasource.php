@@ -168,8 +168,8 @@ class DoctrineORMDatasource extends AbstractDatasource
      * @throws \UnexpectedValueException
      */
     private function buildQueryBuilderComparisonExpression(ComparisonExpression $expression) {
-        $propertyPath = $this->queryBuilder->getRootAlias() . '.' . $expression->getPropertyPath();
-        $placeholder=  ':' . $expression->getPropertyPath();
+        $propertyPath = $expression->getPropertyPath();
+        $placeholder=  ':' . str_replace('.', '_', $expression->getPropertyPath());
         $comparisonValue = $expression->getValue();
         $operator = $expression->getOperator();
 
