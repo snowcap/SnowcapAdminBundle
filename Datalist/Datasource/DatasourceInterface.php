@@ -2,6 +2,8 @@
 
 namespace Snowcap\AdminBundle\Datalist\Datasource;
 
+use Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface;
+
 interface DatasourceInterface extends \IteratorAggregate
 {
     /**
@@ -21,6 +23,12 @@ interface DatasourceInterface extends \IteratorAggregate
      * @param string $query
      */
     public function setSearchQuery($query);
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface $expression
+     * @return mixed
+     */
+    public function setFilterExpression(ExpressionInterface $expression);
 
     /**
      * @return \Snowcap\CoreBundle\Paginator\PaginatorInterface

@@ -9,6 +9,7 @@ use Symfony\Component\Form\Util\PropertyPath;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
 
 class Datalist implements DatalistInterface
 {
@@ -159,11 +160,13 @@ class Datalist implements DatalistInterface
         }
 
         // Handle filters
+        $expressionBuilder = new DatalistFilterExpressionBuilder();
         if(!empty($this->filterData)) {
             foreach($this->filterData as $filterName => $filterValue) {
                 $filter = $this->filters[$filterName];
-                //TODO: do something with this
+                $filter->getType()->buildExpression($expressionBuilder, $filter, $filterValue, $filter->getOptions());
             }
+            $datasource->setFilterExpression($expressionBuilder->getExpression());
         }
 
         return $datasource->getIterator();
@@ -289,7 +292,9 @@ class Datalist implements DatalistInterface
         }
     }
 
-
+    /**
+     * TODO: CHECK
+     */
     public function addAction($routeName, array $parameters = array(), array $options = array())
     {
         $options = array_merge(

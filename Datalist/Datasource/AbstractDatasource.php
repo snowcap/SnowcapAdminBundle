@@ -4,6 +4,8 @@ namespace Snowcap\AdminBundle\Datalist\Datasource;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface;
+
 abstract class AbstractDatasource implements DatasourceInterface
 {
     /**
@@ -27,6 +29,11 @@ abstract class AbstractDatasource implements DatasourceInterface
     protected $searchQuery;
 
     /**
+     * @var ExpressionInterface
+     */
+    protected $filterExpression;
+
+    /**
      * @var array
      */
     protected $options;
@@ -43,7 +50,7 @@ abstract class AbstractDatasource implements DatasourceInterface
      * @param int $limitPerPage
      * @param int $limitRange
      *
-     * @return AbstractDatasource
+     * @return DatasourceInterface
      */
     public function paginate($limitPerPage, $rangeLimit)
     {
@@ -69,6 +76,15 @@ abstract class AbstractDatasource implements DatasourceInterface
     public function setSearchQuery($query)
     {
         $this->searchQuery = $query;
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface $expression
+     * @return mixed
+     */
+    public function setFilterExpression(ExpressionInterface $expression)
+    {
+        $this->filterExpression = $expression;
     }
 
     /**

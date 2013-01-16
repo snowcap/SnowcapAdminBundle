@@ -5,9 +5,6 @@ namespace Snowcap\AdminBundle\Datalist\Filter\Type;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
-use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
-
 abstract class AbstractFilterType implements FilterTypeInterface
 {
     /**
@@ -17,15 +14,5 @@ abstract class AbstractFilterType implements FilterTypeInterface
     {
         $resolver
             ->setDefaults(array('property_path' => null));
-    }
-
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param \Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface $filter
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, DatalistFilterInterface $filter, array $options)
-    {
-
     }
 }
