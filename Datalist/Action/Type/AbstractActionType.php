@@ -12,5 +12,4 @@ abstract class AbstractActionType implements ActionTypeInterface {
     {
 
     }
-
 }

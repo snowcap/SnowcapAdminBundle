@@ -7,7 +7,7 @@ use Snowcap\AdminBundle\Datalist\DatalistInterface;
 interface DatalistActionInterface
 {
     /**
-     * @return \Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface
+     * @return ActionTypeInterface
      */
     public function getType();
 

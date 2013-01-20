@@ -10,6 +10,7 @@ use Snowcap\AdminBundle\Datalist\DatalistInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
+use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 
 
 class DatalistExtension extends \Twig_Extension implements ContainerAwareInterface
@@ -60,11 +61,11 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     {
         return array(
             'datalist_widget' => new \Twig_Function_Method($this, 'renderDatalistWidget', array('is_safe' => array('html'))),
-            'datalist_header' => new \Twig_Function_Method($this, 'renderDatalistHeader', array('is_safe' => array('html'))),
             'datalist_field' => new \Twig_Function_Method($this, 'renderDatalistField', array('is_safe' => array('html'))),
             'datalist_search' => new \Twig_Function_Method($this, 'renderDatalistSearch', array('is_safe' => array('html'))),
             'datalist_filters' => new \Twig_Function_Method($this, 'renderDatalistFilters', array('is_safe' => array('html'))),
-            'datalist_filter' => new \Twig_Function_Method($this, 'renderDatalistFilter', array('is_safe' => array('html')))
+            'datalist_filter' => new \Twig_Function_Method($this, 'renderDatalistFilter', array('is_safe' => array('html'))),
+            'datalist_action' => new \Twig_Function_Method($this, 'renderDatalistAction', array('is_safe' => array('html')))
         );
     }
 
@@ -80,19 +81,6 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         $datalist->getType()->buildViewContext($viewContext, $datalist, $datalist->getOptions());
 
         return $this->renderBlock($datalist->getOption('layout'), $blockName, $viewContext->all());
-    }
-
-    /**
-     * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
-     * @return string
-     */
-    public function renderDatalistHeader(DatalistFieldInterface $field)
-    {
-        $blockName = 'datalist_header'; //TODO: dynamic
-
-        return $this->renderBlock($field->getDatalist()->getOption('layout'), $blockName, array(
-            'label' => $field->getOption('label'),
-        ));
     }
 
     /**
@@ -152,7 +140,24 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         $childForm = $filter->getDatalist()->getFilterForm()->get($filter->getName());
 
         return $this->renderblock($filter->getDatalist()->getOption('layout'), $blockName, array(
-            'form' => $childForm->createView(),
+                'form' => $childForm->createView(),
+            ));
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface $action
+     * @param mixed $item
+     * @return string
+     */
+    public function renderDatalistAction(DatalistActionInterface $action, $item)
+    {
+        $blockName = 'datalist_action_' . $action->getType()->getName();
+        $url = $action->getType()->getUrl($action, $item, $action->getOptions());
+
+        return $this->renderblock($action->getDatalist()->getOption('layout'), $blockName, array(
+            'url' => $url,
+            'label' => $action->getOption('label'),
+            'action' => $action,
         ));
     }
 

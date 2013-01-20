@@ -124,6 +124,7 @@ services:
 
     snowcap_admin.datalist_action_simple:
         class: Snowcap\AdminBundle\Datalist\Action\Type\SimpleActionType
+        arguments: [@router]
         tags:
             - { name: snowcap_admin.datalist_actiontype, alias: simple }
 

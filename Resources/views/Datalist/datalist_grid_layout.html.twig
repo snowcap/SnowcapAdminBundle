@@ -1,22 +1,22 @@
 {# datalist grid block #}
 {% block datalist %}
-{% if datalist.searchable %}
-    {{ datalist_search(datalist) }}
-{% endif %}
-{% if datalist.filterable %}
-    <div class="row-fluid">
-        <div class="span9">
-            {{ block('datalist_table') }}
+    {% if datalist.searchable %}
+        {{ datalist_search(datalist) }}
+    {% endif %}
+    {% if datalist.filterable %}
+        <div class="row-fluid">
+            <div class="span9">
+                {{ block('datalist_table') }}
+            </div>
+            <div class="span3">{{ datalist_filters(datalist) }}</div>
         </div>
-        <div class="span3">{{ datalist_filters(datalist) }}</div>
-    </div>
-{% else  %}
-    {{ block('datalist_table') }}
-{% endif %}
+    {% else  %}
+        {{ block('datalist_table') }}
+    {% endif %}
 
-{% if datalist.paginator is not null %}
-    {{ paginator_widget(datalist.paginator) }}
-{% endif %}
+    {% if datalist.paginator is not null %}
+        {{ paginator_widget(datalist.paginator) }}
+    {% endif %}
 {% endblock datalist %}
 
 {# datalist table block #}
@@ -25,21 +25,25 @@
         <thead>
         <tr>
             {% for field in datalist.fields %}
-                {{ datalist_header(field) }}
+                <th>{{ field.options['label']|trans({}, "SnowcapAdminBundle") }}</th>
             {% endfor %}
             {% if datalist.actions|length > 0 %}
-                <th>{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
+                <th>{{ "content.actions.header"|trans({}, "SnowcapAdminBundle") }}</th>
             {% endif %}
         </tr>
         </thead>
         <tbody>
-        {% for data_row in datalist %}
+        {% for item in datalist %}
             <tr>
                 {% for field in datalist.fields %}
-                    {{ datalist_field(field, data_row) }}
+                    {{ datalist_field(field, item) }}
                 {% endfor %}
-                {% if datalist.actions | length > 0 %}
-                    <td class="listing-actions">{{ block('row_actions') }}</td>
+                {% if datalist.actions|length > 0 %}
+                    <td class="listing-actions">
+                        {% for action in datalist.actions %}
+                            {{ datalist_action(action, item) }}{% if not loop.last %} {% endif %}
+                        {% endfor %}
+                    </td>
                 {% endif %}
             </tr>
         {% endfor %}
@@ -47,18 +51,13 @@
     </table>
 {% endblock datalist_table %}
 
-{# datalist grid header block #}
-{% block datalist_header %}
-    <th>{{ label|trans }}</th>
-{% endblock datalist_header %}
-
 {# datalist text field type block #}
 {% block datalist_field_text %}
     <td>
         {% if value is not null %}
             {{ value|raw }}
         {% else %}
-            <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
     </td>
 {% endblock datalist_field_text %}
@@ -69,7 +68,7 @@
         {% if value is not null %}
             {{ value|date(options['format'])  }}
         {% else %}
-            <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
     </td>
 {% endblock datalist_field_datetime %}
@@ -81,39 +80,43 @@
 
 {# datalist heading field type block #}
 {% block datalist_field_heading %}
-<th>
-    {% if value is not null %}
-        {{ value|raw }}
-    {% else %}
-        <span class="empty-value">{{ "datalist.empty_value"|trans({}, 'SnowcapAdminBundle') }}</span>
-    {% endif %}
-</th>
+    <th>
+        {% if value is not null %}
+            {{ value|raw }}
+        {% else %}
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
+        {% endif %}
+    </th>
 {% endblock datalist_field_heading %}
 
-{# datalist seach block #}
+{# datalist search block #}
 {% block datalist_search %}
-<form class="form-search" method="get">
-    {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, 'SnowcapAdminBundle'), 'class': 'input-xlarge search-query'}}) }}
-    <button type="submit" class="btn">{{ submit|trans({}, 'SnowcapAdminBundle') }}</button>
-</form>
+    <form class="form-search" method="get">
+        {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, "SnowcapAdminBundle"), 'class': 'input-xlarge search-query'}}) }}
+        <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+    </form>
 {% endblock datalist_search %}
 
-{# datalist filter block #}
+{# datalist filters block #}
 {% block datalist_filters %}
-<div class="well">
-    <form class="form-search" method="get">
-        {% for filter in filters %}
-            {{ datalist_filter(filter) }}
-        {% endfor %}
-        <button type="submit" class="btn">{{ submit|trans({}, 'SnowcapAdminBundle') }}</button>
-    </form>
-</div>
-
+    <div class="well">
+        <form class="form-search" method="get">
+            {% for filter in filters %}
+                {{ datalist_filter(filter) }}
+            {% endfor %}
+            <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+        </form>
+    </div>
 {% endblock datalist_filters %}
 
+{# datalist choice filter block #}
 {% block datalist_filter_choice %}
     <div class="control-group">
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-small'}}) }}
     </div>
 {% endblock datalist_filter_choice %}
+
+{% block datalist_action_simple %}
+    <a href="{{ url }}">{{ label|trans({}, "SnowcapAdminBundle") }}</a>
+{% endblock datalist_action_simple %}
