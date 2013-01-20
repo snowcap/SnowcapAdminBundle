@@ -28,8 +28,8 @@
         "symfony/symfony": "2.1.*",
         "symfony/framework-bundle": "2.1.*",
         "sensio/framework-extra-bundle": "2.1.x-dev",
-        "snowcap/core-bundle": "dev-datalist",
-        "snowcap/bootstrap-bundle": "dev-datalist",
+        "snowcap/core-bundle": "dev-master",
+        "snowcap/bootstrap-bundle": "dev-master",
         "knplabs/knp-markdown-bundle": "1.2.x-dev"
     },
     "autoload": {
