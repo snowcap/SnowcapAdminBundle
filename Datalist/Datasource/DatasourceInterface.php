@@ -4,7 +4,7 @@ namespace Snowcap\AdminBundle\Datalist\Datasource;
 
 use Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface;
 
-interface DatasourceInterface extends \IteratorAggregate
+interface DatasourceInterface extends \IteratorAggregate, \Countable
 {
     /**
      * @param int $limitPerPage

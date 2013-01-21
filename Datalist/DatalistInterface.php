@@ -2,7 +2,7 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
@@ -102,16 +102,16 @@ interface DatalistInterface extends \IteratorAggregate
     public function isFilterable();
 
     /**
-     * @param \Symfony\Component\Form\Form $form
+     * @param \Symfony\Component\Form\FormInterface $form
      * @return DatalistInterface
      */
-    public function setSearchForm(Form $form);
+    public function setSearchForm(FormInterface $form);
 
     /**
-     * @param \Symfony\Component\Form\Form $form
+     * @param \Symfony\Component\Form\FormInterface $form
      * @return DatalistInterface
      */
-    public function setFilterForm(Form $form);
+    public function setFilterForm(FormInterface $form);
 
     /**
      * @return \Symfony\Component\Form\FormInterface

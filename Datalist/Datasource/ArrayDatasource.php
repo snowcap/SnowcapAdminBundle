@@ -22,16 +22,6 @@ class ArrayDatasource extends AbstractDatasource
     private $items = array();
 
     /**
-     * @var \Traversable
-     */
-    private $iterator;
-
-    /**
-     * @var ArrayPaginator
-     */
-    private $paginator;
-
-    /**
      * @param array $items
      */
     public function __construct(array $items, array $options = array())
@@ -61,7 +51,7 @@ class ArrayDatasource extends AbstractDatasource
         return $this->iterator;
     }
 
-    private function initialize()
+    protected function initialize()
     {
         if ($this->initialized) {
             return;

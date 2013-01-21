@@ -108,7 +108,7 @@ class DatalistFactory
 
         // Build datalist
         $builder = new DatalistBuilder($name, $type, $resolvedOptions, $this, $this->formFactory);
-        $type->buildDatalist($builder, $options);
+        $type->buildDatalist($builder, $resolvedOptions);
 
         return $builder;
     }

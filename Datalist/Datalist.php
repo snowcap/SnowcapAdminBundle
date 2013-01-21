@@ -2,7 +2,7 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Util\PropertyPath;
 
@@ -12,7 +12,7 @@ use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
 
-class Datalist implements DatalistInterface
+class Datalist implements DatalistInterface, \Countable
 {
     /**
      * @var DatalistConfig
@@ -63,6 +63,16 @@ class Datalist implements DatalistInterface
      * @var Form
      */
     private $filterForm;
+
+    /**
+     * @var Iterator
+     */
+    private $iterator;
+
+    /**
+     * @var bool
+     */
+    private $initialized = false;
 
     /**
      * @param string $code
@@ -157,42 +167,6 @@ class Datalist implements DatalistInterface
     }
 
     /**
-     * @return \Traversable
-     */
-    public function getIterator()
-    {
-        if (!isset($this->datasource)) {
-            return new \EmptyIterator();
-        }
-
-        $datasource = $this->getDatasource();
-
-        // Handle pagination
-        if ($this->hasOption('limit_per_page')) {
-            $datasource
-                ->paginate($this->getOption('limit_per_page'), $this->getOption('range_limit'))
-                ->setPage($this->page);
-        }
-
-        // Handle search
-        if (true === $this->getOption('searchable') && !empty($this->searchQuery)) {
-            $datasource->setSearchQuery($this->searchQuery);
-        }
-
-        // Handle filters
-        $expressionBuilder = new DatalistFilterExpressionBuilder();
-        if(!empty($this->filterData)) {
-            foreach($this->filterData as $filterName => $filterValue) {
-                $filter = $this->filters[$filterName];
-                $filter->getType()->buildExpression($expressionBuilder, $filter, $filterValue, $filter->getOptions());
-            }
-            $datasource->setFilterExpression($expressionBuilder->getExpression());
-        }
-
-        return $datasource->getIterator();
-    }
-
-    /**
      * @return \Snowcap\CoreBundle\Paginator\PaginatorInterface
      */
     public function getPaginator()
@@ -262,21 +236,39 @@ class Datalist implements DatalistInterface
         return count($this->filters) > 0;
     }
 
-    public function setSearchForm(Form $form)
+    /**
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @return DatalistInterface
+     */
+    public function setSearchForm(FormInterface $form)
     {
         $this->searchForm = $form;
+
+        return $this;
     }
 
-    public function setFilterForm(Form $form)
+    /**
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @return DatalistInterface
+     */
+    public function setFilterForm(FormInterface $form)
     {
         $this->filterForm = $form;
+
+        return $this;
     }
 
+    /**
+     * @return \Symfony\Component\Form\FormInterface
+     */
     public function getSearchForm()
     {
         return $this->searchForm;
     }
 
+    /**
+     * @return \Symfony\Component\Form\FormInterface
+     */
     public function getFilterForm()
     {
         return $this->filterForm;
@@ -307,5 +299,64 @@ class Datalist implements DatalistInterface
             }
         }
         $this->filterForm->bind($this->filterData);
+    }
+
+    /**
+     * @return \Traversable
+     */
+    public function getIterator()
+    {
+        $this->initialize();
+
+        return $this->iterator;
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $this->initialize();
+
+        return count($this->datasource);
+    }
+
+    /**
+     * This method populates the iterator property
+     *
+     */
+    private function initialize()
+    {
+        if($this->initialized) {
+            return;
+        }
+
+        if (!isset($this->datasource)) {
+            $this->iterator = new \EmptyIterator();
+        }
+
+        // Handle pagination
+        if ($this->hasOption('limit_per_page')) {
+            $this->datasource
+                ->paginate($this->getOption('limit_per_page'), $this->getOption('range_limit'))
+                ->setPage($this->page);
+        }
+
+        // Handle search
+        if (true === $this->getOption('searchable') && !empty($this->searchQuery)) {
+            $this->datasource->setSearchQuery($this->searchQuery);
+        }
+
+        // Handle filters
+        $expressionBuilder = new DatalistFilterExpressionBuilder();
+        if(!empty($this->filterData)) {
+            foreach($this->filterData as $filterName => $filterValue) {
+                $filter = $this->filters[$filterName];
+                $filter->getType()->buildExpression($expressionBuilder, $filter, $filterValue, $filter->getOptions());
+            }
+            $this->datasource->setFilterExpression($expressionBuilder->getExpression());
+        }
+
+        $this->iterator = $this->datasource->getIterator();
     }
 }

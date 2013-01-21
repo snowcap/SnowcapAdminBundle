@@ -39,6 +39,16 @@ abstract class AbstractDatasource implements DatasourceInterface
     protected $options;
 
     /**
+     * @var \Traversable
+     */
+    protected $iterator;
+
+    /**
+     * @var \Snowcap\CoreBundle\Paginator\PaginatorInterface
+     */
+    protected $paginator;
+
+    /**
      * @param array $options
      */
     public function __construct(array $options = array())
@@ -100,5 +110,20 @@ abstract class AbstractDatasource implements DatasourceInterface
             ));
 
         $this->options = $resolver->resolve($options);
+    }
+
+    /**
+     * This method should populated the iterator and paginator member variables
+     */
+    abstract protected function initialize();
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $this->initialize();
+
+        return count($this->iterator);
     }
 }

@@ -60,6 +60,8 @@ class DatalistField implements DatalistFieldInterface
 
     /**
      * @return string
+     *
+     * TODO: check if not better handled through options
      */
     public function getPropertyPath()
     {

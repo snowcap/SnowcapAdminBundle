@@ -22,16 +22,6 @@ class DoctrineORMDatasource extends AbstractDatasource
     private $initialized = false;
 
     /**
-     * @var \Traversable
-     */
-    private $iterator;
-
-    /**
-     * @var DoctrineORMPaginator
-     */
-    private $paginator;
-
-    /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
      */
     public function __construct(QueryBuilder $queryBuilder, array $options = array())
@@ -65,7 +55,7 @@ class DoctrineORMDatasource extends AbstractDatasource
      * Load the collection
      *
      */
-    private function initialize()
+    protected function initialize()
     {
         if($this->initialized) {
             return;

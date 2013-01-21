@@ -4,6 +4,7 @@ namespace Snowcap\AdminBundle\Twig\Extension;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\Form\Exception\InvalidPropertyException;
 use Symfony\Component\Form\FormFactory;
 
 use Snowcap\AdminBundle\Datalist\DatalistInterface;
@@ -93,7 +94,17 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         $blockName = 'datalist_field_' . $field->getType()->getName();
 
         $propertyPath = new PropertyPath($field->getPropertyPath());
-        $value = $propertyPath->getValue($row);
+        try {
+            $value = $propertyPath->getValue($row);
+        } catch (InvalidPropertyException $e) {
+            if(is_object($row) && !$field->getDatalist()->hasOption('data_class')) {
+                $message = sprintf('Missing "data_class" option');
+            }
+            else {
+                $message = sprintf('unknown property "%s"', $field->getPropertyPath());
+            }
+            throw new \UnexpectedValueException($message);
+        }
 
         $viewContext = new ViewContext();
         $field->getType()->buildViewContext($viewContext, $field, $value, $field->getOptions());
@@ -109,11 +120,15 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     {
         $blockName = 'datalist_search';
 
-        return $this->renderblock($datalist->getOption('layout'), $blockName, array(
-            'form' => $datalist->getSearchForm()->createView(),
-            'placeholder' => $datalist->getOption('search_placeholder'),
-            'submit' => $datalist->getOption('search_submit'),
-        ));
+        return $this->renderblock(
+            $datalist->getOption('layout'),
+            $blockName,
+            array(
+                'form' => $datalist->getSearchForm()->createView(),
+                'placeholder' => $datalist->getOption('search_placeholder'),
+                'submit' => $datalist->getOption('search_submit'),
+            )
+        );
     }
 
     /**
@@ -124,10 +139,14 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     {
         $blockName = 'datalist_filters';
 
-        return $this->renderblock($datalist->getOption('layout'), $blockName, array(
-            'filters' => $datalist->getFilters(),
-            'submit' => $datalist->getOption('filter_submit'),
-        ));
+        return $this->renderblock(
+            $datalist->getOption('layout'),
+            $blockName,
+            array(
+                'filters' => $datalist->getFilters(),
+                'submit' => $datalist->getOption('filter_submit'),
+            )
+        );
     }
 
     /**
@@ -139,9 +158,13 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         $blockName = 'datalist_filter_' . $filter->getType()->getName();
         $childForm = $filter->getDatalist()->getFilterForm()->get($filter->getName());
 
-        return $this->renderblock($filter->getDatalist()->getOption('layout'), $blockName, array(
+        return $this->renderblock(
+            $filter->getDatalist()->getOption('layout'),
+            $blockName,
+            array(
                 'form' => $childForm->createView(),
-            ));
+            )
+        );
     }
 
     /**
@@ -154,11 +177,15 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         $blockName = 'datalist_action_' . $action->getType()->getName();
         $url = $action->getType()->getUrl($action, $item, $action->getOptions());
 
-        return $this->renderblock($action->getDatalist()->getOption('layout'), $blockName, array(
-            'url' => $url,
-            'label' => $action->getOption('label'),
-            'action' => $action,
-        ));
+        return $this->renderblock(
+            $action->getDatalist()->getOption('layout'),
+            $blockName,
+            array(
+                'url' => $url,
+                'label' => $action->getOption('label'),
+                'action' => $action,
+            )
+        );
     }
 
     /**

@@ -21,28 +21,12 @@
     {# above block #}
     {% block above %}{% endblock %}
 
-    {# searchform block #}
-    {% block searchform %}
-        {% if search_form is defined and (list.data is not empty or search_form.vars.value is not empty) %}
-            <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-search" novalidate="novalidate">
-                {% for field in search_form %}
-                    {{ form_widget(field, { 'attr': { 'placeholder': "content.search.label"|trans({}, 'SnowcapAdminBundle')}}) }}
-                {% endfor %}
-                <button type="submit" class="btn">{{ "content.search.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
-                <a href="{{ admin_content_path(admin, 'index') }}" class="btn primary">{{ "content.search.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
-            </form>
-        {% endif %}
-    {% endblock searchform %}
-
     {# list block #}
     {% block list %}
 
         {% set list_content %}
-        {% if list.data is not empty %}
-            {{ list_widget(list) }}
-            {% if list.paginator != null %}
-                {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
-            {% endif %}
+        {% if list is not empty %}
+            {{ datalist_widget(list) }}
         {% else %}
             {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle')) }}
         {% endif %}
