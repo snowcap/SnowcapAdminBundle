@@ -300,6 +300,11 @@ class Datalist implements DatalistInterface, \Countable
             $data = $data->query->all();
         }
 
+        // Handle pagination
+        if(isset($data['page'])) {
+            $this->setPage($data['page']);
+        }
+
         // Handle search
         if(isset($data['search'])) {
             $this->searchQuery = $data['search'];
