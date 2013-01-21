@@ -1,0 +1,13 @@
+{% extends "SnowcapAdminBundle::base.html.twig" %}
+
+{# body block #}
+{% block body %}
+
+    {# pageheader block #}
+    {% block pageheader %}
+        <div class="page-header">
+            <h2>{{ admin.entityName(entity) }}</h2>
+        </div>
+    {% endblock pageheader %}
+
+{% endblock body %}

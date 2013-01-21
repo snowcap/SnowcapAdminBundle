@@ -133,6 +133,12 @@ services:
         tags:
             - { name: snowcap_admin.datalist_actiontype, alias: simple }
 
+    snowcap_admin.datalist_action_content_admin:
+        class: Snowcap\AdminBundle\Datalist\Action\Type\ContentAdminActionType
+        arguments: [@snowcap_admin.routing_helper_content]
+        tags:
+            - { name: snowcap_admin.datalist_actiontype, alias: content_admin }
+
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger

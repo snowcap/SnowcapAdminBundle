@@ -14,6 +14,7 @@ class ContentController extends BaseController
 {
     /**
      * Display the index screen (listing)
+     *
      */
     public function indexAction(Request $request, ContentAdmin $admin)
     {
@@ -32,6 +33,20 @@ class ContentController extends BaseController
         return $this->render(
             $this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()),
             $templateParams
+        );
+    }
+
+    /**
+     * Display the detail screen
+     *
+     */
+    public function viewAction(Request $request, ContentAdmin $admin)
+    {
+        $entity = $admin->findEntity($request->attributes->get('id'));
+
+        return $this->render(
+            $this->getTemplate('SnowcapAdminBundle:Content:view.html.twig', $admin->getAlias()),
+            array('admin' => $admin, 'entity' => $entity)
         );
     }
 

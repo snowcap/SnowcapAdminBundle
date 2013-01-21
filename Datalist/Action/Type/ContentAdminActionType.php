@@ -4,22 +4,22 @@ namespace Snowcap\AdminBundle\Datalist\Action\Type;
 
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Routing\RouterInterface;
+use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
 use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 
-class SimpleActionType extends AbstractActionType {
+class ContentAdminActionType extends AbstractActionType {
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
      */
-    private $router;
+    private $routingHelper;
 
     /**
      * @param \Symfony\Component\Routing\RouterInterface $router
      */
-    public function __construct(RouterInterface $router)
+    public function __construct(ContentRoutingHelper $routingHelper)
     {
-        $this->router = $router;
+        $this->routingHelper = $routingHelper;
     }
 
     /**
@@ -30,8 +30,13 @@ class SimpleActionType extends AbstractActionType {
         parent::setDefaultOptions($resolver);
 
         $resolver
-            ->setDefaults(array('params' => array()))
-            ->setRequired(array('route'));
+            ->setDefaults(array('params' => array('id' => 'id')))
+            ->setRequired(array('admin', 'action'))
+            ->setAllowedTypes(array(
+                'params' => 'array',
+                'admin' => 'Snowcap\AdminBundle\Admin\ContentAdmin',
+                'action' => 'string'
+            ));
     }
 
     public function getUrl(DatalistActionInterface $action, $item, array $options = array())
@@ -43,7 +48,7 @@ class SimpleActionType extends AbstractActionType {
             $parameters[$paramName] = $paramValue;
         }
 
-        return $this->router->generate($options['route'], $parameters);
+        return $this->routingHelper->generateUrl($options['admin'], $options['action'], $parameters);
     }
 
     /**

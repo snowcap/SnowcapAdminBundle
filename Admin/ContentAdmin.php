@@ -1,19 +1,15 @@
 <?php
 namespace Snowcap\AdminBundle\Admin;
 
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\Util\PropertyPath;
-use Snowcap\AdminBundle\Datalist\DatalistFactory;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\RouteCollection;
-
-use Snowcap\AdminBundle\Exception;
-use Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs;
 use Symfony\Component\Routing\Route;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
+
+use Snowcap\AdminBundle\Datalist\DatalistFactory;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
 /**
@@ -45,21 +41,6 @@ abstract class ContentAdmin extends AbstractAdmin
      * @var ContentRoutingHelper
      */
     protected $routingHelper;
-
-    /**
-     * Return the main admin form for this content
-     *
-     * @param object $data
-     * @return \Symfony\Component\Form\Form
-     */
-    abstract public function getForm($data = null);
-
-    /**
-     * Return the main admin list for this content
-     *
-     * @return \Snowcap\AdminBundle\Datalist\DatalistInterface
-     */
-    abstract public function getDatalist();
 
     /**
      * Return the main admin querybuilder for this content
@@ -109,9 +90,9 @@ abstract class ContentAdmin extends AbstractAdmin
         $this->em->persist($entity);
     }
 
-    public function flush()
+    public function flush($entity = null)
     {
-        $this->em->flush();
+        $this->em->flush($entity);
     }
 
     /**
@@ -123,126 +104,6 @@ abstract class ContentAdmin extends AbstractAdmin
     {
         $this->em->remove($entity);
     }
-
-    /**
-     * Determine if the admin is translatable - false in this case, to be overridden
-     *
-     * @return bool
-     */
-    public function isTranslatable()
-    {
-        return false;
-    }
-
-    /**
-     * Create a datalist with the provided view mode and name
-     *
-     * @param string $view a registered grid view mode
-     * @param string $name
-     * @return \Snowcap\AdminBundle\Datalist\AbstractDatalist
-     */
-    protected function createDatalist($view, $name)
-    {
-        $datalist = $this->datalistFactory->create($view, $name);
-        $datalist->setQueryBuilder($this->getQueryBuilder());
-        $datalist->addAction(
-            $this->routingHelper->getRouteName($this, 'update'),
-            array('alias' => $this->getAlias()),
-            array('label' => 'content.actions.edit', 'icon' => 'icon-edit')
-        );
-        $datalist->addAction(
-            $this->routingHelper->getRouteName($this, 'delete'),
-            array('alias' => $this->getAlias()),
-            array(
-                'label' => 'content.actions.delete.label',
-                'icon' => 'icon-remove',
-                'confirm' => true,
-                'confirm_title' => 'content.actions.delete.confirm.title',
-                'confirm_body' => 'content.actions.delete.confirm.body',
-            )
-        );
-        return $datalist;
-    }
-
-    /**
-     * Create a pre-configured search form builder
-     *
-     * @return FormBuilder
-     */
-    protected function createSearchFormBuilder()
-    {
-        return $this->formFactory->createNamedBuilder('', 'form', null, array('virtual' => true, 'csrf_protection' => false));
-    }
-
-    /**
-     * Create a pre-configured filter form builder
-     *
-     * @return FormBuilder
-     */
-    protected function createFilterFormBuilder()
-    {
-        return $this->formFactory->createNamedBuilder('', 'form', null, array('virtual' => true, 'csrf_protection' => false));
-    }
-
-    /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param $entity
-     */
-    public function prePersist(LifecycleEventArgs $ea, $entity) {}
-
-    /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param $entity
-     */
-    public function postPersist(LifecycleEventArgs $ea, $entity) {}
-
-    /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param $entity
-     */
-    public function preUpdate(LifecycleEventArgs $ea, $entity) {}
-
-    /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param $entity
-     */
-    public function postUpdate(LifecycleEventArgs $ea, $entity) {}
-
-    /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $ea
-     * @param $entity
-     */
-    public function postRemove(LifecycleEventArgs $ea, $entity) {}
-
-    /**
-     * @param \Doctrine\ORM\Event\LoadClassMetadataEventArgs $eventArgs
-     */
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs) {}
-
-    /**
-     * @param \Snowcap\CoreBundle\Doctrine\ORM\Event\PreFlushEventArgs $ea
-     * @param array $entities
-     */
-    public function preFlush(PreFlushEventArgs $ea, $entities) {}
-
-    public function toString($entity)
-    {
-        $path = $this->toStringPath();
-
-        if($path === null) {
-            return null;
-        }
-
-        $propertyPath = new PropertyPath($path);
-        $output = $propertyPath->getValue($entity);
-
-        return $output;
-    }
-
-    /**
-     * @return string
-     */
-    abstract public function getEntityClass();
 
     /**
      * @param \Doctrine\ORM\EntityManager $em
@@ -287,6 +148,11 @@ abstract class ContentAdmin extends AbstractAdmin
             $this->routingHelper->getRouteName($this, 'index'),
             $this->routingHelper->getRoute($this, 'index', array(), true)
         );
+        // Add view route
+        $routeCollection->add(
+            $this->routingHelper->getRouteName($this, 'view'),
+            $this->routingHelper->getRoute($this, 'view', array('id'))
+        );
         // Add create route
         $routeCollection->add(
             $this->routingHelper->getRouteName($this, 'create'),
@@ -311,4 +177,30 @@ abstract class ContentAdmin extends AbstractAdmin
     {
         return $this->routingHelper->generateUrl($this, 'index');
     }
+
+    /**
+     * @return string
+     */
+    abstract public function getEntityClass();
+
+    /**
+     * Return the main admin form for this content
+     *
+     * @param object $data
+     * @return \Symfony\Component\Form\Form
+     */
+    abstract public function getForm($data = null);
+
+    /**
+     * Return the main admin list for this content
+     *
+     * @return \Snowcap\AdminBundle\Datalist\DatalistInterface
+     */
+    abstract public function getDatalist();
+
+    /**
+     * @param mixed $entity
+     * @return string
+     */
+    abstract public function getEntityName($entity);
 }
