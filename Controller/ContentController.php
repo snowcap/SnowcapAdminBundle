@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
+use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,36 +17,17 @@ class ContentController extends BaseController
      */
     public function indexAction(Request $request, ContentAdmin $admin)
     {
-        $list = $admin->getDatalist();
-        $request = $this->getRequest();
-        if (($page = $request->get('page')) !== null) {
-            $list->setPage($page);
-        }
+        $datalist = $admin->getDatalist();
+        $datasource = new DoctrineORMDatasource($admin->getQueryBuilder());
+        $datalist->setDatasource($datasource);
+        $datalist->bind($request);
 
         $templateParams = array(
             'admin' => $admin,
-            'list' => $list,
+            'datalist' => $datalist,
             'reorder' => false, // TODO: reimplement reorder
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
         );
-
-        $searchForm = $admin->getSearchForm();
-        $filterForm = $admin->getFilterForm();
-
-        $criteria = array();
-        if (null !== $searchForm) {
-            $searchForm->bind($request);
-            $criteria = array_merge($criteria, $searchForm->getData());
-            $templateParams['search_form'] = $searchForm->createView();
-        }
-        if (null !== $filterForm) {
-            $filterForm->bind($request);
-            $criteria = array_merge($criteria, $filterForm->getData());
-            $templateParams['filter_form'] = $filterForm->createView();
-        }
-        if (!empty($criteria)) {
-            $list->filterData($criteria);
-        }
 
         return $this->render(
             $this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()),

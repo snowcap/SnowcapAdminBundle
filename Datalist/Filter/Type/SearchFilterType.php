@@ -8,8 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
 use Snowcap\AdminBundle\Datalist\Filter\Expression\ComparisonExpression;
+use Snowcap\AdminBundle\Datalist\Filter\Expression\CombinedExpression;
 
-class ChoiceFilterType extends AbstractFilterType
+class SearchFilterType extends AbstractFilterType
 {
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
@@ -18,7 +19,8 @@ class ChoiceFilterType extends AbstractFilterType
     {
         parent::setDefaultOptions($resolver);
 
-        $resolver->setRequired(array('choices'));
+        $resolver
+            ->setRequired(array('search_fields'));
     }
 
     /**
@@ -28,8 +30,7 @@ class ChoiceFilterType extends AbstractFilterType
      */
     public function buildForm(FormBuilderInterface $builder, DatalistFilterInterface $filter, array $options)
     {
-        $builder->add($filter->getName(), 'choice', array(
-            'choices' => $options['choices'],
+        $builder->add($filter->getName(), 'search', array(
             'label' => $options['label']
         ));
     }
@@ -42,7 +43,17 @@ class ChoiceFilterType extends AbstractFilterType
      */
     public function buildExpression(DatalistFilterExpressionBuilder $builder, DatalistFilterInterface $filter, $value, array $options)
     {
-        $builder->add(new ComparisonExpression($filter->getPropertyPath(), ComparisonExpression::OPERATOR_EQ, $value));
+        if(is_array($options['search_fields'])) {
+            $expression = new CombinedExpression(CombinedExpression::OPERATOR_OR);
+            foreach($options['search_fields'] as $searchField) {
+                $comparisonExpression = new ComparisonExpression($searchField, ComparisonExpression::OPERATOR_LIKE, $value);
+                $expression->addExpression($comparisonExpression);
+            }
+        }
+        else {
+            $expression = new ComparisonExpression($options['search_fields'], ComparisonExpression::OPERATOR_LIKE, $value);
+        }
+        $builder->add($expression);
     }
 
     /**
@@ -50,6 +61,6 @@ class ChoiceFilterType extends AbstractFilterType
      */
     public function getName()
     {
-        return 'choice';
+        return 'search';
     }
 }

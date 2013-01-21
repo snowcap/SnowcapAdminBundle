@@ -34,9 +34,9 @@ abstract class AbstractDatasource implements DatasourceInterface
     protected $filterExpression;
 
     /**
-     * @var array
+     * @var ExpressionInterface
      */
-    protected $options;
+    protected $searchExpression;
 
     /**
      * @var \Traversable
@@ -47,14 +47,6 @@ abstract class AbstractDatasource implements DatasourceInterface
      * @var \Snowcap\CoreBundle\Paginator\PaginatorInterface
      */
     protected $paginator;
-
-    /**
-     * @param array $options
-     */
-    public function __construct(array $options = array())
-    {
-        $this->processOptions($options);
-    }
 
     /**
      * @param int $limitPerPage
@@ -81,35 +73,19 @@ abstract class AbstractDatasource implements DatasourceInterface
     }
 
     /**
-     * @param string $query
+     * @param \Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface $expression
      */
-    public function setSearchQuery($query)
+    public function setSearchExpression(ExpressionInterface $expression)
     {
-        $this->searchQuery = $query;
+        $this->searchExpression = $expression;
     }
 
     /**
      * @param \Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface $expression
-     * @return mixed
      */
     public function setFilterExpression(ExpressionInterface $expression)
     {
         $this->filterExpression = $expression;
-    }
-
-    /**
-     * @param array $options
-     */
-    protected function processOptions(array $options)
-    {
-        $resolver = new OptionsResolver();
-        $resolver
-            ->setOptional(array('search', 'search_mode'))
-            ->setAllowedTypes(array(
-                'search' => array('string', 'array')
-            ));
-
-        $this->options = $resolver->resolve($options);
     }
 
     /**

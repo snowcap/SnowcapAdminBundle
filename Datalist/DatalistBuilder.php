@@ -123,13 +123,19 @@ class DatalistBuilder extends DatalistConfig
         }
 
         // Add search form
-        if($datalist->isSearchable()) {
-            $searchForm = $this->formFactory->createNamedBuilder('', 'form', null, array(
-                    'csrf_protection' => false
-                ))
-                ->add('search', 'search')
-                ->getForm();
-            $datalist->setSearchForm($searchForm);
+        if(null !== $this->getOption('search')) {
+            $searchFormBuilder = $this->formFactory->createNamedBuilder('');
+            $searchFilter = $this->createFilter('search', array(
+                'type' => 'search',
+                'options' => array(
+                    'search_fields' => $datalist->getOption('search')
+                )
+            ));
+            $searchFilter->getType()->buildForm($searchFormBuilder, $searchFilter, $searchFilter->getOptions());
+
+            $searchFilter->setDatalist($datalist);
+            $datalist->setSearchFilter($searchFilter);
+            $datalist->setSearchForm($searchFormBuilder->getForm());
         }
 
         // Add filters and filter form

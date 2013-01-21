@@ -24,10 +24,8 @@ class DoctrineORMDatasource extends AbstractDatasource
     /**
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
      */
-    public function __construct(QueryBuilder $queryBuilder, array $options = array())
+    public function __construct(QueryBuilder $queryBuilder)
     {
-        parent::__construct($options);
-
         $this->queryBuilder = $queryBuilder;
     }
 
@@ -62,24 +60,9 @@ class DoctrineORMDatasource extends AbstractDatasource
         }
 
         // Handle search
-        if(isset($this->searchQuery)) {
-            if(!isset($this->options['search'])) {
-                throw new \Exception('Missing "search" option');
-            }
-
-            $search = $this->options['search'];
-            if(is_string($search)) {
-                $search = array($search);
-            }
-            if(is_array($search)) {
-                foreach($search as $searchField) {
-                    $this->queryBuilder->orWhere($this->queryBuilder->expr()->like($searchField, ':query'));
-                }
-                $this->queryBuilder->setParameter('query', '%'. $this->searchQuery . '%');
-            }
-            else {
-                throw new \InvalidArgumentException(sprintf('Unexpected type "%s" for "search" options', gettype($search)));
-            }
+        if(isset($this->searchExpression)) {
+            $queryBuilderExpression = $this->buildQueryBuilderExpression($this->searchExpression);
+            $this->queryBuilder->andWhere($queryBuilderExpression);
         }
 
         // Handle filters
@@ -181,6 +164,10 @@ class DoctrineORMDatasource extends AbstractDatasource
                 break;
             case ComparisonExpression::OPERATOR_LTE:
                 $expr = $this->queryBuilder->expr()->lte($propertyPath, $placeholder);
+                break;
+            case ComparisonExpression::OPERATOR_LIKE:
+                $expr = $this->queryBuilder->expr()->like($propertyPath, $placeholder);
+                $comparisonValue = '%' . $comparisonValue . '%';
                 break;
             default:
                 throw new \UnexpectedValueException(sprintf('Unknown operator "%s"', $operator));

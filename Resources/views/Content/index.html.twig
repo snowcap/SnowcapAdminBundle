@@ -24,32 +24,10 @@
     {# list block #}
     {% block list %}
 
-        {% set list_content %}
-        {% if list is not empty %}
-            {{ datalist_widget(list) }}
+        {% if datalist is not empty %}
+            {{ datalist_widget(datalist) }}
         {% else %}
             {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle')) }}
-        {% endif %}
-        {% endset %}
-
-        {% if filter_form is defined %}
-            <div class="row">
-                <div class="span9">{{ list_content }}</div>
-                <div class="span3">
-                    <div class="well">
-                        <h3>{{ "content.filter.title"|trans({}, 'SnowcapAdminBundle') }}</h3>
-                        <form action="{{ admin_content_path(admin, 'index') }}" method="GET" class="form-filter" novalidate="novalidate">
-                            {% for filter in filter_form %}
-                                {{ form_row(filter, {'attr': {'class': 'input-medium'}}) }}
-                            {% endfor %}
-                            <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
-                            <a href="{{ admin_content_path(admin, 'index') }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        {% else %}
-            {{ list_content }}
         {% endif %}
         <hr/>
     {% endblock list %}

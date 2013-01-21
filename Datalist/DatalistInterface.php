@@ -39,6 +39,18 @@ interface DatalistInterface extends \IteratorAggregate
      */
     public function getFilters();
 
+
+
+    /**
+     * @param Filter\DatalistFilterInterface $filter
+     */
+    public function setSearchFilter(DatalistFilterInterface $filter);
+
+    /**
+     * @return Filter\DatalistFilterInterface
+     */
+    public function getSearchFilter();
+
     /**
      * @param Action\DatalistActionInterface $action
      * @return DatalistInterface
@@ -90,11 +102,6 @@ interface DatalistInterface extends \IteratorAggregate
      * @return DatalistInterface
      */
     public function setPage($page);
-
-    /**
-     * @return bool
-     */
-    public function isSearchable();
 
     /**
      * @return bool

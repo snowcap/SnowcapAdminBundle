@@ -1,6 +1,6 @@
 {# datalist grid block #}
 {% block datalist %}
-    {% if datalist.searchable %}
+    {% if datalist.option('search') %}
         {{ datalist_search(datalist) }}
     {% endif %}
     {% if datalist.filterable %}

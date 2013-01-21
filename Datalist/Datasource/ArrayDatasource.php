@@ -24,10 +24,8 @@ class ArrayDatasource extends AbstractDatasource
     /**
      * @param array $items
      */
-    public function __construct(array $items, array $options = array())
+    public function __construct(array $items)
     {
-        parent::__construct($options);
-
         $this->items = $items;
     }
 
@@ -58,37 +56,11 @@ class ArrayDatasource extends AbstractDatasource
         }
 
         $items = $this->items;
-        $query = $this->searchQuery;
+
         // Handle search
-        if (isset($this->searchQuery)) {
-            if (!isset($this->options['search'])) {
-                throw new \Exception('Missing "search" option');
-            }
-
-            $search = $this->options['search'];
-            if (is_string($search)) {
-                $search = array($search);
-            }
-            if (is_array($search)) {
-                $items = array_filter(
-                    $items,
-                    function ($item) use ($search, $query) {
-                        foreach ($search as $searchField) {
-                            if (isset($item[$searchField]) && $item[$searchField] === $query) {
-                                return true;
-                            }
-                        }
-
-                        return false;
-                    }
-
-                );
-            } else {
-                throw new \InvalidArgumentException(sprintf(
-                    'Unexpected type "%s" for "search" options',
-                    gettype($search)
-                ));
-            }
+        if(isset($this->searchExpression)) {
+            $searchCallback = $this->buildExpressionCallback($this->searchExpression);
+            $items = array_filter($items, $searchCallback);
         }
 
         // Handle filters
@@ -208,6 +180,9 @@ class ArrayDatasource extends AbstractDatasource
                     break;
                 case ComparisonExpression::OPERATOR_LTE:
                     $result = $value <= $comparisonValue;
+                    break;
+                case ComparisonExpression::OPERATOR_LIKE:
+                    $result = false !== strpos($value, $comparisonValue);
                     break;
                 default:
                     throw new \UnexpectedValueException(sprintf('Unknown operator "%s"', $operator));

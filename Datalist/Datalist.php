@@ -11,6 +11,7 @@ use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
+use Snowcap\AdminBundle\Datalist\Filter\Expression\ComparisonExpression;
 
 class Datalist implements DatalistInterface, \Countable
 {
@@ -33,6 +34,11 @@ class Datalist implements DatalistInterface, \Countable
      * @var array
      */
     private $filters = array();
+
+    /**
+     * @var DatalistFilterInterface
+     */
+    private $searchFilter;
 
     /**
      * @var array
@@ -130,6 +136,22 @@ class Datalist implements DatalistInterface, \Countable
     }
 
     /**
+     * @param Filter\DatalistFilterInterface $filter
+     */
+    public function setSearchFilter(DatalistFilterInterface $filter)
+    {
+        $this->searchFilter = $filter;
+    }
+
+    /**
+     * @return Filter\DatalistFilterInterface
+     */
+    public function getSearchFilter()
+    {
+        return $this->searchFilter;
+    }
+
+    /**
      * @param Action\DatalistActionInterface $action
      * @return DatalistInterface
      */
@@ -218,14 +240,6 @@ class Datalist implements DatalistInterface, \Countable
     public function getOption($name, $default = null)
     {
         return $this->config->getOption($name, $default);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSearchable()
-    {
-        return true === $this->getOption('searchable');
     }
 
     /**
@@ -343,8 +357,10 @@ class Datalist implements DatalistInterface, \Countable
         }
 
         // Handle search
-        if (true === $this->getOption('searchable') && !empty($this->searchQuery)) {
-            $this->datasource->setSearchQuery($this->searchQuery);
+        if (null !== $this->getOption('search') && !empty($this->searchQuery)) {
+            $expressionBuilder = new DatalistFilterExpressionBuilder();
+            $this->searchFilter->getType()->buildExpression($expressionBuilder, $this->searchFilter, $this->searchQuery, $this->searchFilter->getOptions());
+            $this->datasource->setSearchExpression($expressionBuilder->getExpression());
         }
 
         // Handle filters

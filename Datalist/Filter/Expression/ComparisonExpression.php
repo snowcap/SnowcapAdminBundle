@@ -11,11 +11,12 @@ class ComparisonExpression implements ExpressionInterface {
     const OPERATOR_GTE = 'gte';
     const OPERATOR_LT = 'lt';
     const OPERATOR_LTE = 'lte';
+    const OPERATOR_LIKE = 'like';
 
     /**
-     * @var \Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface
+     * @var string
      */
-    private $filter;
+    private $propertyPath;
 
     /**
      * @var string
@@ -32,12 +33,12 @@ class ComparisonExpression implements ExpressionInterface {
      * @param string $operator
      * @param mixed $value
      */
-    public function __construct(DatalistFilterInterface $filter, $operator, $value) {
+    public function __construct($propertyPath, $operator, $value) {
         if(!in_array($operator, self::getValidOperators())) {
             throw new \InvalidArgumentException(sprintf('Unknown operator "%s"', $operator));
         };
 
-        $this->filter = $filter;
+        $this->propertyPath = $propertyPath;
         $this->operator = $operator;
         $this->value = $value;
     }
@@ -63,7 +64,7 @@ class ComparisonExpression implements ExpressionInterface {
      */
     public function getPropertyPath()
     {
-        return $this->filter->getPropertyPath();
+        return $this->propertyPath;
     }
 
     /**
@@ -72,7 +73,7 @@ class ComparisonExpression implements ExpressionInterface {
     static private function getValidOperators(){
         return array(
             self::OPERATOR_EQ, self::OPERATOR_NEQ, self::OPERATOR_GT, self::OPERATOR_GTE,
-            self::OPERATOR_LT, self::OPERATOR_LTE
+            self::OPERATOR_LT, self::OPERATOR_LTE, self::OPERATOR_LIKE
         );
     }
 }

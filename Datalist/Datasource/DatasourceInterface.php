@@ -20,9 +20,10 @@ interface DatasourceInterface extends \IteratorAggregate, \Countable
     public function setPage($page);
 
     /**
-     * @param string $query
+     * @param \Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface $expression
+     * @return mixed
      */
-    public function setSearchQuery($query);
+    public function setSearchExpression(ExpressionInterface $expression);
 
     /**
      * @param \Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface $expression

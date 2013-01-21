@@ -14,16 +14,19 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => null,
-            'layout' => 'grid',
-            'limit_per_page' => null,
-            'range_limit' => 10,
-            'searchable' => false,
-            'search_placeholder' => 'datalist.search.placeholder',
-            'search_submit' => 'datalist.search.submit',
-            'filter_submit' => 'datalist.filter.submit',
-        ));
+        $resolver
+            ->setDefaults(array(
+                'data_class' => null,
+                'layout' => 'grid',
+                'limit_per_page' => null,
+                'range_limit' => 10,
+                'search_placeholder' => 'datalist.search.placeholder',
+                'search_submit' => 'datalist.search.submit',
+                'filter_submit' => 'datalist.filter.submit',
+            ))
+            ->setOptional(array(
+                'search'
+            ));
     }
 
     /**
