@@ -1,6 +1,6 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 
-{% form_theme forms form_theme_template %}
+{% form_theme form form_theme_template %}
 
 {# body block #}
 {% block body %}
@@ -15,7 +15,7 @@
     {% block form %}
         <form
             action="{{ form_action }}"
-            method="post" {{ form_enctype(forms) }}
+            method="post" {{ form_enctype(form) }}
             novalidate="novalidate"
             class="form-vertical"
         >
@@ -24,15 +24,15 @@
             {% block formfields %}
             {% endblock formfields %}
 
-            {{ form_rest(forms) }}
+            {{ form_rest(form) }}
 
             {# formactions block #}
             {% block formactions %}
                 <div class="form-actions">
-                    <button type="submit" name="saveMode" class="btn btn-large btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
+                    <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
                         {{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
-                    <button type="submit" name="saveMode" class="btn btn-large" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_CONTINUE') }}">
+                    <button type="submit" name="saveMode" class="btn" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_CONTINUE') }}">
                         {{ "content.actions.saveandcontinue"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
                 </div>

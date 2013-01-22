@@ -56,12 +56,10 @@ class ContentController extends BaseController
     public function createAction(Request $request, ContentAdmin $admin)
     {
         $entity = $admin->buildEntity();
-        $forms = $this->createForm('form');
         $form = $admin->getForm($entity);
-        $forms->add($form);
         if ('POST' === $request->getMethod()) {
-            $forms->bind($request);
-            if ($forms->isValid()) {
+            $form->bind($request);
+            if ($form->isValid()) {
                 $admin->saveEntity($entity);
                 $admin->flush();
                 // TODO: reactivate using event dispatcher
@@ -86,7 +84,7 @@ class ContentController extends BaseController
         $templateParams = array(
             'admin' => $admin,
             'entity' => $entity,
-            'forms' => $forms->createView(),
+            'form' => $form->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
             'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'create'),
@@ -109,12 +107,12 @@ class ContentController extends BaseController
             return $this->renderError('error.content.notfound', 404);
         }
 
-        $forms = $this->createForm('form');
-        $form = $admin->getForm($entity);
-        $forms->add($form);
+        $form = $admin->getForm();
+        $form->setData($entity);
+
         if ('POST' === $request->getMethod()) {
-            $forms->bindRequest($request);
-            if ($forms->isValid()) {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
                 $admin->saveEntity($entity);
                 $admin->flush();
                 // TODO: reactivate using event dispatcher
@@ -139,7 +137,7 @@ class ContentController extends BaseController
         $templateParams = array(
             'admin' => $admin,
             'entity' => $entity,
-            'forms' => $forms->createView(),
+            'form' => $form->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
             'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())),

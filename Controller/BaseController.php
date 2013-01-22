@@ -41,7 +41,7 @@ class BaseController extends Controller
                 $templateNameParts = explode(':', $templateName);
                 $templateNameParts[0] = $adminBundleName;
                 if(null !== $code) {
-                    $templateNameParts[1] .= '/' . String::camelize($code);
+                    $templateNameParts[1] = String::camelize($code);
                 }
                 $candidate = implode(':', $templateNameParts);
                 if($this->get('templating')->exists($candidate)) {
