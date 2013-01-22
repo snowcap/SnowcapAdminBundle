@@ -3,6 +3,6 @@
 {# pageheader block #}
 {% block pageheader %}
     <div class="page-header">
-        <h2>{{ "content.create.title"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle') }}</h2>
+        <h1>{{ "content.create.title"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle') }}</h1>
     </div>
 {% endblock pageheader %}

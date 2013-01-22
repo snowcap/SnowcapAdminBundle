@@ -6,8 +6,18 @@
     {# pageheader block #}
     {% block pageheader %}
         <div class="page-header">
-            <h2>{{ admin.entityName(entity) }}</h2>
+            <h1>{{ admin.entityName(entity) }}</h1>
         </div>
     {% endblock pageheader %}
+
+    {# detail block #}
+    {% block detail %}
+
+    {% endblock detail %}
+
+    {# after block #}
+    {% block after %}
+
+    {% endblock %}
 
 {% endblock body %}
