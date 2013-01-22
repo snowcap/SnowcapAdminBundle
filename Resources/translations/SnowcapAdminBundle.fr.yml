@@ -69,7 +69,7 @@ reorderable_content:
 project:
     name: Admin
 
-data:
+datalist:
     emptyvalue: ---
     search:
         submit: Rechercher
@@ -134,12 +134,15 @@ logger:
         create:
             markup: success
             label: Nouveau
+            inline: created
         update:
             markup: info
             label: Mise à jour
+            inline: updated
         delete:
             markup: important
             label: Suppression
+            inline: deleted
 
 error:
     content:
