@@ -175,16 +175,15 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     public function renderDatalistAction(DatalistActionInterface $action, $item)
     {
         $blockName = 'datalist_action_' . $action->getType()->getName();
-        $url = $action->getType()->getUrl($action, $item, $action->getOptions());
+
+
+        $viewContext = new ViewContext();
+        $action->getType()->buildViewContext($viewContext, $action, $item, $action->getOptions());
 
         return $this->renderblock(
             $action->getDatalist()->getOption('layout'),
             $blockName,
-            array(
-                'url' => $url,
-                'label' => $action->getOption('label'),
-                'action' => $action,
-            )
+            $viewContext->all()
         );
     }
 

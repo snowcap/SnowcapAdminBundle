@@ -25,10 +25,10 @@
         <thead>
         <tr>
             {% for field in datalist.fields %}
-                <th>{{ field.options['label']|trans({}, "SnowcapAdminBundle") }}</th>
+                <th>{{ field.options['label']|trans({}, translation_domain) }}</th>
             {% endfor %}
             {% if datalist.actions|length > 0 %}
-                <th>{{ "content.actions.header"|trans({}, "SnowcapAdminBundle") }}</th>
+                <th>{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
             {% endif %}
         </tr>
         </thead>
@@ -92,8 +92,10 @@
 {# datalist search block #}
 {% block datalist_search %}
     <form class="form-search" method="get">
-        {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, "SnowcapAdminBundle"), 'class': 'input-xlarge search-query'}}) }}
-        <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+        <div class="input-append">
+            {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, "SnowcapAdminBundle"), 'class': 'input-xxlarge search-query'}}) }}
+            <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+        </div>
     </form>
 {% endblock datalist_search %}
 
@@ -118,5 +120,5 @@
 {% endblock datalist_filter_choice %}
 
 {% block datalist_action_simple %}
-    <a href="{{ url }}">{{ label|trans({}, "SnowcapAdminBundle") }}</a>
+    <a href="{{ url }}">{{ label|trans({}, translation_domain) }}</a>
 {% endblock datalist_action_simple %}
