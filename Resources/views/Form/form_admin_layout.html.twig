@@ -1,6 +1,24 @@
 {% extends 'SnowcapBootstrapBundle:Form:form_bootstrap_layout.html.twig' %}
 
-{% block snowcap_admin_inline_widget %}
+{% block snowcap_admin_inline_entity_row %}
+{% spaceless %}
+    {% set row_attr = {'data-admin': 'inline-entity'} %}
+    {{ block('form_row') }}
+
+{% endspaceless %}
+{% endblock snowcap_admin_inline_entity_row %}
+
+{% block snowcap_admin_inline_entity_widget %}
+    <div class="form-inline">
+        {{ block('choice_widget') }}
+        {% if allow_add %}
+            &nbsp;<a href="{{ add_url }}" class="btn" rel="add">{{ add_label|trans({}, translation_domain) }}</a>
+        {% endif %}
+    </div>
+{% endblock snowcap_admin_inline_entity_widget %}
+
+
+{% block ___oldsnowcap_admin_inline_widget %}
     {{ block('choice_widget') }}
     <ul class="selected row">
         {% if value is not empty %}

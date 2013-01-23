@@ -2,10 +2,11 @@
 
 namespace Snowcap\AdminBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
-
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This controller provides basic CRUD capabilities for content models
@@ -56,7 +57,9 @@ class ContentController extends BaseController
     public function createAction(Request $request, ContentAdmin $admin)
     {
         $entity = $admin->buildEntity();
-        $form = $admin->getForm($entity);
+        $form = $admin->getForm();
+        $form->setData($entity);
+
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
@@ -65,15 +68,20 @@ class ContentController extends BaseController
                 // TODO: reactivate using event dispatcher
                 //$this->get('snowcap_admin.logger')->logContent(Logger::ACTION_CREATE, $admin, $entity, $locale);
                 $this->setFlash('success', 'content.create.flash.success');
-                $saveMode = $this->getRequest()->get('saveMode');
-                if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl(
-                        $admin,
-                        'update',
-                        array('id' => $entity->getId())
-                    );
-                } else {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
+                if($request->isXmlHttpRequest()) {
+                    return new Response(json_encode(array('val' => $entity->getId(), 'html' => $admin->getEntityName($entity))), 201);
+                }
+                else {
+                    $saveMode = $this->getRequest()->get('saveMode');
+                    if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
+                        $redirectUrl = $this->getRoutingHelper()->generateUrl(
+                            $admin,
+                            'update',
+                            array('id' => $entity->getId())
+                        );
+                    } else {
+                        $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
+                    }
                 }
 
                 return $this->redirect($redirectUrl);

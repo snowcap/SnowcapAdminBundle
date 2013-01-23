@@ -149,14 +149,14 @@ jQuery(document).ready(function ($) {
      *
      * @param DOMElement row
      */
-    var InlineWidget = function (row) {
+    var InlineEntityWidget = function (container) {
 
         var self = this;
-        var row = $(row);
-        var trigger = row.find('a[rel=create]');
+        var container = $(container);
+        var trigger = container.find('a[rel=add]');
         var modal = $('#modal');
-        var select = row.find('select');
-        var selected = row.find(".selected");
+        var select = container.find('select');
+        //var selected = row.find(".selected");
 
         /**
          * Observe what's cooking in the add form
@@ -166,30 +166,20 @@ jQuery(document).ready(function ($) {
             modal.find('*[type=submit]').on('click', function (event) {
                 event.preventDefault();
                 var form = modal.find('form');
-                var data = new FormData(form[0]);
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', form.attr('action'), true);
-                xhr.onload = function (e) {
-                    if (this.status === 200) {
-                        var responseJSON = JSON.parse(this.response);
-                        modal.html(responseJSON.html);
-                        self.observeAddForm();
-                    }
-                    else if (this.status === 201) {
-                        var responseJSON = JSON.parse(this.response);
-                        var selectedItem = $(responseJSON['html']);
-                        self.selectItem(selectedItem);
-                        var selectedId = selectedItem.find('a.identity').attr('href');
+                $.post(form.attr('action'), form.serialize(), null, "json")
+                    .success(function(data, textStatus, jqXHR) {
+                        modal.html('');
                         var option = $('<option>');
-                        option.attr('value', selectedId);
-                        option.attr('selected', 'selected');
-                        option.html(selectedId);
+                        option.val(data.val);
+                        option.html(data.html);
                         select.append(option);
-
+                        select.val(data.val);
                         modal.modal('hide');
-                    }
-                };
-                xhr.send(data);
+                    })
+                    .error(function(data, textStatus, jqXHR) {
+                        console.log(data);
+                        alert('An error has occured');
+                    });
             });
         };
         /**
@@ -197,7 +187,7 @@ jQuery(document).ready(function ($) {
          *
          * @param DOMElement selectedItem
          */
-        self.selectItem = function (selectedItem) {
+        /*self.selectItem = function (selectedItem) {
             row.find('.empty').hide();
             if (select.attr('multiple') !== 'multiple') {
                 selected.find('li:not(.empty)').remove();
@@ -212,13 +202,13 @@ jQuery(document).ready(function ($) {
             selectedItem.append(close);
             selected.append(selectedItem);
             select.find('option[value=' + $(selectedItem).find('a').attr('href') + ']').attr('selected', 'selected');
-        };
+        };*/
         /**
          * Remove an item from the selection (on click)
          *
          * @param DOMEvent event
          */
-        self.removeSelection = function (event) {
+        /*self.removeSelection = function (event) {
             event.preventDefault();
             var entityId = $(this).prev('.identity').attr('href');
             $(this).parent().remove();
@@ -226,15 +216,14 @@ jQuery(document).ready(function ($) {
             if (selected.find('li').length === 0) {
                 row.find('.empty').show();
             }
-        };
+        };*/
         /**
          * Inline widget init
          *
          */
         self.init = function () {
-            select.hide();
             // Observe autocomplete field
-            row.find('.autocomplete').keyup(function (event) {
+            /*row.find('.autocomplete').keyup(function (event) {
                 var autocomplete = $(this);
                 if ($(this).val().length >= 3) {
                     $.get($(this).attr('data-url').replace('placeholder', $(this).val()), function (data) {
@@ -252,22 +241,22 @@ jQuery(document).ready(function ($) {
                         results.show();
                     });
                 }
-            });
+            });*/
             // Observe existing selections and hide empty text
-            selected.find('li a.identity').click(function(event){event.preventDefault()});
+            /*selected.find('li a.identity').click(function(event){event.preventDefault()});
             selected.find('li a.close').click(self.removeSelection);
             if(selected.find('li').length !== 0) {
                 row.find('.empty').hide();
-            }
+            }*/
             // Hide autocomplete results on body click
-            $('body').click(function (event) {
+            /*$('body').click(function (event) {
                 row.find('.autocomplete-results').hide();
-            });
+            });*/
             // Observe the "create" button
             trigger.click(function (event) {
                 event.preventDefault();
                 $.get($(this).attr('href'), function (data) {
-                    modal.html(data.html);
+                    modal.html(data);
                     self.observeAddForm();
                     modal.modal('show');
                 });
@@ -282,34 +271,8 @@ jQuery(document).ready(function ($) {
     $('.widget-markdown').markdownPreviewer();
 
     // Inline widgets
-    $('.type_snowcap_admin_inline').each(function (offset, row) {
-        new InlineWidget(row);
-    });
-
-    // Reorderable
-    $('.open-reorder').on('click', function(event) {
-        event.preventDefault();
-        var modal = $('#modal');
-        $.get($(this).attr('href'), function(data) {
-            modal.html(data.html);
-            var tree = modal.find('.tree');
-            tree
-                .on('loaded.jstree', function(event) {
-                    $(this).jstree('open_all');
-                    modal.find('a.save').on('click', function(event) {
-                        event.preventDefault();
-                        var treeData = tree.jstree('get_json', -1, [], []);
-                        $.post($(this).attr('href'), {'treeData': treeData}, function(data) {
-                            modal.html("");
-                            modal.modal('hide');
-                        });
-                    });
-                })
-                .jstree({
-                    'plugins' : [ 'themes', 'html_data', 'json_data', 'dnd']
-                });
-            modal.modal('show');
-        });
+    $('[data-admin=inline-entity]').each(function (offset, container) {
+        new InlineEntityWidget(container);
     });
 
     // autosize for textareas

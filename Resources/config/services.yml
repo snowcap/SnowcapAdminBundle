@@ -55,7 +55,7 @@ services:
         tags:
             -  { name: twig.extension }
 
-    # Form types (for edition)
+    # Form types
     snowcap_admin.form_type_slug:
         class: Snowcap\AdminBundle\Form\Type\SlugType
         tags:
@@ -71,16 +71,11 @@ services:
         tags:
             -  { name: form.type, alias: snowcap_admin_wysiwyg }
 
-    # Form types (for search /filter)
-    snowcap_admin.form_type_content_search:
-        class: Snowcap\AdminBundle\Form\Type\Content\SearchType
+    snowcap_admin.form_type_inline_entity:
+        class: Snowcap\AdminBundle\Form\Type\InlineEntityType
+        arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
         tags:
-            - { name: form.type, alias: snowcap_admin_content_search }
-
-    snowcap_admin.form_type_content_filter:
-        class: Snowcap\AdminBundle\Form\Type\Content\FilterType
-        tags:
-            - { name: form.type, alias: snowcap_admin_content_filter }
+            - { name: form.type, alias: snowcap_admin_inline_entity }
 
     # Datalists
     snowcap_admin.datalist_factory:

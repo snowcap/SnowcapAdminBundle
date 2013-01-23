@@ -1,0 +1,6 @@
+{% extends form_template %}
+
+{# pageheader block #}
+{% block modal_title %}
+    <h1>{{ "content.create.title"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle') }}</h1>
+{% endblock modal_title %}

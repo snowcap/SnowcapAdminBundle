@@ -1,0 +1,21 @@
+<form
+    action="{{ form_action }}"
+    method="post" {{ form_enctype(form) }}
+    novalidate="novalidate" style="margin: 0"
+>
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        {% block modal_title %}{% endblock%}
+    </div>
+    <div class="modal-body">
+        {# formfields block #}
+        {% block formfields %}
+        {% endblock formfields %}
+        {{ form_rest(form) }}
+    </div>
+    <div class="modal-footer">
+        <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
+            {{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}
+        </button>
+    </div>
+</form>
