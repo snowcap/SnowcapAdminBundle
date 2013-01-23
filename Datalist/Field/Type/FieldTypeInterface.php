@@ -16,11 +16,6 @@ interface FieldTypeInterface extends TypeInterface
     public function setDefaultOptions(OptionsResolverInterface $resolver);
 
     /**
-     * @return string
-     */
-    public function getName();
-
-    /**
      * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewCobtext
      * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
      * @param mixed $value
