@@ -175,7 +175,7 @@ class ContentController extends BaseController
     /**
      * @return \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
      */
-    private function getRoutingHelper()
+    protected function getRoutingHelper()
     {
         return $this->get('snowcap_admin.routing_helper_content');
     }
