@@ -43,7 +43,7 @@ services:
     # Twig extensions
     snowcap_admin.twig_admin:
         class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
-        arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
+        arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content, @translator]
         tags:
             -  { name: twig.extension }
 

@@ -3,7 +3,7 @@
 namespace Snowcap\AdminBundle\Twig\Extension;
 
 use Symfony\Component\Form\Util\PropertyPath;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
@@ -25,14 +25,21 @@ class AdminExtension extends \Twig_Extension
     private $contentRoutingHelper;
 
     /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * @param \Snowcap\AdminBundle\AdminManager $adminManager
      */
     public function __construct(
         AdminManager $adminManager,
-        ContentRoutingHelper $contentRoutingHelper
+        ContentRoutingHelper $contentRoutingHelper,
+        TranslatorInterface $translator
     ){
         $this->adminManager = $adminManager;
         $this->contentRoutingHelper = $contentRoutingHelper;
+        $this->translator = $translator;
     }
 
     /**
@@ -44,6 +51,7 @@ class AdminExtension extends \Twig_Extension
             'is_array'  => new \Twig_Function_Method($this, 'is_array', array()),
             'get_admin_for_entity_name' => new \Twig_Function_Method($this, 'getAdminForEntityName'),
             'admin' => new \Twig_Function_Method($this, 'getAdminByCode'),
+            'admin_label' => new \Twig_Function_Method($this, 'getAdminLabel'),
             'admin_content_path' => new \Twig_Function_Method($this, 'getAdminContentPath'),
         );
     }
@@ -89,6 +97,19 @@ class AdminExtension extends \Twig_Extension
     public function getAdminContentPath(ContentAdmin $admin, $action, array $params = array())
     {
         return $this->contentRoutingHelper->generateUrl($admin, $action, $params);
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
+     * @param bool $plural
+     * @return string
+     */
+    public function getAdminLabel(ContentAdmin $admin, $plural = false)
+    {
+        $number = $plural ? 10 : 1;
+        $label = $admin->getOption('label');
+
+        return $this->translator->transChoice($label, $number, array(), 'SnowcapAdminBundle');
     }
 
     /**

@@ -2,5 +2,5 @@
 
 {% trans_default_domain 'SnowcapAdminBundle' %}
 
-{% set title = "content.create.title"|trans %}
+{% set title = "content.create.title"|trans({'%content_name%': admin_label(admin)}) %}
 {% set form_action = admin_content_path(admin, 'create') %}

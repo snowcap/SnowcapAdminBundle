@@ -2,6 +2,7 @@
 
 {% trans_default_domain 'SnowcapAdminBundle' %}
 
+{# modal_before block #}
 {% block modal_before %}
 <form
     action="{{ form_action }}"
@@ -9,14 +10,22 @@
     novalidate="novalidate"
 >
 {% endblock modal_before %}
+
+{# modal_title block #}
+{% block modal_title %}
+    <h3>{{ title }}</h3>
+{% endblock modal_title %}
+
+{# body block #}
 {% block modal_body %}
 
-    {# formfields block #}
-    {% block formfields %}{% endblock formfields %}
+    {# form_fields block #}
+    {% block form_fields %}{% endblock form_fields %}
     {{ form_rest(form) }}
 
 {% endblock modal_body %}
 
+{# modal_footer block #}
 {% block modal_footer %}
 
     <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
@@ -25,4 +34,5 @@
 
 {% endblock modal_footer %}
 
+{# modal_after block #}
 {% block modal_after %}</form>{% endblock modal_after %}
