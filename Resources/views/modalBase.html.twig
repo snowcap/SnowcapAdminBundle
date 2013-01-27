@@ -1,3 +1,4 @@
+{% block modal_before %}{% endblock modal_before %}
 <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     {% block modal_title %}{% endblock%}
@@ -8,3 +9,4 @@
 <div class="modal-footer">
     {% block modal_footer %}{% endblock %}
 </div>
+{% block modal_after %}{% endblock modal_after %}

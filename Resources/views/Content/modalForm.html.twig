@@ -1,0 +1,28 @@
+{% extends 'SnowcapAdminBundle::modalBase.html.twig' %}
+
+{% trans_default_domain 'SnowcapAdminBundle' %}
+
+{% block modal_before %}
+<form
+    action="{{ form_action }}"
+    method="post" {{ form_enctype(form) }}
+    novalidate="novalidate"
+>
+{% endblock modal_before %}
+{% block modal_body %}
+
+    {# formfields block #}
+    {% block formfields %}{% endblock formfields %}
+    {{ form_rest(form) }}
+
+{% endblock modal_body %}
+
+{% block modal_footer %}
+
+    <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
+        {{ "content.actions.save"|trans }}
+    </button>
+
+{% endblock modal_footer %}
+
+{% block modal_after %}</form>{% endblock modal_after %}

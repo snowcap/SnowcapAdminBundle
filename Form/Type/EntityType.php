@@ -14,7 +14,7 @@ use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
  * Slug field type class
  *
  */
-class InlineEntityType extends AbstractType
+class EntityType extends AbstractType
 {
     /**
      * @var \Snowcap\AdminBundle\AdminManager
@@ -35,20 +35,6 @@ class InlineEntityType extends AbstractType
         $this->routingHelper = $routingHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions(array $options)
-    {
-        return array(
-            'inline_admin' => null,
-            'empty_value' => '---',
-            'preview' => null,
-            'property' => 'id',
-            'allow_add' => false,
-        );
-    }
-
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
@@ -63,7 +49,7 @@ class InlineEntityType extends AbstractType
     {
         $view->vars['allow_add'] = $options['allow_add'];
         if($options['allow_add']) {
-            $view->vars['add_url'] = $this->routingHelper->generateUrl($this->adminManager->getAdmin($options['admin']), 'create');
+            $view->vars['add_url'] = $this->routingHelper->generateUrl($this->adminManager->getAdmin($options['admin']), 'modalCreate');
             $view->vars['add_label'] = $options['add_label'];
         }
     }
@@ -73,7 +59,7 @@ class InlineEntityType extends AbstractType
      */
     public function getName()
     {
-        return 'snowcap_admin_inline_entity';
+        return 'snowcap_admin_entity';
     }
 
     /**

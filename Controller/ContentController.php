@@ -65,23 +65,16 @@ class ContentController extends BaseController
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
                 $admin->flush();
-                // TODO: reactivate using event dispatcher
-                //$this->get('snowcap_admin.logger')->logContent(Logger::ACTION_CREATE, $admin, $entity, $locale);
                 $this->setFlash('success', 'content.create.flash.success');
-                if($request->isXmlHttpRequest()) {
-                    return new Response(json_encode(array('val' => $entity->getId(), 'html' => $admin->getEntityName($entity))), 201);
-                }
-                else {
-                    $saveMode = $this->getRequest()->get('saveMode');
-                    if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                        $redirectUrl = $this->getRoutingHelper()->generateUrl(
-                            $admin,
-                            'update',
-                            array('id' => $entity->getId())
-                        );
-                    } else {
-                        $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
-                    }
+                $saveMode = $this->getRequest()->get('saveMode');
+                if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl(
+                        $admin,
+                        'update',
+                        array('id' => $entity->getId())
+                    );
+                } else {
+                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
                 }
 
                 return $this->redirect($redirectUrl);
@@ -100,6 +93,37 @@ class ContentController extends BaseController
 
         return $this->render(
             $this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $admin->getAlias()),
+            $templateParams
+        );
+    }
+
+    public function modalCreateAction(Request $request, ContentAdmin $admin) {
+        $entity = $admin->buildEntity();
+        $form = $admin->getForm();
+        $form->setData($entity);
+
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $admin->saveEntity($entity);
+                $admin->flush();
+
+                return new Response(json_encode(array('val' => $entity->getId(), 'html' => $admin->getEntityName($entity))), 201);
+            } else {
+
+            }
+        }
+        $templateParams = array(
+            'admin' => $admin,
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:modalForm.html.twig', $admin->getAlias()),
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
+            'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'create'),
+        );
+
+        return $this->render(
+            $this->getTemplate('SnowcapAdminBundle:Content:modalCreate.html.twig', $admin->getAlias()),
             $templateParams
         );
     }

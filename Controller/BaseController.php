@@ -34,15 +34,6 @@ class BaseController extends Controller
      */
     protected function getTemplate($templateName, $code = null)
     {
-        // Handle XHR requests
-        if($this->getRequest()->isXmlHttpRequest()) {
-            $templateNameParts = explode('.', $templateName);
-            $extension = array_pop($templateNameParts);
-            $format = array_pop($templateNameParts);
-            array_push($templateNameParts, 'xhr', $format, $extension);
-            $templateName = implode('.', $templateNameParts);
-        }
-
         $kernel = $this->get('kernel');
         foreach($kernel->getBundles() as $bundle) {
             if('SnowcapAdminBundle' === $bundle->getParent()) {

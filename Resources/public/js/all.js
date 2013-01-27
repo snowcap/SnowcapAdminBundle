@@ -271,7 +271,7 @@ jQuery(document).ready(function ($) {
     $('.widget-markdown').markdownPreviewer();
 
     // Inline widgets
-    $('[data-admin=inline-entity]').each(function (offset, container) {
+    $('[data-admin=form-type-entity]').each(function (offset, container) {
         new InlineEntityWidget(container);
     });
 

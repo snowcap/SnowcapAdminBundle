@@ -71,11 +71,11 @@ services:
         tags:
             -  { name: form.type, alias: snowcap_admin_wysiwyg }
 
-    snowcap_admin.form_type_inline_entity:
-        class: Snowcap\AdminBundle\Form\Type\InlineEntityType
+    snowcap_admin.form_type_entity:
+        class: Snowcap\AdminBundle\Form\Type\EntityType
         arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
         tags:
-            - { name: form.type, alias: snowcap_admin_inline_entity }
+            - { name: form.type, alias: snowcap_admin_entity }
 
     # Datalists
     snowcap_admin.datalist_factory:

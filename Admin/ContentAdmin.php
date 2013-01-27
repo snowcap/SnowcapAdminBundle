@@ -158,6 +158,11 @@ abstract class ContentAdmin extends AbstractAdmin
             $this->routingHelper->getRouteName($this, 'create'),
             $this->routingHelper->getRoute($this, 'create')
         );
+        // Add modal create route
+        $routeCollection->add(
+            $this->routingHelper->getRouteName($this, 'modalCreate'),
+            $this->routingHelper->getRoute($this, 'modalCreate')
+        );
         // Add update route
         $routeCollection->add(
             $this->routingHelper->getRouteName($this, 'update'),
