@@ -1,6 +1,6 @@
+{% extends form_template %}
+
 {% trans_default_domain 'SnowcapAdminBundle' %}
 
 {% set title = "content.create.title"|trans %}
 {% set form_action = admin_content_path(admin, 'create') %}
-
-{% embed form_template %}{% endembed %}

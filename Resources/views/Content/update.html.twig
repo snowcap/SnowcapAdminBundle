@@ -1,6 +1,6 @@
+{% extends form_template %}
+
 {% trans_default_domain 'SnowcapAdminBundle' %}
 
 {% set title = admin.entityName(entity) %}
 {% set form_action = admin_content_path(admin, 'update', {'id': entity.id}) %}
-
-{% embed form_template %}{% endembed %}

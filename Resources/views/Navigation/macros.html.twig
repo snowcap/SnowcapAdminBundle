@@ -1,5 +1,5 @@
 {% macro menu_item(admin) %}
-    <li>
+    <li{% if is_active_path(admin.defaultUrl) %} class="active"{% endif %}>
         <a href="{{ admin.defaultUrl }}" >{{ admin.option('label')|transchoice(10) }}</a>
     </li>
 {% endmacro %}

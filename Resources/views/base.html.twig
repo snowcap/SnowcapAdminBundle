@@ -4,11 +4,18 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>{% block title %}Snowcap Admin{% endblock %}</title>
-		{% block stylesheets %}
-            <link rel="stylesheet" type="text/css" href="{{ asset('bundles/snowcapbootstrap/vendor/bootstrap/css/bootstrap.min.css') }}"/>
-            <link rel="stylesheet" type="text/css" href="{{ asset('bundles/snowcapadmin/css/all.css') }}"/>
-		{% endblock %}
-		<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+
+        {# stylesheets block #}
+        {% block stylesheets %}
+            {% stylesheets
+                'bundles/snowcapadmin/less/main.less'
+                filter="lessphp,cssrewrite"
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock stylesheets %}
+
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 	</head>
 	<body>
         {% render('SnowcapAdminBundle:Navigation:main') %}

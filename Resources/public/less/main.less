@@ -1,0 +1,29 @@
+@import "bundles/snowcapbootstrap/vendor/bootstrap/less/bootstrap.less";
+
+body {
+    padding-top: 60px;
+}
+
+/* Navigation */
+.navbar-secondary {
+
+    .brand {
+        font-size: @baseFontSize;
+    }
+
+    &.affix {
+        position: fixed;
+        right: 0;
+        left: 0;
+        top: 40px;
+        z-index: @zindexFixedNavbar;
+        margin-bottom: 0; // remove 18px margin for default navbar
+
+        .navbar-inner {
+            .border-radius(0);
+            .container {
+                #grid > .core > .span(@gridColumns)
+            }
+        }
+    }
+}
