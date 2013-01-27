@@ -1,8 +1,6 @@
-{% extends form_template %}
+{% trans_default_domain 'SnowcapAdminBundle' %}
 
-{# pageheader block #}
-{% block pageheader %}
-    <div class="page-header">
-        <h1>{{ admin.entityName(entity) }}</h1>
-    </div>
-{% endblock pageheader %}
+{% set title = admin.entityName(entity) %}
+{% set form_action = admin_content_path(admin, 'update', {'id': entity.id}) %}
+
+{% embed form_template %}{% endembed %}

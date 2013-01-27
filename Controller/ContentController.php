@@ -88,7 +88,6 @@ class ContentController extends BaseController
             'form' => $form->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
-            'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'create'),
         );
 
         return $this->render(
@@ -119,7 +118,6 @@ class ContentController extends BaseController
             'form' => $form->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:modalForm.html.twig', $admin->getAlias()),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
-            'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'create'),
         );
 
         return $this->render(
@@ -172,7 +170,6 @@ class ContentController extends BaseController
             'form' => $form->createView(),
             'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
-            'form_action' => $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())),
         );
 
         return $this->render(

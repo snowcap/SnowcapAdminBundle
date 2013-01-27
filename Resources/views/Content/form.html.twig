@@ -6,10 +6,14 @@
 {% block body %}
 
     {# pageheader block - to be provided by child templates  #}
-    {% block pageheader %}{% endblock pageheader %}
+    {% block pageheader %}
+        <div class="page-header">
+            <h1>{{ title }}</h1>
+        </div>
+    {% endblock pageheader %}
 
-    {# preform block - to be provided by child templates  #}
-    {% block preform %}{% endblock preform %}
+    {# form_before block - to be provided by child templates  #}
+    {% block form_before %}{% endblock form_before %}
 
     {# main block #}
     {% block form %}
@@ -21,13 +25,11 @@
         >
 
             {# formfields block #}
-            {% block formfields %}
-            {% endblock formfields %}
-
+            {% block form_fields %}{% endblock form_fields %}
             {{ form_rest(form) }}
 
             {# formactions block #}
-            {% block formactions %}
+            {% block form_actions %}
                 <div class="form-actions">
                     <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
                         {{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}
@@ -36,12 +38,12 @@
                         {{ "content.actions.saveandcontinue"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
                 </div>
-            {% endblock formactions %}
+            {% endblock form_actions %}
 
         </form>
     {% endblock form %}
 
     {# postform block - to be provided by child templates  #}
-    {% block postform %}{% endblock postform %}
+    {% block form_after %}{% endblock form_after %}
 
 {% endblock body %}

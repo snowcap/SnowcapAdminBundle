@@ -1,8 +1,6 @@
-{% extends form_template %}
+{% trans_default_domain 'SnowcapAdminBundle' %}
 
-{# pageheader block #}
-{% block pageheader %}
-    <div class="page-header">
-        <h1>{{ "content.create.title"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle') }}</h1>
-    </div>
-{% endblock pageheader %}
+{% set title = "content.create.title"|trans %}
+{% set form_action = admin_content_path(admin, 'create') %}
+
+{% embed form_template %}{% endembed %}
