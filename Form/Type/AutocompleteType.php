@@ -48,7 +48,7 @@ class AutocompleteType extends AbstractType
                 'allow_add' => false,
                 'add_label' => 'Add'
             ))
-            ->setRequired(array('admin'))
+            ->setRequired(array('admin', 'where'))
             ->setOptional(array('property'));
     }
 
@@ -72,7 +72,10 @@ class AutocompleteType extends AbstractType
     {
         $value = $form->getData();
 
-        if(isset($options['property'])) {
+        if(null === $value) {
+            $textValue = "";
+        }
+        elseif(isset($options['property'])) {
             $propertyPath = new PropertyPath($options['property']);
             $textValue = $propertyPath->getValue($value);
         }
@@ -87,7 +90,7 @@ class AutocompleteType extends AbstractType
         $view->vars['list_url'] = $this->routingHelper->generateUrl(
             $this->adminManager->getAdmin($options['admin']),
             'autocompleteList',
-            array('query' => '__query__', 'property' => $options['property'])
+            array('query' => '__query__', 'where' => $options['where'], 'property' => $options['property'])
         );
         $view->vars['allow_add'] = $options['allow_add'];
         if($options['allow_add']) {

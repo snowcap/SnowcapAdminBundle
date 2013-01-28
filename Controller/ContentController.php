@@ -207,9 +207,10 @@ class ContentController extends BaseController
      * Render a json array of entity values and text (to be used in autocomplete widgets)
      *
      */
-    public function autocompleteListAction(Request $request, ContentAdmin $admin, $query, $property) {
-        $results = $admin->getQueryBuilder()
-            ->andWhere('e.name LIKE :query')
+    public function autocompleteListAction(Request $request, ContentAdmin $admin, $query, $where, $property) {
+        $qb = $admin->getQueryBuilder();
+        $results = $qb
+            ->andWhere($where)
             ->setParameter('query', '%' . $query . '%')
             ->getQuery()
             ->getResult();

@@ -26,6 +26,10 @@ class EntityToIdTransformer implements DataTransformerInterface {
      */
     function transform($value)
     {
+        if(null === $value) {
+            return "";
+        }
+
         return $value->getId();
     }
 
