@@ -4,6 +4,7 @@ namespace Snowcap\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Util\PropertyPath;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
@@ -126,7 +127,11 @@ class ContentController extends BaseController
         );
     }
 
-    public function autocompleteListAction(Request $request, ContentAdmin $admin, $query) {
+    /**
+     * Render a json array of entity values and text (to be used in autocomplete widgets)
+     *
+     */
+    public function autocompleteListAction(Request $request, ContentAdmin $admin, $query, $property) {
         $results = $admin->getQueryBuilder()
             ->andWhere('e.name LIKE :query')
             ->setParameter('query', '%' . $query . '%')
@@ -134,8 +139,9 @@ class ContentController extends BaseController
             ->getResult();
 
         $flattenedResults = array();
+        $propertyPath = new PropertyPath($property);
         foreach($results as $result) {
-            $flattenedResults[] = array($result->getId(), $result->getZipAndName());
+            $flattenedResults[] = array($result->getId(), $propertyPath->getValue($result));
         }
 
         return new Response(json_encode($flattenedResults));
@@ -143,6 +149,7 @@ class ContentController extends BaseController
 
     /**
      * Update an existing content entity
+     *
      */
     public function updateAction(Request $request, ContentAdmin $admin)
     {
@@ -152,8 +159,7 @@ class ContentController extends BaseController
             return $this->renderError('error.content.notfound', 404);
         }
 
-        $form = $admin->getForm();
-        $form->setData($entity);
+        $form = $admin->getFormWithData($entity);
 
         if ('POST' === $request->getMethod()) {
             $form->bindRequest($request);

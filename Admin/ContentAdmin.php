@@ -77,6 +77,7 @@ abstract class ContentAdmin extends AbstractAdmin
     public function findEntity($entityId)
     {
         $entity = $this->em->getRepository($this->getEntityClass())->find($entityId);
+
         return $entity;
     }
 
@@ -166,7 +167,7 @@ abstract class ContentAdmin extends AbstractAdmin
         // Add autocomplete list route
         $routeCollection->add(
             $this->routingHelper->getRouteName($this, 'autocompleteList'),
-            $this->routingHelper->getRoute($this, 'autocompleteList', array('query'))
+            $this->routingHelper->getRoute($this, 'autocompleteList', array('query', 'property'))
         );
         // Add update route
         $routeCollection->add(

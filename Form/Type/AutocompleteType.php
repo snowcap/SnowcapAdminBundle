@@ -64,7 +64,7 @@ class AutocompleteType extends AbstractType
         $view->vars['list_url'] = $this->routingHelper->generateUrl(
             $this->adminManager->getAdmin($options['admin']),
             'autocompleteList',
-            array('query' => '__query__')
+            array('query' => '__query__', 'property' => $options['property'])
         );
     }
 
@@ -83,5 +83,13 @@ class AutocompleteType extends AbstractType
     public function getName()
     {
         return 'snowcap_admin_autocomplete';
+    }
+
+    /**
+     * @return string
+     */
+    public function getParent()
+    {
+        return 'hidden';
     }
 }
