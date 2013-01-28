@@ -5,6 +5,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Exception\InvalidPropertyException;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormFactory;
 
 use Snowcap\AdminBundle\Datalist\DatalistInterface;
@@ -97,13 +98,14 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         try {
             $value = $propertyPath->getValue($row);
         } catch (InvalidPropertyException $e) {
-            if(is_object($row) && !$field->getDatalist()->hasOption('data_class')) {
+            if (is_object($row) && !$field->getDatalist()->hasOption('data_class')) {
                 $message = sprintf('Missing "data_class" option');
-            }
-            else {
+            } else {
                 $message = sprintf('unknown property "%s"', $field->getPropertyPath());
             }
             throw new \UnexpectedValueException($message);
+        } catch (UnexpectedTypeException $e) {
+            $value = null;
         }
 
         $viewContext = new ViewContext();

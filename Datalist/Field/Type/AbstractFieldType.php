@@ -30,5 +30,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
         $viewContext['value'] = $value;
         $viewContext['field'] = $field;
         $viewContext['options'] = $options;
+        $viewContext['translation_domain'] = $field->getDatalist()->getOption('translation_domain');
     }
 }

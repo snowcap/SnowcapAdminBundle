@@ -70,7 +70,7 @@ project:
     name: Admin
 
 datalist:
-    emptyvalue: ---
+    empty_value: ---
     search:
         submit: Rechercher
         placeholder: Entrez vos termes de recherche

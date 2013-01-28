@@ -75,7 +75,7 @@
 
 {# datalist label field type block #}
 {% block datalist_field_label %}
-    <td><span class="label label-{{ class }}">{{ value }}</span></td>
+    <td><span class="label label-{{ class }}">{{ value|trans({}, translation_domain) }}</span></td>
 {% endblock datalist_field_label %}
 
 {# datalist heading field type block #}
