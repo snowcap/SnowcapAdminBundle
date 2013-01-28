@@ -46,7 +46,8 @@ class AutocompleteType extends AbstractType
         $resolver
             ->setDefaults(array(
                 'allow_add' => false,
-                'add_label' => 'Add'
+                'add_label' => 'Add',
+                'multiple' => false,
             ))
             ->setRequired(array('admin', 'where'))
             ->setOptional(array('property'));
@@ -59,7 +60,7 @@ class AutocompleteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $admin = $this->adminManager->getAdmin($options['admin']);
-        $builder->addModelTransformer(new EntityToIdTransformer($admin));
+        $builder->addModelTransformer(new EntityToIdTransformer($admin, $options['multiple']));
     }
 
     /**
@@ -72,20 +73,20 @@ class AutocompleteType extends AbstractType
     {
         $value = $form->getData();
 
-        if(null === $value) {
-            $textValue = "";
-        }
-        elseif(isset($options['property'])) {
-            $propertyPath = new PropertyPath($options['property']);
-            $textValue = $propertyPath->getValue($value);
-        }
-        elseif(method_exists($value, '__toString')) {
-            $textValue = $value->__toString();
+        if($options['multiple']) {
+            $textValue = array();
+            foreach($value as $entity) {
+                $textValue[]= $this->buildSingleTextValue($entity, $options);
+            }
         }
         else {
-            throw new MissingOptionsException('You must provide a "property" option (or your class must implement the "__toString" method');
+            $textValue = $this->buildSingleTextValue($value, $options);
         }
 
+        $view->vars['multiple'] = $options['multiple'];
+        if($options['multiple']) {
+            $view->vars['full_name'] = $view->vars['full_name'].'[]';
+        }
         $view->vars['text_value'] = $textValue;
         $view->vars['list_url'] = $this->routingHelper->generateUrl(
             $this->adminManager->getAdmin($options['admin']),
@@ -113,5 +114,30 @@ class AutocompleteType extends AbstractType
     public function getParent()
     {
         return 'text';
+    }
+
+    /**
+     * @param mixed $value
+     * @param array $options
+     * @return string
+     * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     */
+    private function buildSingleTextValue($value, array $options)
+    {
+        if(null === $value) {
+            $textValue = "";
+        }
+        elseif(isset($options['property'])) {
+            $propertyPath = new PropertyPath($options['property']);
+            $textValue = $propertyPath->getValue($value);
+        }
+        elseif(method_exists($value, '__toString')) {
+            $textValue = $value->__toString();
+        }
+        else {
+            throw new MissingOptionsException('You must provide a "property" option (or your class must implement the "__toString" method');
+        }
+
+        return $textValue;
     }
 }

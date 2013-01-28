@@ -14,10 +14,11 @@
 {% block snowcap_admin_autocomplete_widget %}
     {% set text_attr = attr %}
     {% set attr = {} %}
-    <div class="form-inline" data-admin="form-type-autocomplete" data-list-url="{{ list_url }}">
-        <input type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% set widget_mode = multiple ? 'multiple' : 'single' %}
+    <div class="form-autocomplete{% if multiple %} form-autocomplete-multiple{% endif %}" data-admin="form-type-autocomplete" data-list-url="{{ list_url }}">
+        {{ block('snowcap_admin_autocomplete_widget_' ~ widget_mode) }}
         {% set text_widget %}
-            <input type="text" {{ block('snowcap_admin_autocomplete_widget_attributes') }} {% if text_value is not empty %}value="{{ text_value }}" {% endif %}/>
+            {{ block('snowcap_admin_autocomplete_widget_' ~ widget_mode ~ '_text') }}
         {% endset %}
         {% if allow_add %}
             <div class="input-append">
@@ -31,6 +32,33 @@
         {% endif %}
     </div>
 {% endblock snowcap_admin_autocomplete_widget %}
+
+{% block snowcap_admin_autocomplete_widget_single %}
+    <input type="hidden" name="{{ full_name }}" id="{{ id }}" {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endblock snowcap_admin_autocomplete_widget_single %}
+
+{% block snowcap_admin_autocomplete_widget_multiple %}
+    {% for index, single_value in value %}
+        <input type="hidden" name="{{ full_name }}" id="{{ id ~ "-" ~ index }}" {% if single_value is not empty %}value="{{ single_value }}" {% endif %}/>
+    {% endfor %}
+{% endblock snowcap_admin_autocomplete_widget_multiple %}
+
+{% block snowcap_admin_autocomplete_widget_single_text %}
+    <input type="text" id="{{ id }}" name="{{ full_name }}" {% if text_value is not empty %}value="{{ text_value }}" {% endif %}/>
+{% endblock snowcap_admin_autocomplete_widget_single_text %}
+
+{% block snowcap_admin_autocomplete_widget_multiple_text %}
+    <ul class="tokens">
+        {% for single_text_value in text_value %}
+            <li class="token">
+                {{ single_text_value }}<a class="close" rel="remove">&times;</a>
+            </li>
+        {% endfor %}
+        <li class="token-input">
+            <input type="text"/>
+        </li>
+    </ul>
+{% endblock snowcap_admin_autocomplete_widget_multiple_text %}
 
 {% block snowcap_admin_autocomplete_widget_attributes %}
     id="{{ id }}-text" name="{{ id }}-text"{% for attrname, attrvalue in text_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
