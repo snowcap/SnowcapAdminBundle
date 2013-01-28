@@ -126,6 +126,21 @@ class ContentController extends BaseController
         );
     }
 
+    public function autocompleteListAction(Request $request, ContentAdmin $admin, $query) {
+        $results = $admin->getQueryBuilder()
+            ->andWhere('e.name LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+
+        $flattenedResults = array();
+        foreach($results as $result) {
+            $flattenedResults[] = array($result->getId(), $result->getZipAndName());
+        }
+
+        return new Response(json_encode($flattenedResults));
+    }
+
     /**
      * Update an existing content entity
      */

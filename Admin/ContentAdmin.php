@@ -163,6 +163,11 @@ abstract class ContentAdmin extends AbstractAdmin
             $this->routingHelper->getRouteName($this, 'modalCreate'),
             $this->routingHelper->getRoute($this, 'modalCreate')
         );
+        // Add autocomplete list route
+        $routeCollection->add(
+            $this->routingHelper->getRouteName($this, 'autocompleteList'),
+            $this->routingHelper->getRoute($this, 'autocompleteList', array('query'))
+        );
         // Add update route
         $routeCollection->add(
             $this->routingHelper->getRouteName($this, 'update'),

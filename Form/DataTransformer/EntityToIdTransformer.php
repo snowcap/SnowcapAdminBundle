@@ -4,24 +4,20 @@ namespace Snowcap\AdminBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
-class ContentFilterTransformer implements DataTransformerInterface {
-    /**
-     * @var string
-     */
-    private $field;
+use Snowcap\AdminBundle\Admin\ContentAdmin;
 
+class EntityToIdTransformer implements DataTransformerInterface {
     /**
-     * @var string
+     * @var ContentAdmin
      */
-    private $operator;
+    private $admin;
 
     /**
      * @param string $field the field to filter on
      * @param string $operator the filter operator
      */
-    public function __construct($field, $operator) {
-        $this->field = $field;
-        $this->operator = $operator;
+    public function __construct(ContentAdmin $admin) {
+        $this->admin = $admin;
     }
 
     /**
@@ -30,7 +26,7 @@ class ContentFilterTransformer implements DataTransformerInterface {
      */
     function transform($value)
     {
-        return $value;
+        return $value->getId();
     }
 
     /**
@@ -39,9 +35,6 @@ class ContentFilterTransformer implements DataTransformerInterface {
      */
     function reverseTransform($value)
     {
-        return array_merge($value, array(
-            'field' => $this->field,
-            'operator' => $this->operator,
-        ));
+        return $this->admin->findEntity($value);
     }
 }

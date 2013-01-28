@@ -265,14 +265,63 @@ jQuery(document).ready(function ($) {
         self.init();
     };
 
+    /**
+    * Autocomplete widget
+    *
+    * @param DOMElement row
+    */
+    var AutocompleteWidget = function (container) {
+        var container = $(container);
+        var listUrl = container.data('list-url');
+
+        var textInput = container.find('input[type=text]');
+
+        var labels, mapped;
+
+        textInput.focus(function(e){
+            $(this).data('prev', $(this).val());
+            $(this).val('');
+        }).blur(function(e){
+            if($(this).val() === '') {
+                $(this).val($(this).data('prev'));
+            }
+        });
+
+        textInput.typeahead({
+            source: function(query, process) {
+                var replacedUrl = listUrl.replace('__query__', query);
+                $.getJSON(replacedUrl, function(data) {
+                    labels = []
+                    mapped = {}
+                    $.each(data, function (i, item) {
+                        mapped[item[1]] = item[0];
+                        labels.push(item[1]);
+                    })
+
+                    process(labels);
+                });
+            },
+            minLength: 3,
+            updater: function(item) {
+                container.find('input[type=hidden]').val(mapped[item]);
+                return item;
+            }
+        });
+    };
+
     // Slug
     $('.widget-slug').slugger();
     // Markdown
     $('.widget-markdown').markdownPreviewer();
 
-    // Inline widgets
+    // Admin entity widgets
     $('[data-admin=form-type-entity]').each(function (offset, container) {
         new InlineEntityWidget(container);
+    });
+
+    // Autocomplete widgets
+    $('[data-admin=form-type-autocomplete]').each(function (offset, container) {
+        new AutocompleteWidget(container);
     });
 
     // autosize for textareas

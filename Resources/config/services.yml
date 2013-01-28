@@ -77,6 +77,12 @@ services:
         tags:
             - { name: form.type, alias: snowcap_admin_entity }
 
+    snowcap_admin.form_type_autocomplete:
+        class: Snowcap\AdminBundle\Form\Type\AutocompleteType
+        arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
+        tags:
+            -  { name: form.type, alias: snowcap_admin_autocomplete }
+
     # Datalists
     snowcap_admin.datalist_factory:
         class: Snowcap\AdminBundle\Datalist\DatalistFactory
