@@ -38,13 +38,36 @@ class AutocompleteType extends AbstractType
         $this->routingHelper = $routingHelper;
     }
 
+    /**
+     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver
+            ->setDefaults(array(
+                'allow_add' => false,
+                'add_label' => 'Add'
+            ))
+            ->setRequired(array('admin'))
+            ->setOptional(array('property'));
+    }
 
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $admin = $this->adminManager->getAdmin($options['admin']);
         $builder->addModelTransformer(new EntityToIdTransformer($admin));
     }
 
+    /**
+     * @param \Symfony\Component\Form\FormView $view
+     * @param \Symfony\Component\Form\FormInterface $form
+     * @param array $options
+     * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $value = $form->getData();
@@ -66,16 +89,12 @@ class AutocompleteType extends AbstractType
             'autocompleteList',
             array('query' => '__query__', 'property' => $options['property'])
         );
+        $view->vars['allow_add'] = $options['allow_add'];
+        if($options['allow_add']) {
+            $view->vars['add_url'] = $this->routingHelper->generateUrl($this->adminManager->getAdmin($options['admin']), 'modalCreate');
+            $view->vars['add_label'] = $options['add_label'];
+        }
     }
-
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver
-            ->setRequired(array('admin'))
-            ->setOptional(array('property'));
-    }
-
 
     /**
      * @return string
@@ -90,6 +109,6 @@ class AutocompleteType extends AbstractType
      */
     public function getParent()
     {
-        return 'hidden';
+        return 'text';
     }
 }

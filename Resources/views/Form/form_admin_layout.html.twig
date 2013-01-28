@@ -1,5 +1,6 @@
 {% extends 'SnowcapBootstrapBundle:Form:form_bootstrap_layout.html.twig' %}
 
+{# entity widget #}
 {% block snowcap_admin_entity_widget %}
     <div class="form-inline" data-admin="form-type-entity">
         {{ block('choice_widget') }}
@@ -9,45 +10,33 @@
     </div>
 {% endblock snowcap_admin_entity_widget %}
 
+{# autocomplete widget #}
 {% block snowcap_admin_autocomplete_widget %}
     {% set text_attr = attr %}
     {% set attr = {} %}
-    <div data-admin="form-type-autocomplete" data-list-url="{{ list_url }}">
+    <div class="form-inline" data-admin="form-type-autocomplete" data-list-url="{{ list_url }}">
         <input type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-        <input type="text" {{ block('snowcap_admin_autocomplete_widget_attributes') }} {% if text_value is not empty %}value="{{ text_value }}" {% endif %}/>
+        {% set text_widget %}
+            <input type="text" {{ block('snowcap_admin_autocomplete_widget_attributes') }} {% if text_value is not empty %}value="{{ text_value }}" {% endif %}/>
+        {% endset %}
+        {% if allow_add %}
+            <div class="input-append">
+                {{ text_widget }}
+                <a href="{{ add_url }}" class="btn" rel="add">
+                    <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
+                </a>
+            </div>
+        {% else %}
+            {{ text_widget }}
+        {% endif %}
     </div>
 {% endblock snowcap_admin_autocomplete_widget %}
 
 {% block snowcap_admin_autocomplete_widget_attributes %}
-    id="{{ id }}-text" name="discard"{% if read_only %} readonly="readonly"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if pattern %} pattern="{{ pattern }}"{% endif %}
-    {% for attrname, attrvalue in text_attr %}{% if attrname in ['placeholder', 'title'] %}{{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}" {% else %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}
+    id="{{ id }}-text" name="{{ id }}-text"{% for attrname, attrvalue in text_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
 {% endblock %}
 
-{% block ___oldsnowcap_admin_inline_widget %}
-    {{ block('choice_widget') }}
-    <ul class="selected row">
-        {% if value is not empty %}
-            {% set results = multiple ? data : [data] %}
-            {% for result in results %}
-                {% include 'SnowcapAdminBundle:InlineContent:preview.html.twig' with {'entity': result, 'admin': inline_admin }%}
-            {% endfor %}
-        {% endif %}
-    </ul>
-    <div class="autocomplete-wrapper">
-        <input class="autocomplete" placeholder="{{ "inline_content.search"|trans({}, 'SnowcapAdminBundle') }}" type="text" data-url="{{ path('snowcap_admin_inlinecontent_autocomplete', {'code': inline_admin.code, 'input': 'placeholder'}) }}"/>
-        {% if allow_add %}
-            <a class="btn btn-small btn-primary" rel="create" href="{{ path('snowcap_admin_inlinecontent_create', {'code': inline_admin.code }) }}">
-                <i class="icon-plus icon-white"></i> {{ "inline_content.create"|trans({}, 'SnowcapAdminBundle') }}
-            </a>
-        {% endif %}
-        <div class="autocomplete-results"></div>
-    </div>
-{% endblock %}
-
-{% block snowcap_admin_content_filter_widget %}
-    {{ form_widget(form.value, {attr: attr}) }}
-{% endblock %}
-
+{# slug widget #}
 {% block slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}
     <div class="input-append">
@@ -58,9 +47,10 @@
     {{ modal('modal-' ~ id, 'ATTENTION', 'If you change the slug, you can break links on other pages') }}
 {% endblock slug_widget %}
 
+{# markdown widget #}
 {% block snowcap_admin_markdown_widget %}
-{% set attr = attr|merge({'class': attr.class|default('widget-markdown')}) %}
 {% spaceless %}
+    {% set attr = attr|merge({'class': attr.class|default('widget-markdown')}) %}
     <div class="tabbable tabs-below">
 
         <div class="tab-content">
@@ -75,11 +65,12 @@
             <li class="active"><a href="#textarea-{{ id }}" data-toggle="tab" class="text-trigger">Text</a></li>
             <li><a href="#preview-{{ id }}" data-toggle="tab" class="preview-trigger">Preview</a></li>
         </ul>
-</div>
+    </div>
 {% endspaceless %}
 {% endblock %}
 
+{# wysiwyg widget #}
 {% block snowcap_admin_wysiwyg_widget %}
-{% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-wysiwyg': wysiwyg_config}) %}
-{{ block('textarea_widget') }}
+    {% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-wysiwyg': wysiwyg_config}) %}
+    {{ block('textarea_widget') }}
 {% endblock %}

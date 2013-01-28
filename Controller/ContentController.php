@@ -97,56 +97,6 @@ class ContentController extends BaseController
         );
     }
 
-    public function modalCreateAction(Request $request, ContentAdmin $admin) {
-        $entity = $admin->buildEntity();
-        $form = $admin->getForm();
-        $form->setData($entity);
-
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $admin->saveEntity($entity);
-                $admin->flush();
-
-                return new Response(json_encode(array('val' => $entity->getId(), 'html' => $admin->getEntityName($entity))), 201);
-            } else {
-
-            }
-        }
-        $templateParams = array(
-            'admin' => $admin,
-            'entity' => $entity,
-            'form' => $form->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:modalForm.html.twig', $admin->getAlias()),
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
-        );
-
-        return $this->render(
-            $this->getTemplate('SnowcapAdminBundle:Content:modalCreate.html.twig', $admin->getAlias()),
-            $templateParams
-        );
-    }
-
-    /**
-     * Render a json array of entity values and text (to be used in autocomplete widgets)
-     *
-     */
-    public function autocompleteListAction(Request $request, ContentAdmin $admin, $query, $property) {
-        $results = $admin->getQueryBuilder()
-            ->andWhere('e.name LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
-            ->getQuery()
-            ->getResult();
-
-        $flattenedResults = array();
-        $propertyPath = new PropertyPath($property);
-        foreach($results as $result) {
-            $flattenedResults[] = array($result->getId(), $propertyPath->getValue($result));
-        }
-
-        return new Response(json_encode($flattenedResults));
-    }
-
     /**
      * Update an existing content entity
      *
@@ -159,7 +109,8 @@ class ContentController extends BaseController
             return $this->renderError('error.content.notfound', 404);
         }
 
-        $form = $admin->getFormWithData($entity);
+        $form = $admin->getForm();
+        $form->setData($entity);
 
         if ('POST' === $request->getMethod()) {
             $form->bindRequest($request);
@@ -212,6 +163,68 @@ class ContentController extends BaseController
         $this->setFlash('success', 'content.delete.flash.success');
 
         return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
+    }
+
+    /**
+     * Create a new content entity through ajax modal
+     *
+     */
+    public function modalCreateAction(Request $request, ContentAdmin $admin) {
+        $entity = $admin->buildEntity();
+        $form = $admin->getForm();
+        $form->setData($entity);
+
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $admin->saveEntity($entity);
+                $admin->flush();
+
+                $json = array(
+                    'result' => array($entity->getId(), $admin->getEntityName($entity))
+                );
+
+                return new Response(json_encode($json), 201);
+            } else {
+
+            }
+        }
+        $templateParams = array(
+            'admin' => $admin,
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:modalForm.html.twig', $admin->getAlias()),
+            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
+        );
+
+        return $this->render(
+            $this->getTemplate('SnowcapAdminBundle:Content:modalCreate.html.twig', $admin->getAlias()),
+            $templateParams
+        );
+    }
+
+    /**
+     * Render a json array of entity values and text (to be used in autocomplete widgets)
+     *
+     */
+    public function autocompleteListAction(Request $request, ContentAdmin $admin, $query, $property) {
+        $results = $admin->getQueryBuilder()
+            ->andWhere('e.name LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->getQuery()
+            ->getResult();
+
+        $flattenedResults = array();
+        $propertyPath = new PropertyPath($property);
+        foreach($results as $result) {
+            $flattenedResults[] = array($result->getId(), $propertyPath->getValue($result));
+        }
+
+        $json = array(
+            'result' => $flattenedResults
+        );
+
+        return new Response(json_encode($json));
     }
 
     /**

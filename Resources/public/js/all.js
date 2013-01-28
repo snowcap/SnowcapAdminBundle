@@ -149,14 +149,12 @@ jQuery(document).ready(function ($) {
      *
      * @param DOMElement row
      */
-    var InlineEntityWidget = function (container) {
-
+    var EntityWidget = function (container) {
         var self = this;
         var container = $(container);
         var trigger = container.find('a[rel=add]');
         var modal = $('#modal');
         var select = container.find('select');
-        //var selected = row.find(".selected");
 
         /**
          * Observe what's cooking in the add form
@@ -170,10 +168,10 @@ jQuery(document).ready(function ($) {
                     .success(function(data, textStatus, jqXHR) {
                         modal.html('');
                         var option = $('<option>');
-                        option.val(data.val);
-                        option.html(data.html);
+                        option.val(data.result[0]);
+                        option.html(data.result[1]);
                         select.append(option);
-                        select.val(data.val);
+                        select.val(data.result[0]);
                         modal.modal('hide');
                     })
                     .error(function(data, textStatus, jqXHR) {
@@ -182,77 +180,13 @@ jQuery(document).ready(function ($) {
                     });
             });
         };
-        /**
-         * Add an item to the selection
-         *
-         * @param DOMElement selectedItem
-         */
-        /*self.selectItem = function (selectedItem) {
-            row.find('.empty').hide();
-            if (select.attr('multiple') !== 'multiple') {
-                selected.find('li:not(.empty)').remove();
-                select.find('option[selected=selected]').removeAttr('selected');
-            }
-            selectedItem.addClass('span2');
-            selectedItem.find('a.identity').click(function(event){
-                event.preventDefault();
-            });
-            var close = $('<a>').addClass('close').html('x');
-            close.click(self.removeSelection);
-            selectedItem.append(close);
-            selected.append(selectedItem);
-            select.find('option[value=' + $(selectedItem).find('a').attr('href') + ']').attr('selected', 'selected');
-        };*/
-        /**
-         * Remove an item from the selection (on click)
-         *
-         * @param DOMEvent event
-         */
-        /*self.removeSelection = function (event) {
-            event.preventDefault();
-            var entityId = $(this).prev('.identity').attr('href');
-            $(this).parent().remove();
-            select.find("option[value='" + entityId + "']").removeAttr('selected');
-            if (selected.find('li').length === 0) {
-                row.find('.empty').show();
-            }
-        };*/
+
         /**
          * Inline widget init
          *
          */
         self.init = function () {
-            // Observe autocomplete field
-            /*row.find('.autocomplete').keyup(function (event) {
-                var autocomplete = $(this);
-                if ($(this).val().length >= 3) {
-                    $.get($(this).attr('data-url').replace('placeholder', $(this).val()), function (data) {
-                        var results = autocomplete.siblings('.autocomplete-results');
-                        results.css('min-width', autocomplete.css('width'));
-                        results.html(data.html);
-                        results.find('li a').click(function (event) {
-                            event.preventDefault();
-                            results.hide();
-                            autocomplete.val('');
-                            var selectedItem = $(this).parent().clone();
-                            self.selectItem(selectedItem);
-                        });
-                        results.find('ul').show();
-                        results.show();
-                    });
-                }
-            });*/
-            // Observe existing selections and hide empty text
-            /*selected.find('li a.identity').click(function(event){event.preventDefault()});
-            selected.find('li a.close').click(self.removeSelection);
-            if(selected.find('li').length !== 0) {
-                row.find('.empty').hide();
-            }*/
-            // Hide autocomplete results on body click
-            /*$('body').click(function (event) {
-                row.find('.autocomplete-results').hide();
-            });*/
-            // Observe the "create" button
+            // Observe the "add" button
             trigger.click(function (event) {
                 event.preventDefault();
                 $.get($(this).attr('href'), function (data) {
@@ -271,42 +205,84 @@ jQuery(document).ready(function ($) {
     * @param DOMElement row
     */
     var AutocompleteWidget = function (container) {
+        var self = this;
         var container = $(container);
-        var listUrl = container.data('list-url');
-
+        var trigger = container.find('a[rel=add]');
+        var modal = $('#modal');
         var textInput = container.find('input[type=text]');
+        var valueInput = container.find('input[type=hidden]');
 
         var labels, mapped;
+        var listUrl = container.data('list-url');
 
-        textInput.focus(function(e){
-            $(this).data('prev', $(this).val());
-            $(this).val('');
-        }).blur(function(e){
-            if($(this).val() === '') {
-                $(this).val($(this).data('prev'));
-            }
-        });
-
-        textInput.typeahead({
-            source: function(query, process) {
-                var replacedUrl = listUrl.replace('__query__', query);
-                $.getJSON(replacedUrl, function(data) {
-                    labels = []
-                    mapped = {}
-                    $.each(data, function (i, item) {
-                        mapped[item[1]] = item[0];
-                        labels.push(item[1]);
+        /**
+         * Observe what's cooking in the add form
+         *
+         */
+        self.observeAddForm = function () {
+            modal.find('*[type=submit]').on('click', function (event) {
+                event.preventDefault();
+                var form = modal.find('form');
+                $.post(form.attr('action'), form.serialize(), null, "json")
+                    .success(function(data, textStatus, jqXHR) {
+                        modal.html('');
+                        textInput.val(data.result[1]);
+                        valueInput.val(data.result[0]);
+                        modal.modal('hide');
                     })
+                    .error(function(data, textStatus, jqXHR) {
+                        console.log(data);
+                        alert('An error has occured');
+                    });
+            });
+        };
 
-                    process(labels);
+        /**
+         * Autocomplete widget init
+         *
+         */
+        self.init = function () {
+            // Observe the "add" button
+            trigger.click(function (event) {
+                event.preventDefault();
+                $.get($(this).attr('href'), function (data) {
+                    modal.html(data);
+                    self.observeAddForm();
+                    modal.modal('show');
                 });
-            },
-            minLength: 3,
-            updater: function(item) {
-                container.find('input[type=hidden]').val(mapped[item]);
-                return item;
-            }
-        });
+            });
+            // Initialize typeahead
+            textInput.typeahead({
+                source: function(query, process) {
+                    var replacedUrl = listUrl.replace('__query__', query);
+                    $.getJSON(replacedUrl, function(data) {
+                        labels = [];
+                        mapped = {};
+                        $.each(data.result, function (i, item) {
+                            mapped[item[1]] = item[0];
+                            labels.push(item[1]);
+                        })
+
+                        process(labels);
+                    });
+                },
+                minLength: 3,
+                updater: function(item) {
+                    container.find('input[type=hidden]').val(mapped[item]);
+                    return item;
+                }
+            });
+            // Handle focus / blur
+            textInput.focus(function(e){
+                $(this).data('prev', $(this).val());
+                $(this).val('');
+            }).blur(function(e){
+                if($(this).val() === '') {
+                    $(this).val($(this).data('prev'));
+                }
+            });
+        };
+        self.init();
     };
 
     // Slug
@@ -316,7 +292,7 @@ jQuery(document).ready(function ($) {
 
     // Admin entity widgets
     $('[data-admin=form-type-entity]').each(function (offset, container) {
-        new InlineEntityWidget(container);
+        new EntityWidget(container);
     });
 
     // Autocomplete widgets
