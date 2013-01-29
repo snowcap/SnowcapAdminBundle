@@ -12,13 +12,19 @@
 
 {# autocomplete widget #}
 {% block snowcap_admin_autocomplete_widget %}
-    {% set text_attr = attr %}
-    {% set attr = {} %}
-    {% set widget_mode = multiple ? 'multiple' : 'single' %}
-    <div class="form-autocomplete{% if multiple %} form-autocomplete-multiple{% endif %}" data-admin="form-type-autocomplete" data-list-url="{{ list_url }}">
-        {{ block('snowcap_admin_autocomplete_widget_' ~ widget_mode) }}
+    {% if compound %}
+        {{ block('snowcap_admin_autocomplete_multiple_widget') }}
+    {% else %}
+        {{ block('snowcap_admin_autocomplete_single_widget') }}
+    {% endif %}
+{% endblock snowcap_admin_autocomplete_widget %}
+
+{% block snowcap_admin_autocomplete_single_widget %}
+{% spaceless %}
+    <div class="form-autocomplete" data-admin="form-type-autocomplete" data-mode="single" data-list-url="{{ list_url }}">
+        {{ form_widget(form, {'type': 'hidden'}) }}
         {% set text_widget %}
-            {{ block('snowcap_admin_autocomplete_widget_' ~ widget_mode ~ '_text') }}
+            <input type="text" id="_{{ id }}" name="_{{ full_name }}" {% if text_value is not empty %}value="{{ text_value }}" {% endif %} autocomplete="off"/>
         {% endset %}
         {% if allow_add %}
             <div class="input-append">
@@ -31,38 +37,38 @@
             {{ text_widget }}
         {% endif %}
     </div>
-{% endblock snowcap_admin_autocomplete_widget %}
+{% endspaceless %}
+{% endblock snowcap_admin_autocomplete_single_widget %}
 
-{% block snowcap_admin_autocomplete_widget_single %}
-    <input type="hidden" name="{{ full_name }}" id="{{ id }}" {% if value is not empty %}value="{{ value }}" {% endif %}/>
-{% endblock snowcap_admin_autocomplete_widget_single %}
-
-{% block snowcap_admin_autocomplete_widget_multiple %}
-    {% for index, single_value in value %}
-        <input type="hidden" name="{{ full_name }}" id="{{ id ~ "-" ~ index }}" {% if single_value is not empty %}value="{{ single_value }}" {% endif %}/>
-    {% endfor %}
-{% endblock snowcap_admin_autocomplete_widget_multiple %}
-
-{% block snowcap_admin_autocomplete_widget_single_text %}
-    <input type="text" id="{{ id }}" name="{{ full_name }}" {% if text_value is not empty %}value="{{ text_value }}" {% endif %}/>
-{% endblock snowcap_admin_autocomplete_widget_single_text %}
-
-{% block snowcap_admin_autocomplete_widget_multiple_text %}
-    <ul class="tokens">
-        {% for single_text_value in text_value %}
-            <li class="token">
-                {{ single_text_value }}<a class="close" rel="remove">&times;</a>
-            </li>
-        {% endfor %}
-        <li class="token-input">
-            <input type="text"/>
-        </li>
-    </ul>
-{% endblock snowcap_admin_autocomplete_widget_multiple_text %}
-
-{% block snowcap_admin_autocomplete_widget_attributes %}
-    id="{{ id }}-text" name="{{ id }}-text"{% for attrname, attrvalue in text_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
-{% endblock %}
+{% block snowcap_admin_autocomplete_multiple_widget %}
+    {% spaceless %}
+        <div class="form-autocomplete form-autocomplete-multiple" data-admin="form-type-autocomplete" data-mode="multiple" data-list-url="{{ list_url }}" data-prototype="{{ form_row(prototype)|e }}">
+            {% for child in form %}
+                {{ form_widget(child) }}
+            {% endfor %}
+            {% set text_widget %}
+                <ul class="tokens">
+                    {% for single_text_value in text_value %}
+                        <li class="token">
+                            <span>{{ single_text_value }}</span><a class="close" rel="remove">&times;</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <input name="_{{ full_name }}" class="token-input" type="text" autocomplete="off"/>
+            {% endset %}
+            {% if allow_add %}
+                <div class="input-append">
+                    {{ text_widget }}
+                    <a href="{{ add_url }}" class="btn" rel="add">
+                        <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
+                    </a>
+                </div>
+            {% else %}
+                {{ text_widget }}
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock snowcap_admin_autocomplete_multiple_widget %}
 
 {# slug widget #}
 {% block slug_widget %}

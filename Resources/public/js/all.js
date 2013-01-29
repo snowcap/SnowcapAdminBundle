@@ -214,6 +214,7 @@ jQuery(document).ready(function ($) {
 
         var labels, mapped;
         var listUrl = container.data('list-url');
+        var mode = container.data('mode');
 
         /**
          * Observe what's cooking in the add form
@@ -267,9 +268,29 @@ jQuery(document).ready(function ($) {
                     });
                 },
                 minLength: 3,
+                matcher: function(item) {
+                    var existingTokens = container.find('.token span').map(function() {
+                        return $(this).html();
+                    });
+
+                    return -1 === $.inArray(item, existingTokens);
+                },
                 updater: function(item) {
-                    container.find('input[type=hidden]').val(mapped[item]);
-                    return item;
+                    if('single' === mode) {
+                        container.find('input[type=hidden]').val(mapped[item]);
+                        return item;
+                    }
+                    else {
+                        var prototype = container.data('prototype');
+                        var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
+                        $prototype.val(mapped[item]);
+                        container.prepend($prototype);
+
+                        $token = $('<li>').addClass('token').html($('<span>').html(item)).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
+                        container.find('.tokens').append($token);
+
+                        return "";
+                    }
                 }
             });
             // Handle focus / blur
@@ -281,6 +302,12 @@ jQuery(document).ready(function ($) {
                     $(this).val($(this).data('prev'));
                 }
             });
+            // Remove associations
+            if('multiple' === mode) {
+                $('ul.tokens').on('click', 'a[rel=remove]', function(event) {
+                    //TODO: handle removals
+                });
+            }
         };
         self.init();
     };
@@ -296,8 +323,12 @@ jQuery(document).ready(function ($) {
     });
 
     // Autocomplete widgets
-    $('[data-admin=form-type-autocomplete]').each(function (offset, container) {
-        new AutocompleteWidget(container);
+    var launchAutocompletes = function() {
+        new AutocompleteWidget($(this));
+    };
+    $('[data-admin=form-type-autocomplete]').each(launchAutocompletes);
+    $('.collection-container').on('new_collection_item', function() {
+        $(this).find('[data-admin=form-type-autocomplete]').each(launchAutocompletes);
     });
 
     // autosize for textareas
