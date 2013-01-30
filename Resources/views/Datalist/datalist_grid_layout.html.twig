@@ -119,6 +119,13 @@
     </div>
 {% endblock datalist_filter_choice %}
 
+{% block datalist_filter_search %}
+    <div class="control-group">
+        {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'input-small'}}) }}
+    </div>
+{% endblock datalist_filter_search %}
+
 {% block datalist_action_simple %}
     <a href="{{ url }}">{{ label|trans({}, translation_domain) }}</a>
 {% endblock datalist_action_simple %}

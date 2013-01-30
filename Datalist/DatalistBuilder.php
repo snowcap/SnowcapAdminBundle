@@ -139,7 +139,9 @@ class DatalistBuilder extends DatalistConfig
         }
 
         // Add filters and filter form
-        $filterFormBuilder = $this->formFactory->createNamedBuilder('');
+        $filterFormBuilder = $this->formFactory->createNamedBuilder('', 'form', null, array(
+            'translation_domain' => $datalist->getOption('translation_domain')
+        ));
         foreach ($this->filters as $filterName => $filterConfig) {
             $filter = $this->createFilter($filterName, $filterConfig);
             $filter->setDatalist($datalist);
