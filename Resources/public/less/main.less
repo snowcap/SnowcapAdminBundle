@@ -39,15 +39,17 @@ body {
 
         li.token {
             float: left;
-            background: @grayLighter;
-            margin: 0 6px 6px 0;
-            padding: 4px 6px;
-            border: 1px solid @inputBorder;
             line-height: @baseLineHeight;
-            .border-radius(@inputBorderRadius);
+            min-height: 20px;
+            padding: 6px;
+            margin: 0 6px 6px 0;
+            background-color: @wellBackground;
+            border: 1px solid darken(@wellBackground, 7%);
+            .border-radius(@baseBorderRadius);
+            .box-shadow(inset 0 1px 1px rgba(0,0,0,.05));
 
             .close {
-                vertical-align: top;
+               margin: -2px 0 0 4px;
             }
         }
     }

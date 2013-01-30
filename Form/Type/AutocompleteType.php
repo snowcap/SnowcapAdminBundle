@@ -94,22 +94,21 @@ class AutocompleteType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        // Set the text value(s) to display in the form
         $value = $form->getData();
+        // For multiple autocomplete, we need to store textual values indexed by value, along with the prototype
         if($options['multiple']) {
-            $textValue = array();
+            $textValues = array();
             foreach($value as $entity) {
-                $textValue[]= $this->buildSingleTextValue($entity, $options);
+                $textValues[$entity->getId()]= $this->buildTextValue($entity, $options);
             }
-        }
-        else {
-            $textValue = $this->buildSingleTextValue($value, $options);
-        }
-        $view->vars['text_value'] = $textValue;
+            $view->vars['text_values'] = $textValues;
 
-        // If we are dealing with multiple values, we have to handle the prototype
-        if ($form->getConfig()->hasAttribute('prototype')) {
             $view->vars['prototype'] = $form->getConfig()->getAttribute('prototype')->createView($view);
+        }
+        // For single autocompletes, just store the only textual value
+        else {
+            $textValue = $this->buildTextValue($value, $options);
+            $view->vars['text_value'] = $textValue;
         }
 
         // Set the other variables
@@ -144,7 +143,7 @@ class AutocompleteType extends AbstractType
      * @return string
      * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
      */
-    private function buildSingleTextValue($value, array $options)
+    private function buildTextValue($value, array $options)
     {
         if(null === $value) {
             $textValue = "";

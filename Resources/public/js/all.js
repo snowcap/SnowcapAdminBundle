@@ -305,7 +305,9 @@ jQuery(document).ready(function ($) {
             // Remove associations
             if('multiple' === mode) {
                 $('ul.tokens').on('click', 'a[rel=remove]', function(event) {
-                    //TODO: handle removals
+                    var value = $(this).parent('li').data('value');
+                    $(this).parent('li').remove();
+                    container.find('input[value=' + value + ']').remove();
                 });
             }
         };

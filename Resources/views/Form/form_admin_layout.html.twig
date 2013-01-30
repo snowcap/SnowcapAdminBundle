@@ -24,7 +24,7 @@
     <div class="form-autocomplete" data-admin="form-type-autocomplete" data-mode="single" data-list-url="{{ list_url }}">
         {{ form_widget(form, {'type': 'hidden'}) }}
         {% set text_widget %}
-            <input type="text" id="_{{ id }}" name="_{{ full_name }}" {% if text_value is not empty %}value="{{ text_value }}" {% endif %} autocomplete="off"/>
+            <input type="text"{% if text_value is not empty %} value="{{ text_value }}"{% endif %}  {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
         {% endset %}
         {% if allow_add %}
             <div class="input-append">
@@ -48,13 +48,14 @@
             {% endfor %}
             {% set text_widget %}
                 <ul class="tokens">
-                    {% for single_text_value in text_value %}
-                        <li class="token">
-                            <span>{{ single_text_value }}</span><a class="close" rel="remove">&times;</a>
+                    {% for value, text_value in text_values %}
+                        <li class="token" data-value="{{ value }}">
+                            <span>{{ text_value }}</span><a class="close" rel="remove">&times;</a>
                         </li>
                     {% endfor %}
                 </ul>
-                <input name="_{{ full_name }}" class="token-input" type="text" autocomplete="off"/>
+                {% set attr = attr|merge({'class': (attr.class|default('') ~ ' token-input')|trim }) %}
+                <input type="text" {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
             {% endset %}
             {% if allow_add %}
                 <div class="input-append">
@@ -69,6 +70,13 @@
         </div>
     {% endspaceless %}
 {% endblock snowcap_admin_autocomplete_multiple_widget %}
+
+{% block snowcap_admin_autocomplete_widget_attributes %}
+    {% spaceless %}
+        id="_{{ id }}" name="_{{ full_name }}" autocomplete="off"{% if read_only %} readonly="readonly"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if pattern %} pattern="{{ pattern }}"{% endif %}
+        {% for attrname, attrvalue in attr %}{% if attrname in ['placeholder', 'title'] %}{{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}" {% else %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}
+    {% endspaceless %}
+{% endblock snowcap_admin_autocomplete_widget_attributes %}
 
 {# slug widget #}
 {% block slug_widget %}
