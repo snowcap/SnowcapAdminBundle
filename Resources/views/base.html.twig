@@ -3,12 +3,13 @@
 <html lang="{{ app.request.locale }}">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>{% block title %}Snowcap Admin{% endblock %}</title>
 
         {# stylesheets block #}
         {% block stylesheets %}
             {% stylesheets
-            'bundles/snowcapbootstrap/vendor/bootstrap/less/bootstrap.less' 'bundles/snowcapadmin/less/main.less'
+            'bundles/snowcapbootstrap/vendor/bootstrap/less/bootstrap.less' 'bundles/snowcapbootstrap/vendor/bootstrap/less/responsive.less' 'bundles/snowcapadmin/less/main.less'
                 filter="lessphp,cssrewrite"
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
