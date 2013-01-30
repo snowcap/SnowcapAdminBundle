@@ -313,7 +313,7 @@ class Datalist implements DatalistInterface, \Countable
 
         // Handle filters
         foreach($this->filters as $filter) {
-            if(isset($data[$filter->getName()])) {
+            if(isset($data[$filter->getName()]) && !empty($data[$filter->getName()])) {
                 $this->filterData[$filter->getName()] = $data[$filter->getName()];
             }
         }

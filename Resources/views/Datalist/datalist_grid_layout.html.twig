@@ -102,11 +102,12 @@
 {# datalist filters block #}
 {% block datalist_filters %}
     <div class="well">
-        <form class="form-search" method="get">
+        <form class="form-vertical" method="get">
             {% for filter in filters %}
                 {{ datalist_filter(filter) }}
             {% endfor %}
-            <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+            <button type="submit" class="btn btn-primary">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+            <a class="btn" href="{{ url }}">{{ reset|trans({}, "SnowcapAdminBundle") }}</a>
         </form>
     </div>
 {% endblock datalist_filters %}
@@ -115,16 +116,23 @@
 {% block datalist_filter_choice %}
     <div class="control-group">
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
-        {{ form_widget(form, {'attr': {'class': 'input-small'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
     </div>
 {% endblock datalist_filter_choice %}
 
 {% block datalist_filter_search %}
     <div class="control-group">
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
-        {{ form_widget(form, {'attr': {'class': 'input-small'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
     </div>
 {% endblock datalist_filter_search %}
+
+{% block datalist_filter_entity %}
+    <div class="control-group">
+        {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
+    </div>
+{% endblock datalist_filter_entity %}
 
 {% block datalist_action_simple %}
     <a href="{{ url }}">{{ label|trans({}, translation_domain) }}</a>

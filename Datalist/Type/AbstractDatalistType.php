@@ -23,6 +23,7 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
                 'search_placeholder' => 'datalist.search.placeholder',
                 'search_submit' => 'datalist.search.submit',
                 'filter_submit' => 'datalist.filter.submit',
+                'filter_reset' => 'datalist.filter.reset',
                 'translation_domain' => 'messages'
             ))
             ->setOptional(array(

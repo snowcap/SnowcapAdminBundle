@@ -76,6 +76,7 @@ datalist:
         placeholder: Entrez vos termes de recherche
     filter:
         submit: Filtrer
+        reset: Réinitialiser
 
 cataloguetranslation:
     title: Contenu d'interface

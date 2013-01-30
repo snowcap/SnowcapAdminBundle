@@ -147,6 +147,8 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
             array(
                 'filters' => $datalist->getFilters(),
                 'submit' => $datalist->getOption('filter_submit'),
+                'reset' => $datalist->getOption('filter_reset'),
+                'url' => $this->container->get('request')->getPathInfo()
             )
         );
     }

@@ -123,6 +123,11 @@ services:
         tags:
             - { name: snowcap_admin.datalist_filtertype, alias: choice }
 
+    snowcap_admin.datalist_filter_entity:
+        class: Snowcap\AdminBundle\Datalist\Filter\Type\EntityFilterType
+        tags:
+            - { name: snowcap_admin.datalist_filtertype, alias: entity }
+
     snowcap_admin.datalist_filter_search:
         class: Snowcap\AdminBundle\Datalist\Filter\Type\SearchFilterType
         tags:

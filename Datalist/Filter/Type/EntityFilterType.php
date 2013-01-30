@@ -9,7 +9,7 @@ use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
 use Snowcap\AdminBundle\Datalist\Filter\Expression\ComparisonExpression;
 
-class ChoiceFilterType extends AbstractFilterType
+class EntityFilterType extends AbstractFilterType
 {
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
@@ -19,8 +19,8 @@ class ChoiceFilterType extends AbstractFilterType
         parent::setDefaultOptions($resolver);
 
         $resolver
-            ->setRequired(array('choices'))
-            ->setOptional(array('empty_value'));
+            ->setRequired(array('class'))
+            ->setOptional(array('property', 'empty_value'));
     }
 
     /**
@@ -30,15 +30,16 @@ class ChoiceFilterType extends AbstractFilterType
      */
     public function buildForm(FormBuilderInterface $builder, DatalistFilterInterface $filter, array $options)
     {
-        $formOptions = array(
-            'choices' => $options['choices'],
-            'label' => $options['label']
+        $formOptions =array(
+            'class' => $options['class'],
+            'label' => $options['label'],
+            'property' => $options['property'],
         );
         if(isset($options['empty_value'])) {
             $formOptions['empty_value'] = $options['empty_value'];
         }
 
-        $builder->add($filter->getName(), 'choice', $formOptions);
+        $builder->add($filter->getName(), 'entity', $formOptions);
     }
 
     /**
@@ -57,6 +58,6 @@ class ChoiceFilterType extends AbstractFilterType
      */
     public function getName()
     {
-        return 'choice';
+        return 'entity';
     }
 }
