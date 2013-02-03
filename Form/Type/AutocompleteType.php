@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 
@@ -75,7 +75,6 @@ class AutocompleteType extends AbstractType
             $builder->setAttribute('prototype', $prototype->getForm());
 
             $resizeListener = new ResizeFormListener(
-                $builder->getFormFactory(),
                 'hidden',
                 array(),
                 true,
@@ -149,8 +148,8 @@ class AutocompleteType extends AbstractType
             $textValue = "";
         }
         elseif(isset($options['property'])) {
-            $propertyPath = new PropertyPath($options['property']);
-            $textValue = $propertyPath->getValue($value);
+            $accessor = PropertyAccess::getPropertyAccessor();
+            $textValue = $accessor->getValue($value, $options['property']);
         }
         elseif(method_exists($value, '__toString')) {
             $textValue = $value->__toString();
