@@ -5,6 +5,7 @@ namespace Snowcap\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\Form\Form;
 
 use Snowcap\CoreBundle\Util\String;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
@@ -59,27 +60,8 @@ class ContentController extends BaseController
         $form = $admin->getForm();
         $form->setData($entity);
 
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $admin->saveEntity($entity);
-                $admin->flush();
-                $this->setFlash('success', 'content.create.flash.success');
-                $saveMode = $this->getRequest()->get('saveMode');
-                if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl(
-                        $admin,
-                        'update',
-                        array('id' => $entity->getId())
-                    );
-                } else {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
-                }
-
-                return $this->redirect($redirectUrl);
-            } else {
-                $this->setFlash('error', 'content.create.flash.error');
-            }
+        if ($request->isMethod('POST')) {
+            $this->save($admin, $form, $entity, 'content.create.flash.success', 'content.create.flash.error');
         }
         $templateParams = array(
             'admin' => $admin,
@@ -105,29 +87,8 @@ class ContentController extends BaseController
         $form = $admin->getForm();
         $form->setData($entity);
 
-        if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
-            if ($form->isValid()) {
-                $admin->saveEntity($entity);
-                $admin->flush();
-                // TODO: reactivate using event dispatcher
-                //$this->get('snowcap_admin.logger')->logContent(Logger::ACTION_UPDATE, $admin, $entity, $locale);
-                $this->setFlash('success', 'content.update.flash.success');
-                $saveMode = $this->getRequest()->get('saveMode');
-                if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl(
-                        $admin,
-                        'update',
-                        array('id' => $entity->getId())
-                    );
-                } else {
-                    $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
-                }
-
-                return $this->redirect($redirectUrl);
-            } else {
-                $this->setFlash('error', 'content.update.flash.error');
-            }
+        if ($request->isMethod('POST')) {
+            $this->save($admin, $form, $entity, 'content.update.flash.success', 'content.update.flash.error');
         }
         $templateParams = array(
             'admin' => $admin,
@@ -209,6 +170,39 @@ class ContentController extends BaseController
         $json = array('result' => $flattenedResults);
 
         return new Response(json_encode($json));
+    }
+
+    /**
+     * Save a content entity
+     *
+     * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
+     * @param \Symfony\Component\Form\Form $form
+     * @param object $entity
+     * @param string $successFlash
+     * @param string $errorFlash
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    protected function save(ContentAdmin $admin, Form $form, $entity, $successFlash, $errorFlash) {
+        $form->bind($this->getRequest());
+        if ($form->isValid()) {
+            $admin->saveEntity($entity);
+            $admin->flush();
+            $this->setFlash('success', $successFlash);
+            $saveMode = $this->getRequest()->get('saveMode');
+            if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
+                $redirectUrl = $this->getRoutingHelper()->generateUrl(
+                    $admin,
+                    'update',
+                    array('id' => $entity->getId())
+                );
+            } else {
+                $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
+            }
+
+            return $this->redirect($redirectUrl);
+        } else {
+            $this->setFlash('error', $errorFlash);
+        }
     }
 
     /**
