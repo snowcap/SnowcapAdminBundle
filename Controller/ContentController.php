@@ -6,11 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Util\PropertyPath;
 
+use Snowcap\CoreBundle\Util\String;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
 
 /**
  * This controller provides basic CRUD capabilities for content models
+ *
  */
 class ContentController extends BaseController
 {
@@ -27,15 +29,10 @@ class ContentController extends BaseController
 
         $templateParams = array(
             'admin' => $admin,
-            'datalist' => $datalist,
-            'reorder' => false, // TODO: reimplement reorder
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig')
+            'datalist' => $datalist
         );
 
-        return $this->render(
-            $this->getTemplate("SnowcapAdminBundle:Content:index.html.twig", $admin->getAlias()),
-            $templateParams
-        );
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':index.html.twig', $templateParams);
     }
 
     /**
@@ -54,6 +51,7 @@ class ContentController extends BaseController
 
     /**
      * Create a new content entity
+     *
      */
     public function createAction(Request $request, ContentAdmin $admin)
     {
@@ -87,14 +85,9 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
         );
 
-        return $this->render(
-            $this->getTemplate('SnowcapAdminBundle:Content:create.html.twig', $admin->getAlias()),
-            $templateParams
-        );
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':create.html.twig', $templateParams);
     }
 
     /**
@@ -140,18 +133,14 @@ class ContentController extends BaseController
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:form.html.twig', $admin->getAlias()),
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
         );
 
-        return $this->render(
-            $this->getTemplate('SnowcapAdminBundle:Content:update.html.twig', $admin->getAlias()),
-            $templateParams
-        );
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':update.html.twig', $templateParams);
     }
 
     /**
      * Delete a content entity
+     *
      */
     public function deleteAction(Request $request, ContentAdmin $admin)
     {
@@ -197,10 +186,7 @@ class ContentController extends BaseController
             'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
         );
 
-        return $this->render(
-            $this->getTemplate('SnowcapAdminBundle:Content:modalCreate.html.twig', $admin->getAlias()),
-            $templateParams
-        );
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', $templateParams);
     }
 
     /**
@@ -220,10 +206,7 @@ class ContentController extends BaseController
         foreach($results as $result) {
             $flattenedResults[] = array($result->getId(), $propertyPath->getValue($result));
         }
-
-        $json = array(
-            'result' => $flattenedResults
-        );
+        $json = array('result' => $flattenedResults);
 
         return new Response(json_encode($json));
     }

@@ -40,7 +40,7 @@ services:
 #        tags:
 #            - { name: doctrine.event_subscriber}
 
-    # Twig extensions
+    # Twig extensions and loaders
     snowcap_admin.twig_admin:
         class: Snowcap\AdminBundle\Twig\Extension\AdminExtension
         arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content, @translator]
@@ -54,6 +54,11 @@ services:
             - [ setContainer, [@service_container]]
         tags:
             -  { name: twig.extension }
+    snowcap_admin.twig_loader:
+        class: Snowcap\AdminBundle\Twig\Loader\AdminLoader
+        arguments: [@templating.locator, @templating.name_parser]
+        tags:
+            - { name: twig.loader }
 
     # Form types
     snowcap_admin.form_type_slug:
