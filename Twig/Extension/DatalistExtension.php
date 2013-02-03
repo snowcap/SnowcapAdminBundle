@@ -3,7 +3,7 @@ namespace Snowcap\AdminBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Form\Exception\InvalidPropertyException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormFactory;
@@ -94,9 +94,9 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     {
         $blockName = 'datalist_field_' . $field->getType()->getName();
 
-        $propertyPath = new PropertyPath($field->getPropertyPath());
+        $accessor = PropertyAccess::getPropertyAccessor();
         try {
-            $value = $propertyPath->getValue($row);
+            $value = $accessor->getValue($row, $field->getPropertyPath());
         } catch (InvalidPropertyException $e) {
             if (is_object($row) && !$field->getDatalist()->hasOption('data_class')) {
                 $message = sprintf('Missing "data_class" option');
@@ -200,9 +200,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     private function renderblock($layout, $blockName, array $context = array())
     {
-        $templateName = 'datalist_' . $layout . '_layout.html.twig';
-        $loader = $this->environment->getLoader();
-        $loader->addPath(__DIR__ . '/../../Resources/views/Datalist');
+        $templateName = 'SnowcapAdminBundle:Datalist:datalist_' . $layout . '_layout.html.twig';
         $template = $this->environment->loadTemplate($templateName);
 
         if (!$template->hasBlock($blockName)) {

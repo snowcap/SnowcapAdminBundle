@@ -2,7 +2,7 @@
 
 namespace Snowcap\AdminBundle\Datalist\Action\Type;
 
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
@@ -42,9 +42,9 @@ class ContentAdminActionType extends AbstractActionType {
     public function getUrl(DatalistActionInterface $action, $item, array $options = array())
     {
         $parameters = array();
+        $accessor = PropertyAccess::getPropertyAccessor();
         foreach($options['params'] as $paramName => $paramPath) {
-            $propertyPath = new PropertyPath($paramPath);
-            $paramValue = $propertyPath->getValue($item);
+            $paramValue = $accessor->getValue($item, $paramPath);
             $parameters[$paramName] = $paramValue;
         }
 
