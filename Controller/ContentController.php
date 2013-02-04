@@ -61,7 +61,18 @@ class ContentController extends BaseController
         $form->setData($entity);
 
         if ($request->isMethod('POST')) {
-            $this->save($admin, $form, $entity, 'content.create.flash.success', 'content.create.flash.error');
+            try {
+                $this->save($admin, $form, $entity);
+                $this->setFlash('success', 'content.create.flash.success');
+                $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
+                    $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
+                    $this->getRoutingHelper()->generateUrl($admin, 'index');
+
+                return $this->redirect($redirectUrl);
+            }
+            catch(\Exception $e) {
+                $this->setFlash('error', 'content.create.flash.error');
+            }
         }
         $templateParams = array(
             'admin' => $admin,
@@ -88,7 +99,18 @@ class ContentController extends BaseController
         $form->setData($entity);
 
         if ($request->isMethod('POST')) {
-            $this->save($admin, $form, $entity, 'content.update.flash.success', 'content.update.flash.error');
+            try {
+                $this->save($admin, $form, $entity);
+                $this->setFlash('success', 'content.update.flash.success');
+                $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
+                    $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
+                    $this->getRoutingHelper()->generateUrl($admin, 'index');
+
+                return $this->redirect($redirectUrl);
+            }
+            catch(\Exception $e) {
+                $this->setFlash('error', 'content.update.flash.error');
+            }
         }
         $templateParams = array(
             'admin' => $admin,
@@ -182,26 +204,13 @@ class ContentController extends BaseController
      * @param string $errorFlash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    protected function save(ContentAdmin $admin, Form $form, $entity, $successFlash, $errorFlash) {
+    protected function save(ContentAdmin $admin, Form $form, $entity) {
         $form->bind($this->getRequest());
         if ($form->isValid()) {
             $admin->saveEntity($entity);
             $admin->flush();
-            $this->setFlash('success', $successFlash);
-            $saveMode = $this->getRequest()->get('saveMode');
-            if ($saveMode === ContentAdmin::SAVEMODE_CONTINUE) {
-                $redirectUrl = $this->getRoutingHelper()->generateUrl(
-                    $admin,
-                    'update',
-                    array('id' => $entity->getId())
-                );
-            } else {
-                $redirectUrl = $this->getRoutingHelper()->generateUrl($admin, 'index');
-            }
-
-            return $this->redirect($redirectUrl);
         } else {
-            $this->setFlash('error', $errorFlash);
+            throw new \Exception('could not save');
         }
     }
 
