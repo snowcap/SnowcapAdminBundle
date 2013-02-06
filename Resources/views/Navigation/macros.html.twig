@@ -1,5 +1,7 @@
-{% macro menu_item(admin) %}
-    <li{% if is_active_path(admin.defaultPath) %} class="active"{% endif %}>
-        <a href="{{ admin.defaultPath }}" >{{ admin.option('label')|transchoice(10) }}</a>
+{% macro menu_item(admin, action, label) %}
+    {% set path = action is empty ? admin.defaultPath : admin_content_path(admin, action) %}
+    {% set label = label|default(admin.option('label')) %}
+    <li{% if is_active_path(path) %} class="active"{% endif %}>
+        <a href="{{ path }}" >{{ label|transchoice(10) }}</a>
     </li>
 {% endmacro %}

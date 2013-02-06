@@ -33,12 +33,12 @@ services:
         tags:
             - { name: request.param_converter }
 
-    # Subscriber for activating admin classes shortcuts
-#    snowcap_admin.admin_subscriber:
-#        class: Snowcap\AdminBundle\Listener\AdminSubscriber
-#        arguments: [@snowcap_admin]
-#        tags:
-#            - { name: doctrine.event_subscriber}
+    # Event listeners
+    snowcap_admin.listener_navigation:
+        class: Snowcap\AdminBundle\EventListener\NavigationListener
+        arguments: [@snowcap_core.navigation]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     # Twig extensions and loaders
     snowcap_admin.twig_admin:
