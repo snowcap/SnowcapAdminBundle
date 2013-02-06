@@ -184,7 +184,7 @@ abstract class ContentAdmin extends AbstractAdmin
     /**
      * @return string
      */
-    public function getDefaultUrl()
+    public function getDefaultPath()
     {
         return $this->routingHelper->generateUrl($this, 'index');
     }

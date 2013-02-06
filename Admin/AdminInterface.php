@@ -9,7 +9,7 @@ interface AdminInterface
     /**
      * @return string
      */
-    public function getDefaultUrl();
+    public function getDefaultPath();
 
     /**
      * @param string $alias
