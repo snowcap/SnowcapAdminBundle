@@ -1,0 +1,54 @@
+{% import 'SnowcapBootstrapBundle::macros.html.twig' as bootstrap %}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{% block title %}Snowcap Admin{% endblock %}</title>
+
+        {# stylesheets block #}
+        {% block stylesheets %}
+            {% stylesheets
+                'bundles/snowcapbootstrap/vendor/bootstrap/less/bootstrap.less'
+                'bundles/snowcapadmin/less/main.less'
+                'bundles/snowcapbootstrap/vendor/bootstrap/less/responsive.less'
+                filter="lessphp,cssrewrite"
+            %}
+                <link rel="stylesheet" href="{{ asset_url }}" />
+            {% endstylesheets %}
+        {% endblock stylesheets %}
+
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+	</head>
+	<body>
+        {{ render(controller('SnowcapAdminBundle:Navigation:main')) }}
+        <div class="container">
+            {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
+            {% for type, flash in app.session.getFlashes() %}
+                {{ alert(flash, type, null, true) }}
+            {% endfor %}
+            {% block body %}{% endblock %}
+        </div>
+        <div class="modal fade" id="modal" style="display: none"></div>
+        {% block javascripts %}
+            {% javascripts
+                'bundles/snowcapcore/vendor/jquery/jquery.js'
+                'bundles/snowcapcore/js/all.js'
+                'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-affix.js'
+                'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-modal.js'
+                'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-tooltip.js'
+                'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-typeahead.js'
+                'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-dropdown.js'
+                'bundles/snowcapbootstrap/js/all.js'
+                'bundles/snowcapadmin/vendor/ckeditor/ckeditor.js'
+                'bundles/snowcapadmin/vendor/ckeditor/adapters/jquery.js'
+                'bundles/snowcapadmin/vendor/jstree/jquery.jstree.js'
+                'bundles/snowcapadmin/vendor/autosize/jquery.autosize-min.js'
+                'bundles/snowcapadmin/js/all.js'
+                'bundles/snowcapadmin/js/ckeditor.js'
+            %}
+                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+	</body>
+</html>
