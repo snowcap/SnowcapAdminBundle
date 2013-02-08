@@ -32,4 +32,12 @@ abstract class AbstractFieldType implements FieldTypeInterface
         $viewContext['options'] = $options;
         $viewContext['translation_domain'] = $field->getDatalist()->getOption('translation_domain');
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return $this->getName();
+    }
 }

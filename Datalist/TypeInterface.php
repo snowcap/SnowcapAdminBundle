@@ -14,4 +14,9 @@ interface TypeInterface {
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver);
+
+    /**
+     * @return string
+     */
+    public function getBlockName();
 }

@@ -4,7 +4,6 @@ namespace Snowcap\AdminBundle\Twig\Extension;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Form\Exception\InvalidPropertyException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormFactory;
 
@@ -13,6 +12,7 @@ use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
+use Snowcap\AdminBundle\Twig\TokenParser\DatalistThemeTokenParser;
 
 
 class DatalistExtension extends \Twig_Extension implements ContainerAwareInterface
@@ -33,11 +33,22 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     private $formFactory;
 
     /**
+     * @var string
+     */
+    private $defaultTheme = 'SnowcapAdminBundle:Datalist:datalist_grid_layout.html.twig';
+
+    /**
+     * @var array
+     */
+    private $themes;
+
+    /**
      * @param \Symfony\Component\Form\FormFactory $formFactory
      */
     public function __construct(FormFactory $formFactory)
     {
         $this->formFactory = $formFactory;
+        $this->themes = new \SplObjectStorage();
     }
 
     /**
@@ -72,17 +83,25 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     }
 
     /**
+     * @return array
+     */
+    public function getTokenParsers()
+    {
+        return array(new DatalistThemeTokenParser());
+    }
+
+    /**
      * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
      * @return string
      */
     public function renderDatalistWidget(DatalistInterface $datalist)
     {
-        $blockName = 'datalist';
+        $blockNames = array($datalist->getType()->getBlockName(), '_' . $datalist->getName() . '_datalist');
 
         $viewContext = new ViewContext();
         $datalist->getType()->buildViewContext($viewContext, $datalist, $datalist->getOptions());
 
-        return $this->renderBlock($datalist->getOption('layout'), $blockName, $viewContext->all());
+        return $this->renderBlock($datalist, $blockNames, $viewContext->all());
     }
 
     /**
@@ -92,7 +111,10 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     public function renderDatalistField(DatalistFieldInterface $field, $row)
     {
-        $blockName = 'datalist_field_' . $field->getType()->getName();
+        $blockNames = array(
+            'datalist_field_' . $field->getType()->getBlockName(),
+            '_' . $field->getDatalist()->getName() . '_' . $field->getName() . '_field',
+        );
 
         $accessor = PropertyAccess::getPropertyAccessor();
         try {
@@ -111,7 +133,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
         $viewContext = new ViewContext();
         $field->getType()->buildViewContext($viewContext, $field, $value, $field->getOptions());
 
-        return $this->renderBlock($field->getDatalist()->getOption('layout'), $blockName, $viewContext->all());
+        return $this->renderBlock($field->getDatalist(), $blockNames, $viewContext->all());
     }
 
     /**
@@ -120,17 +142,16 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     public function renderDatalistSearch(DatalistInterface $datalist)
     {
-        $blockName = 'datalist_search';
-
-        return $this->renderblock(
-            $datalist->getOption('layout'),
-            $blockName,
-            array(
-                'form' => $datalist->getSearchForm()->createView(),
-                'placeholder' => $datalist->getOption('search_placeholder'),
-                'submit' => $datalist->getOption('search_submit'),
-            )
+        $blockNames = array(
+            'datalist_search',
+            '_' . $datalist->getName() . '_search',
         );
+
+        return $this->renderblock($datalist, $blockNames, array(
+            'form' => $datalist->getSearchForm()->createView(),
+            'placeholder' => $datalist->getOption('search_placeholder'),
+            'submit' => $datalist->getOption('search_submit'),
+        ));
     }
 
     /**
@@ -139,18 +160,17 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     public function renderDatalistFilters(DatalistInterface $datalist)
     {
-        $blockName = 'datalist_filters';
-
-        return $this->renderblock(
-            $datalist->getOption('layout'),
-            $blockName,
-            array(
-                'filters' => $datalist->getFilters(),
-                'submit' => $datalist->getOption('filter_submit'),
-                'reset' => $datalist->getOption('filter_reset'),
-                'url' => $this->container->get('request')->getPathInfo()
-            )
+        $blockNames = array(
+            'datalist_filters',
+            '_' . $datalist->getName() . '_filters'
         );
+
+        return $this->renderblock($datalist, $blockNames, array(
+            'filters' => $datalist->getFilters(),
+            'submit' => $datalist->getOption('filter_submit'),
+            'reset' => $datalist->getOption('filter_reset'),
+            'url' => $this->container->get('request')->getPathInfo()
+        ));
     }
 
     /**
@@ -159,16 +179,15 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     public function renderDatalistFilter(DatalistFilterInterface $filter)
     {
-        $blockName = 'datalist_filter_' . $filter->getType()->getName();
+        $blockNames = array(
+            'datalist_filter_' . $filter->getType()->getBlockName(),
+            '_' . $filter->getDatalist()->getName() . '_' . $filter->getName() . '_filter'
+        );
         $childForm = $filter->getDatalist()->getFilterForm()->get($filter->getName());
 
-        return $this->renderblock(
-            $filter->getDatalist()->getOption('layout'),
-            $blockName,
-            array(
-                'form' => $childForm->createView(),
-            )
-        );
+        return $this->renderblock($filter->getDatalist(), $blockNames, array(
+            'form' => $childForm->createView(),
+        ));
     }
 
     /**
@@ -178,15 +197,17 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     public function renderDatalistAction(DatalistActionInterface $action, $item)
     {
-        $blockName = 'datalist_action_' . $action->getType()->getName();
-
+        $blockNames = array(
+            'datalist_action_' . $action->getType()->getName(),
+            '_' . $action->getDatalist()->getName() . '_' . $action->getName() . '_action'
+        );
 
         $viewContext = new ViewContext();
         $action->getType()->buildViewContext($viewContext, $action, $item, $action->getOptions());
 
         return $this->renderblock(
-            $action->getDatalist()->getOption('layout'),
-            $blockName,
+            $action->getDatalist(),
+            $blockNames,
             $viewContext->all()
         );
     }
@@ -198,16 +219,43 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      * @return string
      * @throws \Exception
      */
-    private function renderblock($layout, $blockName, array $context = array())
+    private function renderblock(DatalistInterface $datalist, array $blockNames, array $context = array())
     {
-        $templateName = 'SnowcapAdminBundle:Datalist:datalist_' . $layout . '_layout.html.twig';
-        $template = $this->environment->loadTemplate($templateName);
-
-        if (!$template->hasBlock($blockName)) {
-            throw new \Exception(sprintf('The block "%s" could not be loaded ', $blockName));
+        $templateNames = $this->getTemplateNames($datalist);
+        foreach($templateNames as $templateName) {
+            $template = $this->environment->loadTemplate($templateName);
+            do {
+                foreach($blockNames as $blockName) {
+                    if ($template->hasBlock($blockName)) {
+                        return $template->renderBlock($blockName, $context);
+                    }
+                }
+            }
+            while(($template = $template->getParent($context)) !== false);
         }
 
-        return $template->renderBlock($blockName, $context);
+        throw new \Exception(sprintf('No block found (tried to find %s)', implode(',', $blockNames)));
+    }
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
+     * @return array
+     */
+    private function getTemplateNames(DatalistInterface $datalist)
+    {
+        if(isset($this->themes[$datalist])){
+            return $this->themes[$datalist];
+        }
+
+        return array($this->defaultTheme);
+    }
+
+    /**
+     * @param string $theme
+     */
+    public function setTheme(DatalistInterface $datalist, $ressources)
+    {
+        $this->themes[$datalist] = $ressources;
     }
 
     /**

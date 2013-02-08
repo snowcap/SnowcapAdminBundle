@@ -30,4 +30,12 @@ abstract class AbstractActionType implements ActionTypeInterface {
         $viewContext['translation_domain'] = $action->getDatalist()->getOption('translation_domain');
         $viewContext['options'] = $options;
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return $this->getName();
+    }
 }

@@ -15,4 +15,12 @@ abstract class AbstractFilterType implements FilterTypeInterface
         $resolver
             ->setDefaults(array('property_path' => null));
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return $this->getName();
+    }
 }
