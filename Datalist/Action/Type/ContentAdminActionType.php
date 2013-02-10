@@ -56,6 +56,14 @@ class ContentAdminActionType extends AbstractActionType {
      */
     public function getName()
     {
+        return 'content_admin';
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
         return 'simple';
     }
 }

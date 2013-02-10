@@ -34,9 +34,10 @@ interface DatalistFieldInterface
     public function getOption($name, $default = null);
 
     /**
-     * @return string
+     * @param mixed $row
+     * @return mixed
      */
-    public function getPropertyPath();
+    public function getData($row);
 
     /**
      * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist

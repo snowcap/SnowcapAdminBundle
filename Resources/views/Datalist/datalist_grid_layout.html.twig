@@ -51,8 +51,8 @@
     </table>
 {% endblock datalist_table %}
 
-{# datalist text field type block #}
-{% block datalist_field_text %}
+{# text field #}
+{% block text_field %}
     <td>
         {% if value is not null %}
             {{ value|raw }}
@@ -60,10 +60,10 @@
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
     </td>
-{% endblock datalist_field_text %}
+{% endblock text_field %}
 
-{# datalist datetime field type block #}
-{% block datalist_field_datetime %}
+{# datetime field #}
+{% block datetime_field %}
     <td>
         {% if value is not null %}
             {{ value|date(options['format'])  }}
@@ -71,15 +71,15 @@
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
     </td>
-{% endblock datalist_field_datetime %}
+{% endblock datetime_field %}
 
-{# datalist label field type block #}
-{% block datalist_field_label %}
+{# label field #}
+{% block label_field %}
     <td><span class="label label-{{ class }}">{{ value|trans({}, translation_domain) }}</span></td>
-{% endblock datalist_field_label %}
+{% endblock label_field %}
 
-{# datalist heading field type block #}
-{% block datalist_field_heading %}
+{# heading field #}
+{% block heading_field %}
     <th>
         {% if value is not null %}
             {{ value|raw }}
@@ -87,9 +87,9 @@
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
     </th>
-{% endblock datalist_field_heading %}
+{% endblock heading_field %}
 
-{# datalist search block #}
+{# datalist search #}
 {% block datalist_search %}
     <form class="form-search" method="get">
         <div class="input-append">
@@ -99,7 +99,7 @@
     </form>
 {% endblock datalist_search %}
 
-{# datalist filters block #}
+{# datalist filters #}
 {% block datalist_filters %}
     <div class="well">
         <form class="form-vertical" method="get">
@@ -112,28 +112,31 @@
     </div>
 {% endblock datalist_filters %}
 
-{# datalist choice filter block #}
-{% block datalist_filter_choice %}
+{# choice filter #}
+{% block choice_filter %}
     <div class="control-group">
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
     </div>
-{% endblock datalist_filter_choice %}
+{% endblock choice_filter %}
 
-{% block datalist_filter_search %}
+{# search filter #}
+{% block search_filter %}
     <div class="control-group">
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
     </div>
-{% endblock datalist_filter_search %}
+{% endblock search_filter %}
 
-{% block datalist_filter_entity %}
+{# entity filter #}
+{% block entity_filter %}
     <div class="control-group">
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
     </div>
-{% endblock datalist_filter_entity %}
+{% endblock entity_filter %}
 
-{% block datalist_action_simple %}
+{# simple action #}
+{% block simple_action %}
     <a href="{{ url }}">{{ label|trans({}, translation_domain) }}</a>
-{% endblock datalist_action_simple %}
+{% endblock simple_action %}

@@ -2,6 +2,10 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
+
 use Snowcap\AdminBundle\Datalist\DatalistInterface;
 
 class DatalistField implements DatalistFieldInterface
@@ -59,21 +63,32 @@ class DatalistField implements DatalistFieldInterface
     }
 
     /**
-     * @return string
-     *
-     * TODO: check if not better handled through options
+     * @param mixed $row
+     * @return mixed
+     * @throws \UnexpectedValueException
      */
-    public function getPropertyPath()
+    public function getData($row)
     {
-        $propertyPath = $this->getOption('property_path');
-        if (null === $propertyPath) {
-            $propertyPath = $this->config->getName();
-            if (null === $this->datalist->getOption('data_class')) {
-                $propertyPath = '[' . $propertyPath . ']';
+        $accessor = PropertyAccess::getPropertyAccessor();
+        $propertyPath = $this->getPropertyPath();
+        try {
+            $value = $accessor->getValue($row, $propertyPath);
+        } catch (NoSuchPropertyException $e) {
+            if (is_object($row) && !$this->getDatalist()->hasOption('data_class')) {
+                $message = sprintf('Missing "data_class" option');
+            } else {
+                $message = sprintf('unknown property "%s"', $propertyPath);
             }
+            throw new \UnexpectedValueException($message);
+        } catch (UnexpectedTypeException $e) {
+            $value = null;
         }
 
-        return $propertyPath;
+        if(null === $value && $this->hasOption('default')) {
+            $value = $this->getOption('default');
+        }
+
+        return $value;
     }
 
     /**
@@ -99,5 +114,23 @@ class DatalistField implements DatalistFieldInterface
     public function getType()
     {
         return $this->config->getType();
+    }
+
+    /**
+     * @return string
+     *
+     * TODO: check if not better handled through options
+     */
+    private function getPropertyPath()
+    {
+        $propertyPath = $this->getOption('property_path');
+        if (null === $propertyPath) {
+            $propertyPath = $this->config->getName();
+            if (null === $this->datalist->getOption('data_class')) {
+                $propertyPath = '[' . $propertyPath . ']';
+            }
+        }
+
+        return $propertyPath;
     }
 }

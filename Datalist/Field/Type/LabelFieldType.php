@@ -28,17 +28,17 @@ class LabelFieldType extends AbstractFieldType
      * @param mixed $value
      * @param array $options
      */
-    public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $value, array $options)
+    public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $row, array $options)
     {
-        parent::buildViewContext($viewContext, $field, $value, $options);
+        parent::buildViewContext($viewContext, $field, $row, $options);
 
         $mappings = $options['mappings'];
-        if(!array_key_exists($value, $mappings)) {
-            throw new \UnexpectedValueException(sprintf('No mapping for value %s', $value));
+        if(!array_key_exists($viewContext['value'], $mappings)) {
+            throw new \UnexpectedValueException(sprintf('No mapping for value %s', $viewContext['value']));
         }
 
-        $viewContext['class'] = $value;
-        $viewContext['value'] = $mappings[$value];
+        $viewContext['class'] = $viewContext['value'];
+        $viewContext['value'] = $mappings[$viewContext['value']];
     }
 
     /**

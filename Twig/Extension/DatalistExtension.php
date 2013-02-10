@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 
 use Snowcap\AdminBundle\Datalist\DatalistInterface;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
@@ -38,7 +39,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     private $defaultTheme = 'SnowcapAdminBundle:Datalist:datalist_grid_layout.html.twig';
 
     /**
-     * @var array
+     * @var SplObjectStorage
      */
     private $themes;
 
@@ -96,7 +97,10 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     public function renderDatalistWidget(DatalistInterface $datalist)
     {
-        $blockNames = array($datalist->getType()->getBlockName(), '_' . $datalist->getName() . '_datalist');
+        $blockNames = array(
+            $datalist->getType()->getBlockName(),
+            '_' . $datalist->getName() . '_datalist'
+        );
 
         $viewContext = new ViewContext();
         $datalist->getType()->buildViewContext($viewContext, $datalist, $datalist->getOptions());
@@ -112,26 +116,14 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     public function renderDatalistField(DatalistFieldInterface $field, $row)
     {
         $blockNames = array(
-            'datalist_field_' . $field->getType()->getBlockName(),
+            $field->getType()->getBlockName() . '_field',
             '_' . $field->getDatalist()->getName() . '_' . $field->getName() . '_field',
         );
 
-        $accessor = PropertyAccess::getPropertyAccessor();
-        try {
-            $value = $accessor->getValue($row, $field->getPropertyPath());
-        } catch (InvalidPropertyException $e) {
-            if (is_object($row) && !$field->getDatalist()->hasOption('data_class')) {
-                $message = sprintf('Missing "data_class" option');
-            } else {
-                $message = sprintf('unknown property "%s"', $field->getPropertyPath());
-            }
-            throw new \UnexpectedValueException($message);
-        } catch (UnexpectedTypeException $e) {
-            $value = null;
-        }
+
 
         $viewContext = new ViewContext();
-        $field->getType()->buildViewContext($viewContext, $field, $value, $field->getOptions());
+        $field->getType()->buildViewContext($viewContext, $field, $row, $field->getOptions());
 
         return $this->renderBlock($field->getDatalist(), $blockNames, $viewContext->all());
     }
@@ -180,7 +172,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     public function renderDatalistFilter(DatalistFilterInterface $filter)
     {
         $blockNames = array(
-            'datalist_filter_' . $filter->getType()->getBlockName(),
+            $filter->getType()->getBlockName() . '_filter',
             '_' . $filter->getDatalist()->getName() . '_' . $filter->getName() . '_filter'
         );
         $childForm = $filter->getDatalist()->getFilterForm()->get($filter->getName());
@@ -198,7 +190,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     public function renderDatalistAction(DatalistActionInterface $action, $item)
     {
         $blockNames = array(
-            'datalist_action_' . $action->getType()->getName(),
+            $action->getType()->getBlockName() . '_action',
             '_' . $action->getDatalist()->getName() . '_' . $action->getName() . '_action'
         );
 
