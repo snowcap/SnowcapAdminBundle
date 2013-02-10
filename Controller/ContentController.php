@@ -28,12 +28,10 @@ class ContentController extends BaseController
         $datalist->setDatasource($datasource);
         $datalist->bind($request);
 
-        $templateParams = array(
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':index.html.twig', array(
             'admin' => $admin,
             'datalist' => $datalist
-        );
-
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':index.html.twig', $templateParams);
+        ));
     }
 
     /**
@@ -44,10 +42,10 @@ class ContentController extends BaseController
     {
         $entity = $admin->findEntity($request->attributes->get('id'));
 
-        return $this->render(
-            $this->getTemplate('SnowcapAdminBundle:Content:view.html.twig', $admin->getAlias()),
-            array('admin' => $admin, 'entity' => $entity)
-        );
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':view.html.twig', array(
+            'admin' => $admin,
+            'entity' => $entity
+        ));
     }
 
     /**
@@ -74,13 +72,12 @@ class ContentController extends BaseController
                 $this->setFlash('error', 'content.create.flash.error');
             }
         }
-        $templateParams = array(
+
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':create.html.twig', array(
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
-        );
-
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':create.html.twig', $templateParams);
+        ));
     }
 
     /**
@@ -112,13 +109,12 @@ class ContentController extends BaseController
                 $this->setFlash('error', 'content.update.flash.error');
             }
         }
-        $templateParams = array(
+
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':update.html.twig', array(
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
-        );
-
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':update.html.twig', $templateParams);
+        ));
     }
 
     /**
@@ -161,15 +157,12 @@ class ContentController extends BaseController
 
             }
         }
-        $templateParams = array(
+
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', array(
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
-            'form_template' => $this->getTemplate('SnowcapAdminBundle:Content:modalForm.html.twig', $admin->getAlias()),
-            'form_theme_template' => $this->getTemplate('SnowcapAdminBundle:Form:form_layout.html.twig'),
-        );
-
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', $templateParams);
+        ));
     }
 
     /**

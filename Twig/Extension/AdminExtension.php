@@ -2,7 +2,6 @@
 
 namespace Snowcap\AdminBundle\Twig\Extension;
 
-use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Snowcap\AdminBundle\AdminManager;

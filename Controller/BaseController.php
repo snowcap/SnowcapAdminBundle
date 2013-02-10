@@ -25,35 +25,6 @@ class BaseController extends Controller
     }
 
     /**
-     * Find a content-specific template name in the child bundle
-     *
-     * @param string $templateName the original template name as used in SnowcapAdminBundle
-     * @param string $code the specific content admin code
-     *
-     * @return string
-     */
-    protected function getTemplate($templateName, $code = null)
-    {
-        $kernel = $this->get('kernel');
-        foreach($kernel->getBundles() as $bundle) {
-            if('SnowcapAdminBundle' === $bundle->getParent()) {
-                $adminBundleName = $bundle->getName();
-                $templateNameParts = explode(':', $templateName);
-                $templateNameParts[0] = $adminBundleName;
-                if(null !== $code) {
-                    $templateNameParts[1] = String::camelize($code);
-                }
-                $candidate = implode(':', $templateNameParts);
-                if($this->get('templating')->exists($candidate)) {
-                    return $candidate;
-                }
-            }
-        }
-
-        return $templateName;
-    }
-
-    /**
      * @param $type
      * @param $code
      *
