@@ -13,6 +13,7 @@
                 'bundles/snowcapadmin/less/main.less'
                 'bundles/snowcapbootstrap/vendor/bootstrap/less/responsive.less'
                 filter="lessphp,cssrewrite"
+                output='cache/assetic/css/snowcapadmin.css'
             %}
                 <link rel="stylesheet" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -46,6 +47,7 @@
                 'bundles/snowcapadmin/vendor/autosize/jquery.autosize-min.js'
                 'bundles/snowcapadmin/js/all.js'
                 'bundles/snowcapadmin/js/ckeditor.js'
+                output='cache/assetic/css/snowcapadmin.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
