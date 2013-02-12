@@ -91,7 +91,7 @@
 
 {# datalist search #}
 {% block datalist_search %}
-    <form class="form-search" method="get">
+    <form class="form-search" method="get" novalidate>
         <div class="input-append">
             {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, "SnowcapAdminBundle"), 'class': 'input-xxlarge search-query'}}) }}
             <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
@@ -102,7 +102,7 @@
 {# datalist filters #}
 {% block datalist_filters %}
     <div class="well">
-        <form class="form-vertical" method="get">
+        <form class="form-vertical" method="get" novalidate>
             {% for filter in filters %}
                 {{ datalist_filter(filter) }}
             {% endfor %}

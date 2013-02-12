@@ -32,7 +32,8 @@ class ChoiceFilterType extends AbstractFilterType
     {
         $formOptions = array(
             'choices' => $options['choices'],
-            'label' => $options['label']
+            'label' => $options['label'],
+            'required' => false
         );
         if(isset($options['empty_value'])) {
             $formOptions['empty_value'] = $options['empty_value'];

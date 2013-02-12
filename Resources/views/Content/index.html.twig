@@ -17,11 +17,10 @@
     {# list block #}
     {% block list %}
 
-        {% if datalist is not empty %}
-            {{ datalist_widget(datalist) }}
-        {% else %}
+        {% if datalist is  empty %}
             {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, 'SnowcapAdminBundle')}, 'SnowcapAdminBundle')) }}
         {% endif %}
+        {{ datalist_widget(datalist) }}
         <hr/>
     {% endblock list %}
 
