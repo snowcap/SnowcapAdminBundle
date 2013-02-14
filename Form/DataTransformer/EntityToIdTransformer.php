@@ -66,6 +66,9 @@ class EntityToIdTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
+        if(null === $value) {
+            return null;
+        }
         if($this->multiple) {
             $reverseTransformedValue = new ArrayCollection();
             foreach($value as $id) {
