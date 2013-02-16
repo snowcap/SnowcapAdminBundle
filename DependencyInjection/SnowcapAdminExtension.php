@@ -32,6 +32,11 @@ class SnowcapAdminExtension extends Extension
             ->replaceArgument(2, $config['content']['route_prefix'])
             ->replaceArgument(3, $config['content']['route_name_prefix']);
 
+        $container->findDefinition('snowcap_admin')->addMethodCall(
+            'setDefaultTranslationDomain',
+            array($config['default_translation_domain'])
+        );
+
         $container->setParameter('snowcap_admin.im_formats', $config['im_formats']);
 
         /*if(array_key_exists('translation_catalogues', $config)) {

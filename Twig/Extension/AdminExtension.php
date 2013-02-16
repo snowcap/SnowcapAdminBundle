@@ -52,6 +52,7 @@ class AdminExtension extends \Twig_Extension
             'admin' => new \Twig_Function_Method($this, 'getAdminByCode'),
             'admin_label' => new \Twig_Function_Method($this, 'getAdminLabel'),
             'admin_content_path' => new \Twig_Function_Method($this, 'getAdminContentPath'),
+            'admin_translation_domain' => new \Twig_Function_Method($this, 'getDefaultTranslationDomain'),
         );
     }
 
@@ -109,6 +110,14 @@ class AdminExtension extends \Twig_Extension
         $label = $admin->getOption('label');
 
         return $this->translator->transChoice($label, $number, array(), 'SnowcapAdminBundle');
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultTranslationDomain()
+    {
+        return $this->adminManager->getDefaultTranslationDomain();
     }
 
     /**

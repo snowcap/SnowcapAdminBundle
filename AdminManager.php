@@ -11,6 +11,10 @@ use Snowcap\AdminBundle\Admin\AdminInterface;
 class AdminManager
 {
     /**
+     * @var string
+     */
+    private $defaultTranslationDomain;
+    /**
      * @var array
      */
     private $admins = array();
@@ -59,25 +63,18 @@ class AdminManager
     }
 
     /**
-     * @param string $adminName
-     * @param array $adminParams
-     *
-     * TODO: remove OR move ?
+     * @param string $defaultTranslationDomain
      */
-    protected function validateAdmin($adminName, array $adminParams)
+    public function setDefaultTranslationDomain($defaultTranslationDomain)
     {
-        if (!is_array($adminParams)) {
-            throw new Exception(sprintf('The parameters of the admin section "%s" have to be defined as an array, %s given', $adminName, gettype($adminParams)), Exception::ADMIN_INVALID);
-        }
-        if (!array_key_exists('admin_class', $adminParams)) {
-            throw new Exception(sprintf('The admin section "%s" lacks a "admin_class" parameter.', $adminName), Exception::ADMIN_INVALID);
-        }
-        if (!class_exists($adminParams['admin_class'])) {
-            throw new Exception(sprintf('The admin section "%s" has an invalid "admin_class" parameter (%s).', $adminName, $adminParams['admin_class']), Exception::ADMIN_INVALID);
-        }
-        $expectedParent = 'Snowcap\\AdminBundle\\Admin\\AbstractAdmin';
-        if (!in_array($expectedParent, class_parents($adminParams['admin_class']))) { //TODO: replace with instanceof ?
-            throw new Exception(sprintf('The admin section class %s for the admin section "%s" must extend the class %s.', $adminParams['admin_class'], $adminName, $expectedParent), Exception::ADMIN_INVALID);
-        }
+        $this->defaultTranslationDomain = $defaultTranslationDomain;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultTranslationDomain()
+    {
+        return $this->defaultTranslationDomain;
     }
 }
