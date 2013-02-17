@@ -8,7 +8,7 @@
     {% block pageheader %}
         <div class="page-header">
             <h1>
-                {{ "content.list.title"|trans({'%content_name%': admin.option('label')|transchoice(10, {}, admin_translation_domain())}, 'SnowcapAdminBundle') }}
+                {{ "content.list.title"|trans({'%content_name%': admin_label(admin, true)}, 'SnowcapAdminBundle') }}
             </h1>
         </div>
     {% endblock pageheader %}
@@ -20,7 +20,7 @@
     {% block list %}
 
         {% if datalist is  empty %}
-            {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin.option('label')|transchoice(1, {}, admin_translation_domain())}, 'SnowcapAdminBundle')) }}
+            {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin_label(admin)}, 'SnowcapAdminBundle')) }}
         {% endif %}
         {{ datalist_widget(datalist) }}
         <hr/>

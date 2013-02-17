@@ -109,7 +109,7 @@ class AdminExtension extends \Twig_Extension
         $number = $plural ? 10 : 1;
         $label = $admin->getOption('label');
 
-        return $this->translator->transChoice($label, $number, array(), 'SnowcapAdminBundle');
+        return $this->translator->transChoice($label, $number, array(), $this->adminManager->getDefaultTranslationDomain());
     }
 
     /**
