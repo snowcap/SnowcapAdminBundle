@@ -32,6 +32,9 @@
         </div>
         <div class="modal fade" id="modal" style="display: none"></div>
         {% block javascripts %}
+            <script type="text/javascript">
+                var CKEDITOR_BASEPATH = '{{ asset('bundles/snowcapadmin/vendor/ckeditor/') }}';
+            </script>
             {% javascripts
                 'bundles/snowcapcore/vendor/jquery/jquery.js'
                 'bundles/snowcapcore/js/all.js'
@@ -42,12 +45,10 @@
                 'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-dropdown.js'
                 'bundles/snowcapbootstrap/js/all.js'
                 'bundles/snowcapadmin/vendor/ckeditor/ckeditor.js'
-                'bundles/snowcapadmin/vendor/ckeditor/adapters/jquery.js'
-                'bundles/snowcapadmin/vendor/jstree/jquery.jstree.js'
                 'bundles/snowcapadmin/vendor/autosize/jquery.autosize-min.js'
                 'bundles/snowcapadmin/js/all.js'
                 'bundles/snowcapadmin/js/ckeditor.js'
-                output='cache/assetic/css/snowcapadmin.js'
+                output='cache/assetic/js/snowcapadmin.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
