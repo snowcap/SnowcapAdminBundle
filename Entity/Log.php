@@ -13,8 +13,6 @@ use Snowcap\CoreBundle\Doctrine\Mapping as SnowcapCore;
  * @ORM\Table(name="snowcap_admin_log")
  */
 class Log {
-
-    CONST TYPE_CONTENT = 'content';
     CONST TYPE_CATALOG_TRANSLATION = 'catalog_translation';
 
     /**
@@ -30,7 +28,7 @@ class Log {
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string")
+     * @ORM\Column(name="type", type="string", length=64)
      */
     protected $type;
 
@@ -44,7 +42,7 @@ class Log {
     /**
      * @var text
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\Column(name="description", type="text")
      */
     protected $description;
 
@@ -56,13 +54,13 @@ class Log {
 
     /**
      * @var string
-     * @ORM\Column(name="username", type="string", length=255, nullable=true)
+     * @ORM\Column(name="username", type="string", length=255)
      */
     protected $username;
 
     /**
      * @var array
-     * @ORM\Column(name="diff", type="array")
+     * @ORM\Column(name="diff", type="array", nullable=true)
      */
     protected $diff;
 
@@ -81,15 +79,17 @@ class Log {
     }
 
     /**
-     * @param datetime $createdAt
+     * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
-     * @return datetime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -99,9 +99,11 @@ class Log {
     /**
      * @param array $diff
      */
-    public function setDiff($diff)
+    public function setDiff(array $diff = null)
     {
         $this->diff = $diff;
+
+        return $this;
     }
 
     /**
@@ -118,6 +120,8 @@ class Log {
     public function setUsername($username)
     {
         $this->username = $username;
+
+        return $this;
     }
 
     /**
@@ -134,6 +138,8 @@ class Log {
     public function setAction($action)
     {
         $this->action = $action;
+
+        return $this;
     }
 
     /**
@@ -150,6 +156,8 @@ class Log {
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
     }
 
     /**
@@ -163,9 +171,11 @@ class Log {
     /**
      * @param array $params
      */
-    public function setParams($params)
+    public function setParams(array $params = null)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     /**
@@ -182,6 +192,8 @@ class Log {
     public function setType($type)
     {
         $this->type = $type;
+
+        return $this;
     }
 
     /**
@@ -191,5 +203,4 @@ class Log {
     {
         return $this->type;
     }
-
 }

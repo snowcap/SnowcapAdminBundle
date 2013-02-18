@@ -1,16 +1,17 @@
 <?php
 namespace Snowcap\AdminBundle\Admin;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
 use Snowcap\AdminBundle\Datalist\DatalistFactory;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
+use Snowcap\AdminBundle\Event\AdminEvents;
+use Snowcap\AdminBundle\Event\ContentAdminEvent;
 
 /**
  * Content admin class
@@ -41,6 +42,11 @@ abstract class ContentAdmin extends AbstractAdmin
      * @var ContentRoutingHelper
      */
     protected $routingHelper;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
     /**
      * Return the main admin querybuilder for this content
@@ -88,12 +94,15 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function saveEntity($entity)
     {
-        $this->em->persist($entity);
-    }
-
-    public function flush($entity = null)
-    {
-        $this->em->flush($entity);
+        if($this->em->getUnitOfWork()->isInIdentityMap($entity)) {
+            $this->em->flush($entity);
+            $this->eventDispatcher->dispatch(AdminEvents::CONTENT_UPDATE, new ContentAdminEvent($this, $entity));
+        }
+        else {
+            $this->em->persist($entity);
+            $this->em->flush($entity);
+            $this->eventDispatcher->dispatch(AdminEvents::CONTENT_CREATE, new ContentAdminEvent($this, $entity));
+        }
     }
 
     /**
@@ -104,6 +113,9 @@ abstract class ContentAdmin extends AbstractAdmin
     public function deleteEntity($entity)
     {
         $this->em->remove($entity);
+        $this->em->flush();
+
+        $this->eventDispatcher->dispatch(AdminEvents::CONTENT_DELETE, new ContentAdminEvent($this, $entity));
     }
 
     /**
@@ -136,6 +148,22 @@ abstract class ContentAdmin extends AbstractAdmin
     public function setRoutingHelper(ContentRoutingHelper $routingHelper)
     {
         $this->routingHelper = $routingHelper;
+    }
+
+    /**
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->eventDispatcher;
     }
 
     /**

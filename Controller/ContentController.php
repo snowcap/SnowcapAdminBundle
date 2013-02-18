@@ -125,9 +125,6 @@ class ContentController extends BaseController
     {
         $entity = $admin->findEntity($request->attributes->get('id'));
         $admin->deleteEntity($entity);
-        $admin->flush();
-        // TODO: reactivate using event dispatcher
-        // $this->get('snowcap_admin.logger')->logContent(Logger::ACTION_DELETE, $admin, $entity, $this->getRequest()->getLocale());
         $this->setFlash('success', 'content.delete.flash.success');
 
         return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
@@ -146,7 +143,6 @@ class ContentController extends BaseController
             $form->bind($request);
             if ($form->isValid()) {
                 $admin->saveEntity($entity);
-                $admin->flush();
 
                 $json = array(
                     'result' => array($entity->getId(), $admin->getEntityName($entity))
@@ -201,7 +197,6 @@ class ContentController extends BaseController
         $form->bind($this->getRequest());
         if ($form->isValid()) {
             $admin->saveEntity($entity);
-            $admin->flush();
         } else {
             throw new \Exception('could not save');
         }

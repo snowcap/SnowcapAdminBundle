@@ -14,6 +14,7 @@ services:
             - [ setDatalistFactory, [@snowcap_admin.datalist_factory] ]
             - [ setFormFactory, [@form.factory] ]
             - [ setRoutingHelper, [@snowcap_admin.routing_helper_content] ]
+            - [ setEventDispatcher, [@event_dispatcher] ]
 
     # Routing
     snowcap_admin.routing_loader:
@@ -39,6 +40,12 @@ services:
         arguments: [@snowcap_core.navigation]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    snowcap_admin.listener_logger:
+        class: Snowcap\AdminBundle\EventListener\LoggerListener
+        arguments: [@snowcap_admin.logger]
+        tags:
+            - { name: kernel.event_subscriber }
 
     # Twig extensions and loaders
     snowcap_admin.twig_admin:
@@ -158,4 +165,4 @@ services:
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger
-        arguments: [@doctrine, @security.context]
+        arguments: [@doctrine.orm.entity_manager, @security.context]

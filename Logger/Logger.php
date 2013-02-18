@@ -1,27 +1,56 @@
 <?php
 namespace Snowcap\AdminBundle\Logger;
 
-use Symfony\Bundle\DoctrineBundle\Registry;
-use Snowcap\AdminBundle\Entity\Log;
-
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Doctrine\ORM\EntityManager;
+
+use Snowcap\AdminBundle\Entity\Log;
 
 class Logger
 {
-    const ACTION_CREATE = 'create';
-    const ACTION_UPDATE = 'update';
-    const ACTION_DELETE = 'delete';
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    protected $em;
 
-    /** @var \Symfony\Bundle\DoctrineBundle\Registry */
-    protected $doctrine;
-
-    /** @var null|\Symfony\Component\Security\Core\SecurityContextInterface */
+    /**
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     */
     protected $securityContext;
 
-    public function __construct(Registry $doctrine, SecurityContextInterface $securityContext = null)
+    /**
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     */
+    public function __construct(EntityManager $em, SecurityContextInterface $securityContext = null)
     {
-        $this->doctrine = $doctrine;
+        $this->em = $em;
         $this->securityContext = $securityContext;
+    }
+
+    /**
+     * @param string $type
+     * @param string $action
+     * @param string $description
+     * @param array $params
+     * @param array $diff
+     */
+    public function log($type, $action, $description, array $params = null, array $diff = null)
+    {
+        $token = $this->securityContext->getToken();
+
+        $log = new Log();
+        $log
+            ->setUsername(null !== $token ? $token->getUsername() : 'anonymous')
+            ->setType($type)
+            ->setAction($action)
+            ->setDescription($description)
+            ->setCreatedAt(new \DateTime())
+            ->setParams($params)
+            ->setDiff($diff);
+
+        $this->em->persist($log);
+        $this->em->flush($log);
     }
 
     /**
@@ -46,47 +75,8 @@ class Logger
         return $log;
     }
 
-    /**
-     * @param string $action
-     * @param \Snowcap\AdminBundle\Admin\AbstractAdmin $admin
-     * @param object $entity
-     * @param string $locale
-     */
-    public function logContent($action, $admin, $entity, $locale)
-    {
-
-        $em = $this->doctrine->getEntityManager();
-
-        /*
-        $uow = $em->getUnitOfWork();
-        $uow->computeChangeSets();
-
-        $changeset = $uow->getEntityChangeSet($entity);
-        if($admin->isTranslatable()) {
-            $translationEntity = $admin->findTranslationEntity($entity, $locale);
-            $changesetLocale = $uow->getEntityChangeSet($translationEntity);
-            $changeset = array_merge_recursive($changeset, $changesetLocale);
-        }
-        */
-        /* TODO find a way to get this info without duplicating update queries */
-        $changeset = array();
-
-        $log = $this->initLog(Log::TYPE_CONTENT, $action);
-        $log->setParams( array(
-            'entity'    => get_class($entity),
-            'entityId'  => $entity->getId(),
-        ));
-        $log->setDescription($admin->toString($entity));
-        $log->setDiff($changeset);
-
-        $em->persist($log);
-        $em->flush();
-    }
-
     public function logCatalogTranslation($catalogue, $locale, $diff)
     {
-        $em = $this->doctrine->getEntityManager();
-
         $log = $this->initLog(Log::TYPE_CATALOG_TRANSLATION, 'update');
         $log->setParams( array(
             'catalogue' => $catalogue,
@@ -95,7 +85,7 @@ class Logger
         $log->setDescription($catalogue . ' (' . $locale . ')');
         $log->setDiff($diff);
 
-        $em->persist($log);
-        $em->flush();
+        $this->em->persist($log);
+        $this->em->flush();
     }
 }
