@@ -343,13 +343,10 @@ jQuery(document).ready(function ($) {
     });
 
     $('a[href!=#]').click(function(event) {
-        event.preventDefault();
-        var href = $(this).attr('href');
         var formHasChanged = $('body').data('admin-form-changed');
-        if(!formHasChanged) {
-            window.location.href = href;
-        }
-        else {
+        if(formHasChanged) {
+            event.preventDefault();
+            var href = $(this).attr('href');
             var modal = $('#modal');
             $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
                 modal.html(data);
