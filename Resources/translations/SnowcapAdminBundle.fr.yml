@@ -145,6 +145,22 @@ logger:
             label: Suppression
             inline: deleted
 
+security:
+    login:
+        title: Connexion
+        username: Votre nom d'utilisateur
+        password: Votre mot de passe
+        login: Connexion
+
+widget:
+    content_changed:
+        title: Contenu modifié
+        message: Le contenu de cette page a été modifié, mais n'a pas encore été enregistré. Que souhaitez-vous faire ?
+        actions:
+            cancel: Annuler
+            proceed: Changer de page sans sauver
+            save: Sauver et changer de page
+
 error:
     content:
         notfound:

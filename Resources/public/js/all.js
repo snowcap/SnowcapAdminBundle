@@ -336,4 +336,36 @@ jQuery(document).ready(function ($) {
     // autosize for textareas
     $('.catalogue-translation textarea').autosize();
 
+    // Handle "content changed" event
+    $('body').data('admin-form-changed', false);
+    $('[data-admin=form-change-warning]').change(function(event) {
+        $('body').data('admin-form-changed', true);
+    });
+
+    $('a[href!=#]').click(function(event) {
+        event.preventDefault();
+        var href = $(this).attr('href');
+        var formHasChanged = $('body').data('admin-form-changed');
+        if(!formHasChanged) {
+            window.location.href = href;
+        }
+        else {
+            var modal = $('#modal');
+            $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
+                modal.html(data);
+                modal.find('.cancel').click(function(event){
+                    modal.html('');
+                    modal.modal('hide');
+                });
+                modal.find('.proceed').click(function(event){
+                    window.location.href = href;
+                });
+                modal.find('.save').click(function(event){
+                    $('[data-admin=form-content]').submit();
+                });
+                modal.modal('show');
+            });
+        }
+    });
+
 });

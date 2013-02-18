@@ -152,6 +152,15 @@ security:
         password: Your password
         login: Login
 
+widget:
+    content_changed:
+        title: Modified content
+        message: The content of this page has been modified, but has not been saved yet. What do you want to do ?
+        actions:
+            cancel: Cancel
+            proceed: Proceed without saving
+            save: Save and proceed
+
 error:
     content:
         notfound:

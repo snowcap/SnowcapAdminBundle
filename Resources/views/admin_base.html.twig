@@ -34,6 +34,7 @@
         {% block javascripts %}
             <script type="text/javascript">
                 var CKEDITOR_BASEPATH = '{{ asset('bundles/snowcapadmin/vendor/ckeditor/') }}';
+                var SNOWCAP_ADMIN_CONTENT_CHANGE_URL = '{{ path('snowcap_admin_widget_content_changed') }}';
             </script>
             {% javascripts
                 'bundles/snowcapcore/vendor/jquery/jquery.js'

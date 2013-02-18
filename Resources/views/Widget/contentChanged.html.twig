@@ -1,0 +1,17 @@
+{% extends 'SnowcapAdminBundle::modal_base.html.twig' %}
+
+{% trans_default_domain 'SnowcapAdminBundle' %}
+
+{% block modal_title %}
+    <h3>{{ "widget.content_changed.title"|trans }}</h3>
+{% endblock%}
+
+{% block modal_body %}
+    {{ "widget.content_changed.message"|trans }}
+{% endblock %}
+
+{% block modal_footer %}
+    <button class="btn cancel" type="button">{{ "widget.content_changed.actions.cancel"|trans }}</button>
+    <button class="btn proceed" type="button">{{ "widget.content_changed.actions.proceed"|trans }}</button>
+    <button class="btn btn-primary save" type="button">{{ "widget.content_changed.actions.save"|trans }}</button>
+{% endblock %}
