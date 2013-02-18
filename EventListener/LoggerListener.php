@@ -39,10 +39,7 @@ class LoggerListener implements EventSubscriberInterface{
         $entity = $event->getEntity();
         $admin = $event->getAdmin();
 
-        $this->logger->log('content', $this->getAction($event->getName()), $admin->getEntityName($entity), array(
-            'admin_alias' => $admin->getAlias(),
-            'entity_id' => $entity->getId()
-        ));
+        $this->logger->log('content', $this->getAction($event->getName()), $admin->getEntityName($entity), $admin->getAlias(), $entity->getId());
     }
 
     /**

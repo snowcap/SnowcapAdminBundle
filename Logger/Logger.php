@@ -19,31 +19,43 @@ class Logger
     protected $securityContext;
 
     /**
+     * @var string
+     */
+    protected $entityClassName;
+
+    /**
      * @param \Doctrine\ORM\EntityManager $em
      * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @param string $entityClassName The entity where logs will be saved into
      */
-    public function __construct(EntityManager $em, SecurityContextInterface $securityContext = null)
+    public function __construct(EntityManager $em, SecurityContextInterface $securityContext = null, $entityClassName)
     {
         $this->em = $em;
         $this->securityContext = $securityContext;
+        $this->entityClassName = $entityClassName;
     }
 
     /**
      * @param string $type
      * @param string $action
      * @param string $description
+     * @param string $admin
+     * @param int $entityId
      * @param array $params
      * @param array $diff
      */
-    public function log($type, $action, $description, array $params = null, array $diff = null)
+    public function log($type, $action, $description, $admin = null, $entityId = null, array $params = null, array $diff = null)
     {
         $token = $this->securityContext->getToken();
 
-        $log = new Log();
+        /** @var $log Log */
+        $log = new $this->entityClassName();
         $log
             ->setUsername(null !== $token ? $token->getUsername() : 'anonymous')
             ->setType($type)
             ->setAction($action)
+            ->setAdmin($admin)
+            ->setEntityId($entityId)
             ->setDescription($description)
             ->setCreatedAt(new \DateTime())
             ->setParams($params)
@@ -60,7 +72,8 @@ class Logger
      */
     public function initLog($type, $action)
     {
-        $log = new Log();
+        /** @var $log Log */
+        $log = new $this->entityClassName();
         $log->setType($type);
         $log->setCreatedAt( new \datetime('now'));
         $log->setAction($action);

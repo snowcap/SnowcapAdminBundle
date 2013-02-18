@@ -47,6 +47,20 @@ class Log {
     protected $description;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="admin", type="string", length=255, nullable=true)
+     */
+    protected $admin;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="entity_id", type="integer", nullable=true)
+     */
+    protected $entityId;
+
+    /**
      * @var datetime
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -80,6 +94,7 @@ class Log {
 
     /**
      * @param \DateTime $createdAt
+     * @return $this
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -98,6 +113,7 @@ class Log {
 
     /**
      * @param array $diff
+     * @return $this
      */
     public function setDiff(array $diff = null)
     {
@@ -115,7 +131,8 @@ class Log {
     }
 
     /**
-     * @param string $username
+     * @param $username
+     * @return $this
      */
     public function setUsername($username)
     {
@@ -133,7 +150,8 @@ class Log {
     }
 
     /**
-     * @param string $action
+     * @param $action
+     * @return $this
      */
     public function setAction($action)
     {
@@ -151,7 +169,8 @@ class Log {
     }
 
     /**
-     * @param string $description
+     * @param $description
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -169,7 +188,46 @@ class Log {
     }
 
     /**
+     * @param $admin
+     * @return $this
+     */
+    public function setAdmin($admin)
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdmin()
+    {
+        return $this->admin;
+    }
+
+    /**
+     * @param $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        $this->entityId = $entityId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEntityId()
+    {
+        return $this->entityId;
+    }
+
+    /**
      * @param array $params
+     * @return $this
      */
     public function setParams(array $params = null)
     {
@@ -187,7 +245,8 @@ class Log {
     }
 
     /**
-     * @param string $type
+     * @param $type
+     * @return $this
      */
     public function setType($type)
     {

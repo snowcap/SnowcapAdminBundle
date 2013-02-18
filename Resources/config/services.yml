@@ -1,4 +1,5 @@
 parameters:
+    snowcap_admin.logger_entity.class: Snowcap\AdminBundle\Entity\Log
 
 services:
     # Main admin class
@@ -165,4 +166,4 @@ services:
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger
-        arguments: [@doctrine.orm.entity_manager, @security.context]
+        arguments: [@doctrine.orm.entity_manager, @security.context, %snowcap_admin.logger_entity.class%]
