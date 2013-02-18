@@ -4,7 +4,6 @@ namespace Snowcap\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Snowcap\CoreBundle\Util\String;
 
 /**
  * This controller provides generic capabilities for admin controllers

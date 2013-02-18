@@ -118,6 +118,11 @@ services:
         tags:
             - { name: snowcap_admin.datalist_fieldtype, alias: label }
 
+    snowcap_admin.datalist_field_boolean:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\BooleanFieldType
+        tags:
+            - { name: snowcap_admin.datalist_fieldtype, alias: boolean }
+
     snowcap_admin.datalist_field_image:
         class: Snowcap\AdminBundle\Datalist\Field\Type\TextFieldType
         tags:
