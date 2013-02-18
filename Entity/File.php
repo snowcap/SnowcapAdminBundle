@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Snowcap\AdminBundle\Entity
  *
- * @ORM\Table(name="snowcap_admin_file")
  * @ORM\Entity
+ * @ORM\Table(name="snowcap_admin_file")
  */
 class File {
     /**

@@ -145,6 +145,13 @@ logger:
             label: Deletion
             inline: deleted
 
+security:
+    login:
+        title: Login
+        username: Your username
+        password: Your password
+        login: Login
+
 error:
     content:
         notfound:
