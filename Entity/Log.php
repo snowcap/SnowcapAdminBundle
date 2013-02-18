@@ -9,8 +9,8 @@ use Snowcap\CoreBundle\Doctrine\Mapping as SnowcapCore;
 /**
  * Snowcap\CoreBundle\Entity
  *
- * @ORM\Table(name="snowcap_admin_log")
  * @ORM\Entity
+ * @ORM\Table(name="snowcap_admin_log")
  */
 class Log {
 
