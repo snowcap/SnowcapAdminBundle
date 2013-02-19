@@ -27,6 +27,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('route_name_prefix')->defaultValue('snowcap_admin')->end()
                     ->end()
                 ->end()
+                ->arrayNode('security')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
+                    ->end()
+                ->end()
                 ->scalarNode('default_translation_domain')->defaultValue('admin')->end()
                 ->append($this->addImNode())
             ->end();

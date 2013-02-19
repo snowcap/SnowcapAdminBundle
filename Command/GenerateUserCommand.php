@@ -2,6 +2,7 @@
 
 namespace Snowcap\AdminBundle\Command;
 
+use Snowcap\AdminBundle\Security\UserManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -55,21 +56,8 @@ EOT
         $roleString = $this->getOptionalInteractiveOption($input, $output, 'roles', 'Please specify a comma-separated list of roles');
         $roles = explode(',', $roleString);
 
-        $user = new AdminUser();
-
-        $factory = $this->getContainer()->get('security.encoder_factory');
-        $encoder = $factory->getEncoder($user);
-        $encodedPassword = $encoder->encodePassword($password, $user->getSalt());
-
-        $user
-            ->setUsername($username)
-            ->setEmail($email)
-            ->setPassword($encodedPassword)
-            ->setRoles($roles);
-
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $em->persist($user);
-        $em->flush($user);
+        $userManager = $this->getUserManager();
+        $userManager->createUser($username, $password, $email, $roles);
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));
     }
@@ -144,5 +132,11 @@ EOT
         return new DialogHelper();
     }
 
-
+    /**
+     * @return UserManager
+     */
+    private function getUserManager()
+    {
+        return $this->getContainer()->get('snowcap_admin.security.user_manager');
+    }
 }

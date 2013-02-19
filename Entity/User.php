@@ -8,8 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="snowcap_admin_user")
+ * @ORM\MappedSuperclass
  */
 class User implements UserInterface, \Serializable
 {
@@ -20,7 +19,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -29,7 +28,7 @@ class User implements UserInterface, \Serializable
      * @Assert\NotBlank
      * @Assert\Length(max=32)
      */
-    private $username;
+    protected $username;
 
     /**
      * @var string
@@ -39,28 +38,28 @@ class User implements UserInterface, \Serializable
      * @Assert\Email
      * @Assert\Length(max=128)
      */
-    private $email;
+    protected $email;
 
     /**
      * @var array
      *
      * @ORM\Column(type="simple_array")
      */
-    private $roles;
+    protected $roles;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=128)
      */
-    private $password;
+    protected $password;
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", length=32)
      */
-    private $salt;
+    protected $salt;
 
     public function __construct()
     {
