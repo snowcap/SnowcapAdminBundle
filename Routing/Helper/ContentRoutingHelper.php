@@ -7,6 +7,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Route;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
+use Snowcap\CoreBundle\Util\String;
 
 class ContentRoutingHelper {
     /**
@@ -69,7 +70,7 @@ class ContentRoutingHelper {
 
         preg_match('/(?:[A-Z](?:[A-Za-z0-9])+\\\)*(?:)[A-Z](?:[A-Za-z0-9])+Bundle/', get_class($admin), $matches);
         $bundle = implode('', explode('\\', $matches[0]));
-        $section = ucfirst($admin->getAlias());
+        $section = String::camelize($admin->getAlias());
         $controller = $bundle . ':' . $section . ':' . $action;
         try {
             $controller = $this->parser->parse($controller);
