@@ -95,12 +95,12 @@ abstract class ContentAdmin extends AbstractAdmin
     public function saveEntity($entity)
     {
         if($this->em->getUnitOfWork()->isInIdentityMap($entity)) {
-            $this->em->flush($entity);
+            $this->em->flush();
             $this->eventDispatcher->dispatch(AdminEvents::CONTENT_UPDATE, new ContentAdminEvent($this, $entity));
         }
         else {
             $this->em->persist($entity);
-            $this->em->flush($entity);
+            $this->em->flush();
             $this->eventDispatcher->dispatch(AdminEvents::CONTENT_CREATE, new ContentAdminEvent($this, $entity));
         }
     }
