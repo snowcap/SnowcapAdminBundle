@@ -358,7 +358,7 @@ jQuery(document).ready(function ($) {
                     window.location.href = href;
                 });
                 modal.find('.save').click(function(event){
-                    $('[data-admin=form-content]').submit();
+                    $('[data-admin=form-change-warning]').submit();
                 });
                 modal.modal('show');
             });
