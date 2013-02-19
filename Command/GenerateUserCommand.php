@@ -57,7 +57,7 @@ EOT
         $roles = explode(',', $roleString);
 
         $userManager = $this->getUserManager();
-        $userManager->createUser($username, $password, $email, $roles);
+        $userManager->createUser($username, $email, $password, $roles);
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));
     }
