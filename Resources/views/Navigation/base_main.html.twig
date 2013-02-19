@@ -16,11 +16,13 @@
 
                 {# admins block #}
                 {% block admins %}
-                    <ul class="nav">
-                        {% for admin in admins %}
-                            {{ macros.menu_item(admin) }}
-                        {% endfor %}
-                    </ul>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <ul class="nav">
+                            {% for admin in admins %}
+                                {{ macros.menu_item(admin) }}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 {% endblock admins %}
 
                 {# block context #}
