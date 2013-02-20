@@ -31,6 +31,8 @@ snowcap_admin_login:
     defaults:  { _controller: SnowcapAdminBundle:Security:login }
 snowcap_admin_login_check:
     pattern:   /login_check
+snowcap_admin_logout:
+    pattern: /logout
 
 snowcap_admin_extra:
     resource: .

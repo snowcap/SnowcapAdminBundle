@@ -151,6 +151,7 @@ security:
         username: Votre nom d'utilisateur
         password: Votre mot de passe
         login: Connexion
+    logout: Déconnexion
 
 widget:
     content_changed:

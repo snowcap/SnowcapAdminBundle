@@ -147,10 +147,11 @@ logger:
 
 security:
     login:
-        title: Login
+        title: Log in
         username: Your username
         password: Your password
-        login: Login
+        login: Log in
+    logout: Log out
 
 widget:
     content_changed:
