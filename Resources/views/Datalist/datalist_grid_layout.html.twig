@@ -21,14 +21,14 @@
 
 {# datalist table block #}
 {% block datalist_table %}
-    <table class="table table-striped">
+    <table class="table table-striped table-hover datalist">
         <thead>
         <tr>
             {% for field in datalist.fields %}
                 <th>{{ field.options['label']|trans({}, translation_domain) }}</th>
             {% endfor %}
             {% if datalist.actions|length > 0 %}
-                <th>{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
+                <th class="actions">{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>
             {% endif %}
         </tr>
         </thead>
@@ -39,10 +39,12 @@
                     {{ datalist_field(field, item) }}
                 {% endfor %}
                 {% if datalist.actions|length > 0 %}
-                    <td class="listing-actions">
-                        {% for action in datalist.actions %}
-                            {{ datalist_action(action, item) }}{% if not loop.last %} {% endif %}
-                        {% endfor %}
+                    <td class="actions">
+                        <div class="btn-group">
+                            {% for action in datalist.actions %}
+                                {{ datalist_action(action, item) }}{% if not loop.last %} {% endif %}
+                            {% endfor %}
+                        </div>
                     </td>
                 {% endif %}
             </tr>
@@ -150,5 +152,8 @@
 
 {# simple action #}
 {% block simple_action %}
-    <a href="{{ url }}">{{ label|trans({}, translation_domain) }}</a>
+    <a class="btn" href="{{ url }}">
+        {% if icon is defined %}<i class="icon-{{ icon }}"></i> {% endif %}
+        {{ label|trans({}, translation_domain) }}
+    </a>
 {% endblock simple_action %}

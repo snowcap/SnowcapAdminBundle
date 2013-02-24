@@ -4,8 +4,9 @@ namespace Snowcap\AdminBundle\Datalist\Action\Type;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
+use Snowcap\AdminBundle\Datalist\ViewContext;
+use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 
 class ContentAdminActionType extends AbstractActionType {
@@ -30,7 +31,10 @@ class ContentAdminActionType extends AbstractActionType {
         parent::setDefaultOptions($resolver);
 
         $resolver
-            ->setDefaults(array('params' => array('id' => 'id')))
+            ->setDefaults(array(
+                'params' => array('id' => 'id'),
+            ))
+            ->setOptional(array('icon'))
             ->setRequired(array('admin', 'action'))
             ->setAllowedTypes(array(
                 'params' => 'array',
@@ -50,6 +54,22 @@ class ContentAdminActionType extends AbstractActionType {
 
         return $this->routingHelper->generateUrl($options['admin'], $options['action'], $parameters);
     }
+
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewContext
+     * @param \Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface $action
+     * @param $item
+     * @param array $options
+     */
+    public function buildViewContext(ViewContext $viewContext, DatalistActionInterface $action, $item, array $options)
+    {
+        parent::buildViewContext($viewContext, $action, $item, $options);
+
+        if(isset($options['icon'])) {
+            $viewContext['icon'] = $options['icon'];
+        }
+    }
+
 
     /**
      * @return string
