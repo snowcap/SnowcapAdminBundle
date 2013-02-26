@@ -1,5 +1,6 @@
 parameters:
     snowcap_admin.logger_entity.class: Snowcap\AdminBundle\Entity\Log
+    snowcap_admin.security.user_class: ~
 
 services:
     # Main admin class

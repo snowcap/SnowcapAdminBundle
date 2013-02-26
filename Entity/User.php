@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\MappedSuperclass
  */
-class User implements UserInterface, \Serializable
+abstract class User implements UserInterface, \Serializable
 {
     /**
      * @var int

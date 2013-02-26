@@ -17,7 +17,7 @@ class GenerateUserCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('snowcap:admin:generate-user')
+            ->setName('snowcap:admin:generate:user')
             ->setDescription('Create a new user in the database')
             ->setDefinition(array(
                     new InputArgument('username', InputArgument::OPTIONAL),
@@ -26,9 +26,9 @@ class GenerateUserCommand extends ContainerAwareCommand
                     new InputOption('roles', 'r', InputOption::VALUE_OPTIONAL)
                 ))
             ->setHelp(<<<EOT
-The <info>snowcap:admin:generate-user</info> command creates a user:
+The <info>snowcap:admin:generate:user</info> command creates a user:
 
-  <info>php app/console snowcap:admin:generate-user matthieu</info>
+  <info>php app/console snowcap:admin:generate:user matthieu</info>
 
 This interactive shell will ask you for an email and then a password.
 
