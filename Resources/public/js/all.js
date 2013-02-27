@@ -342,7 +342,7 @@ jQuery(document).ready(function ($) {
         $('body').data('admin-form-changed', true);
     });
 
-    $('a[href!=#]').click(function(event) {
+    $('a:not([href^=#])').click(function(event) {
         var formHasChanged = $('body').data('admin-form-changed');
         if(formHasChanged) {
             event.preventDefault();
