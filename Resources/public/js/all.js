@@ -227,8 +227,20 @@ jQuery(document).ready(function ($) {
                 $.post(form.attr('action'), form.serialize(), null, "json")
                     .success(function(data, textStatus, jqXHR) {
                         modal.html('');
-                        textInput.val(data.result[1]);
-                        valueInput.val(data.result[0]);
+                        if('single' === mode) {
+                            // TODO refactor with autocomplete updater
+                            textInput.val(data.result[1]);
+                            valueInput.val(data.result[0]);
+                        }
+                        else {
+                            var prototype = container.data('prototype');
+                            var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
+                            $prototype.val(data.result[0]);
+                            container.prepend($prototype);
+
+                            $token = $('<li>').addClass('token').html($('<span>').html(data.result[1])).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
+                            container.find('.tokens').append($token);
+                        }
                         modal.modal('hide');
                     })
                     .error(function(data, textStatus, jqXHR) {
