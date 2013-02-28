@@ -11,6 +11,8 @@ class TextFieldType extends AbstractFieldType
 {
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        parent::setDefaultOptions($resolver);
+
         $resolver
             ->setOptional(array('callback'))
             ->setAllowedTypes(array('callback' => 'callable'));
