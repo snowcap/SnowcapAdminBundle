@@ -4,6 +4,7 @@ namespace Snowcap\AdminBundle\Security;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class UserManager
 {
@@ -39,7 +40,7 @@ class UserManager
      * @param array $roles
      * @return Snowcap\AdminBundle\Entity\User
      */
-    public function createUser($userName, $email, $password, array $roles)
+    public function createUser($userName, $email, $password, array $roles, array $extraFields = array())
     {
         $user = new $this->userClass;
         $encoder = $this->encoderFactory->getEncoder($user);
@@ -50,6 +51,11 @@ class UserManager
             ->setEmail($email)
             ->setPassword($encodedPassword)
             ->setRoles($roles);
+
+        foreach($extraFields as $extraFieldName => $extraFieldValue) {
+            $propertyAccessor = PropertyAccess::getPropertyAccessor();
+            $propertyAccessor->setValue($user, $extraFieldName, $extraFieldValue);
+        }
 
         $this->em->persist($user);
         $this->em->flush($user);
