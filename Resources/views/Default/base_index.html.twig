@@ -8,8 +8,12 @@
         <div class="page-header">
             <h2>{{ "dashboard.title"|trans({}, 'SnowcapAdminBundle') }}</h2>
         </div>
-        <p>{{ "dashboard.introduction"|trans({}, 'SnowcapAdminBundle')|raw }}</p>
     {% endblock pageheader %}
+
+    {# intro block #}
+    {% block intro %}
+        <p>{{ "dashboard.introduction"|trans({}, 'SnowcapAdminBundle')|raw }}</p>
+    {% endblock intro %}
 
     {# widgets block #}
     {% block widgets %}

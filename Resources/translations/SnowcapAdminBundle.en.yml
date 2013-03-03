@@ -117,8 +117,8 @@ cataloguetranslation:
 dashboard:
     title: Dashboard
     introduction: |
-        Welcome on the adminitration module of your website.<br/>
-        This interface allows you to create, edit, adn delete content.<br/>
+        Welcome on the administration module of your website.<br/>
+        This interface allows you to create, edit, and delete content.<br/>
         For any question or problem, you can create a ticket on the <a href="http://redmine.snowcap.be">Snowcap ticketing platform</a>,<br/>or you can contact us at <a href="mailto:shoot@snowcap.be">shoot@snowcap.be</a>
 
 logger:
