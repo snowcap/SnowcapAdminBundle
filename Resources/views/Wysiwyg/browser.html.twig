@@ -12,8 +12,10 @@
 	<body class="wysiwyg">
         <div class="container">
             {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
-            {% for type, flash in app.session.getFlashes() %}
-                {{ alert(flash, type, null, true) }}
+            {% for type, flashMessages in app.session.flashbag.all(() %}
+                {%  for flashMessage in flashMessages %}
+                    {{ alert(flashMessage, type, null, true) }}
+                {% enfor %}
             {% endfor %}
             <div class="wysiwyg-browser">
                 {% block body %}
