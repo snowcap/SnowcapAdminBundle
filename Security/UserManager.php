@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Security;
 
 use Doctrine\ORM\EntityManager;
+use Snowcap\AdminBundle\Entity\User;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -28,6 +29,12 @@ class UserManager
      */
     public function __construct($userClass, EncoderFactoryInterface $encoderFactory, EntityManager $em)
     {
+        $parentClassName = 'Snowcap\AdminBundle\Entity\User';
+        if (null === $userClass) {
+            throw new \InvalidArgumentException('Please provide a valid user_class in your snowcap_admin.security config.');
+        } elseif (!class_exists($userClass) || !in_array($parentClassName, class_parents($userClass))) {
+            throw new \InvalidArgumentException(sprintf('Your user class does not exist or does not extend %s', $parentClassName));
+        }
         $this->userClass = $userClass;
         $this->encoderFactory = $encoderFactory;
         $this->em = $em;

@@ -49,6 +49,8 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $userManager = $this->getUserManager();
+
         $input->setInteractive(true);
         $username = $this->getOptionalInteractiveArgument($input, $output, 'username', 'Please choose a username');
         $email = $this->getOptionalInteractiveArgument($input, $output, 'email', 'Please choose an email address');
@@ -56,7 +58,6 @@ EOT
         $roleString = $this->getOptionalInteractiveOption($input, $output, 'roles', 'Please specify a comma-separated list of roles');
         $roles = explode(',', $roleString);
 
-        $userManager = $this->getUserManager();
         $userManager->createUser($username, $email, $password, $roles);
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));

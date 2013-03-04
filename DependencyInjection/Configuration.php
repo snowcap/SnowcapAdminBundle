@@ -28,7 +28,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('security')
-                    ->isRequired()->cannotBeEmpty()
                     ->children()
                         ->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
                     ->end()
