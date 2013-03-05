@@ -47,4 +47,12 @@ class BooleanFieldType extends AbstractFieldType
     {
         return 'boolean';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'boolean';
+    }
 }

@@ -77,7 +77,8 @@
 
 {# label field #}
 {% block label_field %}
-    <td><span class="label label-{{ class }}">{{ value|trans({}, translation_domain) }}</span></td>
+    {% set attr = attr|default({'class': 'label'}) %}
+    <td><span{{ block('widget_attributes') }}>{{ value|trans({}, translation_domain) }}</span></td>
 {% endblock label_field %}
 
 {# label field #}
@@ -157,3 +158,10 @@
         {{ label|trans({}, translation_domain) }}
     </a>
 {% endblock simple_action %}
+
+
+{% block widget_attributes %}
+    {% spaceless %}
+        {% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+    {% endspaceless %}
+{% endblock widget_attributes %}

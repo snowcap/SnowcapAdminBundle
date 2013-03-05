@@ -60,4 +60,12 @@ class ChoiceFilterType extends AbstractFilterType
     {
         return 'choice';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'choice';
+    }
 }

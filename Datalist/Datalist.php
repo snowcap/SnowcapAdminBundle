@@ -350,7 +350,7 @@ class Datalist implements DatalistInterface, \Countable
         }
 
         if (!isset($this->datasource)) {
-            $this->iterator = new \EmptyIterator();
+            throw new \Exception('A datalist must have a datasource before it can be iterated or counted');
         }
 
         // Handle pagination

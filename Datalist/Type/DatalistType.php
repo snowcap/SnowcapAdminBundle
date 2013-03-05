@@ -12,4 +12,12 @@ class DatalistType extends AbstractDatalistType {
     {
         return 'datalist';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'datalist';
+    }
 }

@@ -61,4 +61,12 @@ class EntityFilterType extends AbstractFilterType
     {
         return 'entity';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'entity';
+    }
 }

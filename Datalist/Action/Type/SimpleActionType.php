@@ -34,6 +34,12 @@ class SimpleActionType extends AbstractActionType {
             ->setRequired(array('route'));
     }
 
+    /**
+     * @param \Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface $action
+     * @param object $item
+     * @param array $options
+     * @return string
+     */
     public function getUrl(DatalistActionInterface $action, $item, array $options = array())
     {
         $parameters = array();
@@ -50,6 +56,14 @@ class SimpleActionType extends AbstractActionType {
      * @return string
      */
     public function getName()
+    {
+        return 'simple';
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
     {
         return 'simple';
     }

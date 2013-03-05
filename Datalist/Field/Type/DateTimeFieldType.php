@@ -28,4 +28,12 @@ class DateTimeFieldType extends AbstractFieldType
     {
         return 'datetime';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'datetime';
+    }
 }

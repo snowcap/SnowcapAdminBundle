@@ -38,8 +38,5 @@ abstract class AbstractFieldType implements FieldTypeInterface
     /**
      * @return string
      */
-    public function getBlockName()
-    {
-        return $this->getName();
-    }
+    abstract public function getBlockName();
 }

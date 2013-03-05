@@ -11,4 +11,12 @@ class HeadingFieldType extends AbstractFieldType
     {
         return 'heading';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'heading';
+    }
 }

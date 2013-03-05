@@ -37,14 +37,27 @@ class LabelFieldType extends AbstractFieldType
             throw new \UnexpectedValueException(sprintf('No mapping for value %s', $viewContext['value']));
         }
 
-        $viewContext['class'] = $viewContext['value'];
-        $viewContext['value'] = $mappings[$viewContext['value']];
+        $mapping = $mappings[$viewContext['value']];
+        if(!is_array($mapping)) {
+            throw new \Exception('mappings for the label field type must be specified as an associative array');
+        }
+
+        $viewContext['attr'] = isset($mapping['attr']) ? $mapping['attr'] : array();
+        $viewContext['value'] = $mapping['label'];
     }
 
     /**
      * @return string
      */
     public function getName()
+    {
+        return 'label';
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
     {
         return 'label';
     }

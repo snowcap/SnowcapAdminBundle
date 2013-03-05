@@ -55,8 +55,5 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
     /**
      * @return string
      */
-    public function getBlockName()
-    {
-        return $this->getName();
-    }
+    abstract public function getBlockName();
 }

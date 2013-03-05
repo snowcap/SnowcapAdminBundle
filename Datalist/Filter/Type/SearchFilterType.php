@@ -63,4 +63,12 @@ class SearchFilterType extends AbstractFilterType
     {
         return 'search';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'search';
+    }
 }

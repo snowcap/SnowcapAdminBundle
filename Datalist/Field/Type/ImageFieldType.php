@@ -11,4 +11,12 @@ class ImageFieldType extends AbstractFieldType
     {
         return 'image';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'image';
+    }
 }

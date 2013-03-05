@@ -19,8 +19,5 @@ abstract class AbstractFilterType implements FilterTypeInterface
     /**
      * @return string
      */
-    public function getBlockName()
-    {
-        return $this->getName();
-    }
+    abstract public function getBlockName();
 }

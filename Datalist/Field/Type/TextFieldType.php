@@ -40,4 +40,12 @@ class TextFieldType extends AbstractFieldType
     {
         return 'text';
     }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return 'text';
+    }
 }

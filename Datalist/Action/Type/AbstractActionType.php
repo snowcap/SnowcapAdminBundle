@@ -34,8 +34,5 @@ abstract class AbstractActionType implements ActionTypeInterface {
     /**
      * @return string
      */
-    public function getBlockName()
-    {
-        return $this->getName();
-    }
+    abstract public function getBlockName();
 }
