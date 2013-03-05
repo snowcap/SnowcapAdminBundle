@@ -1,4 +1,4 @@
-SnowcapAdminBundle
+Snowcap Admin Bundle
 ==================================
 
 Warning : this bundle is still pretty much WIP. If you are looking for an admin bundle with a lof of community attention, 
