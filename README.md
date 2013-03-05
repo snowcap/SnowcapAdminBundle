@@ -176,7 +176,7 @@ security:
 
     providers:
         admin_users:
-            entity: { class: AdeccoAwpAdminBundle:AdminUser, property: username }
+            entity: { class: AcmeSiteBunde:Artist, property: username }
 
     firewalls:
         ...
@@ -298,7 +298,7 @@ class ArtistAdmin extends ContentAdmin
      */
     public function getEntityClass()
     {
-        return 'Adecco\Awp\SiteBundle\Entity\GlobalTool';
+        return 'Acme\SiteBundle\Entity\Artist';
     }
 }
 ```
