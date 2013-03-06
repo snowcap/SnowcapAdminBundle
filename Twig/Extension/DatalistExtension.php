@@ -205,8 +205,8 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     }
 
     /**
-     * @param string $layout
-     * @param string $blockName
+     * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
+     * @param array $blockNames
      * @param array $context
      * @return string
      * @throws \Exception
