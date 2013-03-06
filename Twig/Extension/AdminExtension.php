@@ -103,6 +103,9 @@ class AdminExtension extends \Twig_Extension
      */
     public function listValue($row, $path, $params = array())
     {
+        if(isset($params['callback'])) {
+            return call_user_func($params['callback'], $row);
+        }
         return $this->getDataValue($row, $path);
     }
 
