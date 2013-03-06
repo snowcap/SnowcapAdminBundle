@@ -170,7 +170,7 @@ class AutocompleteType extends AbstractType
         return $this->routingHelper->generateUrl(
             $this->adminManager->getAdmin($options['admin']),
             'autocompleteList',
-            array('query' => '__query__', 'where' => $options['where'], 'property' => $options['property'])
+            array('query' => '__query__', 'where' => base64_encode($options['where']), 'property' => $options['property'])
         );
     }
 

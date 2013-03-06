@@ -195,7 +195,7 @@ abstract class ContentAdmin extends AbstractAdmin
         // Add autocomplete list route
         $routeCollection->add(
             $this->routingHelper->getRouteName($this, 'autocompleteList'),
-            $this->routingHelper->getRoute($this, 'autocompleteList', array('query', 'where', 'property'))
+            $this->routingHelper->getRoute($this, 'autocompleteList', array('where', 'property', 'query'))
         );
         // Add update route
         $routeCollection->add(
