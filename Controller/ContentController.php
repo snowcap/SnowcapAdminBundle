@@ -70,6 +70,7 @@ class ContentController extends BaseController
             }
             catch(\Exception $e) {
                 $this->setFlash('error', 'content.create.flash.error');
+                $this->get('logger')->addError($e->getMessage());
             }
         }
 
@@ -107,6 +108,7 @@ class ContentController extends BaseController
             }
             catch(\Exception $e) {
                 $this->setFlash('error', 'content.update.flash.error');
+                $this->get('logger')->addError($e->getMessage());
             }
         }
 
