@@ -171,6 +171,10 @@ You can then change your security.yml config file:
 ```yml
 # app/config/security.yml
 
+snowcap_admin:
+    security:
+        user_class: Acme\AdminBundle\Entity\AdminUser
+
 security:
     encoders:
         Snowcap\AdminBundle\Entity\User: sha512
