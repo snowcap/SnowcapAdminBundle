@@ -177,7 +177,7 @@ security:
 
     providers:
         admin_users:
-            entity: { class: AcmeSiteBunde:Artist, property: username }
+            entity: { class: AcmeAdminBunde:AdminUser, property: username }
 
     firewalls:
         ...
