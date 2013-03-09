@@ -118,7 +118,7 @@ the list of configured assetic bundles. Additionally, the lessphp and cssrewrite
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles: ["AcmeSiteBundle", "SnowcapAdminBundle"]
+    bundles: ["AcmeAdminBundle", "SnowcapAdminBundle"]
     filters:
         cssrewrite: ~
         lessphp: ~
