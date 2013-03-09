@@ -29,10 +29,10 @@
         "snowcap/core-bundle": "dev-master",
         "snowcap/bootstrap-bundle": "dev-master",
         "knplabs/knp-markdown-bundle": "1.2.*@dev"
+
     },
     "autoload": {
         "psr-0": { "Snowcap\\AdminBundle": "" }
     },
-    "target-dir": "Snowcap/AdminBundle",
-    "minimum-stability": "dev"
+    "target-dir": "Snowcap/AdminBundle"
 }
