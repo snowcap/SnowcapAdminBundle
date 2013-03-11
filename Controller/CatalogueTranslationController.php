@@ -3,6 +3,7 @@ namespace Snowcap\AdminBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Snowcap\AdminBundle\AdminManager;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Yaml\Yaml;
@@ -17,7 +18,7 @@ class CatalogueTranslationController extends BaseController
      */
     public function indexAction($catalogue, $locale)
     {
-        /** @var $admin \Snowcap\AdminBundle\Environment */
+        /** @var $admin AdminManager */
         $admin = $this->get('snowcap_admin');
 
         $yaml = new Yaml();
@@ -27,14 +28,14 @@ class CatalogueTranslationController extends BaseController
             if ($locale !== null) {
                 $activeLocale = $locale;
             } else {
-                $activeLocale = $admin->getLocale();
+                $activeLocale = $this->getRequest()->getLocale();
             }
         }
 
-        $locales = $admin->getLocales();
+        $locales = $this->container->getParameter('locales');
         $fallbackLocale = $locales[0];
 
-        $catalogueReferences = $admin->getTranslationCatalogues();
+        $catalogueReferences = $this->container->getParameter('snowcap_admin.translation_catalogues');
 
         /** Getting all source catalogues */
         $catalogues = array();
@@ -87,6 +88,7 @@ class CatalogueTranslationController extends BaseController
             'activeCatalogueLocale' => $activeLocale,
             'catalogues' => $catalogues,
             'fallbackCatalogue' => $fallbackCatalogue,
+            'locales' => $locales,
         );
     }
 

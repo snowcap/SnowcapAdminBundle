@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->scalarNode('default_translation_domain')->defaultValue('admin')->end()
+                ->arrayNode('translation_catalogues')->prototype('scalar')->end()->end()
                 ->append($this->addImNode())
             ->end();
 

@@ -45,9 +45,9 @@ class SnowcapAdminExtension extends Extension
 
         $container->setParameter('snowcap_admin.im_formats', $config['im_formats']);
 
-        /*if(array_key_exists('translation_catalogues', $config)) {
-            $container->setParameter('translation_catalogues', $config['translation_catalogues']);
-        }*/
+        if(array_key_exists('translation_catalogues', $config)) {
+            $container->setParameter('snowcap_admin.translation_catalogues', $config['translation_catalogues']);
+        }
 
     }
 }
