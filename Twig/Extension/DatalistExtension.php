@@ -213,9 +213,11 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      */
     private function renderblock(DatalistInterface $datalist, array $blockNames, array $context = array())
     {
-        $templateNames = $this->getTemplateNames($datalist);
-        foreach($templateNames as $templateName) {
-            $template = $this->environment->loadTemplate($templateName);
+        $datalistTemplates = $this->getTemplatesForDatalist($datalist);
+        foreach($datalistTemplates as $template) {
+            if (!$template instanceof \Twig_Template) {
+                $template = $this->environment->loadTemplate($template);
+            }
             do {
                 foreach($blockNames as $blockName) {
                     if ($template->hasBlock($blockName)) {
@@ -233,7 +235,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
      * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
      * @return array
      */
-    private function getTemplateNames(DatalistInterface $datalist)
+    private function getTemplatesForDatalist(DatalistInterface $datalist)
     {
         if(isset($this->themes[$datalist])){
             return $this->themes[$datalist];
