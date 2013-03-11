@@ -2,7 +2,7 @@
     {% if is_array(value) %}
         <h{{ level }} class="level-header">{{ key }}</h{{level}}>
         {% for subkey, subvalue in value %}
-            <ul class="unstyled level{{ level }} {% if level == 3 %} well{%endif%}" >
+            <ul class="level{{ level }} {% if level == 3 %} well{%endif%}" >
                 {{ _self.element(subkey, subvalue, (level+1), parent ~ '[' ~ key ~ ']', fallback[subkey]|default(null))}}
             </ul>
         {% endfor %}
