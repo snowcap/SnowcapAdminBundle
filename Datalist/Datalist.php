@@ -315,6 +315,9 @@ class Datalist implements DatalistInterface, \Countable
             if(isset($data[$filter->getName()]) && !empty($data[$filter->getName()])) {
                 $this->filterData[$filter->getName()] = $data[$filter->getName()];
             }
+            elseif($filter->hasOption('default')) {
+                $this->filterData[$filter->getName()] = $filter->getOption('default');
+            }
         }
         $this->filterForm->bind($this->filterData);
     }

@@ -13,7 +13,8 @@ abstract class AbstractFilterType implements FilterTypeInterface
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
-            ->setDefaults(array('property_path' => null));
+            ->setDefaults(array('property_path' => null))
+            ->setOptional(array('default'));
     }
 
     /**
