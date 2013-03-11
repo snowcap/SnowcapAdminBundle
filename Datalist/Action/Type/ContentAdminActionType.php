@@ -2,6 +2,9 @@
 
 namespace Snowcap\AdminBundle\Datalist\Action\Type;
 
+use Snowcap\AdminBundle\Admin\ContentAdmin;
+use Snowcap\AdminBundle\AdminManager;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -11,6 +14,11 @@ use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 
 class ContentAdminActionType extends AbstractActionType {
     /**
+     * @var \Snowcap\AdminBundle\AdminManager
+     */
+    private $adminManager;
+
+    /**
      * @var \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
      */
     private $routingHelper;
@@ -18,8 +26,9 @@ class ContentAdminActionType extends AbstractActionType {
     /**
      * @param \Symfony\Component\Routing\RouterInterface $router
      */
-    public function __construct(ContentRoutingHelper $routingHelper)
+    public function __construct(AdminManager $adminManager, ContentRoutingHelper $routingHelper)
     {
+        $this->adminManager = $adminManager;
         $this->routingHelper = $routingHelper;
     }
 
@@ -30,6 +39,15 @@ class ContentAdminActionType extends AbstractActionType {
     {
         parent::setDefaultOptions($resolver);
 
+        $adminManager = $this->adminManager;
+        $adminNormalizer = function(Options $options, $admin) use($adminManager) {
+            if(!$admin instanceof ContentAdmin) { //TODO: deprecated notice ?
+                $admin = $adminManager->getAdmin($admin);
+            }
+
+            return $admin;
+        };
+
         $resolver
             ->setDefaults(array(
                 'params' => array('id' => 'id'),
@@ -38,8 +56,11 @@ class ContentAdminActionType extends AbstractActionType {
             ->setRequired(array('admin', 'action'))
             ->setAllowedTypes(array(
                 'params' => 'array',
-                'admin' => 'Snowcap\AdminBundle\Admin\ContentAdmin',
+                'admin' => array('string', 'Snowcap\AdminBundle\Admin\ContentAdmin'),
                 'action' => 'string'
+            ))
+            ->setNormalizers(array(
+                'admin' => $adminNormalizer
             ));
     }
 

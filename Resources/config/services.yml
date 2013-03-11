@@ -161,7 +161,7 @@ services:
 
     snowcap_admin.datalist_action_content_admin:
         class: Snowcap\AdminBundle\Datalist\Action\Type\ContentAdminActionType
-        arguments: [@snowcap_admin.routing_helper_content]
+        arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
         tags:
             - { name: snowcap_admin.datalist_actiontype, alias: content_admin }
 
