@@ -29,20 +29,21 @@
                 {% block context %}{% endblock context %}
 
                 {# security #}
-                {% if is_granted('ROLE_ADMIN') %}
-                <ul class="nav pull-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            {{ app.user.username }}
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ path('snowcap_admin_logout') }}">{{ "security.logout"|trans({}, 'SnowcapAdminBundle') }}</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                {% endif %}
-
+                {% block security %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <ul class="nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-user icon-white"></i> {{ app.user.username }}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('snowcap_admin_logout') }}">{{ "security.logout"|trans({}, 'SnowcapAdminBundle') }}</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    {% endif %}
+                {% endblock security %}
             </div>
         </div>
     </div>
