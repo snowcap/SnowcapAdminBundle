@@ -232,7 +232,7 @@ snowcap_admin:
 
 ```
 
-## Creating admin classes
+## Your first admin class
 
 One of the main features of SnowcapAdminBundle is to allow you to create CRUD interfaces that manage entities. We call those CRUD interfaces
 "Content Admins".
@@ -310,7 +310,7 @@ class ArtistAdmin extends ContentAdmin
 
 Your admin class is ready but we still need to register it as a service.
 
-## Register your admin class with the Service Container
+### Register your admin class with the Service Container
 
 Simply edit your Admin Bundle services.yml file and declare your Admin Class as a service that extends the
 
@@ -325,3 +325,9 @@ class: Acme\AdminBundle\Admin\ArtistAdmin
 ```
 
 That's it, your admin class is ready to use. You can test it at http://yourbaseurl/admin/artist.
+
+## Next steps
+
+Now that you have a basic CRUD admin, you are ready to dive into more advanced features.
+
+* [Using datalists](datalist.md)
