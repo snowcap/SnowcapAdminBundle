@@ -16,7 +16,6 @@ abstract class AbstractFieldType implements FieldTypeInterface
     {
         $resolver->setDefaults(array(
                 'property_path' => null,
-                'data_class' => null,
                 'default' => null
             ))
             ->setOptional(array('callback'))

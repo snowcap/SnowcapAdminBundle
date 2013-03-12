@@ -8,6 +8,12 @@ use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
 
 class BooleanFieldType extends AbstractFieldType
 {
+
+    public function __construct()
+    {
+        trigger_error('The "boolean" field type is deprecated. Please use the "label" field type instead', E_USER_DEPRECATED);
+    }
+
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
      */
