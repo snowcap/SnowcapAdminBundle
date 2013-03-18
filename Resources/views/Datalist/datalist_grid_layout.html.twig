@@ -81,6 +81,17 @@
     <td><span{{ block('widget_attributes') }}>{{ value|trans({}, translation_domain) }}</span></td>
 {% endblock label_field %}
 
+{# image field #}
+{% block image_field %}
+    <td>
+    {% if value is not null %}
+        <img src="{{ value|imresize('admin_thumb') }}" data-src="{{ asset(value) }}" alt="{{ field.options['label']|trans({}, translation_domain) }}"/>
+    {% else %}
+        <img src="http://placehold.it/260x180" alt="{{ field.options['label']|trans({}, translation_domain) }}"/>
+    {% endif %}
+    </td>
+{% endblock image_field %}
+
 {# label field #}
 {% block boolean_field %}
     {% set label_class = value == true ? 'label-success' : 'label-important' %}
