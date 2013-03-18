@@ -133,7 +133,7 @@ services:
         tags:
             - { name: snowcap_admin.datalist_fieldtype, alias: boolean }
 
-    snowcap_admin.datalist_field_image:
+    snowcap_admin.datalist_field_text:
         class: Snowcap\AdminBundle\Datalist\Field\Type\TextFieldType
         tags:
             - { name: snowcap_admin.datalist_fieldtype, alias: text }
