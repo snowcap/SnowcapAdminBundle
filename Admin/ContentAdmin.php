@@ -1,15 +1,8 @@
 <?php
 namespace Snowcap\AdminBundle\Admin;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Routing\RouteCollection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
 
-use Snowcap\AdminBundle\Datalist\DatalistFactory;
-use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 use Snowcap\AdminBundle\Event\AdminEvents;
 use Snowcap\AdminBundle\Event\ContentAdminEvent;
 
@@ -24,38 +17,13 @@ abstract class ContentAdmin extends AbstractAdmin
     const SAVEMODE_CONTINUE = 'continue';
 
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var DatalistFactory
-     */
-    protected $datalistFactory;
-
-    /**
-     * @var FormFactory
-     */
-    protected $formFactory;
-
-    /**
-     * @var ContentRoutingHelper
-     */
-    protected $routingHelper;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
      * Return the main admin querybuilder for this content
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getQueryBuilder()
     {
-        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
         $queryBuilder
             ->select('e')
             ->from($this->getEntityClass(), 'e')
@@ -82,7 +50,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function findEntity($entityId)
     {
-        $entity = $this->em->getRepository($this->getEntityClass())->find($entityId);
+        $entity = $this->getDoctrine()->getEntityManager()->getRepository($this->getEntityClass())->find($entityId);
 
         return $entity;
     }
@@ -94,14 +62,14 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function saveEntity($entity)
     {
-        if($this->em->getUnitOfWork()->isInIdentityMap($entity)) {
-            $this->em->flush();
-            $this->eventDispatcher->dispatch(AdminEvents::CONTENT_UPDATE, new ContentAdminEvent($this, $entity));
+        if($this->getDoctrine()->getEntityManager()->getUnitOfWork()->isInIdentityMap($entity)) {
+            $this->getDoctrine()->getEntityManager()->flush();
+            $this->getEventDispatcher()->dispatch(AdminEvents::CONTENT_UPDATE, new ContentAdminEvent($this, $entity));
         }
         else {
-            $this->em->persist($entity);
-            $this->em->flush();
-            $this->eventDispatcher->dispatch(AdminEvents::CONTENT_CREATE, new ContentAdminEvent($this, $entity));
+            $this->getDoctrine()->getEntityManager()->persist($entity);
+            $this->getDoctrine()->getEntityManager()->flush();
+            $this->getEventDispatcher()->dispatch(AdminEvents::CONTENT_CREATE, new ContentAdminEvent($this, $entity));
         }
     }
 
@@ -112,58 +80,10 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function deleteEntity($entity)
     {
-        $this->em->remove($entity);
-        $this->em->flush();
+        $this->getDoctrine()->getEntityManager()->remove($entity);
+        $this->getDoctrine()->getEntityManager()->flush();
 
-        $this->eventDispatcher->dispatch(AdminEvents::CONTENT_DELETE, new ContentAdminEvent($this, $entity));
-    }
-
-    /**
-     * @param \Doctrine\ORM\EntityManager $em
-     */
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
-    /**
-     * @param \Symfony\Component\Form\FormFactory $formFactory
-     */
-    public function setFormFactory(FormFactory $formFactory)
-    {
-        $this->formFactory = $formFactory;
-    }
-
-    /**
-     * @param \Snowcap\AdminBundle\Datalist\DatalistFactory $datalistFactory
-     */
-    public function setDatalistFactory(DatalistFactory $datalistFactory)
-    {
-        $this->datalistFactory = $datalistFactory;
-    }
-
-    /**
-     * @param \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper $routingHelper
-     */
-    public function setRoutingHelper(ContentRoutingHelper $routingHelper)
-    {
-        $this->routingHelper = $routingHelper;
-    }
-
-    /**
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
-    /**
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    public function getEventDispatcher()
-    {
-        return $this->eventDispatcher;
+        $this->getEventDispatcher()->dispatch(AdminEvents::CONTENT_DELETE, new ContentAdminEvent($this, $entity));
     }
 
     /**
@@ -174,38 +94,38 @@ abstract class ContentAdmin extends AbstractAdmin
     {
         // Add index route
         $routeCollection->add(
-            $this->routingHelper->getRouteName($this, 'index'),
-            $this->routingHelper->getRoute($this, 'index', array(), true)
+            $this->getRoutingHelper()->getRouteName($this, 'index'),
+            $this->getRoutingHelper()->getRoute($this, 'index', array(), true)
         );
         // Add view route
         $routeCollection->add(
-            $this->routingHelper->getRouteName($this, 'view'),
-            $this->routingHelper->getRoute($this, 'view', array('id'))
+            $this->getRoutingHelper()->getRouteName($this, 'view'),
+            $this->getRoutingHelper()->getRoute($this, 'view', array('id'))
         );
         // Add create route
         $routeCollection->add(
-            $this->routingHelper->getRouteName($this, 'create'),
-            $this->routingHelper->getRoute($this, 'create')
+            $this->getRoutingHelper()->getRouteName($this, 'create'),
+            $this->getRoutingHelper()->getRoute($this, 'create')
         );
         // Add modal create route
         $routeCollection->add(
-            $this->routingHelper->getRouteName($this, 'modalCreate'),
-            $this->routingHelper->getRoute($this, 'modalCreate')
+            $this->getRoutingHelper()->getRouteName($this, 'modalCreate'),
+            $this->getRoutingHelper()->getRoute($this, 'modalCreate')
         );
         // Add autocomplete list route
         $routeCollection->add(
-            $this->routingHelper->getRouteName($this, 'autocompleteList'),
-            $this->routingHelper->getRoute($this, 'autocompleteList', array('where', 'property', 'query'))
+            $this->getRoutingHelper()->getRouteName($this, 'autocompleteList'),
+            $this->getRoutingHelper()->getRoute($this, 'autocompleteList', array('where', 'property', 'query'))
         );
         // Add update route
         $routeCollection->add(
-            $this->routingHelper->getRouteName($this, 'update'),
-            $this->routingHelper->getRoute($this, 'update', array('id'))
+            $this->getRoutingHelper()->getRouteName($this, 'update'),
+            $this->getRoutingHelper()->getRoute($this, 'update', array('id'))
         );
         // Add delete route
         $routeCollection->add(
-            $this->routingHelper->getRouteName($this, 'delete'),
-            $this->routingHelper->getRoute($this, 'delete', array('id'))
+            $this->getRoutingHelper()->getRouteName($this, 'delete'),
+            $this->getRoutingHelper()->getRoute($this, 'delete', array('id'))
         );
     }
 
@@ -214,7 +134,15 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function getDefaultPath()
     {
-        return $this->routingHelper->generateUrl($this, 'index');
+        return $this->getRoutingHelper()->generateUrl($this, 'index');
+    }
+
+    /**
+     * @return \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
+     */
+    public function getRoutingHelper()
+    {
+        return $this->container->get('snowcap_admin.routing_helper_content');
     }
 
     /**

@@ -9,15 +9,17 @@ services:
         class: Snowcap\AdminBundle\AdminManager
 
     # Base admin services
+    snowcap_admin.admin_abstract:
+        class: Snowcap\AdminBundle\Admin\AbstractAdmin
+        abstract: true
+        calls:
+            - [ setContainer, [@service_container]]
+
     snowcap_admin.admin_content:
         class: Snowcap\AdminBundle\Admin\ContentAdmin
         abstract: true
-        calls:
-            - [ setEntityManager, [@doctrine.orm.entity_manager] ]
-            - [ setDatalistFactory, [@snowcap_admin.datalist_factory] ]
-            - [ setFormFactory, [@form.factory] ]
-            - [ setRoutingHelper, [@snowcap_admin.routing_helper_content] ]
-            - [ setEventDispatcher, [@event_dispatcher] ]
+        parent: snowcap_admin.admin_abstract
+
 
     # Routing
     snowcap_admin.routing_loader:
@@ -174,3 +176,10 @@ services:
     snowcap_admin.security.user_manager:
         class: Snowcap\AdminBundle\Security\UserManager
         arguments: [%snowcap_admin.security.user_class%, @security.encoder_factory, @doctrine.orm.entity_manager]
+
+    snowcap_admin.content_voter:
+        class: Snowcap\AdminBundle\Security\Voter\ContentAdminVoter
+        public: false
+        arguments: [@snowcap_admin]
+        tags:
+            - { name: security.voter }
