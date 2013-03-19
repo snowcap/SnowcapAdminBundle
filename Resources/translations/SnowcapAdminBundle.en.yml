@@ -27,6 +27,16 @@ content:
             success: Your content has been updated.
             error: Your content cannot be updated.
     delete:
+        title: Delete operation confirmation
+        body:
+            subtitle: Be warned
+            message: This operation will destruct the data permanently.
+            content: |
+                <p>You are about to permanently delete the following entry:</p>
+                <p class="text-center"><strong>%content%</strong></p>
+                <p>Please make sure you don't need it anymore.</p>
+        cancel: Annuler
+        confirm: Delete
         flash:
             success: Your content has been deleted
             error_has_children: You cannot delete content with children
@@ -36,11 +46,7 @@ content:
         save: Save
         saveandcontinue: Save and continue
         edit: Edit
-        delete:
-          label: Delete
-          confirm:
-            title: Are you sure you want to delete this content ?
-            body: This operation will destruct the data permanently.
+        delete: Delete
         back: Back to list
         reorder: Reorder
         confirm:

@@ -1,0 +1,43 @@
+{% extends 'SnowcapAdminBundle::modal_base.html.twig' %}
+
+{% trans_default_domain 'SnowcapAdminBundle' %}
+
+{# modal_before block #}
+{% block modal_before %}
+<form
+    action="{{ admin_content_path(admin, 'delete', {'id': entity.id}) }}"
+    method="post"
+    novalidate="novalidate"
+>
+{% endblock modal_before %}
+
+{# modal_title block #}
+{% block modal_title %}
+    <h3>{{ "content.delete.title"|trans }}</h3>
+{% endblock modal_title %}
+
+{# body block #}
+{% block modal_body %}
+
+    <div class="alert alert-danger">
+        <h4>{{ "content.delete.body.subtitle"|trans }}</h4>
+        <p>{{ "content.delete.body.message"|trans }}</p>
+    </div>
+    <p>{{ "content.delete.body.content"|trans({'%content%': admin.entityName(entity)})|raw }}</p>
+
+{% endblock modal_body %}
+
+{# modal_footer block #}
+{% block modal_footer %}
+
+    <button type="button" data-admin="modal-cancel" class="btn">
+        {{ "content.delete.cancel"|trans }}
+    </button>
+    <button type="submit" name="saveMode" class="btn btn-danger">
+        {{ "content.delete.confirm"|trans }}
+    </button>
+
+{% endblock modal_footer %}
+
+{# modal_after block #}
+{% block modal_after %}</form>{% endblock modal_after %}

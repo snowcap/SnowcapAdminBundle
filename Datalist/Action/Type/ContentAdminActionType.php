@@ -51,6 +51,7 @@ class ContentAdminActionType extends AbstractActionType {
         $resolver
             ->setDefaults(array(
                 'params' => array('id' => 'id'),
+                'modal' => false,
             ))
             ->setOptional(array('icon'))
             ->setRequired(array('admin', 'action'))
@@ -85,6 +86,12 @@ class ContentAdminActionType extends AbstractActionType {
     public function buildViewContext(ViewContext $viewContext, DatalistActionInterface $action, $item, array $options)
     {
         parent::buildViewContext($viewContext, $action, $item, $options);
+
+        $attr = array();
+        if(true === $options['modal']) {
+            $attr['data-bootstrap'] = 'modal';
+        }
+        $viewContext['attr'] = $attr;
 
         if(isset($options['icon'])) {
             $viewContext['icon'] = $options['icon'];

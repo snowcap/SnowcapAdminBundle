@@ -27,6 +27,16 @@ content:
             success: Le contenu a bien été mis à jour.
             error: Le contenu n'a pas pu être mis à jour.
     delete:
+        title: Confirmation de suppression
+        body:
+            subtitle: Attention
+            message: Cette opération détruira les données de façon permanente.
+            content: |
+                <p>Cette action supprimera définitivement le contenu suivant :</p>
+                <p class="text-center"><strong>%content%</strong></p>
+                <p>Assurez-vous que ce contenu n'est plus utilisé avant de l'effacer.</p>
+        cancel: Annuler
+        confirm: Effacer
         flash:
             success: Le contenu a bien été effacé.
             error_has_children: You cannot delete content with children
@@ -36,11 +46,7 @@ content:
         save: Sauvegarder
         saveandcontinue: Sauver et continuer
         edit: Modifier
-        delete:
-          label: Effacer
-          confirm:
-            title: Etes-vous certain de vouloir supprimer ce contenu ?
-            body: Cette opération effacera le contenu à titre définitif
+        delete: Effacer
         back: Retour à la liste
         reorder: Réordonner
         confirm:

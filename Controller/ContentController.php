@@ -126,10 +126,17 @@ class ContentController extends BaseController
     public function deleteAction(Request $request, ContentAdmin $admin)
     {
         $entity = $admin->findEntity($request->attributes->get('id'));
-        $admin->deleteEntity($entity);
-        $this->setFlash('success', 'content.delete.flash.success');
+        if($request->isMethod('post')) {
+            $admin->deleteEntity($entity);
+            $this->setFlash('success', 'content.delete.flash.success');
 
-        return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
+            return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
+        }
+
+        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig', array(
+            'admin' => $admin,
+            'entity' => $entity,
+        ));
     }
 
     /**
@@ -152,7 +159,7 @@ class ContentController extends BaseController
 
                 return new Response(json_encode($json), 201);
             } else {
-
+                //TODO: handle invalid ?
             }
         }
 
