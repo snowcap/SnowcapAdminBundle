@@ -206,3 +206,77 @@ See also Abstract Field Type for inherited options.
 ## Filter types
 
 ## Customize Datalist rendering
+
+Before creating your own theme for your datalist, check the existing ones 
+to see if there is a match with your needs.
+
+If you want to override the layout of the datalist, you have to create your own layout. 
+
+You can extend an existing one if you want to change only a part of it :
+
+```twig
+{# src/Acme/AdminBundle/Resources/views/Datalist/datalist_custom_layout.html.twig #}
+
+
+{% extends 'SnowcapAdminBundle:Datalist:datalist_grid_layout.html.twig' %}
+
+{% block datalist %}
+    {% if datalist.option('search') %}
+        {{ datalist_search(datalist) }}
+    {% endif %}
+    {% if datalist.filterable %}
+        <div class="row-fluid">
+            <div class="span9">
+                {{ block('datalist_custom') }}
+            </div>
+            <div class="span3">{{ datalist_filters(datalist) }}</div>
+        </div>
+    {% else  %}
+        {{ block('datalist_custom') }}
+    {% endif %}
+
+    {% if datalist.paginator is not null %}
+        {{ paginator_widget(datalist.paginator) }}
+    {% endif %}
+{% endblock datalist %}
+
+{% block datalist_custom %}
+    {% for item in datalist %}
+        <div>
+            {% for field in datalist.fields %}
+                {{ datalist_field(field, item) }}
+            {% endfor %}
+            <p>
+            {% if datalist.actions|length > 0 %}
+                {% for action in datalist.actions %}
+                    {{ datalist_action(action, item) }}{% if not loop.last %} {% endif %}
+                {% endfor %}
+            {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+{% endblock datalist_tiled %}
+
+{# text field #}
+{% block text_field %}
+    <h4>{{ field.options['label']|trans({}, translation_domain) }}</h4>
+    <p>
+        {% if value is not null %}
+            {{ value|raw }}
+        {% else %}
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
+        {% endif %}
+    </p>
+{% endblock text_field %}
+```
+
+Now you just have to apply the theme on your datalist. See the example below :
+
+```twig
+{# src/Acme/AdminBundle/Resources/views/Custom/custom.html.twig #}
+
+
+{% datalist_theme datalist 'AcmeAdminBundle:Datalist:datalist_tiled_layout.html.twig' %}
+
+{{ datalist_widget(datalist) }}
+```
