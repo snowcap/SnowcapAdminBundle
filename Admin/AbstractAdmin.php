@@ -2,8 +2,17 @@
 
 namespace Snowcap\AdminBundle\Admin;
 
-abstract class AbstractAdmin implements AdminInterface
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+
+abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
     /**
      * @var string
      */
@@ -76,5 +85,98 @@ abstract class AbstractAdmin implements AdminInterface
     public function hasOption($name)
     {
         return array_key_exists($name, $this->options);
+    }
+
+    /**
+     * Sets the Container.
+     *
+     * @param ContainerInterface $container A ContainerInterface instance
+     *
+     * @api
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @param mixed $data
+     * @param array $options
+     * @return \Symfony\Component\Form\FormBuilderInterface
+     */
+    public function createFormBuilder($data = null, array $options = array())
+    {
+        return $this->container->get('form.factory')->createBuilder('form', $data, $options);
+    }
+
+    /**
+     * @param string $type
+     * @param mixed $data
+     * @param array $options
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    public function createForm($type, $data = null, array $options = array())
+    {
+        return $this->container->get('form.factory')->create($type, $data, $options);
+    }
+
+    /**
+     * @param array $options
+     * @return \Snowcap\AdminBundle\Datalist\DatalistBuilder
+     */
+    public function createDatalistBuilder(array $options = array())
+    {
+        return $this->container->get('snowcap_admin.datalist_factory')->createBuilder('datalist', $data, $options);
+    }
+
+    /**
+     * @param string $type
+     * @param array $options
+     * @return \Snowcap\AdminBundle\Datalist\DatalistInterface
+     */
+    public function createDatalist($type, array $options = array())
+    {
+        return $this->container->get('snowcap_admin.datalist_factory')->create($type, $options);
+    }
+
+    /**
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     */
+    public function getDoctrine()
+    {
+        return $this->container->get('doctrine');
+    }
+
+    /**
+     * @return \Symfony\Component\EventDispatcher\EventDispatcher
+     */
+    public function getEventDispatcher()
+    {
+        return $this->container->get('event_dispatcher');
+    }
+
+    /**
+     * Gets a service by id.
+     *
+     * @param string $id The service id
+     *
+     * @return object The service
+     */
+    protected function get($id)
+    {
+        return $this->container->get($id);
+    }
+
+    /**
+     * By default, grant access
+     *
+     * @param UserInterface $user
+     * @param string $attribute
+     * @param mixed $object
+     * @return int
+     */
+    public function isGranted(UserInterface $user, $attribute, $object)
+    {
+        return VoterInterface::ACCESS_GRANTED;
     }
 }

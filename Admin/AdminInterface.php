@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Admin;
 
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 interface AdminInterface
 {
@@ -55,4 +56,14 @@ interface AdminInterface
      * @return mixed
      */
     public function hasOption($name);
+
+    /**
+     * Should return one of VoterInterface::ACCESS_XXX constant (1, 0 or -1)
+     *
+     * @param UserInterface $user
+     * @param string $attribute
+     * @param mixed $object
+     * @return int
+     */
+    public function isGranted(UserInterface $user, $attribute, $object);
 }

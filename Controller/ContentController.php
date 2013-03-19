@@ -2,6 +2,7 @@
 
 namespace Snowcap\AdminBundle\Controller;
 
+use Snowcap\AdminBundle\Admin\AdminInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Util\PropertyPath;
@@ -10,6 +11,8 @@ use Symfony\Component\Form\Form;
 use Snowcap\CoreBundle\Util\String;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * This controller provides basic CRUD capabilities for content models
@@ -23,6 +26,8 @@ class ContentController extends BaseController
      */
     public function indexAction(Request $request, ContentAdmin $admin)
     {
+        $this->secure($admin, 'ADMIN_CONTENT_LIST');
+
         $datalist = $admin->getDatalist();
         $datasource = new DoctrineORMDatasource($admin->getQueryBuilder());
         $datalist->setDatasource($datasource);
@@ -41,6 +46,7 @@ class ContentController extends BaseController
     public function viewAction(Request $request, ContentAdmin $admin)
     {
         $entity = $admin->findEntity($request->attributes->get('id'));
+        $this->secure($admin, 'ADMIN_CONTENT_VIEW', $entity);
 
         return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':view.html.twig', array(
             'admin' => $admin,
@@ -54,6 +60,8 @@ class ContentController extends BaseController
      */
     public function createAction(Request $request, ContentAdmin $admin)
     {
+        $this->secure($admin, 'ADMIN_CONTENT_CREATE');
+
         $entity = $admin->buildEntity();
         $form = $admin->getForm();
         $form->setData($entity);
@@ -88,10 +96,10 @@ class ContentController extends BaseController
     public function updateAction(Request $request, ContentAdmin $admin)
     {
         $entity = $admin->findEntity($request->attributes->get('id'));
-
         if ($entity === null) {
             return $this->renderError('error.content.notfound', 404);
         }
+        $this->secure($admin, 'ADMIN_CONTENT_UPDATE', $entity);
 
         $form = $admin->getForm();
         $form->setData($entity);
@@ -126,6 +134,8 @@ class ContentController extends BaseController
     public function deleteAction(Request $request, ContentAdmin $admin)
     {
         $entity = $admin->findEntity($request->attributes->get('id'));
+        $this->secure($admin, 'ADMIN_CONTENT_DELETE', $entity);
+
         if($request->isMethod('post')) {
             $admin->deleteEntity($entity);
             $this->setFlash('success', 'content.delete.flash.success');
@@ -144,6 +154,8 @@ class ContentController extends BaseController
      *
      */
     public function modalCreateAction(Request $request, ContentAdmin $admin) {
+        $this->secure($admin, 'ADMIN_CONTENT_CREATE');
+
         $entity = $admin->buildEntity();
         $form = $admin->getForm();
         $form->setData($entity);
@@ -212,10 +224,37 @@ class ContentController extends BaseController
     }
 
     /**
+     * @param AdminInterface $admin
+     * @param mixed $attributes
+     * @param object $object
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     */
+    protected function secure(AdminInterface $admin, $attributes, $object = null)
+    {
+        if(!is_array($attributes)) {
+            $attributes = array($attributes);
+        }
+        $suffixedAttributes = array_map(function($attribute) use($admin) {
+            return $attribute . '__' . strtoupper($admin->getAlias());
+        }, $attributes);
+        if(!$this->getSecurityContext()->isGranted($suffixedAttributes, $object)) {
+            throw new AccessDeniedException();
+        }
+    }
+
+    /**
      * @return \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
      */
     protected function getRoutingHelper()
     {
         return $this->get('snowcap_admin.routing_helper_content');
+    }
+
+    /**
+     * @return SecurityContext
+     */
+    protected function getSecurityContext()
+    {
+        return $this->get('security.context');
     }
 }
