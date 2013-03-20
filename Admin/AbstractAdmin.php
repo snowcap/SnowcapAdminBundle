@@ -156,7 +156,7 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
     }
 
     /**
-     * @return SecurityContextInterface
+     * @return \Symfony\Component\Security\Core\SecurityContextInterface
      */
     public function getSecurityContext()
     {
