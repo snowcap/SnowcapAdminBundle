@@ -60,9 +60,9 @@ class ContentController extends BaseController
      */
     public function createAction(Request $request, ContentAdmin $admin)
     {
-        $this->secure($admin, 'ADMIN_CONTENT_CREATE');
-
         $entity = $admin->buildEntity();
+        $this->secure($admin, 'ADMIN_CONTENT_CREATE', $entity);
+
         $form = $admin->getForm();
         $form->setData($entity);
 
