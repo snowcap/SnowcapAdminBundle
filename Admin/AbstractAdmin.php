@@ -148,11 +148,19 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
     }
 
     /**
-     * @return \Symfony\Component\EventDispatcher\EventDispatcher
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     public function getEventDispatcher()
     {
         return $this->container->get('event_dispatcher');
+    }
+
+    /**
+     * @return SecurityContextInterface
+     */
+    public function getSecurityContext()
+    {
+        return $this->container->get('security.context');
     }
 
     /**
