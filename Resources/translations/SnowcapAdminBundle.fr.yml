@@ -39,7 +39,7 @@ content:
         confirm: Effacer
         flash:
             success: Le contenu a bien été effacé.
-            error_has_children: You cannot delete content with children
+            error_has_children: Impossible de supprimer un contenu lié à d'autres éléments
     actions:
         header: Actions
         create: Nouveau
@@ -51,9 +51,9 @@ content:
         reorder: Réordonner
         confirm:
           title: Confirmation
-          body: Etes-vous certains de vouloir effectuer cette action ?
+          body: Etes-vous certain de vouloir effectuer cette action ?
           confirm: J'en suis certain
-          cancel: Pas sur
+          cancel: Pas sûr
 
 wysiwyg:
     browse:
@@ -94,7 +94,7 @@ cataloguetranslation:
         title: Aide
         introduction: |
           Cette rubrique reprend tous les contenus nécéssaires à l'interface du site, comme un titre de page ou un message de confirmation.<br/>
-          La plupart de ces champs sont des textes simples, mais certains champs contiennent des particularités pour satisfaire des besoins spécifiques:
+          La plupart de ces champs sont des textes simples, mais certains champs contiennent des particularités pour satisfaire des besoins spécifiques :
         example: Exemple
         dynamic:
             title: Valeurs dynamiques
@@ -110,10 +110,10 @@ cataloguetranslation:
             title: Pluralisation
             description: |
               Certaines traductions dépendent d'un nombre donné<br/>
-              Elles peuvent répondre aux différents cas des figure.<br/>
+              Elles peuvent répondre aux différents cas de figure.<br/>
               Il ne faut donc pas modifier la stucture de la phrase, uniquement les mots traduisibles
             example: |
-              Une traduction d'un résultat d'une recherche pourrait afficher, dependemment du nombre de résultats:<br/>
+              Une traduction d'un résultat d'une recherche pourrait afficher, dépendemment du nombre de résultats :<br/>
               <strong>"Aucun résultat", "1 résultat", "x résultats"</strong><br/><br/>
               Une syntaxe spéciale est alors prise en compte:<br/>
               <code>{0}No results|{1}1 result|]1,Inf]%count% results</code><br/>
