@@ -126,7 +126,7 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
      */
     public function createDatalistBuilder(array $options = array())
     {
-        return $this->container->get('snowcap_admin.datalist_factory')->createBuilder('datalist', $data, $options);
+        return $this->container->get('snowcap_admin.datalist_factory')->createBuilder('datalist', $options);
     }
 
     /**
