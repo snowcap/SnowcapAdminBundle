@@ -19,7 +19,7 @@
     {# list block #}
     {% block list %}
 
-        {% if datalist is  empty %}
+        {% if datalist is empty %}
             {{ bootstrap.alert("content.list.empty"|trans({'%content_name%': admin_label(admin)}, 'SnowcapAdminBundle')) }}
         {% endif %}
         {{ datalist_widget(datalist) }}

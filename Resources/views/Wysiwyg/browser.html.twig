@@ -1,54 +1,20 @@
-{% import 'SnowcapBootstrapBundle::macros.html.twig' as bootstrap %}
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>{% block title %}{{ "wysiwyg.browse.title"|trans({}) }}{% endblock %}</title>
-		{% block stylesheets %}
-            <link rel="stylesheet" type="text/css" href="{{ asset('bundles/snowcapbootstrap/vendor/bootstrap/css/bootstrap.min.css') }}"/>
-            <link rel="stylesheet" type="text/css" href="{{ asset('bundles/snowcapadmin/css/all.css') }}"/>
-		{% endblock %}
-	</head>
-	<body class="wysiwyg">
-        <div class="container">
-            {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
-            {% for type, flashMessages in app.session.flashbag.all(() %}
-                {%  for flashMessage in flashMessages %}
-                    {{ alert(flashMessage, type, null, true) }}
-                {% enfor %}
-            {% endfor %}
-            <div class="wysiwyg-browser">
-                {% block body %}
-                    {% include 'SnowcapAdminBundle:Wysiwyg:upload.html.twig' with {'form': uploadForm } %}
-                    <h2>{{ "wysiwyg.browse.title"|trans({}, 'SnowcapAdminBundle') }}</h2>
-                    <hr/>
-                    {% if searchForm is defined and (list.data is not empty or searchForm.vars.value is not empty) %}
-                    <form action="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" method="post" class="form-search" novalidate="novalidate">
-                        {% for field in searchForm %}
-                        {{ form_widget(field, { 'attr': {'placeholder': "content.filter.label"|trans({}, 'SnowcapAdminBundle')}}) }}
-                        {% endfor %}
-                        <button type="submit" class="btn">{{ "content.filter.submit"|trans({}, 'SnowcapAdminBundle') }}</button>
-                        <a href="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" class="btn primary">{{ "content.filter.reset"|trans({}, 'SnowcapAdminBundle') }}</a>
-                    </form>
-                    {% endif %}
+{% extends "SnowcapAdminBundle::base.html.twig" %}
 
-                    {% if list.data is not empty %}
-                        {{ list_widget(list) }}
-                        {% if list.paginator != null %}
-                            {% include 'SnowcapBootstrapBundle:Widget:paginator.html.twig' with { 'paginator': list.paginator }%}
-                        {% endif %}
-                    {% else %}
-                        {{ bootstrap.alert("wysiwyg.browse.empty"|trans({}, 'SnowcapAdminBundle')) }}
-                    {% endif %}
-                {% endblock %}
-            </div>
-        </div>
-        {% block javascripts %}
-            <script src="{{ asset('bundles/snowcapcore/vendor/jquery/jquery.js') }}"></script>
-            <script src="{{ asset('bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap.js') }}"></script>
-            <script src="{{ asset('bundles/snowcapadmin/vendor/ckeditor/ckeditor.js') }}"></script>
-            <script src="{{ asset('bundles/snowcapadmin/vendor/ckeditor/adapters/jquery.js') }}"></script>
-            <script src="{{ asset('bundles/snowcapadmin/js/ckeditor.js') }}"></script>
-        {% endblock %}
-	</body>
-</html>
+{% import 'SnowcapBootstrapBundle::macros.html.twig' as bootstrap %}
+
+{% datalist_theme datalist 'SnowcapAdminBundle:Datalist:datalist_tiled_layout.html.twig' %}
+
+{% block main_nav %}{% endblock main_nav %}
+
+{% block body %}
+    {% include 'SnowcapAdminBundle:Wysiwyg:upload.html.twig' with {'form': uploadForm } %}
+    <h2>{{ "wysiwyg.browse.title"|trans({}, 'SnowcapAdminBundle') }}</h2>
+    <hr/>
+    <div class="wysiwyg-browser">
+        {% if datalist is empty %}
+            {{ bootstrap.alert("wysiwyg.browse.empty"|trans({}, 'SnowcapAdminBundle')) }}
+        {% else %}
+            {{ datalist_widget(datalist) }}
+        {% endif %}
+    </div>
+{% endblock %}

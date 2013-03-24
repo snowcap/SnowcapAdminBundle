@@ -22,7 +22,9 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
 	</head>
 	<body>
-        {{ render(controller('SnowcapAdminBundle:Navigation:main')) }}
+        {% block main_nav %}
+            {{ render(controller('SnowcapAdminBundle:Navigation:main')) }}
+        {% endblock main_nav %}
         <div class="container">
             {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
             {% for type, flashMessages in app.session.flashbag.all() %}

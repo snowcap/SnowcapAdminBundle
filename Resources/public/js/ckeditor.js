@@ -28,7 +28,7 @@ jQuery(document).ready(function ($) {
         window.close();
     };
 
-    $('body.wysiwyg .thumbnail').click(function (event) {
+    $('.wysiwyg-browser .thumbnail').click(function (event) {
         event.preventDefault();
         sendUrlToWysiwyg(this);
     });
