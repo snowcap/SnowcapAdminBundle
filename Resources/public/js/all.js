@@ -230,13 +230,14 @@ jQuery(document).ready(function ($) {
                         if('single' === mode) {
                             // TODO refactor with autocomplete updater
                             textInput.val(data.result[1]);
-                            valueInput.val(data.result[0]);
+                            valueInput.val(data.result[0]).trigger('change');
                         }
                         else {
                             var prototype = container.data('prototype');
                             var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
                             $prototype.val(data.result[0]);
                             container.prepend($prototype);
+                            $prototype.trigger('change');
 
                             $token = $('<li>').addClass('token').html($('<span>').html(data.result[1])).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
                             container.find('.tokens').append($token);
@@ -289,7 +290,7 @@ jQuery(document).ready(function ($) {
                 },
                 updater: function(item) {
                     if('single' === mode) {
-                        container.find('input[type=hidden]').val(mapped[item]);
+                        container.find('input[type=hidden]').val(mapped[item]).trigger('change');
                         return item;
                     }
                     else {
@@ -297,6 +298,7 @@ jQuery(document).ready(function ($) {
                         var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
                         $prototype.val(mapped[item]);
                         container.prepend($prototype);
+                        $prototype.trigger('change');
 
                         $token = $('<li>').addClass('token').html($('<span>').html(item)).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
                         container.find('.tokens').append($token);
