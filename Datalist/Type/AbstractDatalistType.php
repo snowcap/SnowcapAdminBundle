@@ -52,8 +52,4 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
         $viewContext['translation_domain'] = $options['translation_domain'];
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getBlockName();
 }
