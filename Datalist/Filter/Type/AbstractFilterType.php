@@ -17,8 +17,4 @@ abstract class AbstractFilterType implements FilterTypeInterface
             ->setOptional(array('default'));
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getBlockName();
 }

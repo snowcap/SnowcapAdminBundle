@@ -31,8 +31,4 @@ abstract class AbstractActionType implements ActionTypeInterface {
         $viewContext['options'] = $options;
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getBlockName();
 }
