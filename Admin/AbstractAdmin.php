@@ -100,43 +100,19 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
     }
 
     /**
-     * @param mixed $data
-     * @param array $options
-     * @return \Symfony\Component\Form\FormBuilderInterface
+     * @return \Symfony\Component\Form\FormFactoryInterface;
      */
-    public function createFormBuilder($data = null, array $options = array())
+    public function getFormFactory()
     {
-        return $this->container->get('form.factory')->createBuilder('form', $data, $options);
+        return $this->container->get('form.factory');
     }
 
     /**
-     * @param string $type
-     * @param mixed $data
-     * @param array $options
-     * @return \Symfony\Component\Form\FormInterface
+     * @return \Snowcap\AdminBundle\Datalist\DatalistFactory
      */
-    public function createForm($type, $data = null, array $options = array())
+    public function getDatalistFactory()
     {
-        return $this->container->get('form.factory')->create($type, $data, $options);
-    }
-
-    /**
-     * @param array $options
-     * @return \Snowcap\AdminBundle\Datalist\DatalistBuilder
-     */
-    public function createDatalistBuilder(array $options = array())
-    {
-        return $this->container->get('snowcap_admin.datalist_factory')->createBuilder('datalist', $options);
-    }
-
-    /**
-     * @param string $type
-     * @param array $options
-     * @return \Snowcap\AdminBundle\Datalist\DatalistInterface
-     */
-    public function createDatalist($type, array $options = array())
-    {
-        return $this->container->get('snowcap_admin.datalist_factory')->create($type, $options);
+        return $this->container->get('snowcap_admin.datalist_factory');
     }
 
     /**
