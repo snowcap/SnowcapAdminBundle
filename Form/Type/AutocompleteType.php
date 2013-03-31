@@ -52,7 +52,7 @@ class AutocompleteType extends AbstractType
         $resolver
             ->setDefaults(array(
                 'allow_add' => false,
-                'add_label' => 'Create',
+                'add_label' => 'Add new',
                 'multiple' => false,
                 'compound' => $compound,
 
