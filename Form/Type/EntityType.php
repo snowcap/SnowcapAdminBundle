@@ -43,7 +43,7 @@ class EntityType extends AbstractType
         $resolver
             ->setDefaults(array(
                 'allow_add' => false,
-                'add_label' => 'Add'
+                'add_label' => 'Add new'
             ))
             ->setRequired(array('admin'));
     }
