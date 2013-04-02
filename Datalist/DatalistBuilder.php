@@ -70,6 +70,19 @@ class DatalistBuilder extends DatalistConfig
     }
 
     /**
+     * @param $field
+     * @return $this
+     */
+    public function removeField($field)
+    {
+        if (array_key_exists($field, $this->fields)) {
+            unset($this->fields[$field]);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getFields()
@@ -94,6 +107,19 @@ class DatalistBuilder extends DatalistConfig
     }
 
     /**
+     * @param $filter
+     * @return $this
+     */
+    public function removeFilter($filter)
+    {
+        if (array_key_exists($filter, $this->filters)) {
+            unset($this->filters[$filter]);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $action
      * @param string $type
      * @param array $options
@@ -104,6 +130,19 @@ class DatalistBuilder extends DatalistConfig
             'type' => $type,
             'options' => $options
         );
+
+        return $this;
+    }
+
+    /**
+     * @param $action
+     * @return $this
+     */
+    public function removeAction($action)
+    {
+        if (array_key_exists($action, $this->actions)) {
+            unset($this->actions[$action]);
+        }
 
         return $this;
     }
