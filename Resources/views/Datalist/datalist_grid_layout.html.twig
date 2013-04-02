@@ -165,10 +165,17 @@
 {# simple action #}
 {% block simple_action %}
     {% set attr = attr|merge({'class': (attr.class|default('') ~ ' btn')|trim}) %}
-    <a class="btn" href="{{ url }}"{{ block('widget_attributes') }}>
-        {% if icon is defined %}<i class="icon-{{ icon }}"></i> {% endif %}
-        {{ label|trans({}, translation_domain) }}
-    </a>
+    {% if enabled %}
+        <a class="btn" href="{{ url }}"{{ block('widget_attributes') }}>
+            {% if icon is defined %}<i class="icon-{{ icon }}"></i> {% endif %}
+            {{ label|trans({}, translation_domain) }}
+        </a>
+    {% else %}
+        <span class="btn disabled">
+            {% if icon is defined %}<i class="icon-{{ icon }}"></i> {% endif %}
+            {{ label|trans({}, translation_domain) }}
+        </span>
+    {% endif %}
 {% endblock simple_action %}
 
 

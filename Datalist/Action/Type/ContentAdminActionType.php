@@ -52,13 +52,15 @@ class ContentAdminActionType extends AbstractActionType {
             ->setDefaults(array(
                 'params' => array('id' => 'id'),
                 'modal' => false,
+                'enabled' => true,
             ))
             ->setOptional(array('icon'))
             ->setRequired(array('admin', 'action'))
             ->setAllowedTypes(array(
                 'params' => 'array',
                 'admin' => array('string', 'Snowcap\AdminBundle\Admin\ContentAdmin'),
-                'action' => 'string'
+                'action' => 'string',
+                'enabled' => array('bool', 'callable')
             ))
             ->setNormalizers(array(
                 'admin' => $adminNormalizer
@@ -96,6 +98,15 @@ class ContentAdminActionType extends AbstractActionType {
         if(isset($options['icon'])) {
             $viewContext['icon'] = $options['icon'];
         }
+
+        $enabled = $options['enabled'];
+        if(is_callable($enabled)) {
+            $enabled = call_user_func($enabled, $item);
+        }
+        if(!is_bool($enabled)) {
+            throw new \UnexpectedValueException('The "enabled" callback must return a boolean value');
+        }
+        $viewContext['enabled'] = $enabled;
     }
 
 
