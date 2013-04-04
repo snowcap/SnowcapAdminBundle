@@ -53,6 +53,7 @@ class ContentAdminActionType extends AbstractActionType {
                 'params' => array('id' => 'id'),
                 'modal' => false,
                 'enabled' => true,
+                'attr' => array(),
             ))
             ->setOptional(array('icon'))
             ->setRequired(array('admin', 'action'))
@@ -89,7 +90,7 @@ class ContentAdminActionType extends AbstractActionType {
     {
         parent::buildViewContext($viewContext, $action, $item, $options);
 
-        $attr = array();
+        $attr = $options['attr'];
         if(true === $options['modal']) {
             $attr['data-bootstrap'] = 'modal';
         }
