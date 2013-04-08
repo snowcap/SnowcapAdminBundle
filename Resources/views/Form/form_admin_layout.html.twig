@@ -79,7 +79,7 @@
 {% endblock snowcap_admin_autocomplete_widget_attributes %}
 
 {# slug widget #}
-{% block slug_widget %}
+{% block snowcap_admin_slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}
     <div class="input-append">
         {{ block('field_widget') }}
@@ -87,7 +87,7 @@
     </div>
     {% from 'SnowcapBootstrapBundle::macros.html.twig' import modal %}
     {{ modal('modal-' ~ id, 'ATTENTION', 'If you change the slug, you can break links on other pages') }}
-{% endblock slug_widget %}
+{% endblock snowcap_admin_slug_widget %}
 
 {# markdown widget #}
 {% block snowcap_admin_markdown_widget %}

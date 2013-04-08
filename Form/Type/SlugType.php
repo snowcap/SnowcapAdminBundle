@@ -7,6 +7,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Class SlugType
+ *
+ * @package Snowcap\AdminBundle\Form\Type
+ */
 class SlugType extends AbstractType
 {
     /**
