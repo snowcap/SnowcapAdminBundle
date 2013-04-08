@@ -23,7 +23,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function getQueryBuilder()
     {
-        $queryBuilder = $this->getDoctrine()->getEntityManager()->createQueryBuilder();
+        $queryBuilder = $this->getDoctrine()->getManager()->createQueryBuilder();
         $queryBuilder
             ->select('e')
             ->from($this->getEntityClass(), 'e')
@@ -50,7 +50,7 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function findEntity($entityId)
     {
-        $entity = $this->getDoctrine()->getEntityManager()->getRepository($this->getEntityClass())->find($entityId);
+        $entity = $this->getDoctrine()->getManager()->getRepository($this->getEntityClass())->find($entityId);
 
         return $entity;
     }
@@ -62,13 +62,13 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function saveEntity($entity)
     {
-        if($this->getDoctrine()->getEntityManager()->getUnitOfWork()->isInIdentityMap($entity)) {
-            $this->getDoctrine()->getEntityManager()->flush();
+        if($this->getDoctrine()->getManager()->getUnitOfWork()->isInIdentityMap($entity)) {
+            $this->getDoctrine()->getManager()->flush();
             $this->getEventDispatcher()->dispatch(AdminEvents::CONTENT_UPDATE, new ContentAdminEvent($this, $entity));
         }
         else {
-            $this->getDoctrine()->getEntityManager()->persist($entity);
-            $this->getDoctrine()->getEntityManager()->flush();
+            $this->getDoctrine()->getManager()->persist($entity);
+            $this->getDoctrine()->getManager()->flush();
             $this->getEventDispatcher()->dispatch(AdminEvents::CONTENT_CREATE, new ContentAdminEvent($this, $entity));
         }
     }
@@ -80,8 +80,8 @@ abstract class ContentAdmin extends AbstractAdmin
      */
     public function deleteEntity($entity)
     {
-        $this->getDoctrine()->getEntityManager()->remove($entity);
-        $this->getDoctrine()->getEntityManager()->flush();
+        $this->getDoctrine()->getManager()->remove($entity);
+        $this->getDoctrine()->getManager()->flush();
 
         $this->getEventDispatcher()->dispatch(AdminEvents::CONTENT_DELETE, new ContentAdminEvent($this, $entity));
     }
