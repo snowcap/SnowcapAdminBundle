@@ -16,7 +16,7 @@ use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
 /**
- * Slug field type class
+ * Autocomplete field type class
  *
  */
 class AutocompleteType extends AbstractType

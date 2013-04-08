@@ -11,7 +11,7 @@ use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
 /**
- * Slug field type class
+ * Entity field type class
  *
  */
 class EntityType extends AbstractType
