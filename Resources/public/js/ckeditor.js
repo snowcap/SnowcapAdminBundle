@@ -5,6 +5,13 @@ jQuery(document).ready(function ($) {
             customConfig : $(wysiwyg).attr('data-wysiwyg')
         };
         CKEDITOR.replace(wysiwyg, thisConfig);
+
+        var editor = CKEDITOR.instances[$(wysiwyg).attr('id')]; //TODO: clean this up
+        editor.on('blur', function() {
+            if(true === editor.checkDirty()) {
+                $(wysiwyg).parents('form').trigger('change');
+            }
+        });
     });
 
     // Helper function to get parameters from the query string.
