@@ -146,6 +146,14 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
+     * @return \Doctrine\Common\Persistence\ObjectManager
+     */
+    public function getEntityManager()
+    {
+        return $this->getDoctrine()->getManager();
+    }
+
+    /**
      * @return string
      */
     abstract public function getEntityClass();
