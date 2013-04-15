@@ -54,6 +54,7 @@ content:
           body: Etes-vous certain de vouloir effectuer cette action ?
           confirm: J'en suis certain
           cancel: Pas sûr
+    data_changed_message: Les modifications n'ont pas été sauvegardées.
 
 wysiwyg:
     browse:
