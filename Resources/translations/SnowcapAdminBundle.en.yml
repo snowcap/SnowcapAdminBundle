@@ -54,7 +54,6 @@ content:
           body: Are you sure that you want to do this ?
           confirm: I am sure
           cancel: I am not that sure
-    data_changed_message: Some changes have not been saved.
 
 wysiwyg:
     browse:

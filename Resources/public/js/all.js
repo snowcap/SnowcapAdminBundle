@@ -319,6 +319,7 @@ jQuery(document).ready(function ($) {
             // Remove associations
             if('multiple' === mode) {
                 $('ul.tokens').on('click', 'a[rel=remove]', function(event) {
+                    event.preventDefault();
                     var value = $(this).parent('li').data('value');
                     $(this).parent('li').remove();
                     container.find('input[value=' + value + ']').remove();
@@ -357,20 +358,26 @@ jQuery(document).ready(function ($) {
     });
 
     // Handle "content changed" event
-    var $form_change_warning = $('[data-admin=form-change-warning]');
-    if ($form_change_warning.length > 0) {
-        $('body').data('admin-form-changed', false);
-        $form_change_warning.change(function(event) {
-            $('body').data('admin-form-changed', true);
-        });
-
-        $(window).bind('beforeunload', function() {
-            var formHasChanged = $('body').data('admin-form-changed');
-            if(formHasChanged) {
-                return $form_change_warning.data('changed-message');
-            }
-        });
-    }
-
-
+    $('a:not([href^=#])').click(function(event) {
+        var formHasChanged = $('body').data('admin-form-changed');
+        if(formHasChanged) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            var modal = $('#modal');
+            $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
+                modal.html(data);
+                modal.find('.cancel').click(function(event){
+                    modal.html('');
+                    modal.modal('hide');
+                });
+                modal.find('.proceed').click(function(event){
+                    window.location.href = href;
+                });
+                modal.find('.save').click(function(event){
+                    $('[data-admin=form-change-warning]').submit();
+                });
+                modal.modal('show');
+            });
+        }
+    });
 });
