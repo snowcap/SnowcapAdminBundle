@@ -34,11 +34,11 @@ This interactive shell will ask you for an email and then a password.
 
 You can alternatively specify the email and password as the second and third arguments:
 
-  <info>php app/console fos:user:create matthieu matthieu@example.com mypassword</info>
+  <info>snowcap:admin:generate:user matthieu matthieu@example.com mypassword</info>
 
 You can create a super admin via the roles flag:
 
-  <info>php app/console fos:user:create admin --roles=ADMIN,SUPER_ADMIN</info>
+  <info>snowcap:admin:generate:user admin --roles=ADMIN,SUPER_ADMIN</info>
 EOT
             );
     }
