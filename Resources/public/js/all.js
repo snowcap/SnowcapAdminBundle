@@ -65,6 +65,9 @@ jQuery(document).ready(function ($) {
                 .replace(/[îï]/g,'i')
                 .replace(/[ôö]/g,'o')
                 .replace(/[ûüù]/g,'u')
+                .replace(/[ýÿ]/g,'y')
+                .replace(/[ç]/g,'c')
+                .replace(/[œ]/g,'oe')
                 .replace(/[^a-zA-Z0-9\-]/g, '')
                 .replace(/\-+/g, '-')
                 .replace(/\-+$/, '');
