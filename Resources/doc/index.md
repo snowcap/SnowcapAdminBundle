@@ -181,7 +181,7 @@ security:
 
     providers:
         admin_users:
-            entity: { class: AcmeAdminBunde:AdminUser, property: username }
+            entity: { class: AcmeAdminBundle:AdminUser, property: username }
 
     firewalls:
         ...
