@@ -5,6 +5,7 @@ namespace Snowcap\AdminBundle\Twig\Extension;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Snowcap\AdminBundle\AdminManager;
+use Snowcap\AdminBundle\Admin\AdminInterface;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 
@@ -104,7 +105,7 @@ class AdminExtension extends \Twig_Extension
      * @param bool $plural
      * @return string
      */
-    public function getAdminLabel(ContentAdmin $admin, $plural = false)
+    public function getAdminLabel(AdminInterface $admin, $plural = false)
     {
         $number = $plural ? 10 : 1;
         $label = $admin->getOption('label');
