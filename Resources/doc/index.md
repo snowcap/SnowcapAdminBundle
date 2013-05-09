@@ -129,18 +129,6 @@ assetic:
 
 The AdminBundle requires at least an active firewall.
 
-If you just want to test it right away on your local machine, you can simply create an anonymous firewall :
-
-```yml
-# app/config/security.yml
-
-security:
-    firewalls:
-        admin:
-            pattern: ^/admin
-            anonymous: true
-```
-
 You can use whichever authentication mechanism you like. In order to make your life easier, SnowcapAdminBundle provides
 a base user class, and a few other extras to be used with Doctrine's entity user provider and standard login form authentication.
 
