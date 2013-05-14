@@ -1,6 +1,9 @@
 <?php
 namespace Snowcap\AdminBundle\Admin;
 
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouteCollection;
 
 use Snowcap\AdminBundle\Event\AdminEvents;
@@ -15,6 +18,22 @@ abstract class ContentAdmin extends AbstractAdmin
 {
     const SAVEMODE_NORMAL = 'normal';
     const SAVEMODE_CONTINUE = 'continue';
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     *
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver
+            ->setOptional(array('entity_class', 'entity_name'))
+            ->setAllowedTypes(array(
+                'entity_class' => 'string',
+                'entity_name' => 'string'
+            ));
+    }
 
     /**
      * Return the main admin querybuilder for this content
@@ -156,7 +175,13 @@ abstract class ContentAdmin extends AbstractAdmin
     /**
      * @return string
      */
-    abstract public function getEntityClass();
+    public function getEntityClass(){
+        if(!$this->hasOption('entity_class')) {
+            throw new InvalidOptionsException('The option "entity_class" must be set (or you have to define a getEntityClass method)');
+        };
+
+        return $this->getOption('entity_class');
+    }
 
     /**
      * Return the main admin form for this content
@@ -174,8 +199,17 @@ abstract class ContentAdmin extends AbstractAdmin
     abstract public function getDatalist();
 
     /**
-     * @param mixed $entity
+     * @param object $entity
+     *
      * @return string
      */
-    abstract public function getEntityName($entity);
+    public function getEntityName($entity) {
+        if(!$this->hasOption('entity_name')) {
+            throw new InvalidOptionsException('The option "entity_name" must be set (or you have to define a getEntityName method)');
+        };
+
+        $accessor = PropertyAccess::getPropertyAccessor();
+
+        return $accessor->getValue($entity, $this->getOption('entity_name'));
+    }
 }

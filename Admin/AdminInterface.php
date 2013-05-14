@@ -2,6 +2,7 @@
 
 namespace Snowcap\AdminBundle\Admin;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -38,6 +39,12 @@ interface AdminInterface
      * @return array
      */
     public function getOptions();
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     * @return mixed
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver);
 
     /**
      * @param string $name

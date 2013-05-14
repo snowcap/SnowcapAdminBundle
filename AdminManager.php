@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle;
 
 use Snowcap\AdminBundle\Admin\AdminInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Environment admin service
@@ -26,7 +27,12 @@ class AdminManager
     public function registerAdmin($alias, AdminInterface $admin, array $options)
     {
         $admin->setAlias($alias);
-        $admin->setOptions($options);
+
+        $resolver = new OptionsResolver();
+        $admin->setDefaultOptions($resolver);
+        $resolvedOptions = $resolver->resolve($options);
+        $admin->setOptions($resolvedOptions);
+
         $this->admins[$alias] = $admin;
     }
 

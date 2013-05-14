@@ -19,15 +19,19 @@ class AdminCompilerPass implements CompilerPassInterface
 
         $definition = $container->getDefinition('snowcap_admin');
         foreach ($container->findTaggedServiceIds('snowcap_admin.admin') as $serviceId => $tag) {
-            $alias = isset($tag[0]['alias'])
-                ? $tag[0]['alias']
+            $adminTag = $tag[0];
+
+            $alias = isset($adminTag['alias'])
+                ? $adminTag['alias']
                 : $serviceId;
-            $label = isset($tag[0]['label'])
-                ? $tag[0]['label']
-                : $serviceId;
-            $definition->addMethodCall('registerAdmin', array($alias, new Reference($serviceId), array(
-                'label' => $label,
-            )));
+
+            if(!isset($adminTag['label'])) {
+                $adminTag['label'] = $serviceId;
+            }
+
+            unset($adminTag['alias']);
+
+            $definition->addMethodCall('registerAdmin', array($alias, new Reference($serviceId), $adminTag));
         }
     }
 }
