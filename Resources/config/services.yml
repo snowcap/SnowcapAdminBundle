@@ -20,7 +20,6 @@ services:
         abstract: true
         parent: snowcap_admin.admin_abstract
 
-
     # Routing
     snowcap_admin.routing_loader:
         class: Snowcap\AdminBundle\Routing\Loader\AdminLoader

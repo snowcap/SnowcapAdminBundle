@@ -12,7 +12,14 @@ abstract class AbstractActionType implements ActionTypeInterface {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-
+        $resolver
+            ->setDefaults(array(
+                'attr' => array(),
+                'enabled' => true,
+            ))
+            ->setAllowedTypes(array(
+                'enabled' => array('bool', 'callable')
+            ));
     }
 
     /**
@@ -23,6 +30,17 @@ abstract class AbstractActionType implements ActionTypeInterface {
      */
     public function buildViewContext(ViewContext $viewContext, DatalistActionInterface $action, $item, array $options)
     {
+        $viewContext['attr'] = $options['attr'];
+
+        $enabled = $options['enabled'];
+        if(is_callable($enabled)) {
+            $enabled = call_user_func($enabled, $item);
+        }
+        if(!is_bool($enabled)) {
+            throw new \UnexpectedValueException('The "enabled" callback must return a boolean value');
+        }
+        $viewContext['enabled'] = $enabled;
+
         $url = $action->getType()->getUrl($action, $item, $action->getOptions());
 
         $viewContext['url'] = $url;
@@ -30,5 +48,4 @@ abstract class AbstractActionType implements ActionTypeInterface {
         $viewContext['translation_domain'] = $action->getDatalist()->getOption('translation_domain');
         $viewContext['options'] = $options;
     }
-
 }

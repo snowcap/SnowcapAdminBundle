@@ -16,12 +16,12 @@ class ContentAdminActionType extends AbstractActionType {
     /**
      * @var \Snowcap\AdminBundle\AdminManager
      */
-    private $adminManager;
+    protected $adminManager;
 
     /**
      * @var \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
      */
-    private $routingHelper;
+    protected $routingHelper;
 
     /**
      * @param \Symfony\Component\Routing\RouterInterface $router
@@ -52,8 +52,6 @@ class ContentAdminActionType extends AbstractActionType {
             ->setDefaults(array(
                 'params' => array('id' => 'id'),
                 'modal' => false,
-                'enabled' => true,
-                'attr' => array(),
             ))
             ->setOptional(array('icon'))
             ->setRequired(array('admin', 'action'))
@@ -61,7 +59,6 @@ class ContentAdminActionType extends AbstractActionType {
                 'params' => 'array',
                 'admin' => array('string', 'Snowcap\AdminBundle\Admin\ContentAdmin'),
                 'action' => 'string',
-                'enabled' => array('bool', 'callable')
             ))
             ->setNormalizers(array(
                 'admin' => $adminNormalizer
@@ -90,26 +87,14 @@ class ContentAdminActionType extends AbstractActionType {
     {
         parent::buildViewContext($viewContext, $action, $item, $options);
 
-        $attr = $options['attr'];
         if(true === $options['modal']) {
-            $attr['data-bootstrap'] = 'modal';
+            $viewContext['attr']['data-bootstrap'] = 'modal';
         }
-        $viewContext['attr'] = $attr;
 
         if(isset($options['icon'])) {
             $viewContext['icon'] = $options['icon'];
         }
-
-        $enabled = $options['enabled'];
-        if(is_callable($enabled)) {
-            $enabled = call_user_func($enabled, $item);
-        }
-        if(!is_bool($enabled)) {
-            throw new \UnexpectedValueException('The "enabled" callback must return a boolean value');
-        }
-        $viewContext['enabled'] = $enabled;
     }
-
 
     /**
      * @return string

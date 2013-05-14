@@ -30,7 +30,9 @@ class SimpleActionType extends AbstractActionType {
         parent::setDefaultOptions($resolver);
 
         $resolver
-            ->setDefaults(array('params' => array()))
+            ->setDefaults(array(
+                'params' => array(),
+            ))
             ->setRequired(array('route'));
     }
 
