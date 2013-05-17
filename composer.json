@@ -26,10 +26,10 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.2",
-        "snowcap/core-bundle": ">=2.2",
-        "snowcap/bootstrap-bundle": ">=2.2",
-        "knplabs/knp-markdown-bundle": "1.2.*@dev"
+        "symfony/framework-bundle": ">=2.2,<2.4",
+        "snowcap/core-bundle": ">=2.2,<2.4",
+        "snowcap/bootstrap-bundle": ">=2.2,<2.4",
+        "knplabs/knp-markdown-bundle": ">=1.2"
 
     },
     "autoload": {
@@ -38,7 +38,7 @@
     "target-dir": "Snowcap/AdminBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.2.x-dev"
+            "dev-master": "2.3.x-dev"
         }
     }
 }
