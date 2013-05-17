@@ -88,7 +88,9 @@ class ContentAdminActionType extends AbstractActionType {
         parent::buildViewContext($viewContext, $action, $item, $options);
 
         if(true === $options['modal']) {
-            $viewContext['attr']['data-bootstrap'] = 'modal';
+            $attr = $viewContext['attr'];
+            $attr['data-bootstrap'] = 'modal';
+            $viewContext['attr'] = $attr;
         }
 
         if(isset($options['icon'])) {
