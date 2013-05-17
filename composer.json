@@ -29,7 +29,6 @@
         "symfony/framework-bundle": ">=2.2,<2.4",
         "snowcap/core-bundle": ">=2.2,<2.4",
         "snowcap/bootstrap-bundle": ">=2.2,<2.4",
-        "knplabs/knp-markdown-bundle": ">=1.2"
 
     },
     "autoload": {
