@@ -82,7 +82,7 @@
 {% block snowcap_admin_slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}
     <div class="input-append">
-        {{ block('field_widget') }}
+        {{ block('form_widget') }}
         <span class="add-on"><a href="#locked"><i class="icon-pencil icon"></i></a></span>
     </div>
     {% from 'SnowcapBootstrapBundle::macros.html.twig' import modal %}
