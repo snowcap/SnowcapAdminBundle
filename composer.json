@@ -26,9 +26,9 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.2,<2.4",
-        "snowcap/core-bundle": ">=2.2,<2.4",
-        "snowcap/bootstrap-bundle": ">=2.2,<2.4"
+        "symfony/framework-bundle": ">=2.2,<2.4-dev",
+        "snowcap/core-bundle": ">=2.2,<2.4-dev",
+        "snowcap/bootstrap-bundle": ">=2.2,<2.4-dev"
 
     },
     "autoload": {
