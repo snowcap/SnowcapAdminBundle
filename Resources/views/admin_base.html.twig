@@ -26,13 +26,11 @@
             {{ render(controller('SnowcapAdminBundle:Navigation:main')) }}
         {% endblock main_nav %}
         <div class="container">
-            {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
-            {% for type, flashMessages in app.session.flashbag.all() %}
-                {% for flashMessage in flashMessages %}
-                    {{ alert(flashMessage, type, null, true) }}
-                {% endfor %}
-            {% endfor %}
-            {% block body %}{% endblock %}
+            {% block alerts %}
+                {% include 'SnowcapAdminBundle:Widget:alerts.html.twig' %}
+            {% endblock alerts %}
+
+            {% block body %}{% endblock body %}
         </div>
         <div class="modal fade" id="modal" style="display: none"></div>
         {% block javascripts %}
