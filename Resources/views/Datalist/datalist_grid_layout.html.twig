@@ -1,28 +1,36 @@
 {# datalist grid block #}
 {% block datalist %}
 
-    {% if datalist.searchable %}
-        {{ datalist_search(datalist) }}
-    {% endif %}
-
-    {% if datalist.option('filters_on_top') and datalist.filterable %}
-        {{ datalist_filters(datalist) }}
-        <hr/>
-        {{ block('datalist_table') }}
-    {% elseif datalist.filterable %}
-        <hr/>
-        <div class="row-fluid">
-            <div class="span9">
-                {{ block('datalist_table') }}
-            </div>
-            <div class="span3">
-                <div class="well well-small">
+    {% if datalist.option('filters_on_top') %}
+        {% if datalist.filterable or datalist.searchable %}
+            <div class="well">
+                {% if datalist.searchable %}
+                    {{ datalist_search(datalist) }}
+                {% endif %}
+                {% if datalist.filterable %}
                     {{ datalist_filters(datalist) }}
+                {% endif %}
+            </div>
+            {{ block('datalist_table') }}
+        {% endif %}
+    {% else %}
+        {% if datalist.searchable %}
+            {{ datalist_search(datalist) }}
+        {% endif %}
+        {% if datalist.filterable %}
+            <div class="row-fluid">
+                <div class="span9">
+                    {{ block('datalist_table') }}
+                </div>
+                <div class="span3">
+                    <div class="well well-small">
+                        {{ datalist_filters(datalist) }}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% else %}
-        {{ block('datalist_table') }}
+        {% else  %}
+            {{ block('datalist_table') }}
+        {% endif %}
     {% endif %}
 
     {% if datalist.paginator is not null %}
@@ -159,18 +167,18 @@
 
 {# search filter #}
 {% block search_filter %}
-    <div class="control-group">
+    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    </div>
+    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
 {% endblock search_filter %}
 
 {# entity filter #}
 {% block entity_filter %}
-    <div class="control-group">
+    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    </div>
+    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
 {% endblock entity_filter %}
 
 {# simple action #}
