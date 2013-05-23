@@ -250,6 +250,14 @@ class Datalist implements DatalistInterface, \Countable
     }
 
     /**
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return null !== $this->getOption('search');
+    }
+
+    /**
      * @param \Symfony\Component\Form\FormInterface $form
      * @return DatalistInterface
      */

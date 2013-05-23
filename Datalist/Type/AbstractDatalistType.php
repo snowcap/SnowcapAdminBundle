@@ -18,6 +18,7 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
             ->setDefaults(array(
                 'data_class' => null,
                 'layout' => 'grid',
+                'filter_on_top' => false,
                 'limit_per_page' => null,
                 'range_limit' => 10,
                 'search_placeholder' => 'datalist.search.placeholder',
