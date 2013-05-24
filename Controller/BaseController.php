@@ -17,10 +17,11 @@ class BaseController extends Controller
      * @param string $name
      * @param string $value
      * @param array $params
+     * @param string $domain
      */
-    public function setFlash($name, $value, $parameters = array()) //TODO: replace by getSession() usage
+    public function setFlash($name, $value, $parameters = array(), $domain = 'SnowcapAdminBundle') //TODO: replace by getSession() usage
     {
-        return $this->getRequest()->getSession()->setFlash($name, $this->get('translator')->trans($value, $parameters, 'SnowcapAdminBundle'));
+        return $this->getRequest()->getSession()->setFlash($name, $this->get('translator')->trans($value, $parameters, $domain));
     }
 
     /**
