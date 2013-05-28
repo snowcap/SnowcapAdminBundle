@@ -153,53 +153,25 @@ jQuery(document).ready(function ($) {
      * @param DOMElement row
      */
     var EntityWidget = function (container) {
-        var self = this;
         var container = $(container);
-        var trigger = container.find('a[rel=add]');
-        var modal = $('#modal');
-        var select = container.find('select');
+        var $trigger = container.find('a[data-admin=form-type-entity-add]');
+        var $select = container.find('select');
 
-        /**
-         * Observe what's cooking in the add form
-         *
-         */
-        self.observeAddForm = function () {
-            modal.find('*[type=submit]').on('click', function (event) {
-                event.preventDefault();
-                var form = modal.find('form');
-                $.post(form.attr('action'), form.serialize(), null, "json")
-                    .success(function(data, textStatus, jqXHR) {
-                        modal.html('');
-                        var option = $('<option>');
-                        option.val(data.result[0]);
-                        option.html(data.result[1]);
-                        select.append(option);
-                        select.val(data.result[0]);
-                        modal.modal('hide');
-                    })
-                    .error(function(data, textStatus, jqXHR) {
-                        console.log(data);
-                        alert('An error has occured');
-                    });
+        $trigger.click(function (event) {
+            event.preventDefault();
+            var contentModal = new SnowcapAdmin.Content.Modal({url: $trigger.attr('href')});
+            contentModal.on('content:modal:success', function(event, result){
+                var
+                    option = $('<option>'),
+                    entity_id = result[0]
+                    entity_name = result[1];
+                option.val(entity_id);
+                option.html(entity_name);
+                $select.append(option);
+                $select.val(entity_id);
+                alert('YEAH');
             });
-        };
-
-        /**
-         * Inline widget init
-         *
-         */
-        self.init = function () {
-            // Observe the "add" button
-            trigger.click(function (event) {
-                event.preventDefault();
-                $.get($(this).attr('href'), function (data) {
-                    modal.html(data);
-                    self.observeAddForm();
-                    modal.modal('show');
-                });
-            });
-        };
-        self.init();
+        });
     };
 
     /**
@@ -210,7 +182,7 @@ jQuery(document).ready(function ($) {
     var AutocompleteWidget = function (container) {
         var self = this;
         var container = $(container);
-        var trigger = container.find('a[rel=add]');
+        var $trigger = container.find('a[rel=add]');
         var modal = $('#modal');
         var textInput = container.find('input[type=text]');
         var valueInput = container.find('input[type=hidden]');
@@ -220,52 +192,34 @@ jQuery(document).ready(function ($) {
         var mode = container.data('mode');
 
         /**
-         * Observe what's cooking in the add form
-         *
-         */
-        self.observeAddForm = function () {
-            modal.find('*[type=submit]').on('click', function (event) {
-                event.preventDefault();
-                var form = modal.find('form');
-                $.post(form.attr('action'), form.serialize(), null, "json")
-                    .success(function(data, textStatus, jqXHR) {
-                        modal.html('');
-                        if('single' === mode) {
-                            // TODO refactor with autocomplete updater
-                            textInput.val(data.result[1]);
-                            valueInput.val(data.result[0]).trigger('change');
-                        }
-                        else {
-                            var prototype = container.data('prototype');
-                            var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
-                            $prototype.val(data.result[0]);
-                            container.prepend($prototype);
-                            $prototype.trigger('change');
-
-                            $token = $('<li>').addClass('token').html($('<span>').html(data.result[1])).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
-                            container.find('.tokens').append($token);
-                        }
-                        modal.modal('hide');
-                    })
-                    .error(function(data, textStatus, jqXHR) {
-                        console.log(data);
-                        alert('An error has occured');
-                    });
-            });
-        };
-
-        /**
          * Autocomplete widget init
          *
          */
         self.init = function () {
             // Observe the "add" button
-            trigger.click(function (event) {
+            $trigger.click(function (event) {
                 event.preventDefault();
-                $.get($(this).attr('href'), function (data) {
-                    modal.html(data);
-                    self.observeAddForm();
-                    modal.modal('show');
+                var contentModal = new SnowcapAdmin.Content.Modal({url: $trigger.attr('href')});
+                contentModal.on('content:modal:success', function(result){
+                    var
+                        option = $('<option>'),
+                        entity_id = result[0]
+                        entity_name = result[1];
+                    if('single' === mode) {
+                        // TODO refactor with autocomplete updater
+                        textInput.val(entity_name);
+                        valueInput.val(entity_id).trigger('change');
+                    }
+                    else {
+                        var prototype = container.data('prototype');
+                        var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
+                        $prototype.val(entity_id);
+                        container.prepend($prototype);
+                        $prototype.trigger('change');
+
+                        $token = $('<li>').addClass('token').html($('<span>').html(data.result[1])).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
+                        container.find('.tokens').append($token);
+                    }
                 });
             });
             // Initialize typeahead

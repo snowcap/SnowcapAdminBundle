@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\AdminInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Util\PropertyPath;
@@ -90,6 +91,44 @@ class ContentController extends BaseController
     }
 
     /**
+     * Create a new content entity through ajax modal
+     *
+     */
+    public function modalCreateAction(Request $request, ContentAdmin $admin) {
+        $entity = $admin->buildEntity();
+        $this->secure($admin, 'ADMIN_CONTENT_CREATE', $entity);
+
+        $form = $admin->getForm();
+        $form->setData($entity);
+
+        $status = 200;
+
+        if ('POST' === $request->getMethod()) {
+            try {
+                $this->save($admin, $form, $entity);
+
+                $responseData = array(
+                    'result' => array($entity->getId(), $admin->getEntityName($entity))
+                );
+                return new JsonResponse($responseData, 201);
+            }
+            catch(\Exception $e) {
+                //TODO: handle invalid ?
+            }
+        }
+
+        $responseData = array(
+            'content' =>   $this->renderView('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', array(
+                'admin' => $admin,
+                'entity' => $entity,
+                'form' => $form->createView(),
+            ))
+        );
+
+        return new JsonResponse($responseData, $status);
+    }
+
+    /**
      * Update an existing content entity
      *
      */
@@ -128,6 +167,49 @@ class ContentController extends BaseController
     }
 
     /**
+     * Update an existing content entity
+     *
+     */
+    public function modalUpdateAction(Request $request, ContentAdmin $admin)
+    {
+        $entity = $admin->findEntity($request->attributes->get('id'));
+        if ($entity === null) {
+            return $this->renderError('error.content.notfound', 404);
+        }
+        $this->secure($admin, 'ADMIN_CONTENT_UPDATE', $entity);
+
+        $form = $admin->getForm();
+        $form->setData($entity);
+
+        $status = 200;
+
+        if ('POST' === $request->getMethod()) {
+            try {
+                $this->save($admin, $form, $entity);
+
+                $responseData = array(
+                    'result' => array($entity->getId(), $admin->getEntityName($entity))
+                );
+
+                return new JsonResponse($responseData, 201);
+            }
+            catch(\Exception $e) {
+                //TODO: handle invalid ?
+            }
+        }
+
+        $responseData = array(
+            'content' => $this->renderView('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalUpdate.html.twig', array(
+                'admin' => $admin,
+                'entity' => $entity,
+                'form' => $form->createView(),
+            ))
+        );
+
+        return new JsonResponse($responseData, $status);
+    }
+
+    /**
      * Delete a content entity
      *
      */
@@ -146,39 +228,6 @@ class ContentController extends BaseController
         return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig', array(
             'admin' => $admin,
             'entity' => $entity,
-        ));
-    }
-
-    /**
-     * Create a new content entity through ajax modal
-     *
-     */
-    public function modalCreateAction(Request $request, ContentAdmin $admin) {
-        $this->secure($admin, 'ADMIN_CONTENT_CREATE');
-
-        $entity = $admin->buildEntity();
-        $form = $admin->getForm();
-        $form->setData($entity);
-
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $admin->saveEntity($entity);
-
-                $json = array(
-                    'result' => array($entity->getId(), $admin->getEntityName($entity))
-                );
-
-                return new Response(json_encode($json), 201);
-            } else {
-                //TODO: handle invalid ?
-            }
-        }
-
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', array(
-            'admin' => $admin,
-            'entity' => $entity,
-            'form' => $form->createView(),
         ));
     }
 
