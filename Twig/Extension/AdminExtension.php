@@ -95,8 +95,12 @@ class AdminExtension extends \Twig_Extension
      * @param array $params
      * @return string
      */
-    public function getAdminContentPath(ContentAdmin $admin, $action, array $params = array())
+    public function getAdminContentPath($admin, $action, array $params = array())
     {
+        if(!$admin instanceof ContentAdmin) {
+            $admin = $this->getAdminByCode($admin);
+        }
+
         return $this->contentRoutingHelper->generateUrl($admin, $action, $params);
     }
 
