@@ -5,7 +5,7 @@
     <div class="form-inline" data-admin="form-type-entity">
         {{ block('choice_widget') }}
         {% if allow_add %}
-            &nbsp;<a href="{{ add_url }}" class="btn" rel="add">{{ add_label|trans({}, translation_domain) }}</a>
+            &nbsp;<a href="{{ add_url }}" class="btn" data-admin="form-type-entity-add">{{ add_label|trans({}, translation_domain) }}</a>
         {% endif %}
     </div>
 {% endblock snowcap_admin_entity_widget %}
