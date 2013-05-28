@@ -160,7 +160,7 @@ jQuery(document).ready(function ($) {
         $trigger.click(function (event) {
             event.preventDefault();
             var contentModal = new SnowcapAdmin.Content.Modal({url: $trigger.attr('href')});
-            contentModal.on('content:modal:success', function(event, result){
+            contentModal.on('content:modal:success', function(result){
                 var
                     option = $('<option>'),
                     entity_id = result[0]
@@ -169,7 +169,6 @@ jQuery(document).ready(function ($) {
                 option.html(entity_name);
                 $select.append(option);
                 $select.val(entity_id);
-                alert('YEAH');
             });
         });
     };
