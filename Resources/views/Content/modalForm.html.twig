@@ -1,5 +1,8 @@
 {% extends 'SnowcapAdminBundle::modal_base.html.twig' %}
 
+{% set form_class = form_class|default('form_vertical') %}
+{% set extra_form_classes = extra_form_classes|default([]) %}
+
 {% trans_default_domain 'SnowcapAdminBundle' %}
 
 {# modal_before block #}
@@ -8,6 +11,7 @@
     action="{{ form_action }}"
     method="post" {{ form_enctype(form) }}
     novalidate="novalidate"
+    class="{{ ([form_class]|merge(extra_form_classes))|join(' ') }}"
 >
 {% endblock modal_before %}
 
