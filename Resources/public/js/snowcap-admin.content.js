@@ -3,7 +3,8 @@ SnowcapAdmin.Content = (function() {
         $form: null,
         events: function() {
             return _.extend(SnowcapBootstrap.Modal.prototype.events, {
-                'submit form': 'submitForm'
+                'submit form': 'submitForm',
+                'click a[data-admin=content-delete]': 'delete'
             });
         },
         initialize: function() {
@@ -13,10 +14,32 @@ SnowcapAdmin.Content = (function() {
             event.preventDefault();
             var $form = this.$el.find('form');
             $.post($form.attr('action'), $form.serialize(), null, "json")
-                .success(_.bind(function(data) {
-                    this.close();
-                    this.trigger('content:modal:success', data.result);
+                .done(_.bind(this.done, this))
+                .fail(_.bind(this.fail, this));
+        },
+        delete: function(event) {
+            event.preventDefault();
+            var $link = $(event.currentTarget);
+            $.getJSON($link.attr('href'))
+                .done(_.bind(function(data) {
+                    this.$el.html(data.content);
                 }, this));
+        },
+        done: function(data) {
+            this.close();
+            this.trigger('content:modal:success', data.result);
+        },
+        fail: function(jqXHR, textStatus) {
+            switch(jqXHR.status) {
+                case 301: // REDIRECTION
+                    var response = JSON.parse(jqXHR.responseText);
+                    window.location.href = response.redirect_url;
+                    break;
+                default:
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    break;
+            }
         }
     });
 

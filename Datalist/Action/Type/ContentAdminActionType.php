@@ -89,7 +89,7 @@ class ContentAdminActionType extends AbstractActionType {
 
         if(true === $options['modal']) {
             $attr = $viewContext['attr'];
-            $attr['data-bootstrap'] = 'modal';
+            $attr['data-admin'] = 'content-modal';
             $viewContext['attr'] = $attr;
         }
 

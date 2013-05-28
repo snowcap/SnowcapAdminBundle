@@ -106,11 +106,12 @@ class ContentController extends BaseController
         if ('POST' === $request->getMethod()) {
             try {
                 $this->save($admin, $form, $entity);
-
-                $responseData = array(
-                    'result' => array($entity->getId(), $admin->getEntityName($entity))
+                $result = array(
+                    'entity_id' => $entity->getId(),
+                    'entity_name' => $admin->getEntityName($entity)
                 );
-                return new JsonResponse($responseData, 201);
+
+                return new JsonResponse(array('result' => $result), 201);
             }
             catch(\Exception $e) {
                 //TODO: handle invalid ?
@@ -187,11 +188,12 @@ class ContentController extends BaseController
             try {
                 $this->save($admin, $form, $entity);
 
-                $responseData = array(
-                    'result' => array($entity->getId(), $admin->getEntityName($entity))
+                $result = array(
+                    'entity_id' => $entity->getId(),
+                    'entity_name' => $admin->getEntityName($entity)
                 );
 
-                return new JsonResponse($responseData, 201);
+                return new JsonResponse(array('result' => $result), 201);
             }
             catch(\Exception $e) {
                 //TODO: handle invalid ?
@@ -218,6 +220,57 @@ class ContentController extends BaseController
         $entity = $admin->findEntity($request->attributes->get('id'));
         $this->secure($admin, 'ADMIN_CONTENT_DELETE', $entity);
 
+        if($request->isXmlHttpRequest()) {
+            return $this->modalDelete($request, $admin, $entity);
+        }
+        else {
+            return $this->delete($request, $admin, $entity);
+        }
+    }
+
+    /**
+     * Handle AJAX delete (modal)
+     *
+     * @param Request $request
+     * @param ContentAdmin $admin
+     * @param $entity
+     * @return JsonResponse
+     */
+    public function modalDelete(Request $request, ContentAdmin $admin, $entity)
+    {
+        if($request->isMethod('post')) {
+            $admin->deleteEntity($entity);
+            $this->setFlash('success', 'content.delete.flash.success');
+            $result = array(
+                'entity_id' => $entity->getId(),
+                'entity_name' => $admin->getEntityName($entity)
+            );
+            $redirectUrl = $request->headers->get('referer');
+
+            return new JsonResponse(array('result' => $result, 'redirect_url' => $redirectUrl), 301);
+        }
+
+        $content = $this->renderView(
+            'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
+            array(
+                'admin' => $admin,
+                'entity' => $entity,
+            )
+        );
+
+        return new JsonResponse(array('content' => $content));
+    }
+
+    /**
+     * Handle standard delete (no modal)
+     *
+     * @param Request $request
+     * @param ContentAdmin $admin
+     * @param $entity
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
+    public function delete(Request $request, ContentAdmin $admin, $entity)
+    {
         if($request->isMethod('post')) {
             $admin->deleteEntity($entity);
             $this->setFlash('success', 'content.delete.flash.success');
@@ -225,17 +278,20 @@ class ContentController extends BaseController
             return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
         }
 
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig', array(
-            'admin' => $admin,
-            'entity' => $entity,
-        ));
+        return $this->render(
+            'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
+            array(
+                'admin' => $admin,
+                'entity' => $entity,
+            )
+        );
     }
 
     /**
      * Render a json array of entity values and text (to be used in autocomplete widgets)
      *
      */
-    public function autocompleteListAction(Request $request, ContentAdmin $admin, $where, $property, $query) {
+    public function autocompleteListAction(ContentAdmin $admin, $where, $property, $query) {
         $qb = $admin->getQueryBuilder();
         $results = $qb
             ->andWhere(base64_decode($where))
@@ -248,9 +304,8 @@ class ContentController extends BaseController
         foreach($results as $result) {
             $flattenedResults[] = array($result->getId(), $propertyPath->getValue($result));
         }
-        $json = array('result' => $flattenedResults);
 
-        return new Response(json_encode($json));
+        return new JsonResponse(array('result' => $flattenedResults));
     }
 
     /**
