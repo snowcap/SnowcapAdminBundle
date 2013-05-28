@@ -163,8 +163,8 @@ jQuery(document).ready(function ($) {
             contentModal.on('content:modal:success', function(result){
                 var
                     option = $('<option>'),
-                    entity_id = result[0]
-                    entity_name = result[1];
+                    entity_id = result.entity_id
+                    entity_name = result.entity_name;
                 option.val(entity_id);
                 option.html(entity_name);
                 $select.append(option);
@@ -202,8 +202,8 @@ jQuery(document).ready(function ($) {
                 contentModal.on('content:modal:success', function(result){
                     var
                         option = $('<option>'),
-                        entity_id = result[0]
-                        entity_name = result[1];
+                        entity_id = result.entity_id
+                        entity_name = result.entity_name;
                     if('single' === mode) {
                         // TODO refactor with autocomplete updater
                         textInput.val(entity_name);
@@ -216,7 +216,7 @@ jQuery(document).ready(function ($) {
                         container.prepend($prototype);
                         $prototype.trigger('change');
 
-                        $token = $('<li>').addClass('token').html($('<span>').html(data.result[1])).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
+                        $token = $('<li>').addClass('token').html($('<span>').html(entity_name)).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
                         container.find('.tokens').append($token);
                     }
                 });

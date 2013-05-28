@@ -47,6 +47,7 @@ content:
         saveandcontinue: Save and continue
         edit: Edit
         delete: Delete
+        cancel: Cancel
         back: Back to list
         reorder: Reorder
         confirm:
