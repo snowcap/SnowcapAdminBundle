@@ -98,9 +98,10 @@ SnowcapAdmin.Content = (function() {
         },
 
         source: function(query, process) {
-            console.log(query);
             var replacedUrl = this.listUrl.replace('__query__', query);
             $.getJSON(replacedUrl, _.bind(function(data) {
+                this.mapped = {};
+                this.labels = [];
                 $.each(data.result, _.bind(function (i, item) {
                     this.mapped[item[1]] = item[0];
                     this.labels.push(item[1]);
