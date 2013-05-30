@@ -55,7 +55,7 @@ class AutocompleteType extends AbstractType
                 'add_label' => 'Add new',
                 'multiple' => false,
                 'compound' => $compound,
-
+                'id_property' => 'id'
             ))
             ->setRequired(array('admin', 'where'))
             ->setOptional(array('property'));
@@ -170,7 +170,12 @@ class AutocompleteType extends AbstractType
         return $this->routingHelper->generateUrl(
             $this->adminManager->getAdmin($options['admin']),
             'autocompleteList',
-            array('query' => '__query__', 'where' => base64_encode($options['where']), 'property' => $options['property'])
+            array(
+                'query' => '__query__',
+                'where' => base64_encode($options['where']),
+                'id_property' => $options['id_property'],
+                'property' => $options['property'],
+            )
         );
     }
 
