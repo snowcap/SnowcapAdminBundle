@@ -20,7 +20,7 @@ class EntityFilterType extends AbstractFilterType
 
         $resolver
             ->setRequired(array('class'))
-            ->setOptional(array('property', 'empty_value'));
+            ->setOptional(array('property', 'empty_value', 'group_by'));
     }
 
     /**
@@ -38,6 +38,9 @@ class EntityFilterType extends AbstractFilterType
         );
         if(isset($options['empty_value'])) {
             $formOptions['empty_value'] = $options['empty_value'];
+        }
+        if(isset($options['group_by'])) {
+            $formOptions['group_by'] = $options['group_by'];
         }
 
         $builder->add($filter->getName(), 'entity', $formOptions);
