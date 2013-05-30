@@ -6,12 +6,12 @@ use Snowcap\AdminBundle\Admin\AdminInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Form;
 
 use Snowcap\CoreBundle\Util\String;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContext;
 
@@ -291,7 +291,7 @@ class ContentController extends BaseController
      * Render a json array of entity values and text (to be used in autocomplete widgets)
      *
      */
-    public function autocompleteListAction(ContentAdmin $admin, $where, $property, $query) {
+    public function autocompleteListAction(ContentAdmin $admin, $where, $id_property, $property, $query) {
         $qb = $admin->getQueryBuilder();
         $results = $qb
             ->andWhere(base64_decode($where))
@@ -300,9 +300,11 @@ class ContentController extends BaseController
             ->getResult();
 
         $flattenedResults = array();
-        $propertyPath = new PropertyPath($property);
+        $accessor = PropertyAccess::getPropertyAccessor();
         foreach($results as $result) {
-            $flattenedResults[] = array($result->getId(), $propertyPath->getValue($result));
+            $id = $accessor->getValue($result, $id_property);
+            $value = $accessor->getValue($result, $property);
+            $flattenedResults[] = array($id, $value);
         }
 
         return new JsonResponse(array('result' => $flattenedResults));
