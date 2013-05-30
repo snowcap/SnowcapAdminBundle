@@ -298,7 +298,7 @@ jQuery(document).ready(function ($) {
                     }
                     else {
                         var prototype = container.data('prototype');
-                        var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
+                        var $prototype = $($.trim(prototype.replace(/__name__/g, container.find('input[type=hidden]').length)));
                         $prototype.val(mapped[item]);
                         container.prepend($prototype);
                         $prototype.trigger('change');
