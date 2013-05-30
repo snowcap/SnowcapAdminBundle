@@ -65,7 +65,25 @@ class ContentAdminActionType extends AbstractActionType {
             ));
     }
 
+    /**
+     * @param DatalistActionInterface $action
+     * @param $item
+     * @param array $options
+     * @return string
+     */
     public function getUrl(DatalistActionInterface $action, $item, array $options = array())
+    {
+        $parameters = $this->getUrlParameters($item, $options);
+
+        return $this->routingHelper->generateUrl($options['admin'], $options['action'], $parameters);
+    }
+
+    /**
+     * @param $item
+     * @param array $options
+     * @return array
+     */
+    protected function getUrlParameters($item, array $options)
     {
         $parameters = array();
         $accessor = PropertyAccess::getPropertyAccessor();
@@ -74,7 +92,7 @@ class ContentAdminActionType extends AbstractActionType {
             $parameters[$paramName] = $paramValue;
         }
 
-        return $this->routingHelper->generateUrl($options['admin'], $options['action'], $parameters);
+        return $parameters;
     }
 
     /**
