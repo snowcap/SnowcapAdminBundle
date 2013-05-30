@@ -60,12 +60,21 @@ class ContentRoutingHelper {
      */
     public function getRoute(ContentAdmin $admin, $action, $params = array(), $defaultRoute = false)
     {
+        $defaults = array();
         $pattern = '/' . $admin->getAlias();
         if(!$defaultRoute) {
             $pattern .= '/' . $action;
         }
-        foreach($params as $param) {
-            $pattern .= '/{' . $param . '}';
+        foreach($params as $paramKey => $paramValue) {
+            if(is_int($paramKey)) {
+               $paramName = $paramValue;
+            }
+            else {
+                $paramName = $paramKey;
+                $defaults[$paramName] = $paramValue;
+            }
+
+            $pattern .= '/{' . $paramName . '}';
         }
 
         preg_match('/(?:[A-Z](?:[A-Za-z0-9])+\\\)*(?:)[A-Z](?:[A-Za-z0-9])+Bundle/', get_class($admin), $matches);
@@ -79,7 +88,11 @@ class ContentRoutingHelper {
             $controller = $this->parser->parse('SnowcapAdminBundle:Content:' . $action);
         }
 
-        return new Route($pattern, array('_controller' => $controller, 'alias' => $admin->getAlias()));
+        $defaults = array_merge(
+            array('_controller' => $controller, 'alias' => $admin->getAlias()),
+            $defaults
+        );
+        return new Route($pattern, $defaults);
     }
 
     /**

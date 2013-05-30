@@ -118,8 +118,8 @@
     {% set label = ("label " ~ label_class)|trim %}
     {%
         set text = value == true ?
-            true_label|trans({}, 'translation_domain')|default('Yes') :
-            false_label|trans({}, 'teanslation_domain')|default('No')
+            true_label|trans({}, translation_domain)|default('Yes') :
+            false_label|trans({}, translation_domain)|default('No')
     %}
     <td><span class="label {{ label }}">{{ text }}</span></td>
 {% endblock boolean_field %}
