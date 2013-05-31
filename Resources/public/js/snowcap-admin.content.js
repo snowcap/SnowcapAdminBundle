@@ -74,6 +74,7 @@ SnowcapAdmin.Content = (function() {
             this.$textInput.typeahead({
                 source: _.bind(this.source, this),
                 minLength: 3,
+                items: 10,
                 matcher: _.bind(this.matcher, this),
                 updater: _.bind(this.updater, this)
             });
