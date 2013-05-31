@@ -174,7 +174,7 @@ SnowcapAdmin.Content = (function() {
 
 (function($) {
     /**
-     * Observe datalist triggers and create datalist
+     * Observe modal triggers and create modal
      * instances on click
      *
      */
