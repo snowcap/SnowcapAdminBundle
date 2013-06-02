@@ -99,6 +99,13 @@ services:
         tags:
             -  { name: form.type, alias: snowcap_admin_autocomplete }
 
+    # Form type extensions
+    snowcap_admin.form_extension_collection:
+        class: Snowcap\AdminBundle\Form\Extension\CollectionTypeExtension
+        arguments: [@router]
+        tags:
+            - { name: form.type_extension, alias: collection }
+
     # Datalists
     snowcap_admin.datalist_factory:
         class: Snowcap\AdminBundle\Datalist\DatalistFactory

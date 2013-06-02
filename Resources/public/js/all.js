@@ -160,7 +160,7 @@ jQuery(document).ready(function ($) {
         $trigger.click(function (event) {
             event.preventDefault();
             var contentModal = new SnowcapAdmin.Content.Modal({url: $trigger.attr('href')});
-            contentModal.on('content:modal:success', function(result){
+            contentModal.on('modal:success', function(result){
                 var
                     option = $('<option>'),
                     entity_id = result.entity_id
@@ -188,16 +188,6 @@ jQuery(document).ready(function ($) {
     // Admin entity widgets
     $('[data-admin=form-type-entity]').each(function (offset, container) {
         new EntityWidget(container);
-    });
-
-    // Autocomplete widgets
-    var launchAutocompletes = function() {
-        new AutocompleteWidget($(this));
-    };
-    $('.collection-container').on('new_collection_item', function() { //TODO: move into snowcap-admin.content.js
-        $('[data-admin=content-autocomplete]').each(function(offset, autocompleteContainer) {
-            new SnowcapAdmin.Content.Autocomplete({el: $(autocompleteContainer)});
-        });
     });
 
     // autosize for textareas

@@ -119,8 +119,22 @@
 
 {# collection widget #}
 {% block collection_widget %}
-    {% set container_data_attr = container_data_attr|default('data-admin="form-collection-container"') %}
-    {% set add_data_attr = add_data_attr|default('data-admin="form-collection-add"') %}
-
-    {{ parent() }}
+    {% spaceless %}
+        {% if prototype is defined %}
+            {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
+        {% endif %}
+        <div
+            class="form-collection control-group"
+            data-admin="form-collection"{% if confirm_delete %} data-options-confirm-delete-url="{{ confirm_delete_url }}"{% endif %}
+        >
+            {{ block('form_widget') }}
+            {% if allow_add %}
+                <div class="btn-group">
+                    <a href="#" class="btn" data-admin="form-collection-add">
+                        <i class="icon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endspaceless %}
 {% endblock collection_widget %}
