@@ -105,6 +105,10 @@ services:
         arguments: [@router]
         tags:
             - { name: form.type_extension, alias: collection }
+    snowcap_admin.form_extension_text:
+        class: Snowcap\AdminBundle\Form\Extension\TextTypeExtension
+        tags:
+            - { name: form.type_extension, alias: text }
 
     # Datalists
     snowcap_admin.datalist_factory:
