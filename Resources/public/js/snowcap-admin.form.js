@@ -38,13 +38,23 @@ SnowcapAdmin.Form = (function($) {
 
             if(this.options.confirmDelete) {
                 var modal = new SnowcapBootstrap.Modal({'url': this.options.confirmDeleteUrl});
-                modal.on('modal:confirm', function() {
-                    $collectionItem.remove();
-                });
+                modal.on('modal:confirm', _.bind(function() {
+                    this.fadeAndRemoveItem($collectionItem);
+                }, this));
             }
             else {
-                $collectionItem.remove();
+                this.fadeAndRemoveItem($collectionItem);
             }
+        },
+        /**
+         * Fade and remove a collection item
+         *
+         * @param $item
+         */
+        fadeAndRemoveItem: function($item) {
+            $item.fadeOut(function() {
+                $item.remove();
+            });
         }
     });
 
