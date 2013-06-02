@@ -168,6 +168,12 @@ widget:
             cancel: Cancel
             proceed: Proceed without saving
             save: Save and proceed
+    delete_item:
+        title: Delete item
+        message: Are you sure you want to delete this item?
+        actions:
+            cancel: Cancel
+            proceed: Confirm deletion
 
 error:
     content:

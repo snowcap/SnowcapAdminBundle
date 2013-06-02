@@ -168,6 +168,12 @@ widget:
             cancel: Annuler
             proceed: Changer de page sans sauver
             save: Sauver et changer de page
+    delete_item:
+        title: Suppression d'un élément
+        message: Etes-vous certain de vouloir supprimer cet élément ?
+        actions:
+            cancel: Annuler
+            proceed: Confirmer la suppression
 
 error:
     content:

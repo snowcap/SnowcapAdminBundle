@@ -22,6 +22,10 @@ snowcap_admin_cataloguetranslation_index:
     pattern: /catalogue-translation/{catalogue}/{locale}
     defaults: { _controller: SnowcapAdminBundle:CatalogueTranslation:index, catalogue: messages, locale: null }
 
+snowcap_admin_widget_delete_item:
+    pattern: /widget/delete-item
+    defaults: { _controller: SnowcapAdminBundle:Widget:deleteItem }
+
 snowcap_admin_widget_content_changed:
     pattern: /widget/content-changed
     defaults: { _controller: SnowcapAdminBundle:Widget:contentChanged }
