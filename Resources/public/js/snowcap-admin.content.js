@@ -17,7 +17,8 @@ SnowcapAdmin.Content = (function() {
      *
      * @param $context
      */
-    var modalFactory = function($context) {
+    var modalFactory = function() {
+        var $context = (0 === arguments.length) ? $('body') : arguments[0];
         $context.find('[data-admin=content-modal]').each(function(offset, modalTrigger) {
             var $modalTrigger = $(modalTrigger);
             $($modalTrigger).on('click', function(event) {
@@ -41,6 +42,6 @@ SnowcapAdmin.Content = (function() {
 
 (function($) {
 
-    SnowcapAdmin.Content.modalFactory($('body'));
+    SnowcapAdmin.Content.modalFactory();
 
 })(jQuery);
