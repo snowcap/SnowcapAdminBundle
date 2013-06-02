@@ -45,6 +45,9 @@ SnowcapAdmin.Form = (function($) {
             else {
                 this.fadeAndRemoveItem($collectionItem);
             }
+
+            this.trigger('form:collection:remove');
+            this.$form.trigger('change');
         },
         /**
          * Fade and remove a collection item
