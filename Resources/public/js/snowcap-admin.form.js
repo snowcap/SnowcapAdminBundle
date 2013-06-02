@@ -18,6 +18,7 @@ SnowcapAdmin.Form = (function($) {
         initialize: function() {
             SnowcapCore.Form.Collection.prototype.initialize.apply(this);
 
+            this.on('form:collection:add', textAutocompleteFactory);
             this.on('form:collection:add', autocompleteFactory);
         },
         /**
@@ -84,12 +85,76 @@ SnowcapAdmin.Form = (function($) {
      * Used to handle snowcap_admin_autocomplete form type
      *
      */
-    var Autocomplete = Backbone.View.extend({
+    var TextAutocomplete = Backbone.View.extend({
         $textInput: null,
-        $valueInput: null,
+        listUrl: null,
+        labels: [],
+        /**
+         * Initialize
+         *
+         */
+        initialize: function () {
+            this.$el.css('position', 'relative');
+            this.$textInput = this.$el.find('input[type=text]');
+            this.listUrl = this.$el.data('options-url');
+
+            // Initialize typeahead
+            this.$textInput.typeahead({
+                source: _.bind(this.source, this),
+                minLength: 3,
+                items: 10
+            });
+            // Handle focus / blur
+            this.$textInput
+                .on('focus', function(){
+                    $(this).data('prev', $(this).val());
+                    $(this).val('');
+                })
+                .on('blur', function(){
+                    if($(this).val() === '') {
+                        $(this).val($(this).data('prev'));
+                    }
+                });
+        },
+        /**
+         * Bootstrap typeahead source implementation
+         *
+         * @param query
+         * @param process
+         */
+        source: function(query, process) {
+            var replacedUrl = this.listUrl.replace('__query__', query);
+            $.getJSON(replacedUrl, _.bind(function(data) {
+                this.labels = [];
+                $.each(data.result, _.bind(function (i, item) {
+                    this.labels.push(item);
+                }, this));
+                process(this.labels);
+            }, this));
+        }
+    });
+
+    /**
+     * Autocomplete factory function
+     *
+     * @param $context
+     */
+    var textAutocompleteFactory = function() {
+        var $context = (0 === arguments.length) ? $('body') : arguments[0];
+        $context.find('[data-admin=form-text-autocomplete]').each(function(offset, autocompleteContainer) {
+            new TextAutocomplete({el: $(autocompleteContainer)});
+        });
+    };
+
+    /**
+     * Form Autocomplete view
+     * Used to handle snowcap_admin_autocomplete form type
+     *
+     */
+    var Autocomplete = TextAutocomplete.extend({
+        $textInput: null,
         listUrl: null,
         mode: null,
-        labels: [],
         mapped: {},
         events: {
             'click a[data-admin=content-add]': 'add'
@@ -99,30 +164,11 @@ SnowcapAdmin.Form = (function($) {
          *
          */
         initialize: function () {
-            this.$el.css('position', 'relative');
-            this.$textInput = this.$el.find('input[type=text]');
+            TextAutocomplete.prototype.initialize.apply(this);
+
             this.$valueInput = this.$el.find('input[type=hidden]');
-            this.listUrl = this.$el.data('options-url');
             this.mode = this.$el.data('options-mode');
 
-            // Initialize typeahead
-            this.$textInput.typeahead({
-                source: _.bind(this.source, this),
-                minLength: 3,
-                items: 10,
-                matcher: _.bind(this.matcher, this),
-                updater: _.bind(this.updater, this)
-            });
-            // Handle focus / blur
-            this.$textInput.on('focus', function(){
-                $(this).data('prev', $(this).val());
-                $(this).val('');
-            }).on('blur', function(){
-                    if($(this).val() === '') {
-                        $(this).val($(this).data('prev'));
-                    }
-                });
-            // Remove associations
             if('multiple' === this.mode) {
                 $('ul.tokens').on('click', 'a[rel=remove]', _.bind(function(event) {
                     event.preventDefault();
@@ -227,14 +273,16 @@ SnowcapAdmin.Form = (function($) {
      */
     var autocompleteFactory = function() {
         var $context = (0 === arguments.length) ? $('body') : arguments[0];
-        $context.find('[data-admin=content-autocomplete]').each(function(offset, autocompleteContainer) {
-            new SnowcapAdmin.Form.Autocomplete({el: $(autocompleteContainer)});
+        $context.find('[data-admin=form-autocomplete]').each(function(offset, autocompleteContainer) {
+            new Autocomplete({el: $(autocompleteContainer)});
         });
     };
 
     return {
         Collection: Collection,
         collectionFactory: collectionFactory,
+        TextAutocomplete: TextAutocomplete,
+        textAutocompleteFactory: textAutocompleteFactory,
         Autocomplete: Autocomplete,
         autocompleteFactory: autocompleteFactory
     }
@@ -243,6 +291,7 @@ SnowcapAdmin.Form = (function($) {
 jQuery(document).ready(function() {
 
     SnowcapAdmin.Form.collectionFactory();
+    SnowcapAdmin.Form.textAutocompleteFactory();
     SnowcapAdmin.Form.autocompleteFactory();
 
 });

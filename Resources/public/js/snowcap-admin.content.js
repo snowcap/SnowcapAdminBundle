@@ -8,6 +8,7 @@ SnowcapAdmin.Content = (function() {
             SnowcapBootstrap.Modal.prototype.initialize.apply(this);
             this.off('modal:render');
             this.on('modal:render', SnowcapAdmin.Form.collectionFactory);
+            this.on('modal:render', SnowcapAdmin.Form.textAutocompleteFactory);
             this.on('modal:render', SnowcapAdmin.Form.autocompleteFactory);
         }
     });
