@@ -36,9 +36,9 @@ content:
                 <p class="text-center"><strong>%content%</strong></p>
                 <p>Assurez-vous que ce contenu n'est plus utilisé avant de l'effacer.</p>
         cancel: Annuler
-        confirm: Effacer
+        confirm: Supprimer
         flash:
-            success: Le contenu a bien été effacé.
+            success: Le contenu a bien été supprimé.
             error_has_children: Impossible de supprimer un contenu lié à d'autres éléments
     actions:
         header: Actions
@@ -46,7 +46,7 @@ content:
         save: Sauvegarder
         saveandcontinue: Sauver et continuer
         edit: Modifier
-        delete: Effacer
+        delete: Supprimer
         cancel: Annuler
         back: Retour à la liste
         reorder: Réordonner
