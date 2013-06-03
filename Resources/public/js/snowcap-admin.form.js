@@ -98,12 +98,8 @@ SnowcapAdmin.Form = (function($) {
             this.$textInput = this.$el.find('input[type=text]');
             this.listUrl = this.$el.data('options-url');
 
-            // Initialize typeahead
-            this.$textInput.typeahead({
-                source: _.bind(this.source, this),
-                minLength: 3,
-                items: 10
-            });
+            this.initializeTypeahead();
+
             // Handle focus / blur
             this.$textInput
                 .on('focus', function(){
@@ -115,6 +111,18 @@ SnowcapAdmin.Form = (function($) {
                         $(this).val($(this).data('prev'));
                     }
                 });
+        },
+        /**
+         * Initialize typeahead widget
+         *
+         */
+        initializeTypeahead: function() {
+            // Initialize typeahead
+            this.$textInput.typeahead({
+                source: _.bind(this.source, this),
+                minLength: 3,
+                items: 10
+            });
         },
         /**
          * Bootstrap typeahead source implementation
@@ -177,6 +185,20 @@ SnowcapAdmin.Form = (function($) {
                     this.$el.find('input[value=' + value + ']').remove();
                 }, this));
             }
+        },
+        /**
+         * Initialize typeahead widget
+         *
+         */
+        initializeTypeahead: function() {
+            // Initialize typeahead
+            this.$textInput.typeahead({
+                source: _.bind(this.source, this),
+                minLength: 3,
+                items: 10,
+                matcher: _.bind(this.matcher, this),
+                updater: _.bind(this.updater, this)
+            });
         },
         /**
          * Bootstrap typeahead source implementation
