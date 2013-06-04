@@ -193,7 +193,7 @@ SnowcapAdmin.Form = (function($) {
         initializeTypeahead: function() {
             // Initialize typeahead
             this.$textInput.typeahead({
-                source: _.bind(this.source, this),
+                source: _.bind(_.debounce(this.source, 400), this),
                 minLength: 3,
                 items: 10,
                 matcher: _.bind(this.matcher, this),
