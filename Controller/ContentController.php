@@ -114,7 +114,9 @@ class ContentController extends BaseController
                 return new JsonResponse(array('result' => $result), 201);
             }
             catch(\Exception $e) {
-                //TODO: handle invalid ?
+                $status = 400;
+                $this->setFlash('error', 'content.update.flash.error');
+                $this->get('logger')->addError($e->getMessage());
             }
         }
 
@@ -200,6 +202,8 @@ class ContentController extends BaseController
             }
             catch(\Exception $e) {
                 $status = 400;
+                $this->setFlash('error', 'content.update.flash.error');
+                $this->get('logger')->addError($e->getMessage());
             }
         }
 

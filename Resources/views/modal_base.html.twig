@@ -4,6 +4,9 @@
     {% block modal_title %}{% endblock%}
 </div>
 <div class="modal-body">
+    {% block modal_alerts %}
+        {% include 'SnowcapAdminBundle:Widget:alerts.html.twig' %}
+    {% endblock modal_alerts %}
     {% block modal_body %}{% endblock %}
 </div>
 <div class="modal-footer">
