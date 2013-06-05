@@ -159,12 +159,12 @@ jQuery(document).ready(function ($) {
 
         $trigger.click(function (event) {
             event.preventDefault();
-            var contentModal = new SnowcapAdmin.Content.Modal({url: $trigger.attr('href')});
-            contentModal.on('modal:success', function(result){
+            var contentModal = new SnowcapAdmin.Ui.Modal({url: $trigger.attr('href')});
+            contentModal.on('ui:modal:success', function(data){
                 var
                     option = $('<option>'),
-                    entity_id = result.entity_id
-                    entity_name = result.entity_name;
+                    entity_id = data.result.entity_id
+                    entity_name = data.result.entity_name;
                 option.val(entity_id);
                 option.html(entity_name);
                 $select.append(option);
