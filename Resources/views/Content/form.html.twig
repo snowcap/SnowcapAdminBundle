@@ -42,6 +42,9 @@
                     <button type="submit" name="saveMode" class="btn" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_CONTINUE') }}">
                         {{ "content.actions.saveandcontinue"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
+                    <a href="{{ admin_content_path(admin, 'index') }}" class="btn btn-inverse">
+                        {{ "content.actions.back"|trans({}, 'SnowcapAdminBundle') }}
+                    </a>
                 </div>
             {% endblock form_actions %}
 
