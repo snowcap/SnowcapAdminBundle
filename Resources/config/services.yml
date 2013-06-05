@@ -180,7 +180,7 @@ services:
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger
-        arguments: [@doctrine.orm.entity_manager, @security.context, %snowcap_admin.logger_entity.class%]
+        arguments: [@snowcap_admin, @doctrine.orm.entity_manager, @security.context, %snowcap_admin.logger_entity.class%]
 
     # Security
     snowcap_admin.security.user_manager:

@@ -1,6 +1,7 @@
 <?php
 namespace Snowcap\AdminBundle\Logger;
 
+use Snowcap\AdminBundle\AdminManager;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -8,6 +9,11 @@ use Snowcap\AdminBundle\Entity\Log;
 
 class Logger
 {
+    /**
+     * @var \Snowcap\AdminBundle\AdminManager
+     */
+    protected $admin;
+
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -28,8 +34,9 @@ class Logger
      * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
      * @param string $entityClassName The entity where logs will be saved into
      */
-    public function __construct(EntityManager $em, SecurityContextInterface $securityContext = null, $entityClassName)
+    public function __construct(AdminManager $admin, EntityManager $em, SecurityContextInterface $securityContext = null, $entityClassName)
     {
+        $this->admin = $admin;
         $this->em = $em;
         $this->securityContext = $securityContext;
         $this->entityClassName = $entityClassName;
@@ -100,5 +107,36 @@ class Logger
 
         $this->em->persist($log);
         $this->em->flush();
+    }
+
+    /**
+     * Get logs corresponding to the provided criteria
+     *
+     * @param $entity
+     * @param string|array $action
+     * @return array
+     */
+    public function getLogsForEntity($entity, $action = null) {
+        if(null !== $action && !is_array($action)) {
+            $action = array($action);
+        }
+
+        $admin = $this->admin->getAdminForEntity($entity);
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('l')
+            ->from($this->entityClassName, 'l')
+            ->where('l.admin = :admin')
+            ->andWhere('l.entityId = :entity_id')
+            ->setParameter('admin', $admin->getAlias())
+            ->setParameter('entity_id', $entity->getId());
+
+        if(null !== $action) {
+            $qb
+                ->andWhere($qb->expr()->in('l.action', ':action'))
+                ->setParameter('action', $action);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
