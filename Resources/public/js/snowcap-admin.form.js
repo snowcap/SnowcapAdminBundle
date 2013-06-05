@@ -187,8 +187,8 @@ SnowcapAdmin.Form = (function($) {
                 }, this));
             }
             else {
-                if(this.$valueInput.val()) {
-                    this.appendCloseButton();
+                if(this.$valueInput.val() && !(this.$textInput.attr('disabled') || this.$textInput.attr('readonly'))) {
+                    this.appendClearButton();
                 }
             }
         },
@@ -196,7 +196,7 @@ SnowcapAdmin.Form = (function($) {
          * Append a close button
          *
          */
-        appendCloseButton: function() {
+        appendClearButton: function() {
             var $close = $('<a href="#" data-admin="form-autocomplete-clear" class="close">&times;</button>');
             this.$el.append($close);
         },
@@ -254,7 +254,7 @@ SnowcapAdmin.Form = (function($) {
         updater: function(item) {
             if('single' === this.mode) {
                 this.$el.find('input[type=hidden]').val(this.mapped[item]).trigger('change');
-                this.appendCloseButton();
+                this.appendClearButton();
                 return item;
             }
             else {
