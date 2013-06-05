@@ -43,8 +43,8 @@ content:
     actions:
         header: Actions
         create: New
-        save: Save
-        saveandcontinue: Save and continue
+        save: Save and go back to list
+        saveandcontinue: Save and continue edition
         edit: Edit
         delete: Delete
         cancel: Cancel

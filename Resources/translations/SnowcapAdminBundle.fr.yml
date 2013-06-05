@@ -43,8 +43,8 @@ content:
     actions:
         header: Actions
         create: Nouveau
-        save: Sauvegarder
-        saveandcontinue: Sauver et continuer
+        save: Sauvegarder et retourner à la liste
+        saveandcontinue: Sauvegarder et continuer l'édition
         edit: Modifier
         delete: Supprimer
         cancel: Annuler
