@@ -199,7 +199,7 @@ class ContentController extends BaseController
                 ), 201);
             }
             catch(\Exception $e) {
-                //TODO: handle invalid ?
+                $status = 400;
             }
         }
 
