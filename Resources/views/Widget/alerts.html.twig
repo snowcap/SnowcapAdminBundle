@@ -1,6 +1,9 @@
 {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
-{% for type, flashMessages in app.session.flashbag.all() %}
-    {% for flashMessage in flashMessages %}
-        {{ alert(flashMessage, type, null, true) }}
+
+<div data-admin="ui-alerts">
+    {% for type, flashMessages in app.session.flashbag.all() %}
+        {% for flashMessage in flashMessages %}
+            {{ alert(flashMessage, type, null, true) }}
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+</div>

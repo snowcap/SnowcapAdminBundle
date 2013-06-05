@@ -278,12 +278,12 @@ SnowcapAdmin.Form = (function($) {
         add: function(event) {
             event.preventDefault();
             var $trigger = $(event.currentTarget);
-            var contentModal = new SnowcapAdmin.Content.Modal({url: $trigger.attr('href')});
-            contentModal.on('modal:success', _.bind(function(result){
+            var contentModal = new SnowcapAdmin.Ui.Modal({url: $trigger.attr('href')});
+            contentModal.on('ui:modal:success', _.bind(function(data){
                 var
                     option = $('<option>'),
-                    entity_id = result.entity_id,
-                    entity_name = result.entity_name;
+                    entity_id = data.result.entity_id,
+                    entity_name = data.result.entity_name;
                 if('single' === this.mode) {
                     // TODO refactor with autocomplete updater
                     this.$textInput.val(entity_name);

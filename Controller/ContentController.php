@@ -190,10 +190,13 @@ class ContentController extends BaseController
 
                 $result = array(
                     'entity_id' => $entity->getId(),
-                    'entity_name' => $admin->getEntityName($entity)
+                    'entity_name' => $admin->getEntityName($entity),
                 );
 
-                return new JsonResponse(array('result' => $result), 201);
+                return new JsonResponse(array(
+                    'result' => $result,
+                    'flashes' => $this->buildModalFlash('success', 'content.update.flash.success')
+                ), 201);
             }
             catch(\Exception $e) {
                 //TODO: handle invalid ?
