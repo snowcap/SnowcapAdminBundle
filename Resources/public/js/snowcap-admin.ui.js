@@ -10,11 +10,16 @@ SnowcapAdmin.Ui = (function() {
             this.on('ui:modal:render', SnowcapAdmin.Form.collectionFactory);
             this.on('ui:modal:render', SnowcapAdmin.Form.textAutocompleteFactory);
             this.on('ui:modal:render', SnowcapAdmin.Form.autocompleteFactory);
+            this.on('ui:modal:render', this.checkAlerts);
             this.on('ui:modal:success', this.success);
         },
 
         success: function(data) {
             $('[data-admin=ui-alerts]').admin_ui_alerts('addMessages', data.flashes, true);
+        },
+
+        checkAlerts: function(data) {
+            this.$('[data-admin=ui-alerts]').admin_ui_alerts();
         }
 
     });
