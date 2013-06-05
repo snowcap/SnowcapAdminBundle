@@ -41,6 +41,7 @@ SnowcapAdmin.Ui = (function() {
                 if($modalTrigger.data('options-modal-class')) {
                     options.modalClass = $modalTrigger.data('options-modal-class');
                 }
+                options.backdrop = $modalTrigger.data('options-modal-backdrop');
                 new SnowcapAdmin.Ui.Modal(options);
             });
         });
