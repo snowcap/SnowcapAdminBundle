@@ -70,7 +70,7 @@ class ContentController extends BaseController
         if ($request->isMethod('POST')) {
             try {
                 $this->save($admin, $form, $entity);
-                $this->setFlash('success', 'content.create.flash.success');
+                $this->setFlash('success', 'content.create.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
                 $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
@@ -149,7 +149,7 @@ class ContentController extends BaseController
         if ($request->isMethod('POST')) {
             try {
                 $this->save($admin, $form, $entity);
-                $this->setFlash('success', 'content.update.flash.success');
+                $this->setFlash('success', 'content.update.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
                 $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
@@ -197,7 +197,7 @@ class ContentController extends BaseController
 
                 return new JsonResponse(array(
                     'result' => $result,
-                    'flashes' => $this->buildModalFlash('success', 'content.update.flash.success')
+                    'flashes' => $this->buildModalFlash('success', 'content.update.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)))
                 ), 201);
             }
             catch(\Exception $e) {
@@ -247,7 +247,7 @@ class ContentController extends BaseController
     {
         if($request->isMethod('post')) {
             $admin->deleteEntity($entity);
-            $this->setFlash('success', 'content.delete.flash.success');
+            $this->setFlash('success', 'content.delete.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
             $result = array(
                 'entity_id' => $entity->getId(),
                 'entity_name' => $admin->getEntityName($entity)
@@ -280,7 +280,7 @@ class ContentController extends BaseController
     {
         if($request->isMethod('post')) {
             $admin->deleteEntity($entity);
-            $this->setFlash('success', 'content.delete.flash.success');
+            $this->setFlash('success', 'content.delete.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
 
             return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
         }
