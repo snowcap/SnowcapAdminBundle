@@ -7,7 +7,7 @@ Features include:
 
 - Basic CRUD capabilities
 - A Datalist component
-- Form type extensions
+- Form type extensions (autocomplete, advanced file field, ...)
 - Translation interface
 
 **Caution:** This bundle is developed in sync with [symfony's repository](https://github.com/symfony/symfony).
