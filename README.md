@@ -8,6 +8,7 @@ Features include:
 - Basic CRUD capabilities
 - A Datalist component
 - Form type extensions
+- Translation interface
 
 **Caution:** This bundle is developed in sync with [symfony's repository](https://github.com/symfony/symfony).
 For Symfony 2.1.x, you need to use the 2.1.x branch of the bundle.
