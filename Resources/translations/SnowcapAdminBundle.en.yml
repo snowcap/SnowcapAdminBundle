@@ -19,12 +19,12 @@ content:
     create:
         title: Create a "%content_name%" content
         flash:
-            success: Your content has been created.
+            success: Your content "%name%" of type "%type%" has been created.
             error: Your content cannot be created.
     update:
         title: Update "%content_name%" content
         flash:
-            success: Your content has been updated.
+            success: Your content "%name%" of type "%type%" has been updated.
             error: Your content cannot be updated.
     delete:
         title: Delete operation confirmation
@@ -38,7 +38,7 @@ content:
         cancel: Annuler
         confirm: Delete
         flash:
-            success: Your content has been deleted
+            success: Your content "%name%" of type "%type%" has been deleted.
             error_has_children: You cannot delete content with children
     actions:
         header: Actions

@@ -19,12 +19,12 @@ content:
     create:
         title: Nouveau contenu "%content_name%"
         flash:
-            success: Le contenu a bien été créé.
+            success: Le contenu "%name%" de type "%type%" a bien été créé.
             error: Le contenu n'a pas pu être créé.
     update:
         title: Mise à jour du contenu "%content_name%"
         flash:
-            success: Le contenu a bien été mis à jour.
+            success: Le contenu "%name%" de type "%type%" a bien été mis à jour.
             error: Le contenu n'a pas pu être mis à jour.
     delete:
         title: Confirmation de suppression
@@ -38,7 +38,7 @@ content:
         cancel: Annuler
         confirm: Supprimer
         flash:
-            success: Le contenu a bien été supprimé.
+            success: Le contenu "%name%" de type "%type%" a bien été supprimé.
             error_has_children: Impossible de supprimer un contenu lié à d'autres éléments
     actions:
         header: Actions
