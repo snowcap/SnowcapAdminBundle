@@ -37,12 +37,15 @@
             {% block form_actions %}
                 <div class="form-actions">
                     <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
+                        <i class="icon-ok-sign icon-white"></i>
                         {{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
                     <button type="submit" name="saveMode" class="btn" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_CONTINUE') }}">
+                        <i class="icon-edit"></i>
                         {{ "content.actions.saveandcontinue"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
-                    <a href="{{ admin_content_path(admin, 'index') }}" class="btn btn-inverse">
+                    <a href="{{ admin_content_path(admin, 'index') }}" class="btn">
+                        <i class="icon-arrow-left"></i>
                         {{ "content.actions.back"|trans({}, 'SnowcapAdminBundle') }}
                     </a>
                 </div>
