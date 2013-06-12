@@ -21,7 +21,6 @@ SnowcapAdmin.Ui = (function() {
         checkAlerts: function(data) {
             this.$('[data-admin=ui-alerts]').admin_ui_alerts();
         }
-
     });
 
     /**
@@ -31,19 +30,17 @@ SnowcapAdmin.Ui = (function() {
      */
     var modalFactory = function() {
         var $context = (0 === arguments.length) ? $('body') : arguments[0];
-        $context.find('[data-admin=content-modal]').each(function(offset, modalTrigger) {
-            var $modalTrigger = $(modalTrigger);
-            $($modalTrigger).on('click', function(event) {
-                event.preventDefault();
-                var options = {
-                    url: $modalTrigger.attr('href')
-                };
-                if($modalTrigger.data('options-modal-class')) {
-                    options.modalClass = $modalTrigger.data('options-modal-class');
-                }
-                options.backdrop = $modalTrigger.data('options-modal-backdrop');
-                new SnowcapAdmin.Ui.Modal(options);
-            });
+        $context.on('click', '[data-admin=content-modal]', function(event) {
+            event.preventDefault();
+            var $modalTrigger = $(event.currentTarget);
+            var options = {
+                url: $modalTrigger.attr('href')
+            };
+            if($modalTrigger.data('options-modal-class')) {
+                options.modalClass = $modalTrigger.data('options-modal-class');
+            }
+            options.backdrop = $modalTrigger.data('options-modal-backdrop');
+            new SnowcapAdmin.Ui.Modal(options);
         });
     };
 
