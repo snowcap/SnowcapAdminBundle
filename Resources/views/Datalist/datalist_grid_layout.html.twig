@@ -149,9 +149,11 @@
 {% block datalist_filters %}
     {% set form_class = datalist.option('filters_on_top') ? 'form-inline' : 'form-vertical' %}
     <form class="{{ form_class }}" method="get" novalidate>
-        {% for filter in filters %}
-            {{ datalist_filter(filter) }}{% if datalist.option('filters_on_top') %}&nbsp;{% endif %}
-        {% endfor %}
+        <div class="control-group">
+            {% for filter in filters %}
+                {{ datalist_filter(filter) }}{% if datalist.option('filters_on_top') %}&nbsp;{% endif %}
+            {% endfor %}
+        </div>
         <button type="submit" class="btn btn-primary">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
         <a class="btn" href="{{ url }}">{{ reset|trans({}, "SnowcapAdminBundle") }}</a>
     </form>
