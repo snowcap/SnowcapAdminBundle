@@ -7,7 +7,7 @@ CKEDITOR.editorConfig = function( config )
     // Override the toolbar as you needed
     config.toolbar= 'Basic';
     config.toolbar_Basic = [
-        //['PasteText', 'Bold', 'Italic', 'RemoveFormat', 'NumberedList', 'BulletedList', 'Outdent','Indent', 'CreateDiv', 'Blockquote', 'Link', 'Unlink', 'HorizontalRule', 'Image', 'Table', 'Templates', 'Styles', 'Source']
+        //['PasteText', 'Bold', 'Italic', 'RemoveFormat', 'NumberedList', 'BulletedList', 'Outdent','Indent', 'JustifyLeft', 'JustifyRight', 'JustifyCenter', 'JustifyBlock', 'CreateDiv', 'Blockquote', 'Link', 'Unlink', 'HorizontalRule', 'Image', 'Table', 'Templates', 'Styles', 'Source']
         ['Format', 'Bold', 'Italic', 'NumberedList', 'BulletedList', 'Link', 'Unlink', 'Image', '-', 'RemoveFormat', 'PasteText', 'Templates', 'ShowBlocks', 'Source', 'Maximize']
     ];
 
