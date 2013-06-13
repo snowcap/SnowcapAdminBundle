@@ -181,8 +181,9 @@ SnowcapAdmin.Form = (function($) {
             if('multiple' === this.mode) {
                 $('ul.tokens').on('click', 'a[rel=remove]', _.bind(function(event) {
                     event.preventDefault();
-                    var value = $(this).parent('li').data('value');
-                    $(this).parent('li').remove();
+                    var $closeButton = $(event.currentTarget);
+                    var value = $closeButton.parent('li').data('value');
+                    $closeButton.parent('li').remove();
                     this.$el.find('input[value=' + value + ']').remove();
                 }, this));
             }
