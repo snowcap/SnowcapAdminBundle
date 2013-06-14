@@ -259,7 +259,7 @@ SnowcapAdmin.Form = (function($) {
                 return item;
             }
             else {
-                var prototype = this.$el.data('prototype');
+                var prototype = $.trim(this.$el.data('prototype'));
                 var $prototype = $(prototype.replace(/__name__/g, this.$el.find('input[type=hidden]').length));
                 $prototype.val(this.mapped[item]);
                 this.$el.prepend($prototype);
