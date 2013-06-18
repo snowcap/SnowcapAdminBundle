@@ -29,8 +29,8 @@ class SnowcapAdminExtension extends Extension
         $loader->load('services.yml');
 
         $container->findDefinition('snowcap_admin.routing_helper_content')
-            ->replaceArgument(1, $config['content']['route_prefix'])
-            ->replaceArgument(2, $config['content']['route_name_prefix']);
+            ->replaceArgument(2, $config['content']['route_prefix'])
+            ->replaceArgument(3, $config['content']['route_name_prefix']);
 
         $container->setParameter('snowcap_admin.im_formats', $config['im_formats']);
 
