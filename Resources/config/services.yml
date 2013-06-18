@@ -24,7 +24,7 @@ services:
 
     snowcap_admin.routing_helper_content:
         class: Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
-        arguments: [@router, "", ""]
+        arguments: [@router, @controller_name_converter, "", ""]
 
     # Param converters
     snowcap_admin.param_converter:
