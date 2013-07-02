@@ -30,7 +30,7 @@
         "sensio/framework-extra-bundle": "2.1.*-dev",
         "snowcap/core-bundle": "2.1.*@dev",
         "snowcap/bootstrap-bundle": "2.1.*@dev",
-        "knplabs/knp-markdown-bundle": "1.2.x-dev"
+        "knplabs/knp-markdown-bundle": "1.2.*-dev"
     },
     "autoload": {
         "psr-0": { "Snowcap\\AdminBundle": "" }
