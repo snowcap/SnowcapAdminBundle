@@ -142,7 +142,7 @@ class DoctrineORMDatasource extends AbstractDatasource
      */
     private function buildQueryBuilderComparisonExpression(ComparisonExpression $expression) {
         $propertyPath = $expression->getPropertyPath();
-        $placeholder=  ':' . str_replace('.', '_', $expression->getPropertyPath());
+        $placeholder=  ':' . uniqid('p');
         $comparisonValue = $expression->getValue();
         $operator = $expression->getOperator();
 
