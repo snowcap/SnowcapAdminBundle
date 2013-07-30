@@ -214,7 +214,7 @@ If you want to override the layout of the datalist, you have to create your own 
 
 You can extend an existing one if you want to change only a part of it :
 
-```twig
+```jinja
 {# src/Acme/AdminBundle/Resources/views/Datalist/datalist_custom_layout.html.twig #}
 
 
@@ -272,7 +272,7 @@ You can extend an existing one if you want to change only a part of it :
 
 Now you just have to apply the theme on your datalist. See the example below :
 
-```twig
+```jinja
 {# src/Acme/AdminBundle/Resources/views/Custom/custom.html.twig #}
 
 
