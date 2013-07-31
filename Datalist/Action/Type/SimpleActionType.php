@@ -12,7 +12,7 @@ class SimpleActionType extends AbstractActionType {
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
-    private $router;
+    protected $router;
 
     /**
      * @param \Symfony\Component\Routing\RouterInterface $router
