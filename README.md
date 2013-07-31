@@ -41,7 +41,7 @@ This bundle is under the MIT license. See the complete license in the bundle:
 About
 -----
 
-UserBundle is a [Snowcap](https://github.com/snowcap) initiative.
+SnowcapAdminBundle is a [Snowcap](https://github.com/snowcap) initiative.
 
 Reporting an issue or a feature request
 ---------------------------------------
