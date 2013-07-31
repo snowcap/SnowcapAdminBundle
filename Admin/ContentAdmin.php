@@ -212,7 +212,7 @@ abstract class ContentAdmin extends AbstractAdmin
             throw new InvalidOptionsException('The option "entity_name" must be set (or you have to define a getEntityName method)');
         };
 
-        $accessor = PropertyAccess::getPropertyAccessor();
+        $accessor = PropertyAccess::createPropertyAccessor();
 
         return $accessor->getValue($entity, $this->getOption('entity_name'));
     }
