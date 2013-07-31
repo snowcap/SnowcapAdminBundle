@@ -9,6 +9,7 @@ Features include:
 - A Datalist component
 - Form type extensions (autocomplete, advanced file field, ...)
 - Translation interface
+- And much more
 
 **Caution:** This bundle is developed in sync with [symfony's repository](https://github.com/symfony/symfony).
 For Symfony 2.1.x, you need to use the 2.1.x branch of the bundle.
