@@ -191,7 +191,6 @@ abstract class ContentAdmin extends AbstractAdmin
     /**
      * Return the main admin form for this content
      *
-     * @param object $data
      * @return \Symfony\Component\Form\Form
      */
     abstract public function getForm();
