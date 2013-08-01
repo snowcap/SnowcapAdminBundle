@@ -205,3 +205,14 @@
         {% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
 {% endblock widget_attributes %}
+
+{# url field #}
+{% block url_field %}
+    <td>
+        {% if value is not null and url is not null %}
+            <a href="{{ url }}">{{ value|raw }}</a>
+        {% else %}
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
+        {% endif %}
+    </td>
+{% endblock url_field %}

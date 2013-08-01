@@ -90,3 +90,14 @@
         <img src="http://placehold.it/260x180" alt="{{ field.options['label']|trans({}, translation_domain) }}"/>
     {% endif %}
 {% endblock image_field %}
+
+{# url field #}
+{% block url_field %}
+    <td>
+        {% if value is not null and url is not null %}
+            <a href="{{ url }}">{{ value|raw }}</a>
+        {% else %}
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
+        {% endif %}
+    </td>
+{% endblock url_field %}

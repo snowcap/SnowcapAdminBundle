@@ -150,6 +150,12 @@ services:
         tags:
             - { name: snowcap_admin.datalist_fieldtype, alias: text }
 
+    axiloo_mykidi_admin.datalist_field_url:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\UrlFieldType
+        parent: snowcap_admin.datalist_field_text
+        tags:
+            - { name: snowcap_admin.datalist_fieldtype, alias: url }
+
     snowcap_admin.datalist_filter_choice:
         class: Snowcap\AdminBundle\Datalist\Filter\Type\ChoiceFilterType
         tags:
