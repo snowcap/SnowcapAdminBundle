@@ -22,16 +22,13 @@ class UrlFieldType extends TextFieldType
         parent::setDefaultOptions($resolver);
 
         $resolver
-            ->setDefaults(array(
-                'url' => null,
+            ->setRequired(array(
+                'url',
             ))
             ->setAllowedTypes(array(
                 'url' => array(
                     'callable', 'string'
                 )
-            ))
-            ->setOptional(array(
-                'url',
             ));
     }
 
