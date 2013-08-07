@@ -200,7 +200,7 @@ jQuery(document).ready(function ($) {
     });
 
     // Handle "content changed" event
-    $('a:not([href^=#])').click(function(event) {
+    $('a:not([href^=#])').not('[data-admin]').click(function(event) {
         var formHasChanged = $('body').data('admin-form-changed');
         if(formHasChanged) {
             event.preventDefault();
