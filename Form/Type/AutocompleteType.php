@@ -1,4 +1,5 @@
 <?php
+
 namespace Snowcap\AdminBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -7,13 +8,16 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
+use Doctrine\ORM\QueryBuilder;
 
-use Snowcap\AdminBundle\Form\DataTransformer\EntityToIdTransformer;
 use Snowcap\AdminBundle\AdminManager;
+use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
+use Snowcap\AdminBundle\Form\DataTransformer\EntityToIdTransformer;
 
 /**
  * Autocomplete field type class
@@ -45,20 +49,28 @@ class AutocompleteType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $compound = function (Options $options) {
-            return $options['multiple'];
-        };
+        $adminManager = $this->adminManager;
 
         $resolver
             ->setDefaults(array(
                 'allow_add' => false,
                 'add_label' => 'Add new',
                 'multiple' => false,
-                'compound' => $compound,
-
+                'compound' => function (Options $options) {
+                    return $options['multiple'];
+                },
+                'id_property' => 'id',
+                'property' => '__toString',
             ))
             ->setRequired(array('admin', 'where'))
-            ->setOptional(array('property'));
+            ->setOptional(array('row_id_property', 'row_property'))
+            ->setNormalizers(array(
+                'admin' => function(Options $options, $adminOption) use($adminManager) {
+                    if(!$adminOption instanceof ContentAdmin) {
+                        return $adminManager->getAdmin($adminOption);
+                    }
+                }
+            ));
     }
 
     /**
@@ -67,8 +79,7 @@ class AutocompleteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $admin = $this->adminManager->getAdmin($options['admin']);
-        $builder->addModelTransformer(new EntityToIdTransformer($admin, $options['multiple']));
+        $builder->addModelTransformer(new EntityToIdTransformer($options['admin'], $options['multiple']));
 
         if($options['multiple']) {
             $prototype = $builder->create('__name__', 'hidden');
@@ -101,7 +112,6 @@ class AutocompleteType extends AbstractType
                 $textValues[$entity->getId()]= $this->buildTextValue($entity, $options);
             }
             $view->vars['text_values'] = $textValues;
-
             $view->vars['prototype'] = $form->getConfig()->getAttribute('prototype')->createView($view);
         }
         // For single autocompletes, just store the only textual value
@@ -147,15 +157,20 @@ class AutocompleteType extends AbstractType
         if(null === $value) {
             $textValue = "";
         }
-        elseif(isset($options['property'])) {
-            $accessor = PropertyAccess::getPropertyAccessor();
-            $textValue = $accessor->getValue($value, $options['property']);
-        }
-        elseif(method_exists($value, '__toString')) {
-            $textValue = $value->__toString();
-        }
         else {
-            throw new MissingOptionsException('You must provide a "property" option (or your class must implement the "__toString" method');
+            try {
+                $accessor = PropertyAccess::getPropertyAccessor();
+                $textValue = $accessor->getValue($value, $options['property']);
+            }
+            catch(NoSuchPropertyException $e) {
+                if('__toString' === $options['property']) {
+                    $message = 'You must provide a "property" option (or your class must implement the "__toString" method';
+                }
+                else {
+                    $message = sprintf('The "%s" is not a valid property option', $options['property']);
+                }
+                throw new MissingOptionsException($message);
+            }
         }
 
         return $textValue;
@@ -167,10 +182,23 @@ class AutocompleteType extends AbstractType
      */
     private function generateListUrl(array $options)
     {
+        $rowIdProperty = isset($options['row_id_property']) ?
+            $options['row_id_property'] :
+            $options['id_property'];
+
+        $rowProperty = isset($options['row_property']) ?
+            $options['row_property'] :
+            $options['property'];
+
         return $this->routingHelper->generateUrl(
-            $this->adminManager->getAdmin($options['admin']),
+            $options['admin'],
             'autocompleteList',
-            array('query' => '__query__', 'where' => base64_encode($options['where']), 'property' => $options['property'])
+            array(
+                'query' => '__query__',
+                'where' => base64_encode($options['where']),
+                'id_property' => $rowIdProperty,
+                'property' => $rowProperty,
+            )
         );
     }
 
@@ -180,6 +208,6 @@ class AutocompleteType extends AbstractType
      */
     private function generateAddUrl(array $options)
     {
-        return $this->routingHelper->generateUrl($this->adminManager->getAdmin($options['admin']), 'modalCreate');
+        return $this->routingHelper->generateUrl($options['admin'], 'modalCreate');
     }
 }

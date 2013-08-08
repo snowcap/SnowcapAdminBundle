@@ -54,6 +54,47 @@ section {
     }
 }
 
+.form-autocomplete-single {
+    position: relative;
+    .close {
+        position: absolute;
+        right: 6px;
+        top: 3px;
+    }
+}
+
+.form-collection {
+    overflow: auto;
+    .form-collection-item {
+        position: relative;
+        padding-top: 19px;
+
+        .form-collection-item-controls {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+    }
+
+    .row, .row-fluid {
+        &:last-child {
+            .control-group {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.form-embedded {
+    .row, .row-fluid {
+        &:last-child {
+            .control-group {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
 /* Modal styles */
 .modal form {
     margin-bottom: 0;

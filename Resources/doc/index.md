@@ -256,7 +256,7 @@ class ArtistAdmin extends ContentAdmin
      */
     public function getForm()
     {
-        return $this->formFactory
+        return $this->getFormFactory()
             ->createBuilder('form', null, array('data_class' => 'Acme\SiteBundle\Entity\Artist'))
             ->add('firstName', 'text')
             ->add('lastName', 'text')
@@ -270,7 +270,7 @@ class ArtistAdmin extends ContentAdmin
      */
     public function getDatalist()
     {
-        return $this->datalistFactory
+        return $this->getDatalistFactory()
             ->createBuilder('datalist', array('data_class' => 'Acme\SiteBundle\Entity\Artist'))
             ->addField('firstName', 'text')
             ->addField('lastName', 'text')

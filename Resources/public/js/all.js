@@ -153,186 +153,34 @@ jQuery(document).ready(function ($) {
      * @param DOMElement row
      */
     var EntityWidget = function (container) {
-        var self = this;
         var container = $(container);
-        var trigger = container.find('a[rel=add]');
-        var modal = $('#modal');
-        var select = container.find('select');
+        var $trigger = container.find('a[data-admin=form-type-entity-add]');
+        var $select = container.find('select');
 
-        /**
-         * Observe what's cooking in the add form
-         *
-         */
-        self.observeAddForm = function () {
-            modal.find('*[type=submit]').on('click', function (event) {
-                event.preventDefault();
-                var form = modal.find('form');
-                $.post(form.attr('action'), form.serialize(), null, "json")
-                    .success(function(data, textStatus, jqXHR) {
-                        modal.html('');
-                        var option = $('<option>');
-                        option.val(data.result[0]);
-                        option.html(data.result[1]);
-                        select.append(option);
-                        select.val(data.result[0]);
-                        modal.modal('hide');
-                    })
-                    .error(function(data, textStatus, jqXHR) {
-                        console.log(data);
-                        alert('An error has occured');
-                    });
+        $trigger.click(function (event) {
+            event.preventDefault();
+            var contentModal = new SnowcapAdmin.Ui.Modal({url: $trigger.attr('href')});
+            contentModal.on('ui:modal:success', function(data){
+                var
+                    option = $('<option>'),
+                    entity_id = data.result.entity_id
+                entity_name = data.result.entity_name;
+                option.val(entity_id);
+                option.html(entity_name);
+                $select.append(option);
+                $select.val(entity_id);
             });
-        };
-
-        /**
-         * Inline widget init
-         *
-         */
-        self.init = function () {
-            // Observe the "add" button
-            trigger.click(function (event) {
-                event.preventDefault();
-                $.get($(this).attr('href'), function (data) {
-                    modal.html(data);
-                    self.observeAddForm();
-                    modal.modal('show');
-                });
-            });
-        };
-        self.init();
+        });
     };
 
     /**
-    * Autocomplete widget
-    *
-    * @param DOMElement row
-    */
-    var AutocompleteWidget = function (container) {
-        var self = this;
-        var container = $(container);
-        var trigger = container.find('a[rel=add]');
-        var modal = $('#modal');
-        var textInput = container.find('input[type=text]');
-        var valueInput = container.find('input[type=hidden]');
+     * Autocomplete widget
+     *
+     * @param DOMElement row
+     */
 
-        var labels, mapped;
-        var listUrl = container.data('list-url');
-        var mode = container.data('mode');
 
-        /**
-         * Observe what's cooking in the add form
-         *
-         */
-        self.observeAddForm = function () {
-            modal.find('*[type=submit]').on('click', function (event) {
-                event.preventDefault();
-                var form = modal.find('form');
-                $.post(form.attr('action'), form.serialize(), null, "json")
-                    .success(function(data, textStatus, jqXHR) {
-                        modal.html('');
-                        if('single' === mode) {
-                            // TODO refactor with autocomplete updater
-                            textInput.val(data.result[1]);
-                            valueInput.val(data.result[0]).trigger('change');
-                        }
-                        else {
-                            var prototype = container.data('prototype');
-                            var $prototype = $(prototype.replace(/__name__/g, container.find('input[type=hidden]').length));
-                            $prototype.val(data.result[0]);
-                            container.prepend($prototype);
-                            $prototype.trigger('change');
-
-                            $token = $('<li>').addClass('token').html($('<span>').html(data.result[1])).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
-                            container.find('.tokens').append($token);
-                        }
-                        modal.modal('hide');
-                    })
-                    .error(function(data, textStatus, jqXHR) {
-                        console.log(data);
-                        alert('An error has occured');
-                    });
-            });
-        };
-
-        /**
-         * Autocomplete widget init
-         *
-         */
-        self.init = function () {
-            // Observe the "add" button
-            trigger.click(function (event) {
-                event.preventDefault();
-                $.get($(this).attr('href'), function (data) {
-                    modal.html(data);
-                    self.observeAddForm();
-                    modal.modal('show');
-                });
-            });
-            // Initialize typeahead
-            textInput.typeahead({
-                source: function(query, process) {
-                    var replacedUrl = listUrl.replace('__query__', query);
-                    $.getJSON(replacedUrl, function(data) {
-                        labels = [];
-                        mapped = {};
-                        $.each(data.result, function (i, item) {
-                            mapped[item[1]] = item[0];
-                            labels.push(item[1]);
-                        })
-
-                        process(labels);
-                    });
-                },
-                minLength: 3,
-                matcher: function(item) {
-                    var existingTokens = container.find('.token span').map(function() {
-                        return $(this).html();
-                    });
-
-                    return -1 === $.inArray(item, existingTokens);
-                },
-                updater: function(item) {
-                    if('single' === mode) {
-                        container.find('input[type=hidden]').val(mapped[item]).trigger('change');
-                        return item;
-                    }
-                    else {
-                        var prototype = container.data('prototype');
-                        var $prototype = $($.trim(prototype.replace(/__name__/g, container.find('input[type=hidden]').length)));
-                        $prototype.val(mapped[item]);
-                        container.prepend($prototype);
-                        $prototype.trigger('change');
-
-                        $token = $('<li>').addClass('token').html($('<span>').html(item)).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
-                        container.find('.tokens').append($token);
-
-                        return "";
-                    }
-                }
-            });
-            // Handle focus / blur
-            textInput.focus(function(e){
-                $(this).data('prev', $(this).val());
-                $(this).val('');
-            }).blur(function(e){
-                if($(this).val() === '') {
-                    $(this).val($(this).data('prev'));
-                }
-            });
-            // Remove associations
-            if('multiple' === mode) {
-                $('ul.tokens').on('click', 'a[rel=remove]', function(event) {
-                    event.preventDefault();
-                    var value = $(this).parent('li').data('value');
-                    $(this).parent('li').remove();
-                    container.find('input[value=' + value + ']').remove();
-                });
-            }
-        };
-        self.init();
-    };
-
-    // Slug
+        // Slug
     $('.widget-slug').slugger();
     // Markdown
     $('.widget-markdown').markdownPreviewer();
@@ -342,26 +190,17 @@ jQuery(document).ready(function ($) {
         new EntityWidget(container);
     });
 
-    // Autocomplete widgets
-    var launchAutocompletes = function() {
-        new AutocompleteWidget($(this));
-    };
-    $('[data-admin=form-type-autocomplete]').each(launchAutocompletes);
-    $('.collection-container').on('new_collection_item', function() {
-        $(this).find('[data-admin=form-type-autocomplete]').each(launchAutocompletes);
-    });
-
     // autosize for textareas
     $('.catalogue-translation textarea').autosize();
 
     // Handle "content changed" event
     $('body').data('admin-form-changed', false);
-    $('[data-admin=form-change-warning]').change(function(event) {
+    $('[data-admin=form-change-warning]').change(function() {
         $('body').data('admin-form-changed', true);
     });
 
     // Handle "content changed" event
-    $('a:not([href^=#])').click(function(event) {
+    $('a:not([href^=#])').not('[data-admin]').click(function(event) {
         var formHasChanged = $('body').data('admin-form-changed');
         if(formHasChanged) {
             event.preventDefault();
@@ -369,14 +208,14 @@ jQuery(document).ready(function ($) {
             var modal = $('#modal');
             $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
                 modal.html(data);
-                modal.find('.cancel').click(function(event){
+                modal.find('.cancel').click(function(){
                     modal.html('');
                     modal.modal('hide');
                 });
-                modal.find('.proceed').click(function(event){
+                modal.find('.proceed').click(function(){
                     window.location.href = href;
                 });
-                modal.find('.save').click(function(event){
+                modal.find('.save').click(function(){
                     $('[data-admin=form-change-warning]').submit();
                 });
                 modal.modal('show');

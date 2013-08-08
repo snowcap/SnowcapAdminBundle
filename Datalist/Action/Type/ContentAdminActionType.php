@@ -50,22 +50,40 @@ class ContentAdminActionType extends AbstractActionType {
 
         $resolver
             ->setDefaults(array(
-                'params' => array('id' => 'id'),
-                'modal' => false,
-            ))
+                    'params' => array('id' => 'id'),
+                    'modal' => false,
+                ))
             ->setOptional(array('icon'))
             ->setRequired(array('admin', 'action'))
             ->setAllowedTypes(array(
-                'params' => 'array',
-                'admin' => array('string', 'Snowcap\AdminBundle\Admin\ContentAdmin'),
-                'action' => 'string',
-            ))
+                    'params' => 'array',
+                    'admin' => array('string', 'Snowcap\AdminBundle\Admin\ContentAdmin'),
+                    'action' => 'string',
+                ))
             ->setNormalizers(array(
-                'admin' => $adminNormalizer
-            ));
+                    'admin' => $adminNormalizer
+                ));
     }
 
+    /**
+     * @param DatalistActionInterface $action
+     * @param $item
+     * @param array $options
+     * @return string
+     */
     public function getUrl(DatalistActionInterface $action, $item, array $options = array())
+    {
+        $parameters = $this->getUrlParameters($item, $options);
+
+        return $this->routingHelper->generateUrl($options['admin'], $options['action'], $parameters);
+    }
+
+    /**
+     * @param $item
+     * @param array $options
+     * @return array
+     */
+    protected function getUrlParameters($item, array $options)
     {
         $parameters = array();
         $accessor = PropertyAccess::getPropertyAccessor();
@@ -74,7 +92,7 @@ class ContentAdminActionType extends AbstractActionType {
             $parameters[$paramName] = $paramValue;
         }
 
-        return $this->routingHelper->generateUrl($options['admin'], $options['action'], $parameters);
+        return $parameters;
     }
 
     /**
@@ -89,7 +107,7 @@ class ContentAdminActionType extends AbstractActionType {
 
         if(true === $options['modal']) {
             $attr = $viewContext['attr'];
-            $attr['data-bootstrap'] = 'modal';
+            $attr['data-admin'] = 'content-modal';
             $viewContext['attr'] = $attr;
         }
 

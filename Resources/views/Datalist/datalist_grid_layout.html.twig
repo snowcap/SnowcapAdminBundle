@@ -1,22 +1,42 @@
 {# datalist grid block #}
 {% block datalist %}
-    {% if datalist.option('search') %}
-        {{ datalist_search(datalist) }}
-    {% endif %}
-    {% if datalist.filterable %}
-        <div class="row-fluid">
-            <div class="span9">
-                {{ block('datalist_table') }}
+
+    {% if datalist.option('filters_on_top') %}
+        {% if datalist.filterable or datalist.searchable %}
+            <div class="well">
+                {% if datalist.searchable %}
+                    {{ datalist_search(datalist) }}
+                {% endif %}
+                {% if datalist.filterable %}
+                    {{ datalist_filters(datalist) }}
+                {% endif %}
             </div>
-            <div class="span3">{{ datalist_filters(datalist) }}</div>
-        </div>
-    {% else  %}
-        {{ block('datalist_table') }}
+            {{ block('datalist_table') }}
+        {% endif %}
+    {% else %}
+        {% if datalist.searchable %}
+            {{ datalist_search(datalist) }}
+        {% endif %}
+        {% if datalist.filterable %}
+            <div class="row-fluid">
+                <div class="span9">
+                    {{ block('datalist_table') }}
+                </div>
+                <div class="span3">
+                    <div class="well well-small">
+                        {{ datalist_filters(datalist) }}
+                    </div>
+                </div>
+            </div>
+        {% else  %}
+            {{ block('datalist_table') }}
+        {% endif %}
     {% endif %}
 
     {% if datalist.paginator is not null %}
         {{ paginator_widget(datalist.paginator) }}
     {% endif %}
+
 {% endblock datalist %}
 
 {# datalist table block #}
@@ -98,8 +118,8 @@
     {% set label = ("label " ~ label_class)|trim %}
     {%
         set text = value == true ?
-            true_label|trans({}, 'translation_domain')|default('Yes') :
-            false_label|trans({}, 'teanslation_domain')|default('No')
+            true_label|trans({}, translation_domain)|default('Yes') :
+            false_label|trans({}, translation_domain)|default('No')
     %}
     <td><span class="label {{ label }}">{{ text }}</span></td>
 {% endblock boolean_field %}
@@ -127,39 +147,40 @@
 
 {# datalist filters #}
 {% block datalist_filters %}
-    <div class="well">
-        <form class="form-vertical" method="get" novalidate>
+    {% set form_class = datalist.option('filters_on_top') ? 'form-inline' : 'form-vertical' %}
+    <form class="{{ form_class }}" method="get" novalidate>
+        <div class="control-group">
             {% for filter in filters %}
-                {{ datalist_filter(filter) }}
+                {{ datalist_filter(filter) }}{% if datalist.option('filters_on_top') %}&nbsp;{% endif %}
             {% endfor %}
-            <button type="submit" class="btn btn-primary">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
-            <a class="btn" href="{{ url }}">{{ reset|trans({}, "SnowcapAdminBundle") }}</a>
-        </form>
-    </div>
+        </div>
+        <button type="submit" class="btn btn-primary">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+        <a class="btn" href="{{ url }}">{{ reset|trans({}, "SnowcapAdminBundle") }}</a>
+    </form>
 {% endblock datalist_filters %}
 
 {# choice filter #}
 {% block choice_filter %}
-    <div class="control-group">
+    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    </div>
+    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
 {% endblock choice_filter %}
 
 {# search filter #}
 {% block search_filter %}
-    <div class="control-group">
+    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    </div>
+    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
 {% endblock search_filter %}
 
 {# entity filter #}
 {% block entity_filter %}
-    <div class="control-group">
+    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    </div>
+    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
 {% endblock entity_filter %}
 
 {# simple action #}
@@ -184,3 +205,14 @@
         {% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
 {% endblock widget_attributes %}
+
+{# url field #}
+{% block url_field %}
+    <td>
+        {% if value is not null and url is not null %}
+            <a href="{{ url }}">{{ value|raw }}</a>
+        {% else %}
+            <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
+        {% endif %}
+    </td>
+{% endblock url_field %}

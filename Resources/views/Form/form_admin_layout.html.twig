@@ -5,7 +5,7 @@
     <div class="form-inline" data-admin="form-type-entity">
         {{ block('choice_widget') }}
         {% if allow_add %}
-            &nbsp;<a href="{{ add_url }}" class="btn" rel="add">{{ add_label|trans({}, translation_domain) }}</a>
+            &nbsp;<a href="{{ add_url }}" class="btn" data-admin="form-type-entity-add">{{ add_label|trans({}, translation_domain) }}</a>
         {% endif %}
     </div>
 {% endblock snowcap_admin_entity_widget %}
@@ -21,7 +21,7 @@
 
 {% block snowcap_admin_autocomplete_single_widget %}
 {% spaceless %}
-    <div class="form-autocomplete" data-admin="form-type-autocomplete" data-mode="single" data-list-url="{{ list_url }}">
+    <div class="form-autocomplete form-autocomplete-single" data-admin="form-autocomplete" data-options-mode="single" data-options-url="{{ list_url }}">
         {{ form_widget(form, {'type': 'hidden'}) }}
         {% set text_widget %}
             <input type="text"{% if text_value is not empty %} value="{{ text_value }}"{% endif %}  {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
@@ -29,7 +29,7 @@
         {% if allow_add %}
             <div class="input-append">
                 {{ text_widget }}
-                <a href="{{ add_url }}" class="btn" rel="add">
+                <a href="{{ add_url }}" class="btn" data-admin="content-add">
                     <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
                 </a>
             </div>
@@ -42,7 +42,7 @@
 
 {% block snowcap_admin_autocomplete_multiple_widget %}
     {% spaceless %}
-        <div class="form-autocomplete form-autocomplete-multiple" data-admin="form-type-autocomplete" data-mode="multiple" data-list-url="{{ list_url }}" data-prototype="{{ form_row(prototype)|e }}">
+        <div class="form-autocomplete form-autocomplete-multiple" data-admin="form-autocomplete" data-options-mode="multiple" data-options-url="{{ list_url }}" data-prototype="{{ form_row(prototype)|e }}">
             {% for child in form %}
                 {{ form_widget(child) }}
             {% endfor %}
@@ -60,7 +60,7 @@
             {% if allow_add %}
                 <div class="input-append">
                     {{ text_widget }}
-                    <a href="{{ add_url }}" class="btn" rel="add">
+                    <a href="{{ add_url }}" class="btn" data-admin="content-add">
                         <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
                     </a>
                 </div>
@@ -82,7 +82,7 @@
 {% block snowcap_admin_slug_widget %}
     {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}
     <div class="input-append">
-        {{ block('field_widget') }}
+        {{ block('form_widget') }}
         <span class="add-on"><a href="#locked"><i class="icon-pencil icon"></i></a></span>
     </div>
     {% from 'SnowcapBootstrapBundle::macros.html.twig' import modal %}
@@ -116,3 +116,35 @@
     {% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-wysiwyg': wysiwyg_config}) %}
     {{ block('textarea_widget') }}
 {% endblock %}
+
+{# collection widget #}
+{% block collection_widget %}
+    {% spaceless %}
+        {% if prototype is defined %}
+            {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
+        {% endif %}
+        <div
+            class="form-collection control-group"
+            data-admin="form-collection"{% if confirm_delete %} data-options-confirm-delete-url="{{ confirm_delete_url }}"{% endif %}
+        >
+            {{ block('form_widget') }}
+            {% if allow_add %}
+                <div class="btn-group">
+                    <a href="#" class="btn" data-admin="form-collection-add">
+                        <i class="icon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock collection_widget %}
+
+{% block text_widget %}
+    {% if text_autocomplete %}
+        <div class="form-text-autocomplete" data-admin="form-text-autocomplete" data-options-url="{{ list_url }}">
+            {{ block('form_widget') }}
+        </div>
+    {% else %}
+        {{ block('form_widget') }}
+    {% endif %}
+{% endblock text_widget %}

@@ -99,6 +99,17 @@ services:
         tags:
             -  { name: form.type, alias: snowcap_admin_autocomplete }
 
+    # Form type extensions
+    snowcap_admin.form_extension_collection:
+        class: Snowcap\AdminBundle\Form\Extension\CollectionTypeExtension
+        arguments: [@router]
+        tags:
+            - { name: form.type_extension, alias: collection }
+    snowcap_admin.form_extension_text:
+        class: Snowcap\AdminBundle\Form\Extension\TextTypeExtension
+        tags:
+            - { name: form.type_extension, alias: text }
+
     # Datalists
     snowcap_admin.datalist_factory:
         class: Snowcap\AdminBundle\Datalist\DatalistFactory
@@ -139,6 +150,12 @@ services:
         tags:
             - { name: snowcap_admin.datalist_fieldtype, alias: text }
 
+    snowcap_admin.datalist_field_url:
+        class: Snowcap\AdminBundle\Datalist\Field\Type\UrlFieldType
+        parent: snowcap_admin.datalist_field_text
+        tags:
+            - { name: snowcap_admin.datalist_fieldtype, alias: url }
+
     snowcap_admin.datalist_filter_choice:
         class: Snowcap\AdminBundle\Datalist\Filter\Type\ChoiceFilterType
         tags:
@@ -169,7 +186,7 @@ services:
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger
-        arguments: [@doctrine.orm.entity_manager, @security.context, %snowcap_admin.logger_entity.class%]
+        arguments: [@snowcap_admin, @doctrine.orm.entity_manager, @security.context, %snowcap_admin.logger_entity.class%]
 
     # Security
     snowcap_admin.security.user_manager:

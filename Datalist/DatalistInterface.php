@@ -109,6 +109,11 @@ interface DatalistInterface extends \IteratorAggregate
     public function isFilterable();
 
     /**
+     * @return bool
+     */
+    public function isSearchable();
+
+    /**
      * @param \Symfony\Component\Form\FormInterface $form
      * @return DatalistInterface
      */

@@ -159,6 +159,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
 
         return $this->renderblock($datalist, $blockNames, array(
             'filters' => $datalist->getFilters(),
+            'datalist' => $datalist,
             'submit' => $datalist->getOption('filter_submit'),
             'reset' => $datalist->getOption('filter_reset'),
             'url' => $this->container->get('request')->getPathInfo()
@@ -179,6 +180,8 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
 
         return $this->renderblock($filter->getDatalist(), $blockNames, array(
             'form' => $childForm->createView(),
+            'filter' => $filter,
+            'datalist' => $filter->getDatalist()
         ));
     }
 

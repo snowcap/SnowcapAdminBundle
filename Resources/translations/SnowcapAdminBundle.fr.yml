@@ -19,12 +19,12 @@ content:
     create:
         title: Nouveau contenu "%content_name%"
         flash:
-            success: Le contenu a bien été créé.
+            success: Le contenu "%name%" de type "%type%" a bien été créé.
             error: Le contenu n'a pas pu être créé.
     update:
         title: Mise à jour du contenu "%content_name%"
         flash:
-            success: Le contenu a bien été mis à jour.
+            success: Le contenu "%name%" de type "%type%" a bien été mis à jour.
             error: Le contenu n'a pas pu être mis à jour.
     delete:
         title: Confirmation de suppression
@@ -36,17 +36,18 @@ content:
                 <p class="text-center"><strong>%content%</strong></p>
                 <p>Assurez-vous que ce contenu n'est plus utilisé avant de l'effacer.</p>
         cancel: Annuler
-        confirm: Effacer
+        confirm: Supprimer
         flash:
-            success: Le contenu a bien été effacé.
+            success: Le contenu "%name%" de type "%type%" a bien été supprimé.
             error_has_children: Impossible de supprimer un contenu lié à d'autres éléments
     actions:
         header: Actions
         create: Nouveau
-        save: Sauvegarder
-        saveandcontinue: Sauver et continuer
+        save: Sauvegarder et retourner à la liste
+        saveandcontinue: Sauvegarder et continuer l'édition
         edit: Modifier
-        delete: Effacer
+        delete: Supprimer
+        cancel: Annuler
         back: Retour à la liste
         reorder: Réordonner
         confirm:
@@ -167,6 +168,12 @@ widget:
             cancel: Annuler
             proceed: Changer de page sans sauver
             save: Sauver et changer de page
+    delete_item:
+        title: Suppression d'un élément
+        message: Etes-vous certain de vouloir supprimer cet élément ?
+        actions:
+            cancel: Annuler
+            proceed: Confirmer la suppression
 
 error:
     content:

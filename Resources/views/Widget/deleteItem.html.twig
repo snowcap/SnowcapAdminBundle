@@ -1,0 +1,16 @@
+{% extends 'SnowcapAdminBundle::modal_base.html.twig' %}
+
+{% trans_default_domain 'SnowcapAdminBundle' %}
+
+{% block modal_title %}
+    <h3>{{ "widget.delete_item.title"|trans }}</h3>
+{% endblock%}
+
+{% block modal_body %}
+    {{ "widget.delete_item.message"|trans }}
+{% endblock %}
+
+{% block modal_footer %}
+    <button class="btn" data-dismiss="modal" type="button">{{ "widget.delete_item.actions.cancel"|trans }}</button>
+    <button class="btn btn-danger" data-bootstrap="modal-confirm" type="button">{{ "widget.delete_item.actions.proceed"|trans }}</button>
+{% endblock %}

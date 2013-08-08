@@ -2,6 +2,9 @@
 
 {% form_theme form 'SnowcapAdminBundle:Form:form_layout.html.twig' %}
 
+{% set form_class = form_class|default('form_vertical') %}
+{% set extra_form_classes = extra_form_classes|default([]) %}
+
 {# body block #}
 {% block body %}
 
@@ -17,11 +20,12 @@
 
     {# main block #}
     {% block form %}
+
         <form
             action="{{ form_action }}"
             method="post" {{ form_enctype(form) }}
             novalidate="novalidate"
-            class="form-vertical"
+            class="{{ ([form_class]|merge(extra_form_classes))|join(' ') }}"
             data-admin="form-change-warning"
         >
 
@@ -33,11 +37,17 @@
             {% block form_actions %}
                 <div class="form-actions">
                     <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
+                        <i class="icon-ok-sign icon-white"></i>
                         {{ "content.actions.save"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
                     <button type="submit" name="saveMode" class="btn" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_CONTINUE') }}">
+                        <i class="icon-edit"></i>
                         {{ "content.actions.saveandcontinue"|trans({}, 'SnowcapAdminBundle') }}
                     </button>
+                    <a href="{{ admin_content_path(admin, 'index') }}" class="btn">
+                        <i class="icon-arrow-left"></i>
+                        {{ "content.actions.back"|trans({}, 'SnowcapAdminBundle') }}
+                    </a>
                 </div>
             {% endblock form_actions %}
 

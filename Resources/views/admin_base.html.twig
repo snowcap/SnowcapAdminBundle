@@ -26,13 +26,11 @@
             {{ render(controller('SnowcapAdminBundle:Navigation:main')) }}
         {% endblock main_nav %}
         <div class="container">
-            {% from 'SnowcapBootstrapBundle::macros.html.twig' import alert %}
-            {% for type, flashMessages in app.session.flashbag.all() %}
-                {% for flashMessage in flashMessages %}
-                    {{ alert(flashMessage, type, null, true) }}
-                {% endfor %}
-            {% endfor %}
-            {% block body %}{% endblock %}
+            {% block alerts %}
+                {% include 'SnowcapAdminBundle:Widget:alerts.html.twig' %}
+            {% endblock alerts %}
+
+            {% block body %}{% endblock body %}
         </div>
         <div class="modal fade" id="modal" style="display: none"></div>
         {% block javascripts %}
@@ -44,7 +42,8 @@
                 'bundles/snowcapadmin/vendor/jquery.js'
                 'bundles/snowcapadmin/vendor/underscore.js'
                 'bundles/snowcapadmin/vendor/backbone.js'
-                'bundles/snowcapcore/js/all.js'
+                'bundles/snowcapcore/js/snowcap-core.js'
+                'bundles/snowcapcore/js/snowcap-core.form.js'
                 'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-affix.js'
                 'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-modal.js'
                 'bundles/snowcapbootstrap/vendor/bootstrap/js/bootstrap-tooltip.js'
@@ -57,6 +56,9 @@
                 'bundles/snowcapadmin/vendor/autosize/jquery.autosize-min.js'
                 'bundles/snowcapadmin/js/all.js'
                 'bundles/snowcapadmin/js/ckeditor.js'
+                'bundles/snowcapadmin/js/snowcap-admin.js'
+                'bundles/snowcapadmin/js/snowcap-admin.ui.js'
+                'bundles/snowcapadmin/js/snowcap-admin.form.js'
                 output='cache/assetic/js/snowcapadmin.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>

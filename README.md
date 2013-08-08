@@ -7,7 +7,9 @@ Features include:
 
 - Basic CRUD capabilities
 - A Datalist component
-- Form type extensions
+- Form type extensions (autocomplete, advanced file field, ...)
+- Translation interface
+- And much more
 
 **Caution:** This bundle is developed in sync with [symfony's repository](https://github.com/symfony/symfony).
 For Symfony 2.1.x, you need to use the 2.1.x branch of the bundle.
@@ -40,7 +42,7 @@ This bundle is under the MIT license. See the complete license in the bundle:
 About
 -----
 
-UserBundle is a [Snowcap](https://github.com/snowcap) initiative.
+SnowcapAdminBundle is a [Snowcap](https://github.com/snowcap) initiative.
 
 Reporting an issue or a feature request
 ---------------------------------------

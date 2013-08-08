@@ -12,15 +12,31 @@ use Symfony\Component\HttpFoundation\Response;
 class BaseController extends Controller
 {
     /**
-     * Sets a translateed flash message.
+     * Set a translated flash message
      *
-     * @param string $name
-     * @param string $value
-     * @param array $params
+     * @param $name
+     * @param $value
+     * @param array $parameters
+     * @param string $domain
+     * @return mixed
      */
     public function setFlash($name, $value, $parameters = array(), $domain = 'SnowcapAdminBundle') //TODO: replace by getSession() usage
     {
-        return $this->getRequest()->getSession()->setFlash($name, $this->get('translator')->trans($value, $parameters, $domain));
+        return $this->get('session')->getFlashBag()->add($name, $this->get('translator')->trans($value, $parameters, $domain));
+    }
+
+    /**
+     * Build a translated flash message for use in modals
+     *
+     * @param $name
+     * @param $value
+     * @param array $parameters
+     * @param string $domain
+     * @return array
+     */
+    public function buildModalFlash($name, $value, $parameters = array(), $domain = 'SnowcapAdminBundle')
+    {
+        return array($name => array($this->get('translator')->trans($value, $parameters, $domain)));
     }
 
     /**

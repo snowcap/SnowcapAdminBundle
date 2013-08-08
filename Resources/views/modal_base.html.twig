@@ -1,9 +1,12 @@
 {% block modal_before %}{% endblock modal_before %}
 <div class="modal-header">
-    <a href="#" class="close" data-dismiss="modal">×</a>
+    {% block modal_close %}<a href="#" class="close" data-dismiss="modal">×</a>{% endblock modal_close %}
     {% block modal_title %}{% endblock%}
 </div>
 <div class="modal-body">
+    {% block modal_alerts %}
+        {% include 'SnowcapAdminBundle:Widget:alerts.html.twig' %}
+    {% endblock modal_alerts %}
     {% block modal_body %}{% endblock %}
 </div>
 <div class="modal-footer">

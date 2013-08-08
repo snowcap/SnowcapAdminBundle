@@ -134,12 +134,17 @@ abstract class ContentAdmin extends AbstractAdmin
         // Add autocomplete list route
         $routeCollection->add(
             $this->getRoutingHelper()->getRouteName($this, 'autocompleteList'),
-            $this->getRoutingHelper()->getRoute($this, 'autocompleteList', array('where', 'property', 'query'))
+            $this->getRoutingHelper()->getRoute($this, 'autocompleteList', array('where', 'id_property', 'property', 'query'))
         );
         // Add update route
         $routeCollection->add(
             $this->getRoutingHelper()->getRouteName($this, 'update'),
             $this->getRoutingHelper()->getRoute($this, 'update', array('id'))
+        );
+        // Add modal update route
+        $routeCollection->add(
+            $this->getRoutingHelper()->getRouteName($this, 'modalUpdate'),
+            $this->getRoutingHelper()->getRoute($this, 'modalUpdate', array('id'))
         );
         // Add delete route
         $routeCollection->add(
@@ -186,7 +191,6 @@ abstract class ContentAdmin extends AbstractAdmin
     /**
      * Return the main admin form for this content
      *
-     * @param object $data
      * @return \Symfony\Component\Form\Form
      */
     abstract public function getForm();

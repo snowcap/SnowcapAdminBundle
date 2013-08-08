@@ -3,14 +3,15 @@
 namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\AdminInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Form;
 
 use Snowcap\CoreBundle\Util\String;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContext;
 
@@ -69,7 +70,7 @@ class ContentController extends BaseController
         if ($request->isMethod('POST')) {
             try {
                 $this->save($admin, $form, $entity);
-                $this->setFlash('success', 'content.create.flash.success');
+                $this->setFlash('success', 'content.create.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
                 $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
@@ -90,6 +91,47 @@ class ContentController extends BaseController
     }
 
     /**
+     * Create a new content entity through ajax modal
+     *
+     */
+    public function modalCreateAction(Request $request, ContentAdmin $admin) {
+        $entity = $admin->buildEntity();
+        $this->secure($admin, 'ADMIN_CONTENT_CREATE', $entity);
+
+        $form = $admin->getForm();
+        $form->setData($entity);
+
+        $status = 200;
+
+        if ('POST' === $request->getMethod()) {
+            try {
+                $this->save($admin, $form, $entity);
+                $result = array(
+                    'entity_id' => $entity->getId(),
+                    'entity_name' => $admin->getEntityName($entity)
+                );
+
+                return new JsonResponse(array('result' => $result), 201);
+            }
+            catch(\Exception $e) {
+                $status = 400;
+                $this->setFlash('error', 'content.update.flash.error');
+                $this->get('logger')->addError($e->getMessage());
+            }
+        }
+
+        $responseData = array(
+            'content' =>   $this->renderView('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', array(
+                'admin' => $admin,
+                'entity' => $entity,
+                'form' => $form->createView(),
+            ))
+        );
+
+        return new JsonResponse($responseData, $status);
+    }
+
+    /**
      * Update an existing content entity
      *
      */
@@ -107,7 +149,7 @@ class ContentController extends BaseController
         if ($request->isMethod('POST')) {
             try {
                 $this->save($admin, $form, $entity);
-                $this->setFlash('success', 'content.update.flash.success');
+                $this->setFlash('success', 'content.update.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
                 $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
@@ -128,6 +170,55 @@ class ContentController extends BaseController
     }
 
     /**
+     * Update an existing content entity
+     *
+     */
+    public function modalUpdateAction(Request $request, ContentAdmin $admin)
+    {
+        $entity = $admin->findEntity($request->attributes->get('id'));
+        if ($entity === null) {
+            return $this->renderError('error.content.notfound', 404);
+        }
+        $this->secure($admin, 'ADMIN_CONTENT_UPDATE', $entity);
+
+        $form = $admin->getForm();
+        $form->setData($entity);
+
+        $status = 200;
+
+        if ('POST' === $request->getMethod()) {
+            try {
+                $this->save($admin, $form, $entity);
+
+                $result = array(
+                    'entity_id' => $entity->getId(),
+                    'entity_name' => $admin->getEntityName($entity),
+                );
+
+                return new JsonResponse(array(
+                    'result' => $result,
+                    'flashes' => $this->buildModalFlash('success', 'content.update.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)))
+                ), 201);
+            }
+            catch(\Exception $e) {
+                $status = 400;
+                $this->setFlash('error', 'content.update.flash.error');
+                $this->get('logger')->addError($e->getMessage());
+            }
+        }
+
+        $responseData = array(
+            'content' => $this->renderView('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalUpdate.html.twig', array(
+                'admin' => $admin,
+                'entity' => $entity,
+                'form' => $form->createView(),
+            ))
+        );
+
+        return new JsonResponse($responseData, $status);
+    }
+
+    /**
      * Delete a content entity
      *
      */
@@ -136,57 +227,78 @@ class ContentController extends BaseController
         $entity = $admin->findEntity($request->attributes->get('id'));
         $this->secure($admin, 'ADMIN_CONTENT_DELETE', $entity);
 
+        if($request->isXmlHttpRequest()) {
+            return $this->modalDelete($request, $admin, $entity);
+        }
+        else {
+            return $this->delete($request, $admin, $entity);
+        }
+    }
+
+    /**
+     * Handle AJAX delete (modal)
+     *
+     * @param Request $request
+     * @param ContentAdmin $admin
+     * @param $entity
+     * @return JsonResponse
+     */
+    public function modalDelete(Request $request, ContentAdmin $admin, $entity)
+    {
         if($request->isMethod('post')) {
             $admin->deleteEntity($entity);
-            $this->setFlash('success', 'content.delete.flash.success');
+            $this->setFlash('success', 'content.delete.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
+            $result = array(
+                'entity_id' => $entity->getId(),
+                'entity_name' => $admin->getEntityName($entity)
+            );
+            $redirectUrl = $request->headers->get('referer');
+
+            return new JsonResponse(array('result' => $result, 'redirect_url' => $redirectUrl), 301);
+        }
+
+        $content = $this->renderView(
+            'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
+            array(
+                'admin' => $admin,
+                'entity' => $entity,
+            )
+        );
+
+        return new JsonResponse(array('content' => $content));
+    }
+
+    /**
+     * Handle standard delete (no modal)
+     *
+     * @param Request $request
+     * @param ContentAdmin $admin
+     * @param $entity
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
+    public function delete(Request $request, ContentAdmin $admin, $entity)
+    {
+        if($request->isMethod('post')) {
+            $admin->deleteEntity($entity);
+            $this->setFlash('success', 'content.delete.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
 
             return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
         }
 
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig', array(
-            'admin' => $admin,
-            'entity' => $entity,
-        ));
-    }
-
-    /**
-     * Create a new content entity through ajax modal
-     *
-     */
-    public function modalCreateAction(Request $request, ContentAdmin $admin) {
-        $this->secure($admin, 'ADMIN_CONTENT_CREATE');
-
-        $entity = $admin->buildEntity();
-        $form = $admin->getForm();
-        $form->setData($entity);
-
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $admin->saveEntity($entity);
-
-                $json = array(
-                    'result' => array($entity->getId(), $admin->getEntityName($entity))
-                );
-
-                return new Response(json_encode($json), 201);
-            } else {
-                //TODO: handle invalid ?
-            }
-        }
-
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', array(
-            'admin' => $admin,
-            'entity' => $entity,
-            'form' => $form->createView(),
-        ));
+        return $this->render(
+            'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
+            array(
+                'admin' => $admin,
+                'entity' => $entity,
+            )
+        );
     }
 
     /**
      * Render a json array of entity values and text (to be used in autocomplete widgets)
      *
      */
-    public function autocompleteListAction(Request $request, ContentAdmin $admin, $where, $property, $query) {
+    public function autocompleteListAction(ContentAdmin $admin, $where, $id_property, $property, $query) {
         $qb = $admin->getQueryBuilder();
         $results = $qb
             ->andWhere(base64_decode($where))
@@ -195,13 +307,14 @@ class ContentController extends BaseController
             ->getResult();
 
         $flattenedResults = array();
-        $propertyPath = new PropertyPath($property);
+        $accessor = PropertyAccess::getPropertyAccessor();
         foreach($results as $result) {
-            $flattenedResults[] = array($result->getId(), $propertyPath->getValue($result));
+            $id = $accessor->getValue($result, $id_property);
+            $value = $accessor->getValue($result, $property);
+            $flattenedResults[] = array($id, $value);
         }
-        $json = array('result' => $flattenedResults);
 
-        return new Response(json_encode($json));
+        return new JsonResponse(array('result' => $flattenedResults));
     }
 
     /**
