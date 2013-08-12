@@ -70,7 +70,7 @@ class ContentController extends BaseController
         if ($request->isMethod('POST')) {
             try {
                 $this->save($admin, $form, $entity);
-                $this->setFlash('success', 'content.create.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
+                $this->buildEntityFlash('success', 'content.create.flash.success', $admin, $entity);
                 $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
@@ -78,7 +78,7 @@ class ContentController extends BaseController
                 return $this->redirect($redirectUrl);
             }
             catch(\Exception $e) {
-                $this->setFlash('error', 'content.create.flash.error');
+                $this->buildEntityFlash('error', 'content.create.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -115,7 +115,6 @@ class ContentController extends BaseController
             }
             catch(\Exception $e) {
                 $status = 400;
-                $this->setFlash('error', 'content.update.flash.error');
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -149,7 +148,7 @@ class ContentController extends BaseController
         if ($request->isMethod('POST')) {
             try {
                 $this->save($admin, $form, $entity);
-                $this->setFlash('success', 'content.update.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
+                $this->buildEntityFlash('success', 'content.update.flash.success', $admin, $entity);
                 $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
@@ -157,7 +156,7 @@ class ContentController extends BaseController
                 return $this->redirect($redirectUrl);
             }
             catch(\Exception $e) {
-                $this->setFlash('error', 'content.update.flash.error');
+                $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -197,12 +196,11 @@ class ContentController extends BaseController
 
                 return new JsonResponse(array(
                     'result' => $result,
-                    'flashes' => $this->buildModalFlash('success', 'content.update.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)))
+                    'flashes' => $this->buildEntityFlash('success', 'content.update.flash.success', $admin, $entity)
                 ), 201);
             }
             catch(\Exception $e) {
                 $status = 400;
-                $this->setFlash('error', 'content.update.flash.error');
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -247,7 +245,7 @@ class ContentController extends BaseController
     {
         if($request->isMethod('post')) {
             $admin->deleteEntity($entity);
-            $this->setFlash('success', 'content.delete.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
+            $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
             $result = array(
                 'entity_id' => $entity->getId(),
                 'entity_name' => $admin->getEntityName($entity)
@@ -280,7 +278,7 @@ class ContentController extends BaseController
     {
         if($request->isMethod('post')) {
             $admin->deleteEntity($entity);
-            $this->setFlash('success', 'content.delete.flash.success', array('%type%' => $this->get('translator')->transChoice($admin->getOption('label'), 1), '%name%' => $admin->getEntityName($entity)));
+            $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
 
             return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
         }
@@ -353,6 +351,52 @@ class ContentController extends BaseController
         if(!$this->getSecurityContext()->isGranted($suffixedAttributes, $object)) {
             throw new AccessDeniedException();
         }
+    }
+
+    /**
+     * Generate a flash message for the provided admin and entity
+     *
+     * @param string $type
+     * @param string $message
+     * @param ContentAdmin $admin
+     * @param object $entity
+     */
+    protected function buildEntityFlash($type, $message, ContentAdmin $admin, $entity, $domain='SnowcapAdminBundle')
+    {
+        $this->get('session')->getFlashBag()->add($type, $this->get('translator')->trans(
+            $message,
+            array(
+                '%type%' => $this->get('translator')->transChoice(
+                    $admin->getOption('label'), 1, array(), $this->get('snowcap_admin')->getDefaultTranslationDomain()
+                ),
+                '%name%' => $admin->getEntityName($entity)
+            ),
+            $domain
+        ));
+    }
+
+    /**
+     * Generate a flash message for the provided admin and entity
+     *
+     * @param string $type
+     * @param string $message
+     * @param ContentAdmin $admin
+     * @param object $entity
+     */
+    protected function buildModalEntityFlash($type, $message, ContentAdmin $admin, $entity, $domain='SnowcapAdminBundle')
+    {
+        return array(
+            $type => array($this->get('translator')->trans(
+                $message,
+                array(
+                    '%type%' => $this->get('translator')->transChoice(
+                        $admin->getOption('label'), 1, array(), $this->get('snowcap_admin')->getDefaultTranslationDomain()
+                    ),
+                    '%name%' => $admin->getEntityName($entity))
+                ),
+                $domain
+            )
+        );
     }
 
     /**
