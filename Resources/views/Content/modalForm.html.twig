@@ -1,5 +1,7 @@
 {% extends 'SnowcapAdminBundle::modal_base.html.twig' %}
 
+{% form_theme form 'SnowcapAdminBundle:Form:form_layout.html.twig' %}
+
 {% set form_class = form_class|default('form_vertical') %}
 {% set extra_form_classes = extra_form_classes|default([]) %}
 
