@@ -99,18 +99,6 @@ SnowcapAdmin.Form = (function($) {
             this.listUrl = this.$el.data('options-url');
 
             this.initializeTypeahead();
-
-            // Handle focus / blur
-            this.$textInput
-                .on('focus', function(){
-                    $(this).data('prev', $(this).val());
-                    $(this).val('');
-                })
-                .on('blur', function(){
-                    if($(this).val() === '') {
-                        $(this).val($(this).data('prev'));
-                    }
-                });
         },
         /**
          * Initialize typeahead widget
@@ -222,6 +210,7 @@ SnowcapAdmin.Form = (function($) {
          * @param process
          */
         source: function(query, process) {
+            this.invalidate();
             var replacedUrl = this.listUrl.replace('__query__', query);
             $.getJSON(replacedUrl, _.bind(function(data) {
                 this.mapped = {};
@@ -233,6 +222,14 @@ SnowcapAdmin.Form = (function($) {
                 process(this.labels);
             }, this));
         },
+
+        invalidate: function() {
+            if('single' === this.mode) {
+                this.$el.find('input[type=hidden]').val("").trigger('change');
+            }
+            this.$el.parents('.control-group').addClass('warning');
+        },
+
         /**
          * Bootstrap typeahed matcher implementation
          *
@@ -255,6 +252,7 @@ SnowcapAdmin.Form = (function($) {
         updater: function(item) {
             if('single' === this.mode) {
                 this.$el.find('input[type=hidden]').val(this.mapped[item]).trigger('change');
+                this.$el.parents('.control-group').removeClass('warning');
                 this.appendClearButton();
                 return item;
             }
@@ -263,10 +261,12 @@ SnowcapAdmin.Form = (function($) {
                 var $prototype = $(prototype.replace(/__name__/g, this.$el.find('input[type=hidden]').length));
                 $prototype.val(this.mapped[item]);
                 this.$el.prepend($prototype);
-                $prototype.trigger('change');
 
-                $token = $('<li>').addClass('token').html($('<span>').html(item)).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
+                var $token = $('<li>').addClass('token').html($('<span>').html(item)).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
                 this.$el.find('.tokens').append($token);
+
+                $prototype.trigger('change');
+                this.$el.parents('.control-group').removeClass('warning');
 
                 return "";
             }
@@ -309,7 +309,7 @@ SnowcapAdmin.Form = (function($) {
         clear: function(event) {
             event.preventDefault();
             this.$textInput.val('');
-            this.$valueInput.val('');
+            this.invalidate();
         }
     });
 
