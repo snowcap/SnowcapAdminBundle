@@ -21,7 +21,7 @@ class EntityFilterType extends AbstractFilterType
         $resolver
             ->setDefaults(array('query_builder' => null))
             ->setRequired(array('class'))
-            ->setOptional(array('property', 'empty_value', 'group_by', 'query_builder'));
+            ->setOptional(array('property', 'empty_value', 'group_by'));
     }
 
     /**
