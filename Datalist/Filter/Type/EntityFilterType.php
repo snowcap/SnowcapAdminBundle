@@ -19,6 +19,7 @@ class EntityFilterType extends AbstractFilterType
         parent::setDefaultOptions($resolver);
 
         $resolver
+            ->setDefaults(array('query_builder' => null))
             ->setRequired(array('class'))
             ->setOptional(array('property', 'empty_value', 'group_by'));
     }
@@ -30,16 +31,17 @@ class EntityFilterType extends AbstractFilterType
      */
     public function buildForm(FormBuilderInterface $builder, DatalistFilterInterface $filter, array $options)
     {
-        $formOptions =array(
+        $formOptions = array(
             'class' => $options['class'],
             'label' => $options['label'],
             'property' => $options['property'],
+            'query_builder' => $options['query_builder'],
             'required' => false
         );
-        if(isset($options['empty_value'])) {
+        if (isset($options['empty_value'])) {
             $formOptions['empty_value'] = $options['empty_value'];
         }
-        if(isset($options['group_by'])) {
+        if (isset($options['group_by'])) {
             $formOptions['group_by'] = $options['group_by'];
         }
 
