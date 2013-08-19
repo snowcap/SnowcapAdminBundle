@@ -2,6 +2,7 @@ parameters:
     snowcap_admin.logger_entity.class: Snowcap\AdminBundle\Entity\Log
     snowcap_admin.security.user_class: ~
     snowcap_admin.translation_catalogues: ~
+    snowcap_admin.multiupload.tmp_dir: ~
 
 services:
     # Main admin class
@@ -98,6 +99,22 @@ services:
         arguments: [@snowcap_admin, @snowcap_admin.routing_helper_content]
         tags:
             -  { name: form.type, alias: snowcap_admin_autocomplete }
+
+    snowcap_admin.form_type_multiupload:
+        class: Snowcap\AdminBundle\Form\Type\MultiUploadType
+        arguments: [%kernel.root_dir%]
+        tags:
+            -  { name: form.type, alias: snowcap_admin_multiupload }
+
+    snowcap_admin.form_type_multiupload_url:
+        class: Snowcap\AdminBundle\Form\Type\MultiUploadUrlType
+        tags:
+            -  { name: form.type, alias: snowcap_admin_multiupload_url }
+
+    snowcap_admin.form_type_multiupload_image:
+        class: Snowcap\AdminBundle\Form\Type\MultiUploadImageType
+        tags:
+            -  { name: form.type, alias: snowcap_admin_multiupload_image }
 
     # Form type extensions
     snowcap_admin.form_extension_collection:

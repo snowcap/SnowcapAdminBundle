@@ -325,20 +325,111 @@ SnowcapAdmin.Form = (function($) {
         });
     };
 
+    var MultiUpload = Backbone.View.extend({
+        events: {
+            'click .multiupload-file-preview .remove': 'removeFile'
+        },
+
+        initialize: function() {
+            this.entryTemplate = this.$el.attr('data-prototype');
+            this.$uploader = this.$('.multiupload-file-uploader');
+            this.$uploaderForm = this.$uploader.find('input');
+            this.$progress = this.$uploader.find('.progress');
+            this.$progressLoaded = this.$uploader.find('.progress-bar-loaded');
+
+            this.$el.data('index', this.$el.find('.multiupload-file-preview').length);
+
+            this.$uploaderForm.fileupload({
+                start: _.bind(this.start, this),
+                done: _.bind(this.done, this),
+                progressall: _.bind(this.progressall, this),
+                fail: _.bind(this.fail, this),
+                dataType: 'json',
+                limitConcurrentUploads: 3,
+                progressInterval: 40
+            });
+        },
+
+        start: function() {
+            this.$progress.css('display', 'block');
+        },
+
+        progressall: function(event, data) {
+            this.$progress.find('.bar').width(
+                parseInt(data.loaded / data.total * 100, 10) + '%'
+            );
+        },
+
+        done: function(event, data) {
+            this.$progress.hide();
+            this.$uploaderForm = this.$uploader.find('input');
+
+            var index = this.$el.data('index');
+            var $file = $(this.entryTemplate.replace(
+                /__name__/g, index
+            ));
+
+            var url = data.result.url;
+
+            // update the value of the hidden field
+            $file.find('input[type=hidden]').val(url);
+
+            // configure preview
+            $link = $file.find('a');
+
+            $link.attr('href', function() {
+                return url;
+            });
+
+            switch (this.$el.data('type')) {
+                case 'snowcap_admin_multiupload_url':
+                    $link.text(url);
+                    break;
+                case 'snowcap_admin_multiupload_image':
+                    $file.find('img').attr('src', function() {
+                        return this.src + url;
+                    });
+                    break;
+            }
+
+            this.$el.data('index', index + 1);
+            this.$uploader.before($file);
+        },
+
+        fail: function(event, data) {
+            console.log('error while uploading');
+        },
+
+        removeFile: function(event) {
+            // prevent default behavior
+            event.preventDefault();
+
+            // remove the current node from the DOM
+            $(event.currentTarget).parents('.multiupload-file-preview').remove();
+        }
+    });
+
+    var multiuploadFactory = function() {
+        $('[data-multi-upload]').each(function () {
+            new MultiUpload({el: this});
+        });
+    };
+
     return {
         Collection: Collection,
         collectionFactory: collectionFactory,
         TextAutocomplete: TextAutocomplete,
         textAutocompleteFactory: textAutocompleteFactory,
         Autocomplete: Autocomplete,
-        autocompleteFactory: autocompleteFactory
+        autocompleteFactory: autocompleteFactory,
+        Multiupload: MultiUpload,
+        multiuploadFactory: multiuploadFactory
     }
 })(jQuery);
 
 jQuery(document).ready(function() {
-
     SnowcapAdmin.Form.collectionFactory();
     SnowcapAdmin.Form.textAutocompleteFactory();
     SnowcapAdmin.Form.autocompleteFactory();
-
+    SnowcapAdmin.Form.multiuploadFactory();
 });

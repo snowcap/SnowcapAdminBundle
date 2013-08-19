@@ -148,3 +148,57 @@
         {{ block('form_widget') }}
     {% endif %}
 {% endblock text_widget %}
+
+{% block snowcap_admin_multiupload_widget %}
+    {% spaceless %}
+        {% set attr = attr|merge({'data-multi-upload': true, 'class': 'form-multiupload control-group' }) %}
+        {% if prototype is defined %}
+            {% set attr = attr|merge({'data-prototype': form_widget(prototype)|trim }) %}
+        {% endif %}
+        <div {{ block('widget_attributes') }} data-type="{{ type }}">
+            <ul class="file-list">
+                {% for child in form.children %}
+                    {{ form_widget(child) }}
+                {% endfor %}
+                {% if allow_add %}
+                    <li class="multiupload-file-uploader">
+                        <div class="progress" style="display: none;">
+                            <div class="bar" style="width: 0;"></div>
+                        </div>
+
+                        <label for="multiupload-file-uploader">{{ add_label|trans({}, translation_domain) }}</label>
+                        <input type="file" name="files[]" id="multiupload-file-uploader" data-url="{{ path('snowcap_admin_upload') }}" multiple="">
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endspaceless %}
+{% endblock snowcap_admin_multiupload_widget %}
+
+{% block snowcap_admin_multiupload_url_widget %}
+    {% spaceless %}
+        <li class="multiupload-file-preview">
+            <button class="btn btn-mini remove">Remove</button>&nbsp;
+
+            <a href="{{ value }}" target="_blank">
+                {{ value }}
+            </a>
+
+            {{ block('hidden_widget') }}
+        </li>
+    {% endspaceless %}
+{% endblock snowcap_admin_multiupload_url_widget %}
+
+{% block snowcap_admin_multiupload_image_widget %}
+    {% spaceless %}
+        <li class="multiupload-file-preview">
+            <button class="btn btn-mini remove remove-image">Remove</button>
+
+            <a href="{{ form.vars.value }}" target="_blank">
+                <img src="{{ value|imresize(im_resize) }}" alt="{{ value }}" />
+            </a>
+
+            {{ block('hidden_widget') }}
+        </li>
+    {% endspaceless %}
+{% endblock snowcap_admin_multiupload_image_widget %}
