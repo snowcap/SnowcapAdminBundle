@@ -37,17 +37,18 @@ class SnowcapAdminExtension extends Extension
             array($config['default_translation_domain'])
         );
 
-        foreach(array('user_class') as $option) {
-            if(isset($config['security'][$option])) {
+        foreach (array('user_class') as $option) {
+            if (isset($config['security'][$option])) {
                 $container->setParameter('snowcap_admin.security.' . $option, $config['security'][$option]);
             }
         }
 
         $container->setParameter('snowcap_admin.im_formats', $config['im_formats']);
 
-        if(array_key_exists('translation_catalogues', $config)) {
+        if (array_key_exists('translation_catalogues', $config)) {
             $container->setParameter('snowcap_admin.translation_catalogues', $config['translation_catalogues']);
         }
 
+        $container->setParameter('snowcap_admin.multiupload.tmp_dir', $config['multiupload']['tmp_dir']);
     }
 }
