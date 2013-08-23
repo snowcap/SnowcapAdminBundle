@@ -57,7 +57,7 @@
     {#<h4>{{ field.options['label']|trans({}, translation_domain) }}</h4>#}
     <p>
         {% if value is not null %}
-            {{ value|raw }}
+            {% if options.escape %}{{ value }}{% else %}{{ value|raw }}{% endif %}
         {% else %}
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
@@ -95,7 +95,7 @@
 {% block url_field %}
     <p>
         {% if value is not null and url is not null %}
-            <a href="{{ url }}">{{ value|raw }}</a>
+            <a href="{{ url }}">{{ value }}</a>
         {% else %}
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
