@@ -39,7 +39,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     private $defaultTheme = 'SnowcapAdminBundle:Datalist:datalist_grid_layout.html.twig';
 
     /**
-     * @var SplObjectStorage
+     * @var \SplObjectStorage
      */
     private $themes;
 
