@@ -47,5 +47,6 @@ abstract class AbstractActionType implements ActionTypeInterface {
         $viewContext['label'] = $action->getOption('label');
         $viewContext['translation_domain'] = $action->getDatalist()->getOption('translation_domain');
         $viewContext['options'] = $options;
+        $viewContext['item'] = $item;
     }
 }
