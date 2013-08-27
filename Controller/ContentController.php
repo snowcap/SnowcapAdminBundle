@@ -305,7 +305,7 @@ class ContentController extends BaseController
             ->getResult();
 
         $flattenedResults = array();
-        $accessor = PropertyAccess::getPropertyAccessor();
+        $accessor = PropertyAccess::createPropertyAccessor();
         foreach($results as $result) {
             $id = $accessor->getValue($result, $id_property);
             $value = $accessor->getValue($result, $property);
