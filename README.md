@@ -12,7 +12,7 @@ Features include:
 - And much more
 
 **Caution:** This bundle is developed in sync with [symfony's repository](https://github.com/symfony/symfony).
-For Symfony 2.1.x, you need to use the 2.1.x branch of the bundle.
+For Symfony 2.2.x, you need to use the 2.2.x branch of the bundle.
 
 **Warning:** This bundle is still pretty much WIP. If you are looking for an admin bundle with a lof of community attention,
 you should probably look at [SonataAdminBundle](https://github.com/sonata-project/SonataAdminBundle).
