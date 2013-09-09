@@ -117,11 +117,14 @@ class Datalist implements DatalistInterface, \Countable
      */
     public function getFields()
     {
-        if(!isset($this->sortedFields)) {
+        if (!isset($this->sortedFields)) {
             $sortedFields = $this->fields;
-            usort($sortedFields, function(DatalistFieldInterface $field1, DatalistFieldInterface $field2){
-                return $field1->getOption('order', 0) > $field2->getOption('order', 0);
-            });
+            usort(
+                $sortedFields,
+                function (DatalistFieldInterface $field1, DatalistFieldInterface $field2) {
+                    return $field1->getOption('order', 0) >= $field2->getOption('order', 0) ? 1 : -1;
+                }
+            );
             $this->sortedFields = $sortedFields;
         }
 
@@ -316,27 +319,26 @@ class Datalist implements DatalistInterface, \Countable
      */
     public function bind($data)
     {
-        if($data instanceof Request) {
+        if ($data instanceof Request) {
             $data = $data->query->all();
         }
 
         // Handle pagination
-        if(isset($data['page'])) {
+        if (isset($data['page'])) {
             $this->setPage($data['page']);
         }
 
         // Handle search
-        if(isset($data['search'])) {
+        if (isset($data['search'])) {
             $this->searchQuery = $data['search'];
             $this->searchForm->bind(array('search' => $data['search']));
         }
 
         // Handle filters
-        foreach($this->filters as $filter) {
-            if(isset($data[$filter->getName()]) && "" !== $data[$filter->getName()]) {
+        foreach ($this->filters as $filter) {
+            if (isset($data[$filter->getName()]) && "" !== $data[$filter->getName()]) {
                 $this->filterData[$filter->getName()] = $data[$filter->getName()];
-            }
-            elseif($filter->hasOption('default')) {
+            } elseif ($filter->hasOption('default')) {
                 $this->filterData[$filter->getName()] = $filter->getOption('default');
             }
         }
@@ -369,7 +371,7 @@ class Datalist implements DatalistInterface, \Countable
      */
     private function initialize()
     {
-        if($this->initialized) {
+        if ($this->initialized) {
             return;
         }
 
@@ -387,14 +389,19 @@ class Datalist implements DatalistInterface, \Countable
         // Handle search
         if (null !== $this->getOption('search') && !empty($this->searchQuery)) {
             $expressionBuilder = new DatalistFilterExpressionBuilder();
-            $this->searchFilter->getType()->buildExpression($expressionBuilder, $this->searchFilter, $this->searchQuery, $this->searchFilter->getOptions());
+            $this->searchFilter->getType()->buildExpression(
+                $expressionBuilder,
+                $this->searchFilter,
+                $this->searchQuery,
+                $this->searchFilter->getOptions()
+            );
             $this->datasource->setSearchExpression($expressionBuilder->getExpression());
         }
 
         // Handle filters
         $expressionBuilder = new DatalistFilterExpressionBuilder();
-        if(!empty($this->filterData)) {
-            foreach($this->filterData as $filterName => $filterValue) {
+        if (!empty($this->filterData)) {
+            foreach ($this->filterData as $filterName => $filterValue) {
                 $filter = $this->filters[$filterName];
                 $filter->getType()->buildExpression($expressionBuilder, $filter, $filterValue, $filter->getOptions());
             }
