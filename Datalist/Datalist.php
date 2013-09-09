@@ -32,6 +32,11 @@ class Datalist implements DatalistInterface, \Countable
     /**
      * @var array
      */
+    private $sortedFields;
+
+    /**
+     * @var array
+     */
     private $filters = array();
 
     /**
@@ -112,7 +117,15 @@ class Datalist implements DatalistInterface, \Countable
      */
     public function getFields()
     {
-        return $this->fields;
+        if(!isset($this->sortedFields)) {
+            $sortedFields = $this->fields;
+            usort($sortedFields, function(DatalistFieldInterface $field1, DatalistFieldInterface $field2){
+                return $field1->getOption('order', 0) > $field2->getOption('order', 0);
+            });
+            $this->sortedFields = $sortedFields;
+        }
+
+        return $this->sortedFields;
     }
 
     /**

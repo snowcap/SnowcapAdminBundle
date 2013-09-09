@@ -19,7 +19,7 @@ abstract class AbstractFieldType implements FieldTypeInterface
                 'default' => null,
                 'escape' => true,
             ))
-            ->setOptional(array('callback'))
+            ->setOptional(array('callback', 'order'))
             ->setAllowedTypes(array('callback' => 'callable'));
     }
 
