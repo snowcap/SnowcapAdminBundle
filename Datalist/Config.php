@@ -58,12 +58,22 @@ abstract class Config {
     }
 
     /**
-     * @param string $name
-     * @param mixed $default
+     * @param $name
+     * @param null $default
+     * @return null
      */
     public function getOption($name, $default = null)
     {
         return isset($this->options[$name]) ? $this->options[$name] : $default;
+    }
+
+    /**
+     * @param string $name
+     * @param $value
+     */
+    public function setOption($name, $value)
+    {
+        $this->options[$name] = $value;
     }
 
     /**

@@ -63,6 +63,16 @@ class DatalistField implements DatalistFieldInterface
     }
 
     /**
+     * @param string $name
+     * @param $value
+     * @return mixed|void
+     */
+    public function setOption($name, $value)
+    {
+        $this->config->setOption($name, $value);
+    }
+
+    /**
      * @param mixed $row
      * @return mixed
      * @throws \UnexpectedValueException

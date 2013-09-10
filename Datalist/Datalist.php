@@ -119,6 +119,13 @@ class Datalist implements DatalistInterface, \Countable
     {
         if (!isset($this->sortedFields)) {
             $sortedFields = $this->fields;
+            $i = 1;
+            array_walk($sortedFields, function(DatalistFieldInterface $field) use(&$i) {
+                if(null === $field->getOption('order')) {
+                    $field->setOption('order', $i);
+                }
+                ++$i;
+            });
             usort(
                 $sortedFields,
                 function (DatalistFieldInterface $field1, DatalistFieldInterface $field2) {
