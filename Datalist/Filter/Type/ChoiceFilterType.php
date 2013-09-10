@@ -20,7 +20,7 @@ class ChoiceFilterType extends AbstractFilterType
 
         $resolver
             ->setRequired(array('choices'))
-            ->setOptional(array('empty_value'));
+            ->setOptional(array('empty_value', 'preferred_choices'));
     }
 
     /**
@@ -37,6 +37,9 @@ class ChoiceFilterType extends AbstractFilterType
         );
         if(isset($options['empty_value'])) {
             $formOptions['empty_value'] = $options['empty_value'];
+        }
+        if(isset($options['preferred_choices'])) {
+            $formOptions['preferred_choices'] = $options['preferred_choices'];
         }
 
         $builder->add($filter->getName(), 'choice', $formOptions);
