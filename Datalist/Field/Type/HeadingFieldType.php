@@ -2,7 +2,7 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
-class HeadingFieldType extends AbstractFieldType
+class HeadingFieldType extends TextFieldType
 {
     /**
      * @return string

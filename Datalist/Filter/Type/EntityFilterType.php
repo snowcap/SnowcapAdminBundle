@@ -34,10 +34,12 @@ class EntityFilterType extends AbstractFilterType
         $formOptions = array(
             'class' => $options['class'],
             'label' => $options['label'],
-            'property' => $options['property'],
             'query_builder' => $options['query_builder'],
             'required' => false
         );
+        if(isset($options['property'])) {
+            $formOptions['property'] = $options['property'];
+        }
         if (isset($options['empty_value'])) {
             $formOptions['empty_value'] = $options['empty_value'];
         }
