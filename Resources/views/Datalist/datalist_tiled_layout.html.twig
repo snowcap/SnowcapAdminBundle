@@ -94,8 +94,8 @@
 {# url field #}
 {% block url_field %}
     <p>
-        {% if value is not null and url is not null %}
-            <a href="{{ url }}">{{ value }}</a>
+        {% if value is not null %}
+            <a href="{{ url is defined ? url : value }}">{{ value }}</a>
         {% else %}
             <span class="empty-value">{{ "datalist.empty_value"|trans({}, "SnowcapAdminBundle") }}</span>
         {% endif %}
