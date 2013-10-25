@@ -19,8 +19,7 @@ class MultiUploadType extends AbstractType
     /**
      * Constructor
      *
-     * @param $rootDir
-     * @param $tmp
+     * @param string $rootDir
      */
     public function __construct($rootDir)
     {
