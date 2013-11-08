@@ -162,12 +162,14 @@
                 {% endfor %}
                 {% if allow_add %}
                     <li class="multiupload-file-uploader">
-                        <div class="progress" style="display: none;">
-                            <div class="bar" style="width: 0;"></div>
-                        </div>
+                        <div class="uploader-container">
+                            <div class="progress" style="display: none;">
+                                <div class="bar" style="width: 0;"></div>
+                            </div>
 
-                        <label for="multiupload-file-uploader">{{ add_label|trans({}, translation_domain) }}</label>
-                        <input type="file" name="files[]" id="multiupload-file-uploader" data-url="{{ path('snowcap_admin_upload') }}" multiple="">
+                            <label for="multiupload-file-uploader">{{ add_label|trans({}, translation_domain) }}</label>
+                            <input type="file" name="files[]" id="multiupload-file-uploader" data-url="{{ path('snowcap_admin_upload') }}" multiple="">
+                        </div>
                     </li>
                 {% endif %}
             </ul>
