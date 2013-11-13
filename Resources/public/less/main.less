@@ -215,3 +215,56 @@ section {
         }
     }
 }
+
+/* Adding red color on labels, legends and help-blocks when error occurred on fields */
+label.error {
+  color: #b94a48;
+}
+
+div.error p.help-block {
+  color: #b94a48;
+}
+
+legend.error {
+  color: #b94a48;
+  border-bottom-color: #b94a48;
+}
+
+/* Getting smaller legend on sub-fieldsets */
+fieldset fieldset {
+  legend {
+    font-size: 17px;
+    line-height: 30px;
+  }
+  fieldset {
+    legend {
+      font-size: 15px;
+      line-height: 20px;
+    }
+  }
+}
+
+/* Collapsible fieldset styles */
+fieldset.collapsible,
+fieldset[data-admin=form-collapsible-fieldset] {
+  margin-bottom: 20px;
+  legend {
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+    .icon {
+      position: absolute;
+      bottom: 10px;
+      right: 0;
+      opacity: .5;
+    }
+    &.no-border {
+      border: none
+    }
+    &:hover {
+      .icon {
+        opacity: 1;
+      }
+    }
+  }
+}
