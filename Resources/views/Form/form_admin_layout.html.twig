@@ -80,7 +80,7 @@
 
 {# slug widget #}
 {% block snowcap_admin_slug_widget %}
-    {% set attr = attr|merge({'class': 'widget-slug', 'data-target': target }) %}
+    {% set attr = attr|merge({'data-admin': 'form-slugger', 'data-target': target, 'data-modal': '#modal-' ~ id }) %}
     <div class="input-append">
         {{ block('form_widget') }}
         <span class="add-on"><a href="#locked"><i class="icon-pencil icon"></i></a></span>
@@ -113,7 +113,7 @@
 
 {# wysiwyg widget #}
 {% block snowcap_admin_wysiwyg_widget %}
-    {% set attr = attr|merge({'class': attr.class|default('widget-wysiwyg'), 'data-wysiwyg': wysiwyg_config}) %}
+    {% set attr = attr|merge({'data-admin': 'form-wysiwyg-editor', 'data-wysiwyg': wysiwyg_config}) %}
     {{ block('textarea_widget') }}
 {% endblock %}
 

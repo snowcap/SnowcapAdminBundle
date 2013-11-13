@@ -1,4 +1,4 @@
-SnowcapAdmin.Form = (function($) {
+SnowcapAdmin.Form = (function ($) {
     /**
      * Form Collection view
      * Used to manage Symfony form collection type
@@ -15,31 +15,28 @@ SnowcapAdmin.Form = (function($) {
          * Initialize
          *
          */
-        initialize: function() {
+        initialize: function () {
             SnowcapCore.Form.Collection.prototype.initialize.apply(this);
-
-            this.on('form:collection:add', textAutocompleteFactory);
-            this.on('form:collection:add', autocompleteFactory);
         },
         /**
          * Remove a collection item
          *
          * @param event
          */
-        removeItem: function(event) {
+        removeItem: function (event) {
             event.preventDefault();
             var
                 $target = $(event.currentTarget),
                 $collectionItem;
 
             $collectionItem = $target.parents('[data-admin=form-collection-item]');
-            if(0 === $collectionItem.length) {
+            if (0 === $collectionItem.length) {
                 $collectionItem = $target.parent();
             }
 
-            if(this.options.confirmDelete) {
+            if (this.options.confirmDelete) {
                 var modal = new SnowcapBootstrap.Modal({'url': this.options.confirmDeleteUrl});
-                modal.on('modal:confirm', _.bind(function() {
+                modal.on('modal:confirm', _.bind(function () {
                     this.fadeAndRemoveItem($collectionItem);
                 }, this));
             }
@@ -55,8 +52,8 @@ SnowcapAdmin.Form = (function($) {
          *
          * @param $item
          */
-        fadeAndRemoveItem: function($item) {
-            $item.fadeOut(function() {
+        fadeAndRemoveItem: function ($item) {
+            $item.fadeOut(function () {
                 $item.remove();
             });
         }
@@ -65,18 +62,17 @@ SnowcapAdmin.Form = (function($) {
     /**
      * Form collection factory function
      *
-     * @param $context
      */
-    var collectionFactory = function() {
-        var $context = (0 === arguments.length) ? $('body') : arguments[0];
-        $context.find('[data-admin=form-collection]').each(function(offset, container) {
-            var options = {
-                el: $(container),
-                confirmDelete: $(container).data('options-confirm-delete-url') ? true : false,
-                confirmDeleteUrl: $(container).data('options-confirm-delete-url') ? $(container).data('options-confirm-delete-url') : null
-            };
-
-            new SnowcapAdmin.Form.Collection(options);
+    var collectionFactory = function () {
+        var context = arguments[0] || 'body';
+        $('[data-admin=form-collection]', context).each(function (offset, container) {
+            if (!$(container).data('widget')) {
+                $(container).data('widget', new Collection({
+                    el: container,
+                    confirmDelete: $(container).data('options-confirm-delete-url') ? true : false,
+                    confirmDeleteUrl: $(container).data('options-confirm-delete-url') ? $(container).data('options-confirm-delete-url') : null
+                }));
+            }
         });
     };
 
@@ -104,7 +100,7 @@ SnowcapAdmin.Form = (function($) {
          * Initialize typeahead widget
          *
          */
-        initializeTypeahead: function() {
+        initializeTypeahead: function () {
             // Initialize typeahead
             this.$textInput.typeahead({
                 source: _.bind(this.source, this),
@@ -118,9 +114,9 @@ SnowcapAdmin.Form = (function($) {
          * @param query
          * @param process
          */
-        source: function(query, process) {
+        source: function (query, process) {
             var replacedUrl = this.listUrl.replace('__query__', query);
-            $.getJSON(replacedUrl, _.bind(function(data) {
+            $.getJSON(replacedUrl, _.bind(function (data) {
                 this.labels = [];
                 $.each(data.result, _.bind(function (i, item) {
                     this.labels.push(item);
@@ -131,14 +127,14 @@ SnowcapAdmin.Form = (function($) {
     });
 
     /**
-     * Autocomplete factory function
-     *
-     * @param $context
+     * textAutocompleteFactory factory function
      */
-    var textAutocompleteFactory = function() {
-        var $context = (0 === arguments.length) ? $('body') : arguments[0];
-        $context.find('[data-admin=form-text-autocomplete]').each(function(offset, autocompleteContainer) {
-            new TextAutocomplete({el: $(autocompleteContainer)});
+    var textAutocompleteFactory = function () {
+        var context = arguments[0] || 'body';
+        $('[data-admin=form-text-autocomplete]', context).each(function (offset, autocompleteContainer) {
+            if (!$(container).data('widget')) {
+                $(container).data('widget', new TextAutocomplete({el: $(autocompleteContainer)}));
+            }
         });
     };
 
@@ -166,8 +162,8 @@ SnowcapAdmin.Form = (function($) {
             this.$valueInput = this.$el.find('input[type=hidden]');
             this.mode = this.$el.data('options-mode');
 
-            if('multiple' === this.mode) {
-                $('ul.tokens').on('click', 'a[rel=remove]', _.bind(function(event) {
+            if ('multiple' === this.mode) {
+                $('ul.tokens').on('click', 'a[rel=remove]', _.bind(function (event) {
                     event.preventDefault();
                     var $closeButton = $(event.currentTarget);
                     var value = $closeButton.parent('li').data('value');
@@ -176,7 +172,7 @@ SnowcapAdmin.Form = (function($) {
                 }, this));
             }
             else {
-                if(this.$valueInput.val() && !(this.$textInput.attr('disabled') || this.$textInput.attr('readonly'))) {
+                if (this.$valueInput.val() && !(this.$textInput.attr('disabled') || this.$textInput.attr('readonly'))) {
                     this.appendClearButton();
                 }
             }
@@ -185,7 +181,7 @@ SnowcapAdmin.Form = (function($) {
          * Append a close button
          *
          */
-        appendClearButton: function() {
+        appendClearButton: function () {
             var $close = $('<a href="#" data-admin="form-autocomplete-clear" class="close">&times;</button>');
             this.$el.append($close);
         },
@@ -193,7 +189,7 @@ SnowcapAdmin.Form = (function($) {
          * Initialize typeahead widget
          *
          */
-        initializeTypeahead: function() {
+        initializeTypeahead: function () {
             // Initialize typeahead
             this.$textInput.typeahead({
                 source: _.bind(_.debounce(this.source, 400), this),
@@ -209,10 +205,10 @@ SnowcapAdmin.Form = (function($) {
          * @param query
          * @param process
          */
-        source: function(query, process) {
+        source: function (query, process) {
             this.invalidate();
             var replacedUrl = this.listUrl.replace('__query__', query);
-            $.getJSON(replacedUrl, _.bind(function(data) {
+            $.getJSON(replacedUrl, _.bind(function (data) {
                 this.mapped = {};
                 this.labels = [];
                 $.each(data.result, _.bind(function (i, item) {
@@ -223,8 +219,8 @@ SnowcapAdmin.Form = (function($) {
             }, this));
         },
 
-        invalidate: function() {
-            if('single' === this.mode) {
+        invalidate: function () {
+            if ('single' === this.mode) {
                 this.$el.find('input[type=hidden]').val("").trigger('change');
             }
             this.$el.parents('.control-group').addClass('warning');
@@ -236,8 +232,8 @@ SnowcapAdmin.Form = (function($) {
          * @param item
          * @returns {boolean}
          */
-        matcher: function(item) {
-            var existingTokens = this.$el.find('.token span').map(function() {
+        matcher: function (item) {
+            var existingTokens = this.$el.find('.token span').map(function () {
                 return $(this).html();
             });
 
@@ -249,8 +245,8 @@ SnowcapAdmin.Form = (function($) {
          * @param item
          * @returns {*}
          */
-        updater: function(item) {
-            if('single' === this.mode) {
+        updater: function (item) {
+            if ('single' === this.mode) {
                 this.$el.find('input[type=hidden]').val(this.mapped[item]).trigger('change');
                 this.$el.parents('.control-group').removeClass('warning');
                 this.appendClearButton();
@@ -276,16 +272,16 @@ SnowcapAdmin.Form = (function($) {
          *
          * @param event
          */
-        add: function(event) {
+        add: function (event) {
             event.preventDefault();
             var $trigger = $(event.currentTarget);
             var contentModal = new SnowcapAdmin.Ui.Modal({url: $trigger.attr('href')});
-            contentModal.on('ui:modal:success', _.bind(function(data){
+            contentModal.on('ui:modal:success', _.bind(function (data) {
                 var
                     option = $('<option>'),
                     entity_id = data.result.entity_id,
                     entity_name = data.result.entity_name;
-                if('single' === this.mode) {
+                if ('single' === this.mode) {
                     // TODO refactor with autocomplete updater
                     this.$textInput.val(entity_name);
                     this.$valueInput.val(entity_id).trigger('change');
@@ -306,7 +302,7 @@ SnowcapAdmin.Form = (function($) {
          * Clear both the hidden and the text fields
          * @param event
          */
-        clear: function(event) {
+        clear: function (event) {
             event.preventDefault();
             this.$textInput.val('');
             this.invalidate();
@@ -315,13 +311,14 @@ SnowcapAdmin.Form = (function($) {
 
     /**
      * Autocomplete factory function
-     *
-     * @param $context
+
      */
-    var autocompleteFactory = function() {
-        var $context = (0 === arguments.length) ? $('body') : arguments[0];
-        $context.find('[data-admin=form-autocomplete]').each(function(offset, autocompleteContainer) {
-            new Autocomplete({el: $(autocompleteContainer)});
+    var autocompleteFactory = function () {
+        var context = arguments[0] || 'body';
+        $('[data-admin=form-autocomplete]', context).each(function (offset, autocompleteContainer) {
+            if (!$(container).data('widget')) {
+                $(container).data('widget', new Autocomplete({el: $(autocompleteContainer)}));
+            }
         });
     };
 
@@ -330,7 +327,7 @@ SnowcapAdmin.Form = (function($) {
             'click .multiupload-file-preview .remove': 'removeFile'
         },
 
-        initialize: function() {
+        initialize: function () {
             this.entryTemplate = this.$el.attr('data-prototype');
             this.$uploader = this.$('.multiupload-file-uploader');
             this.$uploaderForm = this.$uploader.find('input');
@@ -350,17 +347,17 @@ SnowcapAdmin.Form = (function($) {
             });
         },
 
-        start: function() {
+        start: function () {
             this.$progress.css('display', 'block');
         },
 
-        progressall: function(event, data) {
+        progressall: function (event, data) {
             this.$progress.find('.bar').width(
                 parseInt(data.loaded / data.total * 100, 10) + '%'
             );
         },
 
-        done: function(event, data) {
+        done: function (event, data) {
             this.$progress.hide();
             this.$uploaderForm = this.$uploader.find('input');
 
@@ -377,7 +374,7 @@ SnowcapAdmin.Form = (function($) {
             // configure preview
             $link = $file.find('a');
 
-            $link.attr('href', function() {
+            $link.attr('href', function () {
                 return url;
             });
 
@@ -386,7 +383,7 @@ SnowcapAdmin.Form = (function($) {
                     $link.text(url);
                     break;
                 case 'snowcap_admin_multiupload_image':
-                    $file.find('img').attr('src', function() {
+                    $file.find('img').attr('src', function () {
                         return this.src + url;
                     });
                     break;
@@ -396,11 +393,11 @@ SnowcapAdmin.Form = (function($) {
             this.$uploader.before($file);
         },
 
-        fail: function(event, data) {
+        fail: function (event, data) {
             console.log('error while uploading');
         },
 
-        removeFile: function(event) {
+        removeFile: function (event) {
             // prevent default behavior
             event.preventDefault();
 
@@ -409,27 +406,308 @@ SnowcapAdmin.Form = (function($) {
         }
     });
 
-    var multiuploadFactory = function() {
-        $('[data-multi-upload]').each(function () {
-            new MultiUpload({el: this});
+    var multiuploadFactory = function () {
+        var context = arguments[0] || 'body';
+        $('[data-multi-upload]', context).each(function () {
+            if (!$(container).data('widget')) {
+                $(container).data('widget', new MultiUpload({el: this}));
+            }
         });
     };
 
+    var Slugger = Backbone.View.extend({
+        /**
+         * Instance init
+         */
+        initialize: function () {
+            this.locked = true;
+            this.$target = '';
+            this.currentSlug = '';
+            this.$modal = $(this.$el.data('modal'));
+            this.$modal.modal({show: false});
+            var elementIdSplitted = this.$el.attr('id').split('_');
+            elementIdSplitted.pop();
+            this.$target = $('#' + elementIdSplitted.join('_') + '_' + this.$el.data('target'));
+            if (this.$target.length === 0) {
+                throw "wrong target specified for slug widget (" + this.$el.data('target') + ")";
+            }
+            this.$el.attr('readonly', 'readonly');
+            if (this.$el.val() === '') {
+                this.$el.val(this.makeSlug(this.$target.val()));
+                this.listenTarget();
+            }
+            else {
+                this.currentSlug = this.$el.val();
+            }
+            this.appendLockButton();
+        },
+        /**
+         * Append a "lock" button to control slug behaviour (auto or manual)
+         */
+        appendLockButton: function () {
+            this.$modal.find('a[data-accept=modal]').on('click', _.bind(function () {
+                this.unlock();
+                this.$modal.modal('hide');
+            }, this));
+            this.lockButton = this.$el.parent().find('a');
+            this.lockButton.on('click', _.bind(function (event) {
+                event.preventDefault();
+                if (this.locked) {
+                    this.$modal.modal('show');
+                }
+                else {
+                    this.lock();
+                }
+            }, this));
+        },
+        /**
+         * Unlock the widget input (manual mode)
+         *
+         */
+        unlock: function () {
+            this.locked = false;
+            this.lockButton.find('i').toggleClass('icon-pencil icon-magnet');
+            this.$el.removeAttr('readonly');
+
+        },
+        lock: function () {
+            /**
+             * Lock the widget input (auto mode)
+             */
+            this.locked = true;
+            this.lockButton.find('i').toggleClass('icon-pencil icon-magnet');
+
+            if (this.currentSlug !== '') {
+                this.$el.val(this.currentSlug);
+            }
+            else {
+                this.$el.val(this.makeSlug(this.$target.val()));
+            }
+            this.$el.attr('readonly', 'readonly');
+        },
+        /**
+         * Transform a string into a slug
+         *
+         * @param string string
+         * @return string
+         */
+        makeSlug: function (string) {
+            var hyphenized = string.toLowerCase()
+                .replace(/^\s+|\s+$/g, '')
+                .replace(/\s+/g, '-');
+
+            return hyphenized
+                .replace(/[àâä]/g, 'a')
+                .replace(/[éèêë]/g, 'e')
+                .replace(/[îï]/g, 'i')
+                .replace(/[ôö]/g, 'o')
+                .replace(/[ûüù]/g, 'u')
+                .replace(/[ýÿ]/g, 'y')
+                .replace(/[ç]/g, 'c')
+                .replace(/[œ]/g, 'oe')
+                .replace(/[^a-zA-Z0-9\-]/g, '')
+                .replace(/^\-+|\-+$/, '');
+        },
+        /**
+         * Observe the target field and slug it
+         *
+         */
+        listenTarget: function () {
+            this.$target.keyup(_.bind(function () {
+                if (this.$el.attr('readonly') === 'readonly') {
+                    this.$el.val(this.makeSlug(this.$target.val()));
+                }
+            }, this));
+        }
+    });
+
+    var sluggerFactory = function () {
+        var context = arguments[0] || 'body';
+        $('.widget-slug, [data-admin=form-slugger]', context).each(function (i, element) {
+            if (!$(element).data('widget')) {
+                $(element).data('widget', new Slugger({'el': element}));
+            }
+        });
+    };
+
+    var EntityWidget = Backbone.View.extend({
+        events: {
+            'click a[data-admin=form-type-entity-add]': 'onEntityAddClick'
+        },
+        initialize: function () {
+            this.$select = this.$el.find('select');
+        },
+        onEntityAddClick: function (event) {
+            event.preventDefault();
+            var contentModal = new SnowcapAdmin.Ui.Modal({url: event.currentTarget.href});
+            contentModal.on('ui:modal:success', this.onModalSuccess, this);
+        },
+        onModalSuccess: function (data) {
+            var e_id = data.result.entity_id;
+            this.$select
+                .append($('<option>').html(data.result.entity_name).val(e_id))
+                .val(e_id);
+        }
+    });
+
+    var entityWidgetFactory = function () {
+        var context = arguments[0] || 'body';
+        $('[data-admin=form-type-entity]', context).each(function (i, element) {
+            if (!$(element).data('widget')) {
+                $(element).data('widget', new EntityWidget({'el': element}));
+            }
+        });
+    };
+
+
+    // Manage collapsible content
+    var CollapsibleFieldset = Backbone.View.extend({
+        initialize: function () {
+            var $content = this.$el.children(':not(legend)').detach();
+            this.$legend = this.$el.children('legend').addClass('no-border');
+            this.$icon = $('<span></span>').addClass('icon icon-chevron-up');
+            this.$legend.append(this.$icon);
+            this.$collapsibleContent = $('<div></div>').addClass('well well-light collapsible-content').append($content);
+            this.$el.append(this.$collapsibleContent);
+
+            this.$legend.on('click', _.bind(this.toggle, this));
+            this.isOpen = true;
+        },
+        toggle: function () {
+            this.$legend.toggleClass('no-border');
+            this.$icon.toggleClass('icon-chevron-down icon-chevron-up');
+            this.$collapsibleContent.slideToggle();
+            this.isOpen = !this.isOpen;
+
+            var state = this.isOpen ? 'open' : 'close';
+            this.trigger('form:collapsible:' + state);
+            this.$el.trigger('form:collapsible:' + state);
+        },
+        close: function() {
+            this.$legend.removeClass('no-border');
+            this.$icon.addClass('icon-chevron-down').removeClass('icon-chevron-up');
+            this.$collapsibleContent.slideUp();
+            this.isOpen = false;
+            this.trigger('form:collapsible:close');
+            this.$el.trigger('form:collapsible:close');
+        }
+    });
+
+    var collapsibleFieldsetFactory = function () {
+        var context = arguments[0] || 'body';
+        $('fieldset.collapsible, [data-admin=form-collapsible-fieldset]', context).each(function (i, element) {
+            var widget = $(element).data('widget');
+            if (!widget) {
+                $(element).data('widget', widget = new CollapsibleFieldset({'el': element}));
+            }
+            if ((i > 0 || widget.$el.hasClass('metas')) && widget.$('.error').length === 0) {
+                widget.close();
+            }
+        });
+    };
+
+    /**
+     * Form RichEditor view
+     * Used to manage CKEditor textarea
+     *
+     */
+    var WysiwygEditor = Backbone.View.extend({
+        initialize: function () {
+            CKEDITOR.replace(this.el, {customConfig: this.$el.data('wysiwyg')});
+
+            this.editor = CKEDITOR.instances[this.$el.attr('id')];
+
+            this.editor.on('blur', _.bind(function () {
+                if (true === editor.checkDirty()) {
+                    this.$el.parents('form').trigger('change');
+                }
+            }, this));
+        }
+    });
+
+    var wysiwygEditorFactory = function () {
+        var context = arguments[0] || 'body';
+        $('.widget-wysiwyg, [data-admin=form-wysiwyg-editor]', context).each(function (i, element) {
+            if (!$(element).data('widget')) {
+                $(element).data('widget', new WysiwygEditor({'el': element}));
+            }
+        });
+    };
+
+
+    var Manager = SnowcapCore.Form.Manager.extend({
+        initialize: function() {
+            SnowcapCore.Form.Manager.prototype.initialize.apply(this);
+            this.$('.catalogue-translation textarea').autosize();
+            this.addErrorClasses();
+            $('a:not([href^=#])').not('[data-admin]').on('click', _.bind(this.onExternalLinkClick, this));
+        },
+        addErrorClasses: function() {
+            this.$('form .tab-pane:has(.error)').each(function() {
+                $('a[href="#' + $(this).attr('id') + '"]').addClass('error');
+            });
+            this.$('fieldset').has('.error').each(function() {
+                $('legend', $(this)).first().addClass('error');
+            });
+        },
+        onExternalLinkClick: function(event) {
+            if(this.hasChanged) {
+                event.preventDefault();
+                var modal = $('#modal');
+                $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
+                    modal.html(data);
+                    modal.find('.cancel').click(function(){
+                        modal.html('');
+                        modal.modal('hide');
+                    });
+                    modal.find('.proceed').click(function(){
+                        window.location.href = $(event.currentTarget).attr('href');
+                    });
+                    modal.find('.save').click(function(){
+                        $('[data-admin=form-change-warning]').submit();
+                    });
+                    modal.modal('show');
+                });
+            }
+        }
+    });
+
     return {
+        Manager: Manager,
         Collection: Collection,
-        collectionFactory: collectionFactory,
         TextAutocomplete: TextAutocomplete,
-        textAutocompleteFactory: textAutocompleteFactory,
         Autocomplete: Autocomplete,
-        autocompleteFactory: autocompleteFactory,
         Multiupload: MultiUpload,
-        multiuploadFactory: multiuploadFactory
-    }
+        Slugger: Slugger,
+        EntityWidget: EntityWidget,
+        CollapsibleFieldset: CollapsibleFieldset,
+        WysiwygEditor: WysiwygEditor,
+        factories: {
+            collectionFactory: collectionFactory,
+            textAutocompleteFactory: textAutocompleteFactory,
+            autocompleteFactory: autocompleteFactory,
+            multiuploadFactory: multiuploadFactory,
+            sluggerFactory: sluggerFactory,
+            entityWidgetFactory: entityWidgetFactory,
+            collapsibleFieldsetFactory: collapsibleFieldsetFactory,
+            wysiwygEditorFactory: wysiwygEditorFactory
+        },
+        instances : {
+            managers: []
+        }
+    };
 })(jQuery);
 
-jQuery(document).ready(function() {
-    SnowcapAdmin.Form.collectionFactory();
-    SnowcapAdmin.Form.textAutocompleteFactory();
-    SnowcapAdmin.Form.autocompleteFactory();
-    SnowcapAdmin.Form.multiuploadFactory();
+jQuery(document).ready(function () {
+    $('[data-admin=form-manager]').each(function (i, element) {
+        if (!$(element).data('widget')) {
+            var manager = new SnowcapAdmin.Form.Manager({el: element});
+            _.each(SnowcapAdmin.Form.factories, function(factory) {
+                manager.registerFactory(factory);
+            });
+            SnowcapAdmin.Form.instances.managers.push(manager);
+            $(element).data('widget', manager);
+
+        }
+    });
 });
