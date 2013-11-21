@@ -41,7 +41,6 @@ var CKBUILDER_CONFIG = {
 		'htmlwriter' : 1,
 		'horizontalrule' : 1,
 		'wysiwygarea' : 1,
-		'image' : 1,
 		'indent' : 1,
 		'link' : 1,
 		'list' : 1,

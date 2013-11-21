@@ -26,4 +26,18 @@ jQuery(document).ready(function ($) {
         sendUrlToWysiwyg(this);
     });
 
+    var CKEDITOR_UPDATE_WARNING = false;
+    CKEDITOR.on('instanceReady', function (ev) {
+        if (!CKEDITOR_UPDATE_WARNING) {
+            _.each(ev.editor.config.toolbar_Basic, function (value) {
+                _.each(value, function (value) {
+                    if (value === 'Image') {
+                        alert('CKEDITOR compatibilty break: Please use "image2" instead of "Image" in your toolbar');
+                        CKEDITOR_UPDATE_WARNING = true;
+                    }
+                })
+            })
+        }
+    });
+
 });
