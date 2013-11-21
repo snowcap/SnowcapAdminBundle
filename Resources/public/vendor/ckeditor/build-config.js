@@ -74,7 +74,10 @@ var CKBUILDER_CONFIG = {
 		'codemirror' : 1,
 		'showblocks' : 1,
 		'justify' : 1,
-		'indentlist' : 1
+		'indentlist' : 1,
+		'lineutils' : 1,
+		'widget' : 1,
+		'image2' : 1
 	},
 	languages : {
 		'nl' : 1,
