@@ -634,7 +634,6 @@ SnowcapAdmin.Form = (function ($) {
         });
     };
 
-
     var Manager = SnowcapCore.Form.Manager.extend({
         initialize: function() {
             SnowcapCore.Form.Manager.prototype.initialize.apply(this);
