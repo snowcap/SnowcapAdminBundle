@@ -618,7 +618,7 @@ SnowcapAdmin.Form = (function ($) {
             this.editor = CKEDITOR.instances[this.$el.attr('id')];
 
             this.editor.on('blur', _.bind(function () {
-                if (true === editor.checkDirty()) {
+                if (true === this.editor.checkDirty()) {
                     this.$el.parents('form').trigger('change');
                 }
             }, this));
