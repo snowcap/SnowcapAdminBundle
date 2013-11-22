@@ -1,0 +1,35 @@
+{% set fields = fields|default(null) %}
+
+{% set prefix = random() %}
+<ul class="nav nav-tabs translation-tabs">
+    {% for locale in _locales %}
+        {% block tab_item %}
+            <li class="{% if loop.first %}active{% endif %}"><a href="#{{ prefix }}_{{ locale }}" data-toggle="tab">{{ locale|language|capitalize }}</a></li>
+        {% endblock %}
+    {% endfor %}
+</ul>
+
+<div class="tab-content translation-content">
+    {% for locale in _locales %}
+        <div class="tab-pane{% if loop.first %} active{% endif %}" id="{{ prefix }}_{{ locale }}" data-locale="{{ locale|language|capitalize }}">
+
+            {% set translation = form.translations[locale] %}
+            {% block tab_fields %}
+                {% if fields is empty %}
+                    {% for field in translation %}
+                        {{ form_row(field) }}
+                    {% endfor %}
+                {% else %}
+                    {% for field in fields %}
+                        {{ form_row(translation[field]) }}
+                    {% endfor %}
+                {% endif %}
+            {% endblock %}
+        </div>
+    {% endfor %}
+    {% if form.translations.vars.errors is not empty %}
+        <div class="error">
+            {{ form_errors(form.translations) }}
+        </div>
+    {% endif %}
+</div>
