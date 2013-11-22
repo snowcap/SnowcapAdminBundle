@@ -180,3 +180,7 @@ error:
         notfound:
             title: Ow! Unable to find this document ...
             message: The document you tried to reach doesn't exist.<br/>If you came here through a link, it's more likely that the document has been deleted.
+
+slug_alert:
+    title: ATTENTION
+    message: If you change the slug, you can break links on other pages!
