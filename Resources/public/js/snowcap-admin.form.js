@@ -131,9 +131,9 @@ SnowcapAdmin.Form = (function ($) {
      */
     var textAutocompleteFactory = function () {
         var context = arguments[0] || 'body';
-        $('[data-admin=form-text-autocomplete]', context).each(function (offset, autocompleteContainer) {
+        $('[data-admin=form-text-autocomplete]', context).each(function (offset, container) {
             if (!$(container).data('widget')) {
-                $(container).data('widget', new TextAutocomplete({el: $(autocompleteContainer)}));
+                $(container).data('widget', new TextAutocomplete({el: container}));
             }
         });
     };
@@ -315,9 +315,9 @@ SnowcapAdmin.Form = (function ($) {
      */
     var autocompleteFactory = function () {
         var context = arguments[0] || 'body';
-        $('[data-admin=form-autocomplete]', context).each(function (offset, autocompleteContainer) {
+        $('[data-admin=form-autocomplete]', context).each(function (offset, container) {
             if (!$(container).data('widget')) {
-                $(container).data('widget', new Autocomplete({el: $(autocompleteContainer)}));
+                $(container).data('widget', new Autocomplete({el: container}));
             }
         });
     };
@@ -408,9 +408,9 @@ SnowcapAdmin.Form = (function ($) {
 
     var multiuploadFactory = function () {
         var context = arguments[0] || 'body';
-        $('[data-multi-upload]', context).each(function () {
+        $('[data-multi-upload]', context).each(function (offset, container) {
             if (!$(container).data('widget')) {
-                $(container).data('widget', new MultiUpload({el: this}));
+                $(container).data('widget', new MultiUpload({el: container}));
             }
         });
     };
@@ -523,9 +523,9 @@ SnowcapAdmin.Form = (function ($) {
 
     var sluggerFactory = function () {
         var context = arguments[0] || 'body';
-        $('.widget-slug, [data-admin=form-slugger]', context).each(function (i, element) {
-            if (!$(element).data('widget')) {
-                $(element).data('widget', new Slugger({'el': element}));
+        $('.widget-slug, [data-admin=form-slugger]', context).each(function (offset, container) {
+            if (!$(container).data('widget')) {
+                $(container).data('widget', new Slugger({'el': container}));
             }
         });
     };
@@ -552,9 +552,9 @@ SnowcapAdmin.Form = (function ($) {
 
     var entityWidgetFactory = function () {
         var context = arguments[0] || 'body';
-        $('[data-admin=form-type-entity]', context).each(function (i, element) {
-            if (!$(element).data('widget')) {
-                $(element).data('widget', new EntityWidget({'el': element}));
+        $('[data-admin=form-type-entity]', context).each(function (offset, container) {
+            if (!$(container).data('widget')) {
+                $(container).data('widget', new EntityWidget({'el': container}));
             }
         });
     };
@@ -563,6 +563,7 @@ SnowcapAdmin.Form = (function ($) {
     // Manage collapsible content
     var CollapsibleFieldset = Backbone.View.extend({
         initialize: function () {
+            CollapsibleFieldset.instanceCount++;
             var $content = this.$el.children(':not(legend)').detach();
             this.$legend = this.$el.children('legend').addClass('no-border');
             this.$icon = $('<span></span>').addClass('icon icon-chevron-up');
@@ -591,19 +592,23 @@ SnowcapAdmin.Form = (function ($) {
             this.trigger('form:collapsible:close');
             this.$el.trigger('form:collapsible:close');
         }
+    }, {
+        instanceCount: 0
     });
-
     var collapsibleFieldsetFactory = function () {
         var context = arguments[0] || 'body';
-        $('fieldset.collapsible, [data-admin=form-collapsible-fieldset]', context).each(function (i, element) {
-            var widget = $(element).data('widget');
-            if (!widget) {
-                $(element).data('widget', widget = new CollapsibleFieldset({'el': element}));
-            }
-            if ((i > 0 || widget.$el.hasClass('metas')) && widget.$('.error').length === 0) {
-                widget.close();
-            }
-        });
+        var $containers = $('fieldset.collapsible, [data-admin=form-collapsible-fieldset]', context)
+        if($containers.length > CollapsibleFieldset.instanceCount) {
+            $containers.each(function (offset, container) {
+                var widget = $(container).data('widget');
+                if (!widget) {
+                    $(container).data('widget', widget = new CollapsibleFieldset({'el': container}));
+                }
+                if ((offset > 0 || widget.$el.hasClass('metas')) && widget.$('.error').length === 0) {
+                    widget.close();
+                }
+            });
+        }
     };
 
     /**
@@ -627,9 +632,9 @@ SnowcapAdmin.Form = (function ($) {
 
     var wysiwygEditorFactory = function () {
         var context = arguments[0] || 'body';
-        $('.widget-wysiwyg, [data-admin=form-wysiwyg-editor]', context).each(function (i, element) {
-            if (!$(element).data('widget')) {
-                $(element).data('widget', new WysiwygEditor({'el': element}));
+        $('.widget-wysiwyg, [data-admin=form-wysiwyg-editor]', context).each(function (offset, container) {
+            if (!$(container).data('widget')) {
+                $(container).data('widget', new WysiwygEditor({'el': container}));
             }
         });
     };
@@ -699,14 +704,14 @@ SnowcapAdmin.Form = (function ($) {
 })(jQuery);
 
 jQuery(document).ready(function () {
-    $('[data-admin=form-manager]').each(function (i, element) {
-        if (!$(element).data('widget')) {
-            var manager = new SnowcapAdmin.Form.Manager({el: element});
+    $('[data-admin=form-manager]').each(function (offset, container) {
+        if (!$(container).data('widget')) {
+            var manager = new SnowcapAdmin.Form.Manager({el: container});
             _.each(SnowcapAdmin.Form.factories, function(factory) {
                 manager.registerFactory(factory);
             });
             SnowcapAdmin.Form.instances.managers.push(manager);
-            $(element).data('widget', manager);
+            $(container).data('widget', manager);
 
         }
     });
