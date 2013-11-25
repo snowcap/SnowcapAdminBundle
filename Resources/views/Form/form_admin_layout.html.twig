@@ -80,13 +80,13 @@
 
 {# slug widget #}
 {% block snowcap_admin_slug_widget %}
-    {% set attr = attr|merge({'data-admin': 'form-slugger', 'data-target': target, 'data-modal': '#modal-' ~ id }) %}
+    {% set attr = attr|merge({ 'data-admin': 'form-slugger', 'data-target': target, 'data-modal': '#modal-' ~ id }) %}
     <div class="input-append">
         {{ block('form_widget') }}
         <span class="add-on"><a href="#locked"><i class="icon-pencil icon"></i></a></span>
     </div>
     {% from 'SnowcapBootstrapBundle::macros.html.twig' import modal %}
-    {{ modal('modal-' ~ id, 'ATTENTION', 'If you change the slug, you can break links on other pages') }}
+    {{ modal('modal-' ~ id, 'slug_alert.title'|trans({}, 'SnowcapAdminBundle'), 'slug_alert.message'|trans({}, 'SnowcapAdminBundle')) }}
 {% endblock snowcap_admin_slug_widget %}
 
 {# markdown widget #}
