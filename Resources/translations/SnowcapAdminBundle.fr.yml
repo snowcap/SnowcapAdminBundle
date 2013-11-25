@@ -180,3 +180,7 @@ error:
         notfound:
             title: Oh! Ce document est introuvable ...
             message: Le document que vous avez demandé n'existe pas.<br/>Si vous êtes arrivés ici via un lien, il est fort probable que le document a été supprimé.
+
+slug_alert:
+    title: ATTENTION
+    message: Si vous modifiez le slug, vous pouvez casser des liens sur d'autres pages !
