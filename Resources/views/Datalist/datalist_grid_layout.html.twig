@@ -153,7 +153,9 @@
     <form class="form-search" method="get" novalidate>
         <div class="input-append">
             {{ form_widget(form.search, {'attr': {'placeholder': placeholder|trans({}, "SnowcapAdminBundle"), 'class': 'input-xxlarge search-query'}}) }}
-            <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+            <div class="add-on with-btn">
+                <button type="submit" class="btn">{{ submit|trans({}, "SnowcapAdminBundle") }}</button>
+            </div>
         </div>
     </form>
 {% endblock datalist_search %}
