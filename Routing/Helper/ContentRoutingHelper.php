@@ -2,11 +2,11 @@
 
 namespace Snowcap\AdminBundle\Routing\Helper;
 
+use Snowcap\AdminBundle\Admin\AdminInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Route;
 
-use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\CoreBundle\Util\String;
 
 class ContentRoutingHelper {
@@ -31,8 +31,10 @@ class ContentRoutingHelper {
     private $routePrefix;
 
     /**
-     * @param string $routeNamePrefix
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     * @param \Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser $parser
      * @param string $routePrefix
+     * @param string $routeNamePrefix
      */
     public function __construct(RouterInterface $router, ControllerNameParser $parser, $routePrefix, $routeNamePrefix) {
         $this->router = $router;
@@ -41,7 +43,7 @@ class ContentRoutingHelper {
         $this->routeNamePrefix = $routeNamePrefix;
     }
 
-    public function getRouteName(ContentAdmin $admin, $action)
+    public function getRouteName(AdminInterface $admin, $action)
     {
         return $this->routeNamePrefix . '_' . $admin->getAlias() . '_' . $action;
     }
@@ -52,13 +54,13 @@ class ContentRoutingHelper {
      * This method will first attempt to find a custom Route (like "YourCustomAdminBundle:Section:index")
      * and if it does not work
      *
-     * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
+     * @param \Snowcap\AdminBundle\Admin\AdminInterface $admin
      * @param string $action
      * @param array $params
      * @param bool $defaultRoute
      * @return \Symfony\Component\Routing\Route
      */
-    public function getRoute(ContentAdmin $admin, $action, $params = array(), $defaultRoute = false)
+    public function getRoute(AdminInterface $admin, $action, $params = array(), $defaultRoute = false)
     {
         $defaults = array();
         $pattern = '/' . $admin->getAlias();
@@ -96,11 +98,12 @@ class ContentRoutingHelper {
     }
 
     /**
-     * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
+     * @param \Snowcap\AdminBundle\Admin\AdminInterface $admin
      * @param string $action
+     * @param array $params
      * @return string
      */
-    public function generateUrl(ContentAdmin $admin, $action, $params = array())
+    public function generateUrl(AdminInterface $admin, $action, $params = array())
     {
         $routeName = $this->getRouteName($admin, $action);
 

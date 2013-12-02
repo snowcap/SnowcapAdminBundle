@@ -14,8 +14,7 @@ interface AdminInterface
     public function getDefaultPath();
 
     /**
-     * @param string $alias
-     * @param \Symfony\Component\Routing\RouteCollection $routeCollection
+     * @param RouteCollection $routeCollection
      */
     public function addRoutes(RouteCollection $routeCollection);
 
@@ -42,7 +41,6 @@ interface AdminInterface
 
     /**
      * @param OptionsResolverInterface $resolver
-     * @return mixed
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver);
 

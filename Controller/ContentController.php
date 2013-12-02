@@ -321,12 +321,11 @@ class ContentController extends BaseController
      * @param \Snowcap\AdminBundle\Admin\ContentAdmin $admin
      * @param \Symfony\Component\Form\Form $form
      * @param object $entity
-     * @param string $successFlash
-     * @param string $errorFlash
+     * @throws \Exception
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     protected function save(ContentAdmin $admin, Form $form, $entity) {
-        $form->bind($this->getRequest());
+        $form->submit($this->getRequest());
         if ($form->isValid()) {
             $admin->saveEntity($entity);
         } else {
@@ -360,6 +359,7 @@ class ContentController extends BaseController
      * @param string $message
      * @param ContentAdmin $admin
      * @param object $entity
+     * @param string $domain
      */
     protected function buildEntityFlash($type, $message, ContentAdmin $admin, $entity, $domain='SnowcapAdminBundle')
     {
@@ -382,6 +382,8 @@ class ContentController extends BaseController
      * @param string $message
      * @param ContentAdmin $admin
      * @param object $entity
+     * @param string $domain
+     * @return array
      */
     protected function buildModalEntityFlash($type, $message, ContentAdmin $admin, $entity, $domain='SnowcapAdminBundle')
     {

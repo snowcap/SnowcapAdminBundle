@@ -37,6 +37,7 @@ class AutocompleteType extends AbstractType
 
     /**
      * @param \Snowcap\AdminBundle\AdminManager $adminManager
+     * @param \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper $routingHelper
      */
     public function __construct(AdminManager $adminManager, ContentRoutingHelper $routingHelper)
     {
@@ -114,7 +115,7 @@ class AutocompleteType extends AbstractType
             $view->vars['text_values'] = $textValues;
             $view->vars['prototype'] = $form->getConfig()->getAttribute('prototype')->createView($view);
         }
-        // For single autocompletes, just store the only textual value
+        // For single autocomplete, just store the only textual value
         else {
             $textValue = $this->buildTextValue($value, $options);
             $view->vars['text_value'] = $textValue;

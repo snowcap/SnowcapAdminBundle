@@ -21,7 +21,6 @@ abstract class ContentAdmin extends AbstractAdmin
 
     /**
      * @param OptionsResolverInterface $resolver
-     *
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -106,7 +105,6 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
-     * @param string $alias
      * @param \Symfony\Component\Routing\RouteCollection $routeCollection
      */
     public function addRoutes(RouteCollection $routeCollection)
@@ -162,14 +160,6 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
-     * @return \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
-     */
-    public function getRoutingHelper()
-    {
-        return $this->container->get('snowcap_admin.routing_helper_content');
-    }
-
-    /**
      * @return \Doctrine\ORM\EntityManager
      */
     public function getEntityManager()
@@ -178,6 +168,7 @@ abstract class ContentAdmin extends AbstractAdmin
     }
 
     /**
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      * @return string
      */
     public function getEntityClass(){
@@ -205,6 +196,7 @@ abstract class ContentAdmin extends AbstractAdmin
     /**
      * @param object $entity
      *
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      * @return string
      */
     public function getEntityName($entity) {

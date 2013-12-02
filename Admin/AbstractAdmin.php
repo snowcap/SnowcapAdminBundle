@@ -59,7 +59,6 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
 
     /**
      * @param OptionsResolverInterface $resolver
-     *
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -79,6 +78,7 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
 
     /**
      * @param $name
+     * @throws \InvalidArgumentException
      * @return mixed
      */
     public function getOption($name)
@@ -175,4 +175,13 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
     {
         return VoterInterface::ACCESS_GRANTED;
     }
+
+    /**
+     * @return \Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper
+     */
+    public function getRoutingHelper()
+    {
+        return $this->container->get('snowcap_admin.routing_helper_content');
+    }
+
 }
