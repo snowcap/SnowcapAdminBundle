@@ -24,14 +24,18 @@
     <div class="form-autocomplete form-autocomplete-single" data-admin="form-autocomplete" data-options-mode="single" data-options-url="{{ list_url }}">
         {{ form_widget(form, {'type': 'hidden'}) }}
         {% set text_widget %}
-            <input type="text"{% if text_value is not empty %} value="{{ text_value }}"{% endif %}  {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
+            <div class="text-input">
+                <input type="text"{% if text_value is not empty %} value="{{ text_value }}"{% endif %}  {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
+            </div>
         {% endset %}
         {% if allow_add %}
             <div class="input-append">
                 {{ text_widget }}
-                <a href="{{ add_url }}" class="btn" data-admin="content-add">
-                    <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
-                </a>
+                <div class="add-on with-btn">
+                    <a href="{{ add_url }}" class="btn" data-admin="content-add">
+                        <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
+                    </a>
+                </div>
             </div>
         {% else %}
             {{ text_widget }}
