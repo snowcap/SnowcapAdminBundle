@@ -29,9 +29,11 @@
         {% if allow_add %}
             <div class="input-append">
                 {{ text_widget }}
-                <a href="{{ add_url }}" class="btn" data-admin="content-add">
-                    <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
-                </a>
+                <div class="add-on with-btn">
+                    <a href="{{ add_url }}" class="btn" data-admin="content-add">
+                        <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
+                    </a>
+                </div>
             </div>
         {% else %}
             {{ text_widget }}
