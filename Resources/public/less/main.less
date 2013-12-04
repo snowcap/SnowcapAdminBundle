@@ -55,11 +55,14 @@ section {
 }
 
 .form-autocomplete-single {
-    position: relative;
+    input {
+        margin: 0;
+    }
     .close {
-        position: absolute;
-        right: 6px;
+        float: none;
+        position: relative;
         top: 3px;
+        margin-left: -20px;
     }
 }
 
@@ -273,14 +276,20 @@ fieldset[data-admin=form-collapsible-fieldset] {
     display: table !important;
     width: 100% !important;
 
+    &>.text-input
     input,
     .add-on {
         -webkit-box-sizing: border-box !important;
         -moz-box-sizing: border-box !important;
         box-sizing: border-box !important;
-        display: table-cell !important;
         height: 30px;
     }
+    &>.text-input,
+    &>input,
+    .add-on {
+            display: table-cell !important;
+    }
+    &>.text-input,
     input {
         width: 100% !important;
     }

@@ -24,7 +24,9 @@
     <div class="form-autocomplete form-autocomplete-single" data-admin="form-autocomplete" data-options-mode="single" data-options-url="{{ list_url }}">
         {{ form_widget(form, {'type': 'hidden'}) }}
         {% set text_widget %}
-            <input type="text"{% if text_value is not empty %} value="{{ text_value }}"{% endif %}  {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
+            <div class="text-input">
+                <input type="text"{% if text_value is not empty %} value="{{ text_value }}"{% endif %}  {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
+            </div>
         {% endset %}
         {% if allow_add %}
             <div class="input-append">

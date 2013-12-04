@@ -7,9 +7,9 @@ SnowcapAdmin.Ui = (function() {
         initialize: function() {
             SnowcapBootstrap.Modal.prototype.initialize.apply(this);
             this.off('ui:modal:render');
-            this.on('ui:modal:render', _.partial(SnowcapAdmin.Form.collectionFactory, this.$el));
-            this.on('ui:modal:render', _.partial(SnowcapAdmin.Form.textAutocompleteFactory, this.$el));
-            this.on('ui:modal:render', _.partial(SnowcapAdmin.Form.autocompleteFactory, this.$el));
+            this.on('ui:modal:render', _.partial(SnowcapAdmin.Form.factories.collectionFactory, this.$el));
+            this.on('ui:modal:render', _.partial(SnowcapAdmin.Form.factories.textAutocompleteFactory, this.$el));
+            this.on('ui:modal:render', _.partial(SnowcapAdmin.Form.factories.autocompleteFactory, this.$el));
             this.on('ui:modal:render', this.checkAlerts);
             this.on('ui:modal:success', this.success);
         },

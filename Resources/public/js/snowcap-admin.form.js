@@ -183,7 +183,7 @@ SnowcapAdmin.Form = (function ($) {
          */
         appendClearButton: function () {
             var $close = $('<a href="#" data-admin="form-autocomplete-clear" class="close">&times;</button>');
-            this.$el.append($close);
+            this.$textInput.after($close);
         },
         /**
          * Initialize typeahead widget
