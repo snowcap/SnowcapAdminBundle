@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Snowcap\CoreBundle\Doctrine\Mapping as SnowcapCore;
 
 /**
- * Snowcap\CoreBundle\Entity
+ * Snowcap\AdminBundle\Entity
  *
  * @ORM\Entity
  * @ORM\Table(name="snowcap_admin_log")
@@ -40,7 +40,7 @@ class Log {
     protected $action;
 
     /**
-     * @var text
+     * @var string
      *
      * @ORM\Column(name="description", type="text")
      */
@@ -61,7 +61,7 @@ class Log {
     protected $entityId;
 
     /**
-     * @var datetime
+     * @var \DateTime
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
@@ -131,7 +131,7 @@ class Log {
     }
 
     /**
-     * @param $username
+     * @param string $username
      * @return $this
      */
     public function setUsername($username)
@@ -150,7 +150,7 @@ class Log {
     }
 
     /**
-     * @param $action
+     * @param string $action
      * @return $this
      */
     public function setAction($action)
@@ -169,7 +169,7 @@ class Log {
     }
 
     /**
-     * @param $description
+     * @param string $description
      * @return $this
      */
     public function setDescription($description)
@@ -188,7 +188,7 @@ class Log {
     }
 
     /**
-     * @param $admin
+     * @param int $admin
      * @return $this
      */
     public function setAdmin($admin)
@@ -207,7 +207,7 @@ class Log {
     }
 
     /**
-     * @param $entityId
+     * @param int $entityId
      * @return $this
      */
     public function setEntityId($entityId)
@@ -245,7 +245,7 @@ class Log {
     }
 
     /**
-     * @param $type
+     * @param string $type
      * @return $this
      */
     public function setType($type)
