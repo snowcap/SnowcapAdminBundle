@@ -35,7 +35,7 @@ content:
                 <p>You are about to permanently delete the following entry:</p>
                 <p class="text-center"><strong>%content%</strong></p>
                 <p>Please make sure you don't need it anymore.</p>
-        cancel: Annuler
+        cancel: Cancel
         confirm: Delete
         flash:
             success: Your content "%name%" of type "%type%" has been deleted.
