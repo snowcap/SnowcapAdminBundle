@@ -50,23 +50,25 @@
             {% for child in form %}
                 {{ form_widget(child) }}
             {% endfor %}
+            <ul class="tokens">
+                {% for value, text_value in text_values %}
+                    <li class="token" data-value="{{ value }}">
+                        <span>{{ text_value }}</span><a href="#" class="close" rel="remove">&times;</a>
+                    </li>
+                {% endfor %}
+            </ul>
             {% set text_widget %}
-                <ul class="tokens">
-                    {% for value, text_value in text_values %}
-                        <li class="token" data-value="{{ value }}">
-                            <span>{{ text_value }}</span><a href="#" class="close" rel="remove">&times;</a>
-                        </li>
-                    {% endfor %}
-                </ul>
                 {% set attr = attr|merge({'class': (attr.class|default('') ~ ' token-input')|trim }) %}
                 <input type="text" {{ block('snowcap_admin_autocomplete_widget_attributes') }}/>
             {% endset %}
             {% if allow_add %}
                 <div class="input-append">
                     {{ text_widget }}
-                    <a href="{{ add_url }}" class="btn" data-admin="content-add">
-                        <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
-                    </a>
+                    <div class="add-on with-btn">
+                        <a href="{{ add_url }}" class="btn" data-admin="content-add">
+                            <i class="icon-plus"></i> {{ add_label|trans({}, translation_domain) }}
+                        </a>
+                    </div>
                 </div>
             {% else %}
                 {{ text_widget }}
