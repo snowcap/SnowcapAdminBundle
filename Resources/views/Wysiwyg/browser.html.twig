@@ -13,8 +13,8 @@
     <div class="wysiwyg-browser">
         {% if datalist is empty %}
             {{ bootstrap.alert("wysiwyg.browse.empty"|trans({}, 'SnowcapAdminBundle')) }}
-        {% else %}
-            {{ datalist_widget(datalist) }}
         {% endif %}
+
+        {{ datalist_widget(datalist) }}
     </div>
 {% endblock %}
