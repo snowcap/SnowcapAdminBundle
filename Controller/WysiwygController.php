@@ -49,7 +49,7 @@ class WysiwygController extends BaseController
             ->addField('path', 'image')
             ->addField('name', 'text')
             ->addField('tags', 'text')
-            ->addFilter('name', 'search', array('search_fields' => array('e.name', 'e.tags'), 'label' => 'search'))
+            ->addFilter('name', 'search', array('search_fields' => array('f.name', 'f.tags'), 'label' => 'search'))
             ->getDatalist();
 
         /** @var $em \Doctrine\ORM\EntityManager */

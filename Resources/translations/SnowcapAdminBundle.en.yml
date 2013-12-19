@@ -60,6 +60,12 @@ wysiwyg:
     browse:
         title: Browse images
         empty: No image yet
+    upload:
+        title: Upload
+        placeholder:
+            name: Name
+            tags: Enter tags for further search
+        submit: Submit
 
 inline_content:
     create: Create new %content_name%
