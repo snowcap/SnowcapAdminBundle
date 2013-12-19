@@ -60,6 +60,12 @@ wysiwyg:
     browse:
         title: Parcourir les images
         empty: Pas encore d'image
+    upload:
+        title: Upload
+        placeholder:
+            name: Nom
+            tags: Entrez des tags pour une recherche future
+        submit: Envoyer
 
 inline_content:
     create: Créer un nouvel élément %content_name%

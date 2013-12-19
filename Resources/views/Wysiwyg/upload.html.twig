@@ -1,13 +1,15 @@
 {% if form is defined %}
-    <h2>Upload</h2>
+    <h2>{{ 'wysiwyg.upload.title'|trans({}, 'SnowcapAdminBundle') }}</h2>
     <hr/>
     <form action="{{ path('snowcap_admin_wysiwyg_browser', arguments) }}" {{ form_enctype(form) }} method="post" class="well form-inline" novalidate="novalidate">
+        {{ form_widget(form.name, { 'attr': { 'placeholder': 'wysiwyg.upload.placeholder.name'|trans({}, 'SnowcapAdminBundle') } }) }}
+        {{ form_widget(form.tags, { 'attr': { 'placeholder': 'wysiwyg.upload.placeholder.tags'|trans({}, 'SnowcapAdminBundle') } }) }}
         {{ form_widget(form.file) }}
-        {{ form_widget(form.tags, { 'attr': { 'placeholder': 'Enter tags for further search'}}) }}
-        <button type="submit" class="btn">Submit</button>
+        <button type="submit" class="btn">{{ 'wysiwyg.upload.submit'|trans({}, 'SnowcapAdminBundle') }}</button>
         {{ form_rest(form) }}
     </form>
 {% endif %}
+
 {% if url is defined %}
     <script type='text/javascript'>
         window.opener.CKEDITOR.tools.callFunction({{ arguments.CKEditorFuncNum}}, '{{ app.request.basePath ~ '/' ~ url }}', '{{ message|default('') }}');
