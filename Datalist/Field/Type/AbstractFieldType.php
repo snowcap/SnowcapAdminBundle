@@ -24,9 +24,9 @@ abstract class AbstractFieldType implements FieldTypeInterface
     }
 
     /**
-     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewCobtext
+     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewContext
      * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
-     * @param mixed $value
+     * @param mixed $row
      * @param array $options
      */
     public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $row, array $options)

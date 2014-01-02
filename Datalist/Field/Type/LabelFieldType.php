@@ -25,14 +25,21 @@ class LabelFieldType extends AbstractFieldType
     /**
      * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewContext
      * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
-     * @param mixed $value
+     * @param $row
      * @param array $options
+     * @throws \UnexpectedValueException
+     * @throws \Exception
      */
     public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $row, array $options)
     {
         parent::buildViewContext($viewContext, $field, $row, $options);
 
         $mappings = $options['mappings'];
+
+        // Convert boolean value to integer to avoid problem with indexed arrays
+        if (is_bool($viewContext['value'])) {
+            $viewContext['value'] = (int) $viewContext['value'];
+        }
         if(!array_key_exists($viewContext['value'], $mappings)) {
             throw new \UnexpectedValueException(sprintf('No mapping for value %s', $viewContext['value']));
         }
