@@ -48,24 +48,12 @@ class AdminExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'is_array'  => new \Twig_Function_Method($this, 'is_array', array()),
             'get_admin_for_entity_name' => new \Twig_Function_Method($this, 'getAdminForEntityName'),
             'admin' => new \Twig_Function_Method($this, 'getAdminByCode'),
             'admin_label' => new \Twig_Function_Method($this, 'getAdminLabel'),
             'admin_content_path' => new \Twig_Function_Method($this, 'getAdminContentPath'),
             'admin_translation_domain' => new \Twig_Function_Method($this, 'getDefaultTranslationDomain'),
         );
-    }
-
-    /**
-     * Not obvious ? :)
-     *
-     * @param mixed $value
-     * @return bool
-     */
-    public function is_array($value)
-    {
-        return is_array($value);
     }
 
     /**
