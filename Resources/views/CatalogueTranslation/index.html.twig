@@ -1,5 +1,5 @@
 {% macro element(key, value, level, parent, fallback) %}
-    {% if is_array(value) %}
+    {% if value is iterable %}
         <h{{ level }} class="level-header">{{ key }}</h{{level}}>
         {% for subkey, subvalue in value %}
             <ul class="level{{ level }} {% if level == 3 %} well{%endif%}" >
@@ -53,7 +53,7 @@
                 {{ 'cataloguetranslation.novalues' | trans({}, 'SnowcapAdminBundle') }}
             {% endfor %}
 
-            {% if is_array(activeCatalogue) and (activeCatalogue | length) > 0 %}
+            {% if activeCatalogue is iterable and (activeCatalogue | length) > 0 %}
                 <div class="form-actions">
                     <input type="hidden" name="activeCatalogueLocale" value="{{ activeCatalogueLocale }}" />
                     <input type="submit" class="btn" value="{{ 'cataloguetranslation.submit' | trans({}, 'SnowcapAdminBundle') }}" />
