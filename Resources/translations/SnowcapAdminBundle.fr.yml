@@ -14,8 +14,6 @@ content:
         title: Filtres
         submit: Filtrer
         reset: Annuler
-    actions:
-        header: Entête
     create:
         title: Nouveau contenu "%content_name%"
         flash:
@@ -51,10 +49,10 @@ content:
         back: Retour à la liste
         reorder: Réordonner
         confirm:
-          title: Confirmation
-          body: Etes-vous certain de vouloir effectuer cette action ?
-          confirm: J'en suis certain
-          cancel: Pas sûr
+            title: Confirmation
+            body: Etes-vous certain de vouloir effectuer cette action ?
+            confirm: J'en suis certain
+            cancel: Pas sûr
 
 wysiwyg:
     browse:

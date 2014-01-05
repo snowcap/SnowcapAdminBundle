@@ -14,8 +14,6 @@ content:
         title: Filters
         submit: Filter
         reset: Reset
-    actions:
-        header: Header
     create:
         title: Create a "%content_name%" content
         flash:
@@ -51,10 +49,10 @@ content:
         back: Back to list
         reorder: Reorder
         confirm:
-          title: Confirm
-          body: Are you sure that you want to do this ?
-          confirm: I am sure
-          cancel: I am not that sure
+            title: Confirm
+            body: Are you sure that you want to do this ?
+            confirm: I am sure
+            cancel: I am not that sure
 
 wysiwyg:
     browse:

@@ -34,6 +34,7 @@
 {# modal_footer block #}
 {% block modal_footer %}
 
+    <button type="button" class="btn" data-dismiss="modal">{{ "content.actions.cancel"|trans }}</button>
     <button type="submit" name="saveMode" class="btn btn-primary" value="{{ constant('Snowcap\\AdminBundle\\Admin\\ContentAdmin::SAVEMODE_NORMAL') }}">
         {{ "content.actions.save"|trans }}
     </button>
