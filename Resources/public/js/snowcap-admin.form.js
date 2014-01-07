@@ -161,6 +161,7 @@ SnowcapAdmin.Form = (function ($) {
 
             this.$valueInput = this.$el.find('input[type=hidden]');
             this.mode = this.$el.data('options-mode');
+            this.$close = null;
 
             if ('multiple' === this.mode) {
                 $('ul.tokens').on('click', 'a[rel=remove]', _.bind(function (event) {
@@ -182,8 +183,10 @@ SnowcapAdmin.Form = (function ($) {
          *
          */
         appendClearButton: function () {
-            var $close = $('<a href="#" data-admin="form-autocomplete-clear" class="close">&times;</button>');
-            this.$textInput.after($close);
+            if(null === this.$close) {
+                this.$close = $('<a href="#" data-admin="form-autocomplete-clear" class="close">&times;</button>');
+                this.$textInput.after(this.$close);
+            }
         },
         /**
          * Initialize typeahead widget
@@ -306,6 +309,11 @@ SnowcapAdmin.Form = (function ($) {
             event.preventDefault();
             this.$textInput.val('');
             this.invalidate();
+
+            if ('single' === this.mode) {
+                this.$close.remove();
+                this.$close = null;
+            }
         }
     });
 
