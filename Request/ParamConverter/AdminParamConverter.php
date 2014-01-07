@@ -4,6 +4,7 @@ namespace Snowcap\AdminBundle\Request\ParamConverter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
+use Snowcap\CoreBundle\Navigation\NavigationRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -16,11 +17,18 @@ class AdminParamConverter implements ParamConverterInterface {
     private $adminManager;
 
     /**
-     * @param \Snowcap\AdminBundle\AdminManager $adminManager
+     * @var \Snowcap\CoreBundle\Navigation\NavigationRegistry
      */
-    public function __construct(AdminManager $adminManager)
+    private $registry;
+
+    /**
+     * @param AdminManager $adminManager
+     * @param NavigationRegistry $registry
+     */
+    public function __construct(AdminManager $adminManager, NavigationRegistry $registry)
     {
         $this->adminManager = $adminManager;
+        $this->registry = $registry;
     }
 
     /**
@@ -39,6 +47,7 @@ class AdminParamConverter implements ParamConverterInterface {
         try {
             $admin = $this->adminManager->getAdmin($alias);
             $request->attributes->set($param, $admin);
+            $this->registry->addActivePath($admin->getDefaultPath());
         }
         catch(\InvalidArgumentException $e)
         {
