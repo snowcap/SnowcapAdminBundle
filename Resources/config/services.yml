@@ -35,17 +35,11 @@ services:
     # Param converters
     snowcap_admin.param_converter:
         class: Snowcap\AdminBundle\Request\ParamConverter\AdminParamConverter
-        arguments: [@snowcap_admin]
+        arguments: [@snowcap_admin, @snowcap_core.navigation]
         tags:
             - { name: request.param_converter }
 
     # Event listeners
-    snowcap_admin.listener_navigation:
-        class: Snowcap\AdminBundle\EventListener\NavigationListener
-        arguments: [@snowcap_core.navigation]
-        tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
-
     snowcap_admin.listener_logger:
         class: Snowcap\AdminBundle\EventListener\LoggerListener
         arguments: [@snowcap_admin.logger]
