@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Request\ParamConverter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
+use Snowcap\CoreBundle\Navigation\NavigationRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
@@ -16,16 +17,25 @@ class AdminParamConverter implements ParamConverterInterface {
     private $adminManager;
 
     /**
-     * @param \Snowcap\AdminBundle\AdminManager $adminManager
+     * @var \Snowcap\CoreBundle\Navigation\NavigationRegistry
      */
-    public function __construct(AdminManager $adminManager)
+    private $registry;
+
+    /**
+     * @param AdminManager $adminManager
+     * @param NavigationRegistry $registry
+     */
+    public function __construct(AdminManager $adminManager, NavigationRegistry $registry)
     {
         $this->adminManager = $adminManager;
+        $this->registry = $registry;
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface $configuration
+     * @param Request $request
+     * @param ConfigurationInterface $configuration
+     * @return bool|void
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
@@ -37,6 +47,7 @@ class AdminParamConverter implements ParamConverterInterface {
         try {
             $admin = $this->adminManager->getAdmin($alias);
             $request->attributes->set($param, $admin);
+            $this->registry->addActivePath($admin->getDefaultPath());
         }
         catch(\InvalidArgumentException $e)
         {
