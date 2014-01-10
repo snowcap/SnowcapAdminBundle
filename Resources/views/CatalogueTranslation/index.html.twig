@@ -12,7 +12,9 @@
                 <label class="control-label">{{ key }}</label>
                 <div class="controls">
                     <textarea rows="1" name="data{{ parent }}[{{ key }}]">{{ value }}</textarea>
-                    <p class="help-block">{{ fallback }}</p>
+                    {% if fallback is defined and fallback is not null %}
+                        <p class="help-block">{{ fallback }}</p>
+                    {% endif %}
                 </div>
             </div>
         </li>
