@@ -40,7 +40,10 @@ class CatalogueTranslationController extends BaseController
         /** Getting all source catalogues */
         $catalogues = array();
         foreach ($catalogueReferences as $catalogueReference) {
-            list($namespace, $bundle, $cat) = explode('\\', $catalogueReference);
+            $explodedCatalog = explode('\\', $catalogueReference);
+            $cat = array_pop($explodedCatalog);
+            $bundle = array_pop($explodedCatalog);
+            $namespace = implode(DIRECTORY_SEPARATOR, $explodedCatalog);
             foreach ($locales as $loc) {
                 $filePath = $this->getSourceCataloguePath($namespace, $bundle, $cat, $loc);
                 if (file_exists($filePath)) {
