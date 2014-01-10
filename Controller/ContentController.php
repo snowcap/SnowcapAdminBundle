@@ -115,6 +115,7 @@ class ContentController extends BaseController
             }
             catch(\Exception $e) {
                 $status = 400;
+                $this->buildEntityFlash('error', 'content.create.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -201,6 +202,7 @@ class ContentController extends BaseController
             }
             catch(\Exception $e) {
                 $status = 400;
+                $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -258,7 +260,8 @@ class ContentController extends BaseController
                 return new JsonResponse(array('result' => $result, 'redirect_url' => $redirectUrl), 301);
 
             } catch (\Exception $e) {
-                $status = 500;
+                $status = 400;
+                $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -398,6 +401,7 @@ class ContentController extends BaseController
      * @param object $entity
      * @param string $domain
      * @return array
+     * @deprecated Use buildEntityFlash instead
      */
     protected function buildModalEntityFlash($type, $message, ContentAdmin $admin, $entity, $domain='SnowcapAdminBundle')
     {
