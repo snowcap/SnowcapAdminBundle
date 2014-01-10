@@ -39,6 +39,7 @@ content:
         confirm: Delete
         flash:
             success: Your content "%name%" of type "%type%" has been deleted.
+            error: Your content cannot be deleted
             error_has_children: You cannot delete content with children
     actions:
         header: Actions
