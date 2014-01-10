@@ -243,16 +243,24 @@ class ContentController extends BaseController
      */
     public function modalDelete(Request $request, ContentAdmin $admin, $entity)
     {
-        if($request->isMethod('post')) {
-            $admin->deleteEntity($entity);
-            $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
-            $result = array(
-                'entity_id' => $entity->getId(),
-                'entity_name' => $admin->getEntityName($entity)
-            );
-            $redirectUrl = $request->headers->get('referer');
+        $status = 200;
 
-            return new JsonResponse(array('result' => $result, 'redirect_url' => $redirectUrl), 301);
+        if($request->isMethod('post')) {
+            try {
+                $admin->deleteEntity($entity);
+                $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
+                $result = array(
+                    'entity_id' => $entity->getId(),
+                    'entity_name' => $admin->getEntityName($entity)
+                );
+                $redirectUrl = $request->headers->get('referer');
+
+                return new JsonResponse(array('result' => $result, 'redirect_url' => $redirectUrl), 301);
+
+            } catch (\Exception $e) {
+                $status = 500;
+                $this->get('logger')->addError($e->getMessage());
+            }
         }
 
         $content = $this->renderView(
@@ -263,7 +271,7 @@ class ContentController extends BaseController
             )
         );
 
-        return new JsonResponse(array('content' => $content));
+        return new JsonResponse(array('content' => $content), $status);
     }
 
     /**
@@ -277,8 +285,14 @@ class ContentController extends BaseController
     public function delete(Request $request, ContentAdmin $admin, $entity)
     {
         if($request->isMethod('post')) {
-            $admin->deleteEntity($entity);
-            $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
+            try {
+                $admin->deleteEntity($entity);
+                $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
+
+            } catch(\Exception $e) {
+                $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
+                $this->get('logger')->addError($e->getMessage());
+            }
 
             return $this->redirect($this->getRoutingHelper()->generateUrl($admin, 'index'));
         }

@@ -37,6 +37,7 @@ content:
         confirm: Supprimer
         flash:
             success: Le contenu "%name%" de type "%type%" a bien été supprimé.
+            error: Le contenu n'a pas pu être supprimé
             error_has_children: Impossible de supprimer un contenu lié à d'autres éléments
     actions:
         header: Actions
