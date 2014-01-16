@@ -143,6 +143,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
             'form' => $datalist->getSearchForm()->createView(),
             'placeholder' => $datalist->getOption('search_placeholder'),
             'submit' => $datalist->getOption('search_submit'),
+            'translation_domain' => $datalist->getOption('translation_domain')
         ));
     }
 
@@ -167,7 +168,7 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     }
 
     /**
-     * @param \Snowcap\AdminBundle\Datalist\DatalistInterface $datalist
+     * @param \Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface $filter
      * @return string
      */
     public function renderDatalistFilter(DatalistFilterInterface $filter)
@@ -248,7 +249,8 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     }
 
     /**
-     * @param string $theme
+     * @param DatalistInterface $datalist
+     * @param $ressources
      */
     public function setTheme(DatalistInterface $datalist, $ressources)
     {
