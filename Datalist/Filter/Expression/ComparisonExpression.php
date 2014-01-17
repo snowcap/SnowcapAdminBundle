@@ -10,6 +10,7 @@ class ComparisonExpression implements ExpressionInterface {
     const OPERATOR_LT = 'lt';
     const OPERATOR_LTE = 'lte';
     const OPERATOR_LIKE = 'like';
+    const OPERATOR_IN = 'in';
 
     /**
      * @var string
@@ -72,7 +73,7 @@ class ComparisonExpression implements ExpressionInterface {
     static private function getValidOperators(){
         return array(
             self::OPERATOR_EQ, self::OPERATOR_NEQ, self::OPERATOR_GT, self::OPERATOR_GTE,
-            self::OPERATOR_LT, self::OPERATOR_LTE, self::OPERATOR_LIKE
+            self::OPERATOR_LT, self::OPERATOR_LTE, self::OPERATOR_LIKE, self::OPERATOR_IN
         );
     }
 }
