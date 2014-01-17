@@ -184,6 +184,9 @@ class ArrayDatasource extends AbstractDatasource
                 case ComparisonExpression::OPERATOR_LIKE:
                     $result = false !== strpos($value, $comparisonValue);
                     break;
+                case ComparisonExpression::OPERATOR_IN:
+                    $result = in_array($value, $comparisonValue);
+                    break;
                 default:
                     throw new \UnexpectedValueException(sprintf('Unknown operator "%s"', $operator));
                     break;
