@@ -2,8 +2,6 @@
 
 namespace Snowcap\AdminBundle\Datalist\Filter\Expression;
 
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
-
 class ComparisonExpression implements ExpressionInterface {
     const OPERATOR_EQ = 'eq';
     const OPERATOR_NEQ = 'neq';
@@ -12,6 +10,7 @@ class ComparisonExpression implements ExpressionInterface {
     const OPERATOR_LT = 'lt';
     const OPERATOR_LTE = 'lte';
     const OPERATOR_LIKE = 'like';
+    const OPERATOR_IN = 'in';
 
     /**
      * @var string
@@ -29,9 +28,10 @@ class ComparisonExpression implements ExpressionInterface {
     private $value;
 
     /**
-     * @param \Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface $filter
+     * @param string $propertyPath
      * @param string $operator
      * @param mixed $value
+     * @throws \InvalidArgumentException
      */
     public function __construct($propertyPath, $operator, $value) {
         if(!in_array($operator, self::getValidOperators())) {
@@ -73,7 +73,7 @@ class ComparisonExpression implements ExpressionInterface {
     static private function getValidOperators(){
         return array(
             self::OPERATOR_EQ, self::OPERATOR_NEQ, self::OPERATOR_GT, self::OPERATOR_GTE,
-            self::OPERATOR_LT, self::OPERATOR_LTE, self::OPERATOR_LIKE
+            self::OPERATOR_LT, self::OPERATOR_LTE, self::OPERATOR_LIKE, self::OPERATOR_IN
         );
     }
 }

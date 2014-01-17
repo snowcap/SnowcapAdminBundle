@@ -19,7 +19,7 @@ class EntityFilterType extends AbstractFilterType
         parent::setDefaultOptions($resolver);
 
         $resolver
-            ->setDefaults(array('query_builder' => null))
+            ->setDefaults(array('query_builder' => null, 'multiple' => false))
             ->setRequired(array('class'))
             ->setOptional(array('property', 'empty_value', 'group_by'));
     }
@@ -35,7 +35,8 @@ class EntityFilterType extends AbstractFilterType
             'class' => $options['class'],
             'label' => $options['label'],
             'query_builder' => $options['query_builder'],
-            'required' => false
+            'required' => false,
+            'multiple' => $options['multiple']
         );
         if(isset($options['property'])) {
             $formOptions['property'] = $options['property'];
@@ -58,7 +59,8 @@ class EntityFilterType extends AbstractFilterType
      */
     public function buildExpression(DatalistFilterExpressionBuilder $builder, DatalistFilterInterface $filter, $value, array $options)
     {
-        $builder->add(new ComparisonExpression($filter->getPropertyPath(), ComparisonExpression::OPERATOR_EQ, $value));
+        $operator = true === $options['multiple'] ? ComparisonExpression::OPERATOR_IN : ComparisonExpression::OPERATOR_EQ;
+        $builder->add(new ComparisonExpression($filter->getPropertyPath(), $operator, $value));
     }
 
     /**
