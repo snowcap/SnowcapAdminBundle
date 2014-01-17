@@ -169,6 +169,9 @@ class DoctrineORMDatasource extends AbstractDatasource
                 $expr = $this->queryBuilder->expr()->like($propertyPath, $placeholder);
                 $comparisonValue = '%' . $comparisonValue . '%';
                 break;
+            case ComparisonExpression::OPERATOR_IN:
+                $expr = $this->queryBuilder->expr()->in($propertyPath, $placeholder);
+                break;
             default:
                 throw new \UnexpectedValueException(sprintf('Unknown operator "%s"', $operator));
                 break;
