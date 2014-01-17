@@ -50,7 +50,7 @@ abstract class AbstractDatasource implements DatasourceInterface
 
     /**
      * @param int $limitPerPage
-     * @param int $limitRange
+     * @param int $rangeLimit
      *
      * @return DatasourceInterface
      */
@@ -64,6 +64,8 @@ abstract class AbstractDatasource implements DatasourceInterface
 
     /**
      * @param int $page
+     *
+     * @return DatasourceInterface
      */
     public function setPage($page)
     {

@@ -2,7 +2,7 @@
 
 namespace Snowcap\AdminBundle\Datalist\Datasource;
 
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Snowcap\CoreBundle\Paginator\ArrayPaginator;
 use Snowcap\AdminBundle\Datalist\Filter\Expression\ExpressionInterface;
@@ -157,8 +157,8 @@ class ArrayDatasource extends AbstractDatasource
     private function buildComparisonExpressionCallback(ComparisonExpression $expression)
     {
         $function = function($item) use($expression) {
-            $propertyPath = new PropertyPath($expression->getPropertyPath());
-            $value = $propertyPath->getValue($item);
+            $accessor = PropertyAccess::createPropertyAccessor();
+            $value = $accessor->getValue($item, $expression->getPropertyPath());
             $comparisonValue = $expression->getValue();
             $operator = $expression->getOperator();
 
