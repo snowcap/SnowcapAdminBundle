@@ -48,17 +48,22 @@ class MultiUploadSubscriber implements EventSubscriberInterface
 
         if (is_callable($this->dstDir)) {
             $dstDir = call_user_func($this->dstDir, $event->getForm()->getParent()->getData());
+        } else {
+            $dstDir = $this->dstDir;
         }
 
         if (!empty($data)) {
             foreach ($data as $key => $path) {
-                $filename = $this->rootDir . '/../web/' . $path;
+                $filename = $this->rootDir . '/../web/' . ltrim($path, '/');
 
-                if (!file_exists($filename)) {
+                if (file_exists($filename)) {
                     $file = new File($filename);
-                    $file->move($this->rootDir . '/../web/' . $dstDir);
+                    $file->move($this->rootDir . '/../web/' . ltrim($dstDir, '/'));
                     // modify the form data with the new path
                     $data[$key] = rtrim($dstDir, '/') . '/' . basename($path);
+                } else {
+                    // TODO : check if we need to throw an exception here
+                    unset($data[$key]);
                 }
             }
 
