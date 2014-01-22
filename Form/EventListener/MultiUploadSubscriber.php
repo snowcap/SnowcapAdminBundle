@@ -48,17 +48,29 @@ class MultiUploadSubscriber implements EventSubscriberInterface
 
         if (is_callable($this->dstDir)) {
             $dstDir = call_user_func($this->dstDir, $event->getForm()->getParent()->getData());
+        } else {
+            $dstDir = $this->dstDir;
         }
 
         if (!empty($data)) {
             foreach ($data as $key => $path) {
-                $filename = $this->rootDir . '/../web/' . $path;
-
-                if (!file_exists($filename)) {
-                    $file = new File($filename);
-                    $file->move($this->rootDir . '/../web/' . $dstDir);
+                // First check if the file is still in tmp directory
+                $originalFilename = $this->rootDir . '/../web/' . trim($path, '/');
+                $destinationFilename = $this->rootDir . '/../web/' . trim($dstDir, '/') . '/' . basename($path);
+                $webPath = rtrim($dstDir, '/') . '/' . basename($path);
+                if (file_exists($originalFilename)) { // if it does, then move it to the destination and update the data
+                    $file = new File($originalFilename);
+                    $file->move(dirname($destinationFilename));
                     // modify the form data with the new path
-                    $data[$key] = rtrim($dstDir, '/') . '/' . basename($path);
+                    $data[$key] = $webPath;
+                } else { // otherwise check if it is already on the destination
+                    if (file_exists($destinationFilename)) { // if it does, simply modify the form data with the new path
+                        // modify the form data with the new path
+                        $data[$key] = $webPath;
+                    } else {
+                        // TODO :  check if we need to throw an exception here
+                        unset($data[$key]);
+                    }
                 }
             }
 
