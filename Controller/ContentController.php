@@ -197,7 +197,7 @@ class ContentController extends BaseController
 
                 return new JsonResponse(array(
                     'result' => $result,
-                    'flashes' => $this->buildEntityFlash('success', 'content.update.flash.success', $admin, $entity)
+                    'flashes' => $this->buildModalEntityFlash('success', 'content.update.flash.success', $admin, $entity)
                 ), 201);
             }
             catch(\Exception $e) {
@@ -409,13 +409,12 @@ class ContentController extends BaseController
             $type => array($this->get('translator')->trans(
                 $message,
                 array(
-                    '%type%' => $this->get('translator')->transChoice(
-                        $admin->getOption('label'), 1, array(), $this->get('snowcap_admin')->getDefaultTranslationDomain()
-                    ),
-                    '%name%' => $admin->getEntityName($entity))
+                '%type%' => $this->get('translator')->transChoice(
+                    $admin->getOption('label'), 1, array(), $this->get('snowcap_admin')->getDefaultTranslationDomain()
                 ),
+                '%name%' => $admin->getEntityName($entity)),
                 $domain
-            )
+            ))
         );
     }
 
