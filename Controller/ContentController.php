@@ -157,7 +157,11 @@ class ContentController extends BaseController
                 return $this->redirect($redirectUrl);
             }
             catch(\Exception $e) {
-                $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
+                if (true === $this->get('kernel')->isDebug()) {
+                    $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+                } else {
+                    $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
+                }
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -202,7 +206,11 @@ class ContentController extends BaseController
             }
             catch(\Exception $e) {
                 $status = 400;
-                $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
+                if (true === $this->get('kernel')->isDebug()) {
+                    $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+                } else {
+                    $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
+                }
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -261,7 +269,11 @@ class ContentController extends BaseController
 
             } catch (\Exception $e) {
                 $status = 400;
-                $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
+                if (true === $this->get('kernel')->isDebug()) {
+                    $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+                } else {
+                    $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
+                }
                 $this->get('logger')->addError($e->getMessage());
             }
         }
@@ -293,7 +305,11 @@ class ContentController extends BaseController
                 $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
 
             } catch(\Exception $e) {
-                $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
+                if (true === $this->get('kernel')->isDebug()) {
+                    $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+                } else {
+                    $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
+                }
                 $this->get('logger')->addError($e->getMessage());
             }
 
