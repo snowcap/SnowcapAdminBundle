@@ -23,7 +23,7 @@
         <h4>{{ "content.delete.body.subtitle"|trans }}</h4>
         <p>{{ "content.delete.body.message"|trans }}</p>
     </div>
-    <p>{{ "content.delete.body.content"|trans({'%content%': admin.entityName(entity)})|raw }}</p>
+    {{ "content.delete.body.content"|trans({'%content%': admin.entityName(entity)})|raw }}
 
 {% endblock modal_body %}
 

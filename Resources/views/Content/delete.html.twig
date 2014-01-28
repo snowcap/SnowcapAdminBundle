@@ -1,0 +1,56 @@
+{% extends 'SnowcapAdminBundle::base.html.twig' %}
+
+{% trans_default_domain 'SnowcapAdminBundle' %}
+
+{# body block #}
+{% block body %}
+
+    {# pageheader block - to be provided by child templates  #}
+    {% block page_header %}
+        <div class="page-header">
+            <h1>{{ "content.delete.title"|trans }}</h1>
+        </div>
+    {% endblock page_header %}
+
+    {# form_before block - to be provided by child templates  #}
+    {% block form_before %}{% endblock form_before %}
+
+    {# main block #}
+    {% block form %}
+
+        <form
+                method="post"
+                action="{{ admin_content_path(admin, 'delete', { 'id': entity.id }) }}"
+                novalidate="novalidate"
+                data-admin="form-manager"
+                >
+
+            {% block message %}
+                <div class="alert alert-danger alert-block">
+                    <h4>{{ "content.delete.body.subtitle"|trans }}</h4>
+                    <p>{{ "content.delete.body.message"|trans }}</p>
+                </div>
+                {{ "content.delete.body.content"|trans({'%content%': admin.entityName(entity)})|raw }}
+            {% endblock message %}
+
+            {# formactions block #}
+            {% block form_actions %}
+                <div class="form-actions">
+                    <button type="submit" name="saveMode" class="btn btn-danger">
+                        <i class="icon-trash icon-white"></i>
+                        {{ "content.delete.confirm"|trans }}
+                    </button>
+                    <a href="{{ admin_content_path(admin, 'index') }}" class="btn">
+                        <i class="icon-arrow-left"></i>
+                        {{ "content.delete.cancel"|trans }}
+                    </a>
+                </div>
+            {% endblock form_actions %}
+
+        </form>
+    {% endblock form %}
+
+    {# postform block - to be provided by child templates  #}
+    {% block form_after %}{% endblock form_after %}
+
+{% endblock body %}

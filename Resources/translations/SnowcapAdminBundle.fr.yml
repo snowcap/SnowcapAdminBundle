@@ -31,7 +31,7 @@ content:
             message: Cette opération détruira les données de façon permanente.
             content: |
                 <p>Cette action supprimera définitivement le contenu suivant :</p>
-                <p class="text-center"><strong>%content%</strong></p>
+                <p><strong>%content%</strong></p>
                 <p>Assurez-vous que ce contenu n'est plus utilisé avant de l'effacer.</p>
         cancel: Annuler
         confirm: Supprimer

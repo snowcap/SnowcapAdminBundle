@@ -31,7 +31,7 @@ content:
             message: This operation will destruct the data permanently.
             content: |
                 <p>You are about to permanently delete the following entry:</p>
-                <p class="text-center"><strong>%content%</strong></p>
+                <p><strong>%content%</strong></p>
                 <p>Please make sure you don't need it anymore.</p>
         cancel: Cancel
         confirm: Delete
