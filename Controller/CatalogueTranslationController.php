@@ -1,10 +1,7 @@
 <?php
 namespace Snowcap\AdminBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Snowcap\AdminBundle\AdminManager;
-use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Yaml\Yaml;
 
@@ -13,14 +10,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class CatalogueTranslationController extends BaseController
 {
+    private $alerts = array();
+
     /**
      * @Template()
      */
     public function indexAction($catalogue, $locale)
     {
-        /** @var $admin AdminManager */
-        $admin = $this->get('snowcap_admin');
-
         $yaml = new Yaml();
 
         $activeLocale = $this->getRequest()->get('activeCatalogueLocale');
@@ -92,6 +88,7 @@ class CatalogueTranslationController extends BaseController
             'catalogues' => $catalogues,
             'fallbackCatalogue' => $fallbackCatalogue,
             'locales' => $locales,
+            'alerts' => $this->alerts
         );
     }
 
@@ -129,7 +126,7 @@ class CatalogueTranslationController extends BaseController
     {
         $diff = array();
         foreach ($a as $keyA => $valueA) {
-            if ($valueA !== $b[$keyA]) {
+            if (isset($b[$keyA]) && $valueA !== $b[$keyA]) {
                 if (is_array($valueA)) {
                     $sub = $this->compare($valueA, $b[$keyA]);
                     if (count($sub) > 0) {
@@ -157,10 +154,18 @@ class CatalogueTranslationController extends BaseController
         foreach ($arrays as $array) {
             reset($base);
             while (list($key, $value) = @each($array)) {
-                if (is_array($value) && @is_array($base[$key])) {
-                    $base[$key] = $this->merge($base[$key], $value);
-                } else {
-                    $base[$key] = $value;
+                if(isset($base[$key])) {
+                    if (is_array($value) && @is_array($base[$key])) {
+                        $base[$key] = $this->merge($base[$key], $value);
+                    } else if (is_string($value) && is_string($base[$key])) {
+                        $base[$key] = $value;
+                    }
+                    else {
+                        $this->alerts['type_change'][$key] = $value;
+                    }
+                }
+                else {
+                    $this->alerts['removed'][$key] = $value;
                 }
             }
         }
