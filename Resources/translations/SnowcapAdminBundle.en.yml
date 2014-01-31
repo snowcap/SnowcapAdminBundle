@@ -95,6 +95,9 @@ cataloguetranslation:
     submit: Update
     success: Your content has been updated.
     novalues: No translation keys have been defined for this language yet.
+    alert:
+        type_change: Some content is about to change:
+        removed: Some content is about to be removed:
     help:
         button: Help
         title: Help

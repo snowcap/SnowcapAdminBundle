@@ -95,6 +95,9 @@ cataloguetranslation:
     submit: Sauvegarder
     success: Le contenu a bien été mis à jour.
     novalues: Aucune clé de traduction n'a encore été définie pour cette langue.
+    alert:
+        type_change: Certains contenus vont être modifiés :
+        removed: Certains contenus vont être supprimés :
     help:
         button: Aide
         title: Aide

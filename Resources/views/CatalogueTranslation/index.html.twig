@@ -23,11 +23,27 @@
 {% extends "SnowcapAdminBundle::base.html.twig" %}
 {% block body %}
 
-<a data-toggle="modal" href="#catalog-translation-help-modal" class="btn btn-info pull-right"><i class="icon-question-sign icon-white"></i>&nbsp;{{ 'cataloguetranslation.help.button' | trans({}, 'SnowcapAdminBundle') }}</a>
+    <a data-toggle="modal" href="#catalog-translation-help-modal" class="btn btn-info pull-right"><i class="icon-question-sign icon-white"></i>&nbsp;{{ 'cataloguetranslation.help.button' | trans({}, 'SnowcapAdminBundle') }}</a>
 
-<div class="page-header">
-        <h2>{{ 'cataloguetranslation.title' | trans({}, 'SnowcapAdminBundle') }}</h2>
+    <div class="page-header">
+        <h2>{{ 'cataloguetranslation.title'|trans({}, 'SnowcapAdminBundle') }}</h2>
     </div>
+
+    {% if alerts|length > 0 %}
+        <div class="alert alert-block alert-warning">
+            {% from _self import translation_alert %}
+
+            {% for type, messages in alerts %}
+                <h4>{{ ('cataloguetranslation.alert.' ~ type)|trans({}, 'SnowcapAdminBundle') }}</h4>
+
+                <ul>
+                    {% for key, alert in messages %}
+                        {{ translation_alert(key, alert) }}
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="row">
         <div class="span3">
@@ -97,3 +113,18 @@
     </div>
 
 {% endblock %}
+
+{% macro translation_alert(key, data) %}
+    {% if data is iterable %}
+        <li>
+            {{ key }}
+            <ul>
+                {% for kAlert, alert in data %}
+                    {{ _self.translation_alert(kAlert, alert) }}
+                {% endfor %}
+            </ul>
+        </li>
+    {% else %}
+        <li><strong>{{ key }}</strong> => {{ data }}</li>
+    {% endif %}
+{% endmacro %}

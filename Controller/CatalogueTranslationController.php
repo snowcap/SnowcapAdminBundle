@@ -10,6 +10,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class CatalogueTranslationController extends BaseController
 {
+    private $alerts = array();
+
     /**
      * @Template()
      */
@@ -86,6 +88,7 @@ class CatalogueTranslationController extends BaseController
             'catalogues' => $catalogues,
             'fallbackCatalogue' => $fallbackCatalogue,
             'locales' => $locales,
+            'alerts' => $this->alerts
         );
     }
 
@@ -157,6 +160,12 @@ class CatalogueTranslationController extends BaseController
                     } else if (is_string($value) && is_string($base[$key])) {
                         $base[$key] = $value;
                     }
+                    else {
+                        $this->alerts['type_change'][$key] = $value;
+                    }
+                }
+                else {
+                    $this->alerts['removed'][$key] = $value;
                 }
             }
         }
