@@ -179,15 +179,25 @@
     {{ block('simple_filter') }}
 {% endblock choice_filter %}
 
-{# search filter #}
-{% block search_filter %}
-    {{ block('simple_filter') }}
-{% endblock search_filter %}
-
 {# entity filter #}
 {% block entity_filter %}
     {{ block('simple_filter') }}
 {% endblock entity_filter %}
+
+{# search filter #}
+{% block search_filter %}
+    {% if not datalist.option('filters_on_top') %}
+        <div class="control-group">
+            {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
+            <div class="controls">
+                {{ form_widget(form) }}
+            </div>
+        </div>
+    {% else %}
+        {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
+        {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
+    {% endif %}
+{% endblock search_filter %}
 
 {# entity filter #}
 {% block simple_filter %}
