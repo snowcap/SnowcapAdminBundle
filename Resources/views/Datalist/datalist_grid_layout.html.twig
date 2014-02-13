@@ -150,7 +150,7 @@
 
 {# datalist search #}
 {% block datalist_search %}
-    <form class="form-search" method="get" novalidate>
+    <form class="form-search" method="get" data-admin="form-manager" novalidate>
         <div class="input-append">
             {{ form_widget(form.search, {'attr': {'placeholder': (placeholder|trans({}, translation_domain))|default('datalist.search.placeholder'|trans({}, "SnowcapAdminBundle")), 'class': 'input-xxlarge search-query'}}) }}
             <div class="add-on with-btn">
@@ -163,7 +163,7 @@
 {# datalist filters #}
 {% block datalist_filters %}
     {% set form_class = datalist.option('filters_on_top') ? 'form-inline' : 'form-vertical' %}
-    <form class="{{ form_class }}" method="get" novalidate>
+    <form class="{{ form_class }}" method="get" data-admin="form-manager" novalidate>
         <div class="control-group">
             {% for filter in filters %}
                 {{ datalist_filter(filter) }}{% if datalist.option('filters_on_top') %}&nbsp;{% endif %}
@@ -176,27 +176,33 @@
 
 {# choice filter #}
 {% block choice_filter %}
-    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
-        {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
-        {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
+    {{ block('simple_filter') }}
 {% endblock choice_filter %}
 
 {# search filter #}
 {% block search_filter %}
-    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
-        {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
-        {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
+    {{ block('simple_filter') }}
 {% endblock search_filter %}
 
 {# entity filter #}
 {% block entity_filter %}
-    {% if not datalist.option('filters_on_top') %}<div class="control-group">{% endif %}
+    {{ block('simple_filter') }}
+{% endblock entity_filter %}
+
+{# entity filter #}
+{% block simple_filter %}
+    {% if not datalist.option('filters_on_top') %}
+        <div class="control-group">
+            {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
+            <div class="controls">
+                {{ form_widget(form, {'attr': {'class': 'input-block-level'}}) }}
+            </div>
+        </div>
+    {% else %}
         {{ form_label(form, null, {'label_attr': {'class': 'control-label'}}) }}
         {{ form_widget(form, {'attr': {'class': 'input-medium'}}) }}
-    {% if not datalist.option('filters_on_top') %}</div>{% endif %}
-{% endblock entity_filter %}
+    {% endif %}
+{% endblock simple_filter %}
 
 {# simple action #}
 {% block simple_action %}
