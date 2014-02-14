@@ -21,7 +21,7 @@ class EntityFilterType extends AbstractFilterType
         $resolver
             ->setDefaults(array('query_builder' => null, 'multiple' => false))
             ->setRequired(array('class'))
-            ->setOptional(array('property', 'empty_value', 'group_by', 'attr'));
+            ->setOptional(array('choices', 'property', 'empty_value', 'group_by', 'attr'));
     }
 
     /**
@@ -38,6 +38,9 @@ class EntityFilterType extends AbstractFilterType
             'required' => false,
             'multiple' => $options['multiple']
         );
+        if(isset($options['choices'])) {
+            $formOptions['choices'] = $options['choices'];
+        }
         if(isset($options['property'])) {
             $formOptions['property'] = $options['property'];
         }
