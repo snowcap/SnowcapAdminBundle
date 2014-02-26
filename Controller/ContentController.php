@@ -3,6 +3,7 @@
 namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\AdminInterface;
+use Snowcap\AdminBundle\Exception\ValidationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,7 +78,7 @@ class ContentController extends BaseController
 
                 return $this->redirect($redirectUrl);
             }
-            catch(\Exception $e) {
+            catch(ValidationException $e) {
                 $this->buildEntityFlash('error', 'content.create.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
             }
@@ -113,7 +114,7 @@ class ContentController extends BaseController
 
                 return new JsonResponse(array('result' => $result), 201);
             }
-            catch(\Exception $e) {
+            catch(ValidationException $e) {
                 $status = 400;
                 $this->buildEntityFlash('error', 'content.create.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
@@ -156,7 +157,7 @@ class ContentController extends BaseController
 
                 return $this->redirect($redirectUrl);
             }
-            catch(\Exception $e) {
+            catch(ValidationException $e) {
                 $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
             }
@@ -200,7 +201,7 @@ class ContentController extends BaseController
                     'flashes' => $this->buildEntityFlash('success', 'content.update.flash.success', $admin, $entity)
                 ), 201);
             }
-            catch(\Exception $e) {
+            catch(ValidationException $e) {
                 $status = 400;
                 $this->buildEntityFlash('error', 'content.update.flash.error', $admin, $entity);
                 $this->get('logger')->addError($e->getMessage());
@@ -346,7 +347,7 @@ class ContentController extends BaseController
         if ($form->isValid()) {
             $admin->saveEntity($entity);
         } else {
-            throw new \Exception('could not save');
+            throw new ValidationException('could not save');
         }
     }
 
