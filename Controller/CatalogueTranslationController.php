@@ -195,7 +195,7 @@ class CatalogueTranslationController extends BaseController
         return $this->getKernel()->getRootDir() . '/Resources/translations/' . $catalogue . '.' . $locale . '.yml';
     }
 
-    private function clearTranslationsCache()
+    protected function clearTranslationsCache()
     {
         $cachedir = $this->getKernel()->getCacheDir() . '/translations';
         /** @var $filesystem \Symfony\Component\Filesystem\Filesystem */
@@ -206,7 +206,7 @@ class CatalogueTranslationController extends BaseController
     /**
      * @return \Symfony\Component\HttpKernel\Kernel;
      */
-    private function getKernel()
+    protected function getKernel()
     {
         return $this->get('kernel');
     }
