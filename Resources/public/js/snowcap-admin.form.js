@@ -392,7 +392,8 @@ SnowcapAdmin.Form = (function ($) {
                     break;
                 case 'snowcap_admin_multiupload_image':
                     $file.find('img').attr('src', function () {
-                        return this.src + url;
+                        var src = this.src.split('?'); // managing basic asset versions
+                        return src[0] + url + (src[1] ?  '?' + src[1] : '');
                     });
                     break;
             }
