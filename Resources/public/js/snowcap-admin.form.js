@@ -654,11 +654,15 @@ SnowcapAdmin.Form = (function ($) {
             $('a:not([href^=#])').not('[data-admin]').on('click', _.bind(this.onExternalLinkClick, this));
         },
         addErrorClasses: function() {
-            this.$('form .tab-pane:has(.error)').each(function() {
-                $('a[href="#' + $(this).attr('id') + '"]').addClass('error');
-            });
+            // Look for errors in fieldsets
             this.$('fieldset').has('.error').each(function() {
+                // Add error mode on fieldset legend
                 $('legend', $(this)).first().addClass('error');
+            });
+            // Look for errors in tab-panes
+            this.$('.tab-pane').has('.error').each(function () {
+                // Add error mode on tabs (locale for instance)
+                $('a[href=#' + $(this).attr('id') + ']').parent().addClass('error');
             });
         },
         onExternalLinkClick: function(event) {
