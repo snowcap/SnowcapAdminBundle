@@ -267,13 +267,19 @@ class ContentController extends BaseController
             }
         }
 
-        $content = $this->renderView(
-            'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
-            array(
-                'admin' => $admin,
-                'entity' => $entity,
-            )
-        );
+        if (null === $entity) {
+            $content = $this->renderView(
+                'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalError.html.twig'
+            );
+        } else {
+            $content = $this->renderView(
+                'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
+                array(
+                    'admin' => $admin,
+                    'entity' => $entity,
+                )
+            );
+        }
 
         return new JsonResponse(array('content' => $content), $status);
     }
@@ -288,6 +294,10 @@ class ContentController extends BaseController
      */
     public function delete(Request $request, ContentAdmin $admin, $entity)
     {
+        if ($entity === null) {
+            return $this->renderError('error.content.notfound', 404);
+        }
+
         if($request->isMethod('post')) {
             try {
                 $admin->deleteEntity($entity);

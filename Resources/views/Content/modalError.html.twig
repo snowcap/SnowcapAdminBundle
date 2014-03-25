@@ -1,0 +1,22 @@
+{% extends 'SnowcapAdminBundle::modal_base.html.twig' %}
+
+{% trans_default_domain 'SnowcapAdminBundle' %}
+
+{# modal_title block #}
+{% block modal_title %}
+    <h3>{{ (title|default('content.error.title'))|trans }}</h3>
+{% endblock modal_title %}
+
+{# body block #}
+{% block modal_body %}
+    <div class="alert alert-danger alert-block">
+        <p>{{ (message|default('content.error.message'))|trans }}</p>
+    </div>
+{% endblock modal_body %}
+
+{# modal_footer block #}
+{% block modal_footer %}
+    <button type="button" data-dismiss="modal" class="btn btn-primary">
+        {{ "content.error.close"|trans }}
+    </button>
+{% endblock modal_footer %}
