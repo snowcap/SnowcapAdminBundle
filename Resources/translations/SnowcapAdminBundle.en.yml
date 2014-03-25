@@ -39,6 +39,10 @@ content:
             success: Your content "%name%" of type "%type%" has been deleted.
             error: Your content cannot be deleted
             error_has_children: You cannot delete content with children
+    error:
+        title: An error has occured
+        message: The content you try to update or delete does not exist.
+        close: Close
     actions:
         header: Actions
         create: New

@@ -39,6 +39,10 @@ content:
             success: Le contenu "%name%" de type "%type%" a bien été supprimé.
             error: Le contenu n'a pas pu être supprimé
             error_has_children: Impossible de supprimer un contenu lié à d'autres éléments
+    error:
+        title: Une erreur est survenue
+        message: Le contenu que vous tentez de modifier ou supprimer n'existe pas.
+        close: Fermer
     actions:
         header: Actions
         create: Nouveau
