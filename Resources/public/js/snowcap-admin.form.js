@@ -43,9 +43,6 @@ SnowcapAdmin.Form = (function ($) {
             else {
                 this.fadeAndRemoveItem($collectionItem);
             }
-
-            this.trigger('form:collection:remove');
-            this.$form.trigger('change');
         },
         /**
          * Fade and remove a collection item
@@ -53,9 +50,11 @@ SnowcapAdmin.Form = (function ($) {
          * @param $item
          */
         fadeAndRemoveItem: function ($item) {
-            $item.fadeOut(function () {
+            $item.fadeOut(_.bind(function () {
                 $item.remove();
-            });
+                this.trigger('form:collection:remove');
+                this.$form.trigger('change');
+            }, this));
         }
     });
 
@@ -143,7 +142,7 @@ SnowcapAdmin.Form = (function ($) {
      * Used to handle snowcap_admin_autocomplete form type
      *
      */
-    var Autocomplete = TextAutocomplete.extend({
+        var Autocomplete = TextAutocomplete.extend({
         $textInput: null,
         listUrl: null,
         mode: null,
