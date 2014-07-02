@@ -11,8 +11,8 @@
                     {{ datalist_filters(datalist) }}
                 {% endif %}
             </div>
-            {{ block('datalist_table') }}
         {% endif %}
+        {{ block('datalist_table') }}
     {% else %}
         {% if datalist.searchable %}
             {{ datalist_search(datalist) }}
