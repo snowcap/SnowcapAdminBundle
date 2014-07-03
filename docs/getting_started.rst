@@ -90,7 +90,7 @@ Step 3: Create your Admin Bundle
 
 In order to be able to use the Snowcap Admin Bundle, you need to create your own Admin Bundle in your project.
 
-.. code-block::
+.. code-block:: bash
 
     php ./app/console generate:bundle
 

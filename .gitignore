@@ -6,3 +6,8 @@ composer.lock
 composer.phar
 autoload.php
 /vendor
+
+#docs
+docs/Makefile
+docs/*.py
+docs/_*
