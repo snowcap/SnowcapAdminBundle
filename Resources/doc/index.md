@@ -176,6 +176,7 @@ security:
 
         admin:
             pattern:    ^/admin
+            provider: admin_users
             anonymous: ~
             form_login:
                 login_path:  snowcap_admin_login
