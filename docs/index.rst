@@ -10,8 +10,8 @@ Contents
 --------
 
 .. toctree::
-:maxdepth: 2
+   :maxdepth: 2
 
-       getting_started
-       datalist
-       form_types
+   getting_started
+   datalist
+   form_types
