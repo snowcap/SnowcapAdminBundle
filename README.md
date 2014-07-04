@@ -22,15 +22,12 @@ you should probably look at [SonataAdminBundle](https://github.com/sonata-projec
 Documentation
 -------------
 
-The bulk of the documentation is stored in the `Resources/doc/index.md`
-file in this bundle:
-
-[Read the Documentation for master](https://github.com/snowcap/SnowcapAdminBundle/blob/master/Resources/doc/index.md)
+[Read the Documentation for master](http://docs.snowcap.be/admin-bundle/)
 
 Installation
 ------------
 
-All the installation instructions are located in [documentation](https://github.com/snowcap/SnowcapAdminBundle/blob/master/Resources/doc/index.md).
+All the installation instructions are located in [documentation](http://docs.snowcap.be/admin-bundle/).
 
 License
 -------
