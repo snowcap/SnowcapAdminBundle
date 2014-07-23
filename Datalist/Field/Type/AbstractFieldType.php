@@ -18,6 +18,8 @@ abstract class AbstractFieldType implements FieldTypeInterface
                 'property_path' => null,
                 'default' => null,
                 'escape' => true,
+                'sortable' => false,
+                'sort_property_path' => null
             ))
             ->setOptional(array('callback', 'order'))
             ->setAllowedTypes(array('callback' => 'callable'));

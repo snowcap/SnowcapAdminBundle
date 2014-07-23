@@ -30,6 +30,8 @@ class ContentController extends BaseController
         $this->secure($admin, 'ADMIN_CONTENT_LIST');
 
         $datalist = $admin->getDatalist();
+        $datalist->setRoute($request->attributes->get('_route'))
+            ->setRouteParams($request->query->all());
         $datasource = new DoctrineORMDatasource($admin->getQueryBuilder());
         $datalist->setDatasource($datasource);
         $datalist->bind($request);

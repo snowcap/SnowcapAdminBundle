@@ -10,7 +10,6 @@ use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
-use Snowcap\AdminBundle\Datalist\Filter\Expression\ComparisonExpression;
 
 class Datalist implements DatalistInterface, \Countable
 {
@@ -85,8 +84,17 @@ class Datalist implements DatalistInterface, \Countable
     private $initialized = false;
 
     /**
-     * @param string $code
-     * @param array $options
+     * @var string
+     */
+    private $route;
+
+    /**
+     * @var array
+     */
+    private $routeParams = array();
+
+    /**
+     * @param DatalistConfig $config
      */
     public function __construct(DatalistConfig $config)
     {
@@ -136,6 +144,22 @@ class Datalist implements DatalistInterface, \Countable
         }
 
         return $this->sortedFields;
+    }
+
+    /**
+     * @param $name
+     * @return null|Field\DatalistField
+     */
+    protected function getField($name)
+    {
+        foreach ($this->fields as $field) {
+            /** @var \Snowcap\AdminBundle\Datalist\Field\DatalistField $field */
+            if ($name === $field->getName()) {
+                return $field;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -194,6 +218,7 @@ class Datalist implements DatalistInterface, \Countable
 
     /**
      * @param DatasourceInterface $datasource
+     * @return DatalistInterface
      */
     public function setDatasource($datasource)
     {
@@ -373,6 +398,41 @@ class Datalist implements DatalistInterface, \Countable
     }
 
     /**
+     * @param array $routeParams
+     * @return DatalistInterface
+     */
+    public function setRouteParams($routeParams)
+    {
+        $this->routeParams = $routeParams;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRouteParams()
+    {
+        return $this->routeParams;
+    }
+
+    /**
+     * @param string $route
+     * @return DatalistInterface
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    /**
      * This method populates the iterator property
      *
      */
@@ -413,6 +473,20 @@ class Datalist implements DatalistInterface, \Countable
                 $filter->getType()->buildExpression($expressionBuilder, $filter, $filterValue, $filter->getOptions());
             }
             $this->datasource->setFilterExpression($expressionBuilder->getExpression());
+        }
+
+        // Handle sort
+        if (isset($this->routeParams['sort-field']) && isset($this->routeParams['sort-direction'])) {
+            $field = $this->getField($this->routeParams['sort-field']);
+
+            if (null !== $field && true === $field->getOption('sortable')) {
+                $propertyPath = $field->getOption('sort_property_path');
+                if (empty($propertyPath)) {
+                    throw new \Exception('The "sort_property_path" option must be set on datalist field when option "sortable" is true.');
+                }
+
+                $this->datasource->setSort($propertyPath, $this->routeParams['sort-direction']);
+            }
         }
 
         $this->iterator = $this->datasource->getIterator();
