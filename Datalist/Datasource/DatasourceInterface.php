@@ -35,4 +35,11 @@ interface DatasourceInterface extends \IteratorAggregate, \Countable
      * @return \Snowcap\CoreBundle\Paginator\PaginatorInterface
      */
     public function getPaginator();
+
+    /**
+     * @param string $field
+     * @param string $direction
+     * @throws \InvalidArgumentException
+     */
+    public function setSort($field, $direction);
 }

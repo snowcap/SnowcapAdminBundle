@@ -45,7 +45,37 @@
         <thead>
         <tr>
             {% for field in datalist.fields %}
-                <th>{{ field.options['label']|trans({}, translation_domain) }}</th>
+                <th>
+                    {% if field.options['sortable'] %}
+                        {% set active_sort_field = datalist.datasource.sortField %}
+                        {% set active_sort_direction = datalist.datasource.sortDirection %}
+
+                        {% if active_sort_field == field.options['sort_property_path'] %}
+                            {% set is_active = true %}
+
+                            {% if active_sort_direction == 'asc' %}
+                                {% set icon = 'up' %}
+                                {% set direction = 'desc' %}
+                            {% else %}
+                                {% set icon = 'down' %}
+                                {% set direction = 'asc' %}
+                            {% endif %}
+                        {% else %}
+                            {% set is_active = false %}
+                            {% set icon = 'up' %}
+                            {% set direction = 'asc' %}
+                        {% endif %}
+
+                        {% set route_params = datalist.routeParams|merge({ 'sort-field': field.name, 'sort-direction': direction }) %}
+
+                        <a href="{{ path(datalist.route, route_params) }}"{% if is_active %} class="text-success"{% endif %}>
+                            {{ field.options['label']|trans({}, translation_domain) }}
+                            <i class="icon-chevron-{{ icon }}"></i>
+                        </a>
+                    {% else %}
+                        {{ field.options['label']|trans({}, translation_domain) }}
+                    {% endif %}
+                </th>
             {% endfor %}
             {% if datalist.actions|length > 0 %}
                 <th class="actions">{{ "content.actions.header"|trans({}, 'SnowcapAdminBundle') }}</th>

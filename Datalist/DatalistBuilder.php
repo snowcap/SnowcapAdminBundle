@@ -42,8 +42,10 @@ class DatalistBuilder extends DatalistConfig
 
     /**
      * @param string $name
-     * @param DatalistFactory $factory
+     * @param Type\DatalistTypeInterface $type
      * @param array $options
+     * @param DatalistFactory $factory
+     * @param \Symfony\Component\Form\FormFactory $formFactory
      */
     public function __construct($name, DatalistTypeInterface $type, array $options, DatalistFactory $factory, FormFactory $formFactory)
     {

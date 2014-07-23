@@ -49,6 +49,16 @@ abstract class AbstractDatasource implements DatasourceInterface
     protected $paginator;
 
     /**
+     * @var string
+     */
+    protected $sortField;
+
+    /**
+     * @var string
+     */
+    protected $sortDirection;
+
+    /**
      * @param int $limitPerPage
      * @param int $rangeLimit
      *
@@ -88,6 +98,37 @@ abstract class AbstractDatasource implements DatasourceInterface
     public function setFilterExpression(ExpressionInterface $expression)
     {
         $this->filterExpression = $expression;
+    }
+
+    /**
+     * @param string $field
+     * @param string $direction
+     * @throws \InvalidArgumentException
+     */
+    public function setSort($field, $direction)
+    {
+        if (!in_array($direction, array('asc', 'desc'))) {
+            throw new \InvalidArgumentException('Datasource->setSort(): Argument "direction" must be "asc" or "desc".');
+        }
+
+        $this->sortField = $field;
+        $this->sortDirection = $direction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortDirection()
+    {
+        return $this->sortDirection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSortField()
+    {
+        return $this->sortField;
     }
 
     /**

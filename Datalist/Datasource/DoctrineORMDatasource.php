@@ -71,6 +71,16 @@ class DoctrineORMDatasource extends AbstractDatasource
             $this->queryBuilder->andWhere($queryBuilderExpression);
         }
 
+        // Handle sort
+        if (null !== $this->sortField && null !== $this->sortDirection) {
+            $oldOrderBys = $this->queryBuilder->getDQLPart('orderBy');
+            $this->queryBuilder->resetDQLPart('orderBy');
+            $this->queryBuilder->orderBy($this->sortField, $this->sortDirection);
+            foreach ($oldOrderBys as $oldOrderBy) {
+                $this->queryBuilder->add('orderBy', $oldOrderBy, true);
+            }
+        }
+
         // Handle pagination
         if(isset($this->limitPerPage)) {
             $paginator = new DoctrineORMPaginator($this->queryBuilder->getQuery());
