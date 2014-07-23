@@ -69,6 +69,8 @@ class ArrayDatasource extends AbstractDatasource
             $items = array_filter($items, $filterCallback);
         }
 
+        // @TODO Handle sort
+
         // Handle pagination
         if (isset($this->limitPerPage)) {
             $paginator = new ArrayPaginator($items);
