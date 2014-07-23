@@ -140,4 +140,26 @@ interface DatalistInterface extends \IteratorAggregate
      * @return DatalistInterface
      */
     public function bind($data);
+
+    /**
+     * @return string
+     */
+    public function getRoute();
+
+    /**
+     * @param string $route
+     * @return DatalistInterface
+     */
+    public function setRoute($route);
+
+    /**
+     * @return array
+     */
+    public function getRouteParams();
+
+    /**
+     * @param array $routeParams
+     * @return array
+     */
+    public function setRouteParams($routeParams);
 }
