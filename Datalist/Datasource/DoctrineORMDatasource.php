@@ -182,12 +182,20 @@ class DoctrineORMDatasource extends AbstractDatasource
             case ComparisonExpression::OPERATOR_IN:
                 $expr = $this->queryBuilder->expr()->in($propertyPath, $placeholder);
                 break;
+            case ComparisonExpression::OPERATOR_IS_NULL:
+                $expr = $this->queryBuilder->expr()->isNull($propertyPath);
+                break;
+            case ComparisonExpression::OPERATOR_IS_NOT_NULL:
+                $expr = $this->queryBuilder->expr()->isNotNull($propertyPath);
+                break;
             default:
                 throw new \UnexpectedValueException(sprintf('Unknown operator "%s"', $operator));
                 break;
         }
 
-        $this->queryBuilder->setParameter($placeholder, $comparisonValue);
+        if (!in_array($operator, array(ComparisonExpression::OPERATOR_IS_NULL, ComparisonExpression::OPERATOR_IS_NOT_NULL))) {
+            $this->queryBuilder->setParameter($placeholder, $comparisonValue);
+        }
 
         return $expr;
     }

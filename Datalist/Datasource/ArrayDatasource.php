@@ -189,6 +189,12 @@ class ArrayDatasource extends AbstractDatasource
                 case ComparisonExpression::OPERATOR_IN:
                     $result = in_array($value, $comparisonValue);
                     break;
+                case ComparisonExpression::OPERATOR_IS_NULL:
+                    $result = null === $value;
+                    break;
+                case ComparisonExpression::OPERATOR_IS_NOT_NULL:
+                    $result = null !== $value;
+                    break;
                 default:
                     throw new \UnexpectedValueException(sprintf('Unknown operator "%s"', $operator));
                     break;
