@@ -654,31 +654,37 @@ SnowcapAdmin.Form = (function ($) {
             $('a:not([href^=#])').not('[data-admin]').on('click', _.bind(this.onExternalLinkClick, this));
         },
         addErrorClasses: function() {
-            this.$('form .tab-pane:has(.error)').each(function() {
-                $('a[href="#' + $(this).attr('id') + '"]').addClass('error');
-            });
+            // Look for errors in fieldsets
             this.$('fieldset').has('.error').each(function() {
+                // Add error mode on fieldset legend
                 $('legend', $(this)).first().addClass('error');
+            });
+            // Look for errors in tab-panes
+            this.$('.tab-pane').has('.error').each(function () {
+                // Add error mode on tabs (locale for instance)
+                $('a[href=#' + $(this).attr('id') + ']').parent().addClass('error');
             });
         },
         onExternalLinkClick: function(event) {
-            if(this.hasChanged) {
-                event.preventDefault();
-                var modal = $('#modal');
-                $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
-                    modal.html(data);
-                    modal.find('.cancel').click(function(){
-                        modal.html('');
-                        modal.modal('hide');
+            if(!event.ctrlKey && !event.metaKey) {
+                if(this.hasChanged) {
+                    event.preventDefault();
+                    var modal = $('#modal');
+                    $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
+                        modal.html(data);
+                        modal.find('.cancel').click(function(){
+                            modal.html('');
+                            modal.modal('hide');
+                        });
+                        modal.find('.proceed').click(function(){
+                            window.location.href = $(event.currentTarget).attr('href');
+                        });
+                        modal.find('.save').click(function(){
+                            $('[data-admin=form-change-warning]').submit();
+                        });
+                        modal.modal('show');
                     });
-                    modal.find('.proceed').click(function(){
-                        window.location.href = $(event.currentTarget).attr('href');
-                    });
-                    modal.find('.save').click(function(){
-                        $('[data-admin=form-change-warning]').submit();
-                    });
-                    modal.modal('show');
-                });
+                }
             }
         }
     });
