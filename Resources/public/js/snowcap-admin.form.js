@@ -667,23 +667,25 @@ SnowcapAdmin.Form = (function ($) {
             });
         },
         onExternalLinkClick: function(event) {
-            if(this.hasChanged) {
-                event.preventDefault();
-                var modal = $('#modal');
-                $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
-                    modal.html(data);
-                    modal.find('.cancel').click(function(){
-                        modal.html('');
-                        modal.modal('hide');
+            if(!event.ctrlKey && !event.metaKey) {
+                if(this.hasChanged) {
+                    event.preventDefault();
+                    var modal = $('#modal');
+                    $.get(SNOWCAP_ADMIN_CONTENT_CHANGE_URL, function (data) {
+                        modal.html(data);
+                        modal.find('.cancel').click(function(){
+                            modal.html('');
+                            modal.modal('hide');
+                        });
+                        modal.find('.proceed').click(function(){
+                            window.location.href = $(event.currentTarget).attr('href');
+                        });
+                        modal.find('.save').click(function(){
+                            $('[data-admin=form-change-warning]').submit();
+                        });
+                        modal.modal('show');
                     });
-                    modal.find('.proceed').click(function(){
-                        window.location.href = $(event.currentTarget).attr('href');
-                    });
-                    modal.find('.save').click(function(){
-                        $('[data-admin=form-change-warning]').submit();
-                    });
-                    modal.modal('show');
-                });
+                }
             }
         }
     });
