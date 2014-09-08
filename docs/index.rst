@@ -15,3 +15,4 @@ Contents
    getting_started
    datalist
    form_types
+   customize

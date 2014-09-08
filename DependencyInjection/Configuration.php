@@ -41,6 +41,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('tmp_dir')->defaultValue('/uploads/tmp')->end()
                     ->end()
                 ->end()
+                ->scalarNode('default_locale')
+                    ->defaultValue(null)
+                ->end()
+                ->scalarNode('route_prefix')
+                    ->defaultValue('/admin')
+                ->end()
             ->end();
 
         return $treeBuilder;
