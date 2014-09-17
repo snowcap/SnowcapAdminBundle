@@ -29,6 +29,7 @@
         "symfony/framework-bundle": ">=2.2",
         "snowcap/core-bundle": ">=2.2",
         "snowcap/bootstrap-bundle": ">=2.2",
+        "snowcap/im-bundle": ">=2.2",
         "leafo/lessphp": "v0.4.0"
 
     },

@@ -81,6 +81,7 @@ Enable the bundle in the kernel:
             // Required dependencies
             new Snowcap\CoreBundle\SnowcapCoreBundle(),
             new Snowcap\BootstrapBundle\SnowcapBootstrapBundle(),
+            new Snowcap\ImBundle\SnowcapImBundle(),
         );
     }
 
