@@ -60,47 +60,18 @@ The *datalist* Datalist type is the most basic type you can use.
 Options
 ~~~~~~~
 
-**data_class**
-*type:* string *default:* null
-
-If the datalist expects rows to be objects, then you must specify a data_class option to tell the datalist component which class of objects to expect.
-If your datalist have simple array rows, this option must remain null.
-
-**limit_per_page**
-*type:* integer *default:* null
-
-When specified, it will trigger the pagination of the Datalist and will use the option to limit the
-number of rows to display per page.
-
-**range_limit**
-*type:* integer *default:* 10
-
-When the pagination is active, this option controls the maximum number of pagination links to display in the pagination widget.
-
-**search_placeholder**
-*type:* string *default:* datalist.search.placeholder
-
-Controls the text of the search placeholder.
-
-**search_submit**
-*type:* string *default:* datalist.search.submit
-
-Controls the text of the search submit button
-
-**filter_submit**
-*type:* string *default:*: datalist.filter.submit
-
-Controls the text of the filter submit button
-
-**filter_reset**
-*type:* string *default:* datalist.filter.reset
-
-Controls the text of the filter reset button
-
-**translation_domain**
-*type:* string *default:* messages
-
-Changes the translation domain used by the datalist to translated labels.
+====================    ========    ================================    ================================
+Name                    Type        Default                             Description
+====================    ========    ================================    ================================
+data_class              string      null                                If the datalist expects rows to be objects, then you must specify a data_class option to tell the datalist component which class of objects to expect. If your datalist have simple array rows, this option must remain null.
+limit_per_page          integer     null                                When specified, it will trigger the pagination of the Datalist and will use the option to limit the number of rows to display per page.
+range_limit             integer     10                                  When the pagination is active, this option controls the maximum number of pagination links to display in the pagination widget.
+search_placeholder      string      datalist.search.placeholder         Controls the text of the search placeholder.
+search_submit           string      datalist.search.submit              Controls the text of the search submit button.
+filter_submit           string      datalist.filter.submit              Controls the text of the filter submit button.
+filter_reset            string      datalist.filter.reset               Controls the text of the filter reset button.
+translation_domain      string      messages                            Changes the translation domain used by the datalist to translated labels.
+====================    ========    ================================    ================================
 
 Datalist Field Types
 --------------------
@@ -110,25 +81,15 @@ Abstract Field Type
 
 The AbstractFieldType is the base class for all field types. While it cannot be used on its own, it already defines a few options used by all field types.
 
-Options
-~~~~~~~
+**Options**
 
-**property_path**
-*type:* string *default:* null
-
-The property path to use in order to compute the field value for a given row. For more information on how property paths work, please refer to the `PropertyAccess component <http://symfony.com/doc/current/components/property_access/introduction.html>`_.
-
-If no property_path is provided, the name of the field will be used.
-
-**callback**
-*type:* callable *default:* null
-
-If a valid callback is provided for this option, the callback will be used to process the value before passing it to the template.
-
-**default**
-*type:* mixed *default:* null
-
-The default value to use when the computed value of the field for a given property is null.
+====================    ========    ================================    ================================
+Name                    Type        Default                             Description
+====================    ========    ================================    ================================
+property_path           string      null                                The property path to use in order to compute the field value for a given row. For more information on how property paths work, please refer to the `PropertyAccess component <http://symfony.com/doc/current/components/property_access/introduction.html>`_. If no property_path is provided, the name of the field will be used.
+callback                callable    null                                If a valid callback is provided for this option, the callback will be used to process the value before passing it to the template.
+default                 mixed       null                                The default value to use when the computed value of the field for a given property is null.
+====================    ========    ================================    ================================
 
 Text Field Type (text)
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -155,10 +116,11 @@ The Datetime field type is used to display formatted dates. The underlying value
 
 **Options**
 
-**format**
-*type:* string *default:* d/m/Y
-
-The format string to use. See `PHP documentation for DateTime::format() <http://php.net/manual/fr/datetime.format.php>`_ for more information.
+====================    ========    ================================    ================================
+Name                    Type        Default                             Description
+====================    ========    ================================    ================================
+format                  string      d/m/Y                               The format string to use. See `PHP documentation for DateTime::format() <http://php.net/manual/fr/datetime.format.php>`_ for more information.
+====================    ========    ================================    ================================
 
 See also Abstract Field Type for inherited options.
 
