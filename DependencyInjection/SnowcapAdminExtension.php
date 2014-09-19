@@ -51,7 +51,7 @@ class SnowcapAdminExtension extends Extension
 
         $container->setParameter('snowcap_admin.multiupload.tmp_dir', $config['multiupload']['tmp_dir']);
 
-        if (null !== $config['default_locale'] && 0 === strpos($_SERVER['REQUEST_URI'], $config['route_prefix'])) {
+        if (null !== $config['default_locale'] && isset($_SERVER['REQUEST_URI']) && 0 === strpos($_SERVER['REQUEST_URI'], $config['route_prefix'])) {
             $container->setParameter('kernel.default_locale', $config['default_locale']);
         }
     }
