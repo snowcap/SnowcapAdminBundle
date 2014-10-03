@@ -182,6 +182,9 @@ class DoctrineORMDatasource extends AbstractDatasource
             case ComparisonExpression::OPERATOR_IN:
                 $expr = $this->queryBuilder->expr()->in($propertyPath, $placeholder);
                 break;
+            case ComparisonExpression::OPERATOR_NIN:
+                $expr = $this->queryBuilder->expr()->notIn($propertyPath, $placeholder);
+                break;
             case ComparisonExpression::OPERATOR_IS_NULL:
                 $expr = $this->queryBuilder->expr()->isNull($propertyPath);
                 break;
