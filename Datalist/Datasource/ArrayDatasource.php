@@ -189,6 +189,9 @@ class ArrayDatasource extends AbstractDatasource
                 case ComparisonExpression::OPERATOR_IN:
                     $result = in_array($value, $comparisonValue);
                     break;
+                case ComparisonExpression::OPERATOR_NIN:
+                    $result = !in_array($value, $comparisonValue);
+                    break;
                 case ComparisonExpression::OPERATOR_IS_NULL:
                     $result = null === $value;
                     break;
