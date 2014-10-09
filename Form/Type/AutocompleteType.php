@@ -70,6 +70,8 @@ class AutocompleteType extends AbstractType
                     if(!$adminOption instanceof ContentAdmin) {
                         return $adminManager->getAdmin($adminOption);
                     }
+
+                    return $adminOption;
                 }
             ));
     }
