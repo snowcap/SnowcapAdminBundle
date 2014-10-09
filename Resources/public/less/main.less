@@ -280,7 +280,7 @@ fieldset[data-admin=form-collapsible-fieldset] {
   }
 }
 
-.input-append {
+.input-append, .input-prepend {
     display: table !important;
     width: 100% !important;
 
@@ -306,7 +306,6 @@ fieldset[data-admin=form-collapsible-fieldset] {
     }
 
     .add-on {
-        border-left: none !important;
         padding-left: 8px !important;
         padding-right: 8px !important;
         width: 1% !important;
@@ -317,4 +316,12 @@ fieldset[data-admin=form-collapsible-fieldset] {
             border-style: none;
         }
     }
+}
+
+.input-append .add-on {
+    border-left: none !important;
+}
+
+.input-prepend .add-on {
+    border-right: none !important;
 }
