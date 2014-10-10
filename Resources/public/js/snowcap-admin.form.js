@@ -225,7 +225,7 @@ SnowcapAdmin.Form = (function ($) {
             if ('single' === this.mode) {
                 this.$el.find('input[type=hidden]').val("").trigger('change');
             }
-            this.$el.parents('.control-group').addClass('warning');
+            this.$el.closest('.control-group').addClass('warning');
         },
 
         /**
