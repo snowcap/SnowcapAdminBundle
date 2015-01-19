@@ -65,3 +65,50 @@ The called action must send a JsonResponse containing an array of results:
         }
     }
 
+Autocomplete (entities)
+-----------------------
+
+There's also an Autocomplete type that works with entities. For that you will need an Admin class to work with.
+
+Options
+~~~~~~~
+
+====================    ========    ============    ========    ================================
+Name                    Type        Default         Required    Description
+====================    ========    ============    ========    ================================
+admin                   string      null            Yes         Admin class alias
+where                   string      null            Yes         Query to match the related entities
+allow_add               boolean     false           No          Allow adding a new related entity via the current form
+multiple                boolean     false           No          If it is a OneToMany or ManyToMany relation
+id_property             string      "id"            No          Identifier of the related entity
+property                string      "__toString"    No          Text identifying the related entity (eg. its name)
+====================    ========    ============    ========    ================================
+
+Example
+~~~~~~~
+
+.. code-block:: php
+
+    <?php
+
+    namespace Your\AdminBundle\Form\Type;
+
+    use Symfony\Component\Form\AbstractType;
+    use Symfony\Component\Form\FormBuilderInterface;
+
+    class MyFormType extends AbstractType
+    {
+        /**
+         * @param FormBuilderInterface $builder
+         * @param array $options
+         */
+        public function buildForm(FormBuilderInterface $builder, array $options)
+        {
+            $builder->add('tag', 'snowcap_admin_autocomplete', array(
+                'label'    => 'my_form.tag',
+                'admin'    => 'tag',
+                'where'    => 'e.name LIKE :query',
+                'property' => 'name'
+            ));
+        }
+    }
