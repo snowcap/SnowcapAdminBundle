@@ -258,7 +258,7 @@ SnowcapAdmin.Form = (function ($) {
                 var prototype = $.trim(this.$el.data('prototype'));
                 var $prototype = $(prototype.replace(/__name__/g, this.$el.find('input[type=hidden]').length));
                 $prototype.val(this.mapped[item]);
-                this.$el.prepend($prototype);
+                this.$el.append($prototype);
 
                 var $token = $('<li>').addClass('token').data('value', this.mapped[item]).html($('<span>').html(item)).append($('<a>').html('&times;').addClass('close').attr('rel', 'remove'));
                 this.$el.find('.tokens').append($token);
