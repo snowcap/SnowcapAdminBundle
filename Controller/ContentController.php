@@ -250,30 +250,30 @@ class ContentController extends BaseController
     {
         $status = 200;
 
-        if($request->isMethod('post')) {
-            try {
-                $admin->deleteEntity($entity);
-                $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
-                $result = array(
-                    'entity_id' => $entity->getId(),
-                    'entity_name' => $admin->getEntityName($entity)
-                );
-                $redirectUrl = $request->headers->get('referer');
-
-                return new JsonResponse(array('result' => $result, 'redirect_url' => $redirectUrl), 301);
-
-            } catch (\Exception $e) {
-                $status = 400;
-                $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
-                $this->get('logger')->addError($e->getMessage());
-            }
-        }
-
         if (null === $entity) {
             $content = $this->renderView(
                 'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalError.html.twig'
             );
         } else {
+            if($request->isMethod('post')) {
+                try {
+                    $admin->deleteEntity($entity);
+                    $this->buildEntityFlash('success', 'content.delete.flash.success', $admin, $entity);
+                    $result = array(
+                        'entity_id' => $entity->getId(),
+                        'entity_name' => $admin->getEntityName($entity)
+                    );
+                    $redirectUrl = $request->headers->get('referer');
+
+                    return new JsonResponse(array('result' => $result, 'redirect_url' => $redirectUrl), 301);
+
+                } catch (\Exception $e) {
+                    $status = 400;
+                    $this->buildEntityFlash('error', 'content.delete.flash.error', $admin, $entity);
+                    $this->get('logger')->addError($e->getMessage());
+                }
+            }
+
             $content = $this->renderView(
                 'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
                 array(
