@@ -110,6 +110,11 @@ class AutocompleteType extends AbstractType
         $value = $form->getData();
         // For multiple autocomplete, we need to store textual values indexed by value, along with the prototype
         if($options['multiple']) {
+            // Fix: If $value is null we must cast it as an array
+            if (null === $value) {
+                $value = array();
+            }
+            
             $textValues = array();
             foreach($value as $entity) {
                 $textValues[$entity->getId()]= $this->buildTextValue($entity, $options);
