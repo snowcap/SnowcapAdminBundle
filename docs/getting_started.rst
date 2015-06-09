@@ -50,6 +50,17 @@ For Symfony < 2.7
         }
     }
 
+For Symfony >= 2.7
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: javascript
+
+    {
+        "require": {
+            "snowcap/admin-bundle": "~2.0"
+        }
+    }
+
 
 Now tell composer to download the bundle by running the command:
 
