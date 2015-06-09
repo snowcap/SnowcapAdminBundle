@@ -5,12 +5,6 @@ SnowcapAdminBundle provides a few useful features for your backoffice applicatio
 series of tools and helpers to facilitate your work, but also to get out of your way when you want to add totally custom
 features.
 
-Prerequisites
--------------
-
-This version of the bundle requires Symfony 2.2+. If you are using Symfony
-2.1.x, please use the 2.1.x branch of the bundle.
-
 Translations
 ------------
 
@@ -45,11 +39,14 @@ Step 1: Download SnowcapAdminBundle using composer
 
 Add SnowcapAdminBundle in your composer.json:
 
+For Symfony < 2.7
+~~~~~~~~~~~~~~~~~
+
 .. code-block:: javascript
 
     {
         "require": {
-            "snowcap/admin-bundle": "dev-master"
+            "snowcap/admin-bundle": "~1.0"
         }
     }
 
