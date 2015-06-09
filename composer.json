@@ -27,8 +27,8 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": ">=2.2,<2.3",
-        "snowcap/core-bundle": ">=2.2,<2.3",
-        "snowcap/bootstrap-bundle": ">=2.2,<2.3",
+        "snowcap/core-bundle": "~1.0",
+        "snowcap/bootstrap-bundle": "~1.0",
         "knplabs/knp-markdown-bundle": ">=1.2"
 
     },
