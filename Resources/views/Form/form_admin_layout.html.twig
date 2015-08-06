@@ -186,9 +186,9 @@
 {% block snowcap_admin_multiupload_url_widget %}
     {% spaceless %}
         <li class="multiupload-file-preview">
-            <button class="btn btn-mini remove">Remove</button>&nbsp;
+            <button class="btn btn-mini remove">{{ 'multiupload_widget.remove'|trans({}, 'SnowcapAdminBundle') }}</button>&nbsp;
 
-            <a href="{{ value }}" target="_blank">
+            <a href="{{ asset(value) }}" target="_blank">
                 {{ value }}
             </a>
 
@@ -200,10 +200,10 @@
 {% block snowcap_admin_multiupload_image_widget %}
     {% spaceless %}
         <li class="multiupload-file-preview">
-            <button class="btn btn-mini remove remove-image">Remove</button>
+            <button class="btn btn-mini remove remove-image">{{ 'multiupload_widget.remove'|trans({}, 'SnowcapAdminBundle') }}</button>
 
-            <a href="{{ form.vars.value }}" target="_blank">
-                <img src="{{ value|imresize(im_resize) }}" alt="{{ value }}" />
+            <a href="{{ asset(value) }}" target="_blank">
+                <img src="{{ asset(value)|imresize(im_resize) }}" alt="{{ value }}" />
             </a>
 
             {{ block('hidden_widget') }}

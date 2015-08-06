@@ -193,3 +193,6 @@ error:
 slug_alert:
     title: ATTENTION
     message: If you change the slug, you can break links on other pages!
+
+multiupload_widget:
+    remove: Remove

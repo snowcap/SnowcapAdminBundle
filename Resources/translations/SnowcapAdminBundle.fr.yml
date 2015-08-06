@@ -193,3 +193,6 @@ error:
 slug_alert:
     title: ATTENTION
     message: Si vous modifiez le slug, vous pouvez casser des liens sur d'autres pages !
+
+multiupload_widget:
+    remove: Supprimer
