@@ -3,12 +3,12 @@
 namespace Snowcap\AdminBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class MultiUploadUrlType
- *
  * Represent an Url field type for the multi upload form type
+ *
+ * Class MultiUploadUrlType
+ * @package Snowcap\AdminBundle\Form\Type
  */
 class MultiUploadUrlType extends AbstractType
 {

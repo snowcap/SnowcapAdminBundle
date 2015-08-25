@@ -2,40 +2,37 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Snowcap\AdminBundle\Datalist\ViewContext;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class BooleanFieldType
+ * @package Snowcap\AdminBundle\Datalist\Field\Type
+ */
 class BooleanFieldType extends AbstractFieldType
 {
-
-    public function __construct()
-    {
-        //trigger_error('The "boolean" field type is deprecated. Please use the "label" field type instead', E_USER_DEPRECATED);
-    }
-
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver
             ->setDefaults(array(
                 'true_label' => null,
                 'false_label' => null
             ))
-            ->setAllowedTypes(array(
-                'true_label' => array('null', 'string'),
-                'false_label' => array('null', 'string'),
-            ));
+            ->setAllowedTypes('true_label', array('null', 'string'))
+            ->setAllowedTypes('false_label', array('null', 'string'))
+        ;
     }
 
     /**
      * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewContext
      * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
-     * @param mixed $value
+     * @param mixed $row
      * @param array $options
      */
     public function buildViewContext(ViewContext $viewContext, DatalistFieldInterface $field, $row, array $options)

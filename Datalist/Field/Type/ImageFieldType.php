@@ -2,6 +2,10 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
+/**
+ * Class ImageFieldType
+ * @package Snowcap\AdminBundle\Datalist\Field\Type
+ */
 class ImageFieldType extends AbstractFieldType
 {
     /**

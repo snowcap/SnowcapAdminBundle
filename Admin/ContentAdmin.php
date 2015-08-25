@@ -2,7 +2,7 @@
 namespace Snowcap\AdminBundle\Admin;
 
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -20,18 +20,17 @@ abstract class ContentAdmin extends AbstractAdmin
     const SAVEMODE_CONTINUE = 'continue';
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver
-            ->setOptional(array('entity_class', 'entity_name'))
-            ->setAllowedTypes(array(
-                'entity_class' => 'string',
-                'entity_name' => 'string'
-            ));
+            ->setDefined(array('entity_class', 'entity_name'))
+            ->setAllowedTypes('entity_class', 'string')
+            ->setAllowedTypes('entity_name', 'string')
+        ;
     }
 
     /**

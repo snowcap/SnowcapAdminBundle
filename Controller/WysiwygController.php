@@ -64,7 +64,7 @@ class WysiwygController extends BaseController
         if ('POST' === $request->getMethod()) {
             // Manage upload post
             if ($request->get('admin_snowcap_file') !== null) {
-                $uploadForm->bind($request);
+                $uploadForm->handleRequest($request);
                 if ($uploadForm->isValid()) {
                     $em->persist($file);
                     $em->flush();

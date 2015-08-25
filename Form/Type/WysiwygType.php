@@ -3,10 +3,14 @@
 namespace Snowcap\AdminBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class WysiwygType
+ * @package Snowcap\AdminBundle\Form\Type
+ */
 class WysiwygType extends AbstractType
 {
     /**
@@ -18,17 +22,15 @@ class WysiwygType extends AbstractType
     }
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults(array(
                 'wysiwyg_config' => '/bundles/snowcapadmin/js/ckeditor_config.js'
             ))
-            ->setAllowedTypes(array(
-                'wysiwyg_config' => 'string'
-            ));
+            ->setAllowedTypes('wysiwyg_config', 'string');
     }
 
     /**

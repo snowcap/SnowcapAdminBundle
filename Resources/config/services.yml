@@ -124,7 +124,7 @@ services:
     # Datalists
     snowcap_admin.datalist_factory:
         class: Snowcap\AdminBundle\Datalist\DatalistFactory
-        arguments: [@form.Factory]
+        arguments: [@form.factory]
 
     snowcap_admin.datalist_type.datalist:
         class: Snowcap\AdminBundle\Datalist\Type\DatalistType
@@ -197,7 +197,7 @@ services:
     # Admin logger
     snowcap_admin.logger:
         class: Snowcap\AdminBundle\Logger\Logger
-        arguments: [@snowcap_admin, @doctrine.orm.entity_manager, @security.context, %snowcap_admin.logger_entity.class%]
+        arguments: [@snowcap_admin, @doctrine.orm.entity_manager, @security.token_storage, @security.authorization_checker, %snowcap_admin.logger_entity.class%]
 
     # Security
     snowcap_admin.security.user_manager:

@@ -29,7 +29,7 @@ class AdminManager
         $admin->setAlias($alias);
 
         $resolver = new OptionsResolver();
-        $admin->setDefaultOptions($resolver);
+        $admin->configureOptions($resolver);
         $resolvedOptions = $resolver->resolve($options);
         $admin->setOptions($resolvedOptions);
 
@@ -57,6 +57,10 @@ class AdminManager
         return $this->admins;
     }
 
+    /**
+     * @param object $entity
+     * @return AdminInterface|null
+     */
     public function getAdminForEntity($entity) //TODO: remove ?
     {
         $class = get_class($entity);

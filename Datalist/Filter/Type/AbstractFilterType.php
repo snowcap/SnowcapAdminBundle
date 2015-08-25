@@ -2,19 +2,21 @@
 
 namespace Snowcap\AdminBundle\Datalist\Filter\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class AbstractFilterType
+ * @package Snowcap\AdminBundle\Datalist\Filter\Type
+ */
 abstract class AbstractFilterType implements FilterTypeInterface
 {
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults(array('property_path' => null))
-            ->setOptional(array('default'));
+            ->setDefined(array('default'));
     }
-
 }

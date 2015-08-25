@@ -1,34 +1,32 @@
 <?php
+
 namespace Snowcap\AdminBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Snowcap\AdminBundle\AdminManager;
-use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- *
+ * Class CatalogueTranslationController
+ * @package Snowcap\AdminBundle\Controller
  */
 class CatalogueTranslationController extends BaseController
 {
     /**
-     * @Template()
+     * @param Request $request
+     * @param string $catalogue
+     * @param string $locale
+     * @return array
      */
-    public function indexAction($catalogue, $locale)
+    public function indexAction(Request $request, $catalogue, $locale)
     {
-        /** @var $admin AdminManager */
-        $admin = $this->get('snowcap_admin');
-
         $yaml = new Yaml();
 
-        $activeLocale = $this->getRequest()->get('activeCatalogueLocale');
+        $activeLocale = $request->get('activeCatalogueLocale');
         if ($activeLocale === null) {
             if ($locale !== null) {
                 $activeLocale = $locale;
             } else {
-                $activeLocale = $this->getRequest()->getLocale();
+                $activeLocale = $request->getLocale();
             }
         }
 
@@ -65,8 +63,8 @@ class CatalogueTranslationController extends BaseController
         }
 
         /** (re)Generating a yaml with the computed differences from the source catalogue */
-        if ($this->getRequest()->getMethod() === 'POST') {
-            $data = $this->getRequest()->get('data');
+        if ($request->isMethod('POST')) {
+            $data = $request->get('data');
             $diff = $this->compare($data, $activeCatalogue);
             if (!$oldData = @file_get_contents($this->getGeneratedCataloguePath($catalogue,$activeLocale))) {
                 $oldData = "{}";
@@ -85,17 +83,15 @@ class CatalogueTranslationController extends BaseController
         /** merging after the post to prevent persisting source values in the generated one */
         $activeCatalogue = $this->mergeSourceAndGenerated($catalogue, $activeCatalogue, $activeLocale);
 
-        return array(
+        return $this->render('SnowcapAdminBundle:CatalogueTranslation:index.html.twig', array(
             'activeCatalogue' => $activeCatalogue,
             'activeCatalogueName' => $catalogue,
             'activeCatalogueLocale' => $activeLocale,
             'catalogues' => $catalogues,
             'fallbackCatalogue' => $fallbackCatalogue,
             'locales' => $locales,
-        );
+        ));
     }
-
-
 
     /**
      * Merges source and generated catalogue to get the full computed values
@@ -116,7 +112,6 @@ class CatalogueTranslationController extends BaseController
             return $catalogue;
         }
     }
-
 
     /**
      * Returns an array with the differences of the multi array b compared to multi array a

@@ -2,11 +2,14 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Snowcap\AdminBundle\Datalist\ViewContext;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class TextFieldType
+ * @package Snowcap\AdminBundle\Datalist\Field\Type
+ */
 class TextFieldType extends AbstractFieldType
 {
     /**
@@ -18,13 +21,13 @@ class TextFieldType extends AbstractFieldType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
-        $resolver->setOptional(array('truncate'));
+        $resolver->setDefined(array('truncate'));
     }
 
     /**
@@ -37,7 +40,7 @@ class TextFieldType extends AbstractFieldType
     {
         parent::buildViewContext($viewContext, $field, $row, $options);
 
-        if(isset($options['truncate'])) {
+        if (isset($options['truncate'])) {
             $viewContext['truncate'] = $options['truncate'];
         }
     }

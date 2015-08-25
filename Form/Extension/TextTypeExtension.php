@@ -5,10 +5,15 @@ namespace Snowcap\AdminBundle\Form\Extension;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 
-class TextTypeExtension extends AbstractTypeExtension {
+/**
+ * Class TextTypeExtension
+ * @package Snowcap\AdminBundle\Form\Extension
+ */
+class TextTypeExtension extends AbstractTypeExtension
+{
     /**
      * @return string
      */
@@ -18,12 +23,12 @@ class TextTypeExtension extends AbstractTypeExtension {
     }
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setOptional(array('list_url'));
+            ->setDefined(array('list_url'));
     }
 
     /**

@@ -2,25 +2,28 @@
 
 namespace Snowcap\AdminBundle\Datalist\Filter\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Filter\Expression\ComparisonExpression;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class ChoiceFilterType
+ * @package Snowcap\AdminBundle\Datalist\Filter\Type
+ */
 class ChoiceFilterType extends AbstractFilterType
 {
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver
             ->setRequired(array('choices'))
-            ->setOptional(array('empty_value', 'preferred_choices'));
+            ->setDefined(array('empty_value', 'preferred_choices'));
     }
 
     /**

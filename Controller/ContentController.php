@@ -3,18 +3,17 @@
 namespace Snowcap\AdminBundle\Controller;
 
 use Snowcap\AdminBundle\Admin\AdminInterface;
+use Snowcap\AdminBundle\Admin\ContentAdmin;
+use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
 use Snowcap\AdminBundle\Exception\ValidationException;
+use Snowcap\CoreBundle\Util\StringUtil;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\Form;
-
-use Snowcap\CoreBundle\Util\String;
-use Snowcap\AdminBundle\Admin\ContentAdmin;
-use Snowcap\AdminBundle\Datalist\Datasource\DoctrineORMDatasource;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * This controller provides basic CRUD capabilities for content models
@@ -25,6 +24,9 @@ class ContentController extends BaseController
     /**
      * Display the index screen (listing)
      *
+     * @param Request $request
+     * @param ContentAdmin $admin
+     * @return Response
      */
     public function indexAction(Request $request, ContentAdmin $admin)
     {
@@ -37,7 +39,7 @@ class ContentController extends BaseController
         $datalist->setDatasource($datasource);
         $datalist->bind($request);
 
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':index.html.twig', array(
+        return $this->render('SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':index.html.twig', array(
             'admin' => $admin,
             'datalist' => $datalist
         ));
@@ -46,13 +48,16 @@ class ContentController extends BaseController
     /**
      * Display the detail screen
      *
+     * @param Request $request
+     * @param ContentAdmin $admin
+     * @return Response
      */
     public function viewAction(Request $request, ContentAdmin $admin)
     {
         $entity = $admin->findEntity($request->attributes->get('id'));
         $this->secure($admin, 'ADMIN_CONTENT_VIEW', $entity);
 
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':view.html.twig', array(
+        return $this->render('SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':view.html.twig', array(
             'admin' => $admin,
             'entity' => $entity
         ));
@@ -72,9 +77,9 @@ class ContentController extends BaseController
 
         if ($request->isMethod('POST')) {
             try {
-                $this->save($admin, $form, $entity);
+                $this->save($request, $admin, $form, $entity);
                 $this->buildEntityFlash('success', 'content.create.flash.success', $admin, $entity);
-                $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
+                $redirectUrl = $request->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
 
@@ -86,7 +91,7 @@ class ContentController extends BaseController
             }
         }
 
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':create.html.twig', array(
+        return $this->render('SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':create.html.twig', array(
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
@@ -108,7 +113,7 @@ class ContentController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             try {
-                $this->save($admin, $form, $entity);
+                $this->save($request, $admin, $form, $entity);
                 $result = array(
                     'entity_id' => $entity->getId(),
                     'entity_name' => $admin->getEntityName($entity)
@@ -124,7 +129,7 @@ class ContentController extends BaseController
         }
 
         $responseData = array(
-            'content' =>   $this->renderView('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalCreate.html.twig', array(
+            'content' =>   $this->renderView('SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':modalCreate.html.twig', array(
                 'admin' => $admin,
                 'entity' => $entity,
                 'form' => $form->createView(),
@@ -151,9 +156,9 @@ class ContentController extends BaseController
 
         if ($request->isMethod('POST')) {
             try {
-                $this->save($admin, $form, $entity);
+                $this->save($request, $admin, $form, $entity);
                 $this->buildEntityFlash('success', 'content.update.flash.success', $admin, $entity);
-                $redirectUrl = $this->getRequest()->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
+                $redirectUrl = $request->get('saveMode') === ContentAdmin::SAVEMODE_CONTINUE ?
                     $this->getRoutingHelper()->generateUrl($admin, 'update', array('id' => $entity->getId())) :
                     $this->getRoutingHelper()->generateUrl($admin, 'index');
 
@@ -165,7 +170,7 @@ class ContentController extends BaseController
             }
         }
 
-        return $this->render('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':update.html.twig', array(
+        return $this->render('SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':update.html.twig', array(
             'admin' => $admin,
             'entity' => $entity,
             'form' => $form->createView(),
@@ -191,7 +196,7 @@ class ContentController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             try {
-                $this->save($admin, $form, $entity);
+                $this->save($request, $admin, $form, $entity);
 
                 $result = array(
                     'entity_id' => $entity->getId(),
@@ -211,7 +216,7 @@ class ContentController extends BaseController
         }
 
         $responseData = array(
-            'content' => $this->renderView('SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalUpdate.html.twig', array(
+            'content' => $this->renderView('SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':modalUpdate.html.twig', array(
                 'admin' => $admin,
                 'entity' => $entity,
                 'form' => $form->createView(),
@@ -252,7 +257,7 @@ class ContentController extends BaseController
 
         if (null === $entity) {
             $content = $this->renderView(
-                'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalError.html.twig'
+                'SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':modalError.html.twig'
             );
         } else {
             if($request->isMethod('post')) {
@@ -275,7 +280,7 @@ class ContentController extends BaseController
             }
 
             $content = $this->renderView(
-                'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
+                'SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':modalDelete.html.twig',
                 array(
                     'admin' => $admin,
                     'entity' => $entity,
@@ -314,7 +319,7 @@ class ContentController extends BaseController
         }
 
         return $this->render(
-            'SnowcapAdminBundle:' . String::camelize($admin->getAlias()) . ':modalDelete.html.twig',
+            'SnowcapAdminBundle:' . StringUtil::camelize($admin->getAlias()) . ':modalDelete.html.twig',
             array(
                 'admin' => $admin,
                 'entity' => $entity,
@@ -354,8 +359,9 @@ class ContentController extends BaseController
      * @throws \Exception
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    protected function save(ContentAdmin $admin, Form $form, $entity) {
-        $form->submit($this->getRequest());
+    protected function save(Request $request, ContentAdmin $admin, Form $form, $entity)
+    {
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $admin->saveEntity($entity);
         } else {
@@ -377,7 +383,7 @@ class ContentController extends BaseController
         $suffixedAttributes = array_map(function($attribute) use($admin) {
             return $attribute . '__' . strtoupper($admin->getAlias());
         }, $attributes);
-        if(!$this->getSecurityContext()->isGranted($suffixedAttributes, $object)) {
+        if (!$this->getAuthorizationChecker()->isGranted($suffixedAttributes, $object)) {
             throw new AccessDeniedException();
         }
     }
@@ -441,10 +447,10 @@ class ContentController extends BaseController
     }
 
     /**
-     * @return SecurityContext
+     * @return AuthorizationCheckerInterface
      */
-    protected function getSecurityContext()
+    protected function getAuthorizationChecker()
     {
-        return $this->get('security.context');
+        return $this->get('security.authorization_checker');
     }
 }

@@ -2,30 +2,34 @@
 
 namespace Snowcap\AdminBundle\Datalist\Action\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
+use Snowcap\AdminBundle\Datalist\ViewContext;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractActionType implements ActionTypeInterface {
+/**
+ * Class AbstractActionType
+ * @package Snowcap\AdminBundle\Datalist\Action\Type
+ */
+abstract class AbstractActionType implements ActionTypeInterface
+{
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults(array(
                 'attr' => array(),
                 'enabled' => true,
             ))
-            ->setAllowedTypes(array(
-                'enabled' => array('bool', 'callable')
-            ));
+            ->setAllowedTypes('enabled', array('bool', 'callable'))
+        ;
     }
 
     /**
-     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewCobtext
-     * @param \Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface $field
-     * @param mixed $value
+     * @param \Snowcap\AdminBundle\Datalist\ViewContext $viewContext
+     * @param \Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface $action
+     * @param mixed $item
      * @param array $options
      */
     public function buildViewContext(ViewContext $viewContext, DatalistActionInterface $action, $item, array $options)

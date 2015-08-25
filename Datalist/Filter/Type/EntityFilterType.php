@@ -2,26 +2,29 @@
 
 namespace Snowcap\AdminBundle\Datalist\Filter\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormBuilderInterface;
-
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
 use Snowcap\AdminBundle\Datalist\Filter\Expression\ComparisonExpression;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class EntityFilterType
+ * @package Snowcap\AdminBundle\Datalist\Filter\Type
+ */
 class EntityFilterType extends AbstractFilterType
 {
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver
             ->setDefaults(array('query_builder' => null, 'multiple' => false))
             ->setRequired(array('class'))
-            ->setOptional(array('choices', 'property', 'empty_value', 'group_by', 'attr'));
+            ->setDefined(array('choices', 'property', 'empty_value', 'group_by', 'attr'));
     }
 
     /**

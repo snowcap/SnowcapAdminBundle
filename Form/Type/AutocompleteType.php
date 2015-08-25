@@ -2,26 +2,24 @@
 
 namespace Snowcap\AdminBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
-use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
-use Doctrine\ORM\QueryBuilder;
-
 use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Admin\ContentAdmin;
-use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
 use Snowcap\AdminBundle\Form\DataTransformer\EntityToIdTransformer;
+use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
- * Autocomplete field type class
- *
+ * Class AutocompleteType
+ * @package Snowcap\AdminBundle\Form\Type
  */
 class AutocompleteType extends AbstractType
 {
@@ -46,9 +44,9 @@ class AutocompleteType extends AbstractType
     }
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $adminManager = $this->adminManager;
 
@@ -64,16 +62,14 @@ class AutocompleteType extends AbstractType
                 'property' => '__toString',
             ))
             ->setRequired(array('admin', 'where'))
-            ->setOptional(array('row_id_property', 'row_property'))
-            ->setNormalizers(array(
-                'admin' => function(Options $options, $adminOption) use($adminManager) {
-                    if(!$adminOption instanceof ContentAdmin) {
-                        return $adminManager->getAdmin($adminOption);
-                    }
-
-                    return $adminOption;
+            ->setDefined(array('row_id_property', 'row_property'))
+            ->setNormalizer('admin', function (Options $options, $adminOption) use ($adminManager) {
+                if(!$adminOption instanceof ContentAdmin) {
+                    return $adminManager->getAdmin($adminOption);
                 }
-            ));
+
+                return $adminOption;
+            });
     }
 
     /**
@@ -114,7 +110,7 @@ class AutocompleteType extends AbstractType
             if (null === $value) {
                 $value = array();
             }
-            
+
             $textValues = array();
             foreach($value as $entity) {
                 $textValues[$entity->getId()]= $this->buildTextValue($entity, $options);
@@ -167,7 +163,7 @@ class AutocompleteType extends AbstractType
         }
         else {
             try {
-                $accessor = PropertyAccess::getPropertyAccessor();
+                $accessor = PropertyAccess::createPropertyAccessor();
                 $textValue = $accessor->getValue($value, $options['property']);
             }
             catch(NoSuchPropertyException $e) {

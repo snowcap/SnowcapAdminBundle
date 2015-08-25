@@ -2,12 +2,15 @@
 
 namespace Snowcap\AdminBundle\Datalist\Filter\Type;
 
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
+use Snowcap\AdminBundle\Datalist\TypeInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
-use Snowcap\AdminBundle\Datalist\TypeInterface;
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
-
+/**
+ * Interface FilterTypeInterface
+ * @package Snowcap\AdminBundle\Datalist\Filter\Type
+ */
 interface FilterTypeInterface extends TypeInterface
 {
     /**
