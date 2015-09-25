@@ -1,18 +1,17 @@
 <?php
-namespace Snowcap\AdminBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+namespace Snowcap\AdminBundle\Form\Type;
 
 use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Entity field type class
- *
+ * Class EntityType
+ * @package Snowcap\AdminBundle\Form\Type
  */
 class EntityType extends AbstractType
 {
@@ -28,6 +27,7 @@ class EntityType extends AbstractType
 
     /**
      * @param \Snowcap\AdminBundle\AdminManager $adminManager
+     * @param ContentRoutingHelper $routingHelper
      */
     public function __construct(AdminManager $adminManager, ContentRoutingHelper $routingHelper)
     {
@@ -36,9 +36,9 @@ class EntityType extends AbstractType
     }
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults(array(

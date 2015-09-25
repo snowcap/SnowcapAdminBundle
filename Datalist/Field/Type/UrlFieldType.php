@@ -3,9 +3,8 @@
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
-use Snowcap\AdminBundle\Datalist\Field\Type\TextFieldType;
 use Snowcap\AdminBundle\Datalist\ViewContext;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class UrlFieldType
@@ -15,21 +14,16 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class UrlFieldType extends TextFieldType
 {
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver
-            ->setOptional(array(
-                'url',
-            ))
-            ->setAllowedTypes(array(
-                'url' => array(
-                    'callable', 'string'
-                )
-            ));
+            ->setDefined(array('url'))
+            ->setAllowedTypes('url', array('callable', 'string'))
+        ;
     }
 
     /**

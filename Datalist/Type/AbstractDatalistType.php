@@ -2,17 +2,21 @@
 
 namespace Snowcap\AdminBundle\Datalist\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Snowcap\AdminBundle\Datalist\DatalistBuilder;
-use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Datalist\DatalistInterface;
+use Snowcap\AdminBundle\Datalist\ViewContext;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractDatalistType implements DatalistTypeInterface {
+/**
+ * Class AbstractDatalistType
+ * @package Snowcap\AdminBundle\Datalist\Type
+ */
+abstract class AbstractDatalistType implements DatalistTypeInterface
+{
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults(array(
@@ -28,7 +32,7 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
                 'filter_reset' => 'datalist.filter.reset',
                 'translation_domain' => 'messages'
             ))
-            ->setOptional(array(
+            ->setDefined(array(
                 'search'
             ));
     }
@@ -36,6 +40,7 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
     /**
      * @param \Snowcap\AdminBundle\Datalist\DatalistBuilder $builder
      * @param array $options
+     * @return mixed|void
      */
     public function buildDatalist(DatalistBuilder $builder, array $options)
     {
@@ -53,5 +58,4 @@ abstract class AbstractDatalistType implements DatalistTypeInterface {
         $viewContext['options'] = $options;
         $viewContext['translation_domain'] = $options['translation_domain'];
     }
-
 }

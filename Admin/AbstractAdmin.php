@@ -4,7 +4,7 @@ namespace Snowcap\AdminBundle\Admin;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
@@ -58,13 +58,13 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setRequired(array('label'))
-            ->setAllowedTypes(array('label' => 'string'));
+            ->setAllowedTypes('label', 'string');
     }
 
     /**
@@ -141,14 +141,6 @@ abstract class AbstractAdmin implements AdminInterface, ContainerAwareInterface
     public function getEventDispatcher()
     {
         return $this->container->get('event_dispatcher');
-    }
-
-    /**
-     * @return \Symfony\Component\Security\Core\SecurityContextInterface
-     */
-    public function getSecurityContext()
-    {
-        return $this->container->get('security.context');
     }
 
     /**

@@ -3,11 +3,16 @@
 namespace Snowcap\AdminBundle\Datalist\Type;
 
 use Snowcap\AdminBundle\Datalist\DatalistBuilder;
+use Snowcap\AdminBundle\Datalist\DatalistInterface;
 use Snowcap\AdminBundle\Datalist\TypeInterface;
 use Snowcap\AdminBundle\Datalist\ViewContext;
-use Snowcap\AdminBundle\Datalist\DatalistInterface;
 
-interface DatalistTypeInterface extends TypeInterface {
+/**
+ * Interface DatalistTypeInterface
+ * @package Snowcap\AdminBundle\Datalist\Type
+ */
+interface DatalistTypeInterface extends TypeInterface
+{
     /**
      * @param \Snowcap\AdminBundle\Datalist\DatalistBuilder $builder
      * @param array $options

@@ -2,17 +2,20 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class AbstractFieldType
+ * @package Snowcap\AdminBundle\Datalist\Field\Type
+ */
 abstract class AbstractFieldType implements FieldTypeInterface
 {
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
                 'property_path' => null,
@@ -21,8 +24,8 @@ abstract class AbstractFieldType implements FieldTypeInterface
                 'sortable' => false,
                 'sort_property_path' => null
             ))
-            ->setOptional(array('callback', 'order'))
-            ->setAllowedTypes(array('callback' => 'callable'));
+            ->setDefined(array('callback', 'order'))
+            ->setAllowedTypes('callback', 'callable');
     }
 
     /**

@@ -5,8 +5,12 @@ namespace Snowcap\AdminBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class MultiUploadImageType
+ * @package Snowcap\AdminBundle\Form\Type
+ */
 class MultiUploadImageType extends AbstractType
 {
     /**
@@ -31,9 +35,9 @@ class MultiUploadImageType extends AbstractType
 
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'im_resize' => '200x',

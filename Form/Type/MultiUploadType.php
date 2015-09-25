@@ -7,8 +7,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class MultiUploadType
+ * @package Snowcap\AdminBundle\Form\Type
+ */
 class MultiUploadType extends AbstractType
 {
     /**
@@ -41,15 +45,13 @@ class MultiUploadType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setRequired(array('dst_dir'))
-            ->setAllowedTypes(array(
-                'dst_dir' => array('string', 'callable'),
-            ))
+            ->setAllowedTypes('dst_dir', array('string', 'callable'))
             ->setDefaults(array(
                 'type' => 'snowcap_admin_multiupload_url',
             )

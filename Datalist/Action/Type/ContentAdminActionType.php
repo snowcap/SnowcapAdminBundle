@@ -4,15 +4,19 @@ namespace Snowcap\AdminBundle\Datalist\Action\Type;
 
 use Snowcap\AdminBundle\Admin\ContentAdmin;
 use Snowcap\AdminBundle\AdminManager;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
+use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
 use Snowcap\AdminBundle\Datalist\ViewContext;
 use Snowcap\AdminBundle\Routing\Helper\ContentRoutingHelper;
-use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class ContentAdminActionType extends AbstractActionType {
+/**
+ * Class ContentAdminActionType
+ * @package Snowcap\AdminBundle\Datalist\Action\Type
+ */
+class ContentAdminActionType extends AbstractActionType
+{
     /**
      * @var \Snowcap\AdminBundle\AdminManager
      */
@@ -24,7 +28,8 @@ class ContentAdminActionType extends AbstractActionType {
     protected $routingHelper;
 
     /**
-     * @param \Symfony\Component\Routing\RouterInterface $router
+     * @param AdminManager $adminManager
+     * @param ContentRoutingHelper $routingHelper
      */
     public function __construct(AdminManager $adminManager, ContentRoutingHelper $routingHelper)
     {
@@ -33,11 +38,11 @@ class ContentAdminActionType extends AbstractActionType {
     }
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $adminManager = $this->adminManager;
         $adminNormalizer = function(Options $options, $admin) use($adminManager) {
@@ -53,16 +58,13 @@ class ContentAdminActionType extends AbstractActionType {
                 'params' => array('id' => 'id'),
                 'modal' => false,
             ))
-            ->setOptional(array('icon'))
+            ->setDefined(array('icon'))
             ->setRequired(array('admin', 'action'))
-            ->setAllowedTypes(array(
-                'params' => 'array',
-                'admin' => array('string', 'Snowcap\AdminBundle\Admin\ContentAdmin'),
-                'action' => 'string',
-            ))
-            ->setNormalizers(array(
-                'admin' => $adminNormalizer
-            ));
+            ->setAllowedTypes('params', 'array')
+            ->setAllowedTypes('admin', array('string', 'Snowcap\AdminBundle\Admin\ContentAdmin'))
+            ->setAllowedTypes('action', 'string')
+            ->setNormalizer('admin', $adminNormalizer)
+        ;
     }
 
     /**
@@ -86,7 +88,7 @@ class ContentAdminActionType extends AbstractActionType {
     protected function getUrlParameters($item, array $options)
     {
         $parameters = array();
-        $accessor = PropertyAccess::getPropertyAccessor();
+        $accessor = PropertyAccess::createPropertyAccessor();
         foreach($options['params'] as $paramName => $paramPath) {
             $paramValue = $accessor->getValue($item, $paramPath);
             $parameters[$paramName] = $paramValue;

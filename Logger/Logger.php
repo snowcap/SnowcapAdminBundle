@@ -1,12 +1,17 @@
 <?php
+
 namespace Snowcap\AdminBundle\Logger;
 
-use Snowcap\AdminBundle\AdminManager;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
-
+use Snowcap\AdminBundle\AdminManager;
 use Snowcap\AdminBundle\Entity\Log;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * Class Logger
+ * @package Snowcap\AdminBundle\Logger
+ */
 class Logger
 {
     /**
@@ -20,9 +25,14 @@ class Logger
     protected $em;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
      */
-    protected $securityContext;
+    protected $tokenStorage;
+
+    /**
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     */
+    protected $authorizationChecker;
 
     /**
      * @var string
@@ -30,15 +40,18 @@ class Logger
     protected $entityClassName;
 
     /**
+     * @param AdminManager $admin
      * @param \Doctrine\ORM\EntityManager $em
-     * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @param TokenStorageInterface $tokenStorage
+     * @param AuthorizationCheckerInterface $authorizationChecker
      * @param string $entityClassName The entity where logs will be saved into
      */
-    public function __construct(AdminManager $admin, EntityManager $em, SecurityContextInterface $securityContext = null, $entityClassName)
+    public function __construct(AdminManager $admin, EntityManager $em, TokenStorageInterface $tokenStorage, AuthorizationCheckerInterface $authorizationChecker, $entityClassName)
     {
         $this->admin = $admin;
         $this->em = $em;
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
+        $this->authorizationChecker = $authorizationChecker;
         $this->entityClassName = $entityClassName;
     }
 
@@ -53,7 +66,7 @@ class Logger
      */
     public function log($type, $action, $description, $admin = null, $entityId = null, array $params = null, array $diff = null)
     {
-        $token = $this->securityContext->getToken();
+        $token = $this->tokenStorage->getToken();
 
         /** @var $log Log */
         $log = new $this->entityClassName();
@@ -82,11 +95,11 @@ class Logger
         /** @var $log Log */
         $log = new $this->entityClassName();
         $log->setType($type);
-        $log->setCreatedAt( new \datetime('now'));
+        $log->setCreatedAt(new \DateTime('now'));
         $log->setAction($action);
 
-        $token = $this->securityContext->getToken();
-        if (null !== $token && $this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        $token = $this->tokenStorage->getToken();
+        if (null !== $token && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $log->setUsername($token->getUsername());
         } else {
             $log->setUsername('anonymous');
@@ -116,8 +129,9 @@ class Logger
      * @param string|array $action
      * @return array
      */
-    public function getLogsForEntity($entity, $action = null) {
-        if(null !== $action && !is_array($action)) {
+    public function getLogsForEntity($entity, $action = null)
+    {
+        if (null !== $action && !is_array($action)) {
             $action = array($action);
         }
 

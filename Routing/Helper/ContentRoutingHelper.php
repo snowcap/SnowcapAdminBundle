@@ -3,13 +3,17 @@
 namespace Snowcap\AdminBundle\Routing\Helper;
 
 use Snowcap\AdminBundle\Admin\AdminInterface;
+use Snowcap\CoreBundle\Util\StringUtil;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouterInterface;
 
-use Snowcap\CoreBundle\Util\String;
-
-class ContentRoutingHelper {
+/**
+ * Class ContentRoutingHelper
+ * @package Snowcap\AdminBundle\Routing\Helper
+ */
+class ContentRoutingHelper
+{
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
@@ -36,7 +40,8 @@ class ContentRoutingHelper {
      * @param string $routePrefix
      * @param string $routeNamePrefix
      */
-    public function __construct(RouterInterface $router, ControllerNameParser $parser, $routePrefix, $routeNamePrefix) {
+    public function __construct(RouterInterface $router, ControllerNameParser $parser, $routePrefix, $routeNamePrefix)
+    {
         $this->router = $router;
         $this->parser = $parser;
         $this->routePrefix = $routePrefix;
@@ -81,7 +86,7 @@ class ContentRoutingHelper {
 
         preg_match('/(?:[A-Z](?:[A-Za-z0-9])+\\\)*(?:)[A-Z](?:[A-Za-z0-9])+Bundle/', get_class($admin), $matches);
         $bundle = implode('', explode('\\', $matches[0]));
-        $section = String::camelize($admin->getAlias());
+        $section = StringUtil::camelize($admin->getAlias());
         $controller = $bundle . ':' . $section . ':' . $action;
         try {
             $controller = $this->parser->parse($controller);

@@ -2,14 +2,17 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\FormFactory;
-
-use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
+use Snowcap\AdminBundle\Datalist\Action\Type\ActionTypeInterface;
 use Snowcap\AdminBundle\Datalist\Field\Type\FieldTypeInterface;
 use Snowcap\AdminBundle\Datalist\Filter\Type\FilterTypeInterface;
-use Snowcap\AdminBundle\Datalist\Action\Type\ActionTypeInterface;
+use Snowcap\AdminBundle\Datalist\Type\DatalistTypeInterface;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * Class DatalistFactory
+ * @package Snowcap\AdminBundle\Datalist
+ */
 class DatalistFactory
 {
     /**
@@ -47,8 +50,8 @@ class DatalistFactory
 
     /**
      * @param string $type
-     * @param string $view
      * @param array $options
+     * @return DatalistInterface
      */
     public function create($type = 'datalist', array $options = array())
     {
@@ -58,7 +61,6 @@ class DatalistFactory
     /**
      * @param string $name
      * @param string $type
-     * @param string $view
      * @param array $options
      * @return Datalist
      */
@@ -69,7 +71,6 @@ class DatalistFactory
 
     /**
      * @param mixed $type
-     * @param string $view
      * @param array $options
      * @return DatalistBuilder
      */
@@ -85,7 +86,6 @@ class DatalistFactory
     /**
      * @param $name
      * @param mixed $type
-     * @param string $view
      * @param array $options
      * @return DatalistBuilder
      * @throws \InvalidArgumentException
@@ -103,7 +103,7 @@ class DatalistFactory
 
         // Handle datalist options
         $resolver = new OptionsResolver();
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
         $resolvedOptions = $resolver->resolve($options);
 
         // Build datalist

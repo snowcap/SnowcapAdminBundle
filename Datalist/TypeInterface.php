@@ -2,18 +2,23 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-interface TypeInterface {
+/**
+ * Interface TypeInterface
+ * @package Snowcap\AdminBundle\Datalist
+ */
+interface TypeInterface
+{
     /**
      * @return string
      */
     public function getName();
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver);
+    public function configureOptions(OptionsResolver $resolver);
 
     /**
      * @return string

@@ -2,19 +2,20 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Snowcap\AdminBundle\Datalist\ViewContext;
-use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
-
+/**
+ * Class DateTimeFieldType
+ * @package Snowcap\AdminBundle\Datalist\Field\Type
+ */
 class DateTimeFieldType extends AbstractFieldType
 {
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
             'format' => 'd/m/Y'

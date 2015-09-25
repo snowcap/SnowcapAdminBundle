@@ -2,15 +2,19 @@
 
 namespace Snowcap\AdminBundle\Datalist;
 
+use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
+use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
+use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
+use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Snowcap\AdminBundle\Datalist\Field\DatalistFieldInterface;
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterInterface;
-use Snowcap\AdminBundle\Datalist\Action\DatalistActionInterface;
-use Snowcap\AdminBundle\Datalist\Datasource\DatasourceInterface;
-use Snowcap\AdminBundle\Datalist\Filter\DatalistFilterExpressionBuilder;
-
+/**
+ * Class Datalist
+ * @package Snowcap\AdminBundle\Datalist
+ */
 class Datalist implements DatalistInterface, \Countable
 {
     /**
@@ -74,7 +78,7 @@ class Datalist implements DatalistInterface, \Countable
     private $filterForm;
 
     /**
-     * @var Iterator
+     * @var \Iterator
      */
     private $iterator;
 
@@ -147,7 +151,7 @@ class Datalist implements DatalistInterface, \Countable
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return null|Field\DatalistField
      */
     protected function getField($name)
@@ -283,6 +287,7 @@ class Datalist implements DatalistInterface, \Countable
     /**
      * @param string $name
      * @param mixed $default
+     * @return mixed
      */
     public function getOption($name, $default = null)
     {
@@ -363,7 +368,7 @@ class Datalist implements DatalistInterface, \Countable
         // Handle search
         if (isset($data['search'])) {
             $this->searchQuery = $data['search'];
-            $this->searchForm->bind(array('search' => $data['search']));
+            $this->searchForm->submit(array('search' => $data['search']));
         }
 
         // Handle filters
@@ -374,7 +379,7 @@ class Datalist implements DatalistInterface, \Countable
                 $this->filterData[$filter->getName()] = $filter->getOption('default');
             }
         }
-        $this->filterForm->bind($this->filterData);
+        $this->filterForm->submit($this->filterData);
     }
 
     /**

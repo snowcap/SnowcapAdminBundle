@@ -2,12 +2,15 @@
 
 namespace Snowcap\AdminBundle\Datalist\Field;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Snowcap\AdminBundle\Datalist\DatalistInterface;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use Snowcap\AdminBundle\Datalist\DatalistInterface;
-
+/**
+ * Class DatalistField
+ * @package Snowcap\AdminBundle\Datalist\Field
+ */
 class DatalistField implements DatalistFieldInterface
 {
     /**
@@ -56,6 +59,7 @@ class DatalistField implements DatalistFieldInterface
     /**
      * @param string $name
      * @param mixed $default
+     * @return mixed
      */
     public function getOption($name, $default = null)
     {
@@ -79,7 +83,7 @@ class DatalistField implements DatalistFieldInterface
      */
     public function getData($row)
     {
-        $accessor = PropertyAccess::getPropertyAccessor();
+        $accessor = PropertyAccess::createPropertyAccessor();
         $propertyPath = $this->getPropertyPath();
         try {
             $value = $accessor->getValue($row, $propertyPath);

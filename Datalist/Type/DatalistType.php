@@ -2,9 +2,12 @@
 
 namespace Snowcap\AdminBundle\Datalist\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
-class DatalistType extends AbstractDatalistType {
+/**
+ * Class DatalistType
+ * @package Snowcap\AdminBundle\Datalist\Type
+ */
+class DatalistType extends AbstractDatalistType
+{
     /**
      * @return string
      */

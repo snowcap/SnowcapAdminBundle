@@ -1,46 +1,48 @@
 snowcap_admin_default_index:
-    pattern: ""
+    path:     ""
     defaults: { _controller: SnowcapAdminBundle:Default:index }
 
 snowcap_admin_reorderablecontent_reorder:
-    pattern: /reorder/{code}/{locale}
+    path:     /reorder/{code}/{locale}
     defaults: { _controller: SnowcapAdminBundle:ReorderableContent:reorder, locale: null }
 
 snowcap_admin_markdown:
-    pattern: /markdown
+    path:     /markdown
     defaults: { _controller: SnowcapAdminBundle:Default:markdown }
 
 snowcap_admin_switch_locale:
-    pattern: /switch-locale/{locale}
+    path:     /switch-locale/{locale}
     defaults: { _controller: SnowcapAdminBundle:Default:switchLocale }
 
 snowcap_admin_wysiwyg_browser:
-    pattern: /wysiwyg/browser
+    path:     /wysiwyg/browser
     defaults: { _controller: SnowcapAdminBundle:Wysiwyg:browser }
 
 snowcap_admin_cataloguetranslation_index:
-    pattern: /catalogue-translation/{catalogue}/{locale}
+    path:     /catalogue-translation/{catalogue}/{locale}
     defaults: { _controller: SnowcapAdminBundle:CatalogueTranslation:index, catalogue: messages, locale: null }
 
 snowcap_admin_widget_delete_item:
-    pattern: /widget/delete-item
+    path:     /widget/delete-item
     defaults: { _controller: SnowcapAdminBundle:Widget:deleteItem }
 
 snowcap_admin_widget_content_changed:
-    pattern: /widget/content-changed
+    path:     /widget/content-changed
     defaults: { _controller: SnowcapAdminBundle:Widget:contentChanged }
 
 snowcap_admin_upload:
-    pattern: /upload
+    path:     /upload
     defaults: { _controller: SnowcapAdminBundle:Upload:upload }
 
 snowcap_admin_login:
-    pattern:   /login
+    path:     /login
     defaults:  { _controller: SnowcapAdminBundle:Security:login }
+
 snowcap_admin_login_check:
-    pattern:   /login_check
+    path:     /login_check
+
 snowcap_admin_logout:
-    pattern: /logout
+    path:     /logout
 
 snowcap_admin_extra:
     resource: .
