@@ -23,8 +23,9 @@ class AdminManager
     /**
      * @param string $alias
      * @param \Snowcap\AdminBundle\Admin\AdminInterface $admin
+     * @param array
      */
-    public function registerAdmin($alias, AdminInterface $admin, array $options)
+    public function registerAdmin($alias, AdminInterface $admin, array $options = array())
     {
         $admin->setAlias($alias);
 

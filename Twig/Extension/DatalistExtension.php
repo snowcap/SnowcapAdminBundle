@@ -74,12 +74,12 @@ class DatalistExtension extends \Twig_Extension implements ContainerAwareInterfa
     public function getFunctions()
     {
         return array(
-            'datalist_widget' => new \Twig_Function_Method($this, 'renderDatalistWidget', array('is_safe' => array('html'))),
-            'datalist_field' => new \Twig_Function_Method($this, 'renderDatalistField', array('is_safe' => array('html'))),
-            'datalist_search' => new \Twig_Function_Method($this, 'renderDatalistSearch', array('is_safe' => array('html'))),
-            'datalist_filters' => new \Twig_Function_Method($this, 'renderDatalistFilters', array('is_safe' => array('html'))),
-            'datalist_filter' => new \Twig_Function_Method($this, 'renderDatalistFilter', array('is_safe' => array('html'))),
-            'datalist_action' => new \Twig_Function_Method($this, 'renderDatalistAction', array('is_safe' => array('html')))
+            new \Twig_SimpleFunction('datalist_widget', array($this, 'renderDatalistWidget'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('datalist_field', array($this, 'renderDatalistField'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('datalist_search', array($this, 'renderDatalistSearch'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('datalist_filters', array($this, 'renderDatalistFilters'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('datalist_filter', array($this, 'renderDatalistFilter'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('datalist_action', array($this, 'renderDatalistAction'), array('is_safe' => array('html')))
         );
     }
 

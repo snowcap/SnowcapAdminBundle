@@ -48,11 +48,11 @@ class AdminExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'get_admin_for_entity_name' => new \Twig_Function_Method($this, 'getAdminForEntityName'),
-            'admin' => new \Twig_Function_Method($this, 'getAdminByCode'),
-            'admin_label' => new \Twig_Function_Method($this, 'getAdminLabel'),
-            'admin_content_path' => new \Twig_Function_Method($this, 'getAdminContentPath'),
-            'admin_translation_domain' => new \Twig_Function_Method($this, 'getDefaultTranslationDomain'),
+            new \Twig_SimpleFunction('get_admin_for_entity_name', array($this, 'getAdminForEntityName')),
+            new \Twig_SimpleFunction('admin', array($this, 'getAdminByCode')),
+            new \Twig_SimpleFunction('admin_label', array($this, 'getAdminLabel')),
+            new \Twig_SimpleFunction('admin_content_path', array($this, 'getAdminContentPath')),
+            new \Twig_SimpleFunction('admin_translation_domain', array($this, 'getDefaultTranslationDomain')),
         );
     }
 
